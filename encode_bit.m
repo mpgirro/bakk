@@ -21,26 +21,26 @@ for i=1:SUBBAND_COUNT
     S(i) = Subband();
 end
 
-S(1).positionArray = [1 : SUBBAND_LENGTH];
-S(2).positionArray = [SUBBAND_LENGTH+1 : 2*SUBBAND_LENGTH];
-S(3).positionArray = [2*SUBBAND_LENGTH : 3*SUBBAND_LENGTH];
+S(1).posArray = [1 : SUBBAND_LENGTH];
+S(2).posArray = [SUBBAND_LENGTH+1 : 2*SUBBAND_LENGTH];
+S(3).posArray = [2*SUBBAND_LENGTH : 3*SUBBAND_LENGTH];
 
 for i=1:SUBBAND_COUNT
     % copy corresponding coefficients
-    S(i).coefficientArray = decompositionVector(S(i).positionArray);
+    S(i).coefArray = decompositionVector(S(i).posArray);
     
     % we only sum up the absolute values, so apply abs() to every element
-    S(i).coefficientArray = arrayfun(@abs,S(i).coefficientArray);
+    S(i).coefArray = arrayfun(@abs,S(i).coefArray);
     
     % calculate the energy level
-    S(i).energy = sum(S(i).coefficientArray);
+    S(i).energy = sum(S(i).coefArray);
 end
 
-[energyMap, stringMap] = drawmaps(S);
+[energyMap, strMap] = drawmaps(S);
 
-Emin = stringMap('min').energy;
-Emed = stringMap('med').energy;
-Emax = stringMap('max').energy;
+Emin = strMap('min').energy;
+Emed = strMap('med').energy;
+Emax = strMap('max').energy;
 
 % calculate energy difference 
 A = Emax - Emed; 
@@ -67,8 +67,8 @@ if bit == 1 && A-B < emb_str
     
     % precalculate the alteration factors to the coefficients
     % these are static and not influenced by the c(i)
-    f_minmax = 1 + xi/(Emax + 2*Emed + Emin);
-    f_med = 1 - xi/(Emax + 2*Emed + Emin);
+    factorMinMax = 1 + xi/(Emax + 2*Emed + Emin);
+    factorMed = 1 - xi/(Emax + 2*Emed + Emin);
     
 elseif bit == 0 && B - A <= emb_str
     
@@ -79,28 +79,28 @@ elseif bit == 0 && B - A <= emb_str
     
     % precalculate the alteration factors to the coefficients
     % these are static and not influenced by the c(i)
-    f_minmax = 1 - xi/(Emax + 2*Emed + Emin);
-    f_med = 1 + xi/(Emax + 2*Emed + Emin);
+    factorMinMax = 1 - xi/(Emax + 2*Emed + Emin);
+    factorMed = 1 + xi/(Emax + 2*Emed + Emin);
         
 else
     % we do absoluteley nothing
 end
 
 if(insertion)
-    Smin = stringMap('min');
-    Smed = stringMap('med');
-    Smax = stringMap('max');
+    Smin = strMap('min');
+    Smed = strMap('med');
+    Smax = strMap('max');
     for i=1:SUBBAND_LENGTH
-        Smin.coefficientArray(i) = Smin.coefficientArray(i) * f_minmax;
-        Smed.coefficientArray(i) = Smed.coefficientArray(i) * f_med;
-        Smax.coefficientArray(i) = Smax.coefficientArray(i) * f_minmax;
+        Smin.coefArray(i) = Smin.coefArray(i) * factorMinMax;
+        Smed.coefArray(i) = Smed.coefArray(i) * factorMed;
+        Smax.coefArray(i) = Smax.coefArray(i) * factorMinMax;
     end
     
     modDecompositionVector = decompositionVector;
     for i=1:SUBBAND_LENGTH
-        modDecompositionVector(S(1).positionArray(i)) = S(1).coefficientArray(i);
-        modDecompositionVector(S(2).positionArray(i)) = S(2).coefficientArray(i);
-        modDecompositionVector(S(3).positionArray(i)) = S(3).coefficientArray(i);
+        modDecompositionVector(S(1).posArray(i)) = S(1).coefArray(i);
+        modDecompositionVector(S(2).posArray(i)) = S(2).coefArray(i);
+        modDecompositionVector(S(3).posArray(i)) = S(3).coefArray(i);
     end
     
     %diff_C = C - mod_C;

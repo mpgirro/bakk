@@ -4,7 +4,7 @@ classdef Subband < handle
     
     properties(SetAccess = public)  
         energy=0;    % Energy Level 
-        cArray=[];   % coefficients
+        coefficientArray=[];   % coefficients
         positionArray=[];   % Absolute Positions of the Coefficients in the Wavelet Coef Band
     end
         

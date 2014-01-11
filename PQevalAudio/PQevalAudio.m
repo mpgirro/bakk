@@ -1,3 +1,4 @@
+% function PQevalAudio (refSignal, testSignal)
 function PQevalAudio (Fref, Ftest, StartS, EndS)
 % Perceptual evaluation of audio quality.
 
@@ -27,7 +28,7 @@ PQopt.DelayOverlap = 1;
 PQopt.DataBounds = 1;
 PQopt.EndMin = NF / 2;
 
-addpath ('CB', 'MOV', 'Misc', 'Patt');
+%addpath ('CB', 'MOV', 'Misc', 'Patt');
 
 if (nargin < 3)
     StartS = [0, 0];
@@ -37,6 +38,8 @@ if (nargin < 4)
 end
 
 % Get the number of samples and channels for each file
+% WAV(1) = refSignal;
+% WAV(2) = testSignal;
 WAV(1) = PQwavFilePar (Fref);
 WAV(2) = PQwavFilePar (Ftest);
 
@@ -83,9 +86,9 @@ for (i = -Fstart:Np-1)
         PQframeMOV (i, MOVI);   % Output is in global MOVC
 
         % Print the MOV precursors
-        if (PQopt.Ni ~= 0 & mod (i, PQopt.Ni) == 0)
-            PQprtMOVCi (Nchan, i, MOVC);
-        end
+%         if (PQopt.Ni ~= 0 & mod (i, PQopt.Ni) == 0)
+%             PQprtMOVCi (Nchan, i, MOVC);
+%         end
     end
 end
 
@@ -101,7 +104,7 @@ MOVB = PQavgMOVB (MOVC, Nchan, Nwup);
 ODG = PQnNet (MOVB);
 
 % Summary printout
-PQprtMOV (MOVB, ODG);
+% PQprtMOV (MOVB, ODG);
 
 %----------
 function PQ_CheckWAV (WAV)

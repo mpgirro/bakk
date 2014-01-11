@@ -12,7 +12,7 @@ SUBBAND_COUNT = 3;
 % embedding strength factor
 esf = 3;
 
-[C,L] = wavedec(originalSignalSegment, DWT_LEVELS, DWT_WAVELET);
+[decompositionVector,bookkeepingVector] = wavedec(originalSignalSegment, DWT_LEVELS, DWT_WAVELET);
 
 
 
@@ -21,26 +21,26 @@ for i=1:SUBBAND_COUNT
     S(i) = Subband();
 end
 
-S(1).i = [1 : SUBBAND_LENGTH];
-S(2).i = [SUBBAND_LENGTH+1 : 2*SUBBAND_LENGTH];
-S(3).i = [2*SUBBAND_LENGTH : 3*SUBBAND_LENGTH];
+S(1).positionArray = [1 : SUBBAND_LENGTH];
+S(2).positionArray = [SUBBAND_LENGTH+1 : 2*SUBBAND_LENGTH];
+S(3).positionArray = [2*SUBBAND_LENGTH : 3*SUBBAND_LENGTH];
 
 for i=1:SUBBAND_COUNT
     % copy corresponding coefficients
-    S(i).c = C(S(i).i);
+    S(i).coefficientArray = decompositionVector(S(i).positionArray);
     
     % we only sum up the absolute values, so apply abs() to every element
-    S(i).c = arrayfun(@abs,S(i).c);
+    S(i).coefficientArray = arrayfun(@abs,S(i).coefficientArray);
     
     % calculate the energy level
-    S(i).E = sum(S(i).c);
+    S(i).energy = sum(S(i).coefficientArray);
 end
 
-[emap, smap] = drawmaps(S);
+[energyMap, stringMap] = drawmaps(S);
 
-Emin = smap('min').E;
-Emed = smap('med').E;
-Emax = smap('max').E;
+Emin = stringMap('min').energy;
+Emed = stringMap('med').energy;
+Emax = stringMap('max').energy;
 
 % calculate energy difference 
 A = Emax - Emed; 
@@ -50,7 +50,7 @@ B = Emed - Emin;
 % emb_str...embedding strength (S im paper)
 %emb_str = (esf * sum( C(1:3*SUBBAND_LENGTH) )) / 3; 
 emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin)
-esf = 3*emb_str/sum( C(1:3*SUBBAND_LENGTH))
+esf = 3*emb_str/sum( decompositionVector(1:3*SUBBAND_LENGTH))
 
 
 insertion = false;
@@ -87,28 +87,27 @@ else
 end
 
 if(insertion)
-    Smin = smap('min');
-    Smed = smap('med');
-    Smax = smap('max');
+    Smin = stringMap('min');
+    Smed = stringMap('med');
+    Smax = stringMap('max');
     for i=1:SUBBAND_LENGTH
-        Smin.c(i) = Smin.c(i) * f_minmax;
-        Smed.c(i) = Smed.c(i) * f_med;
-        Smax.c(i) = Smax.c(i) * f_minmax;
+        Smin.coefficientArray(i) = Smin.coefficientArray(i) * f_minmax;
+        Smed.coefficientArray(i) = Smed.coefficientArray(i) * f_med;
+        Smax.coefficientArray(i) = Smax.coefficientArray(i) * f_minmax;
     end
     
-    mod_C = C;
+    modDecompositionVector = decompositionVector;
     for i=1:SUBBAND_LENGTH
-        mod_C(S(1).i(i)) = S(1).c(i);
-        mod_C(S(2).i(i)) = S(2).c(i);
-        mod_C(S(3).i(i)) = S(3).c(i);
+        modDecompositionVector(S(1).positionArray(i)) = S(1).coefficientArray(i);
+        modDecompositionVector(S(2).positionArray(i)) = S(2).coefficientArray(i);
+        modDecompositionVector(S(3).positionArray(i)) = S(3).coefficientArray(i);
     end
     
     %diff_C = C - mod_C;
     %plot(diff_C(1:3*SUBBAND_LENGTH));
 
-    modifiedSignalSegment = waverec(mod_C, L, DWT_WAVELET);
+    modifiedSignalSegment = waverec(modDecompositionVector, bookkeepingVector, DWT_WAVELET);
 else
-    
     modifiedSignalSegment = originalSignalSegment;
 end
 

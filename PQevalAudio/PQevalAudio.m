@@ -1,5 +1,5 @@
 % function PQevalAudio (refSignal, testSignal)
-function PQevalAudio (Fref, Ftest, StartS, EndS)
+function [ODG] = PQevalAudio (Fref, Ftest, StartS, EndS)
 % Perceptual evaluation of audio quality.
 
 % - StartS shifts the frames, so that the first frame starts at that sample.

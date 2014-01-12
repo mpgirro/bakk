@@ -1,4 +1,4 @@
-function [ modifiedSignalSegment ] = encode_bit( originalSignalSegment, bit )
+function [ modSignalSegment ] = encode_bit( origSignalSegment, bit )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 %
@@ -9,12 +9,7 @@ DWT_LEVELS = 6;
 SUBBAND_LENGTH = 8;
 SUBBAND_COUNT = 3;
 
-% embedding strength factor
-esf = 3;
-
-[decompositionVector,bookkeepingVector] = wavedec(originalSignalSegment, DWT_LEVELS, DWT_WAVELET);
-
-
+[decompositionVector,bookkeepingVector] = wavedec(origSignalSegment, DWT_LEVELS, DWT_WAVELET);
 
 % create unique class instances, therefore don't use repmat(Subband(),3,1)
 for i=1:SUBBAND_COUNT
@@ -47,68 +42,98 @@ A = Emax - Emed;
 B = Emed - Emin;
 
 
-% emb_str...embedding strength (S im paper)
-%emb_str = (esf * sum( C(1:3*SUBBAND_LENGTH) )) / 3; 
-emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin)
-esf = 3*emb_str/sum( decompositionVector(1:3*SUBBAND_LENGTH))
 
+% emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin);
+% esf = 3*emb_str/sum( decompositionVector(1:3*SUBBAND_LENGTH));
 
-insertion = false;
+% embedding strength factor
+esf = 2;
 
-if bit == 1 && A-B < emb_str
+perceptable = true;
+while(perceptable)
     
-    insertion = true;
+    % emb_str...embedding strength (S im paper)
+    emb_str = (esf * sum( decompositionVector(1:3*SUBBAND_LENGTH) )) / 3; 
+    if (emb_str <= 2*Emed/(Emed+Emax) * (Emax-Emin)) == false
+       emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin);
+       esf = 3*emb_str/sum( decompositionVector(1:3*SUBBAND_LENGTH));
+    end
+
+    insertion = false;
     
-    fprintf('A-B=%d\n',A-B);
-    
-    % we have to modify the coefficients
-    
-    xi = abs(emb_str-A+B);
-    
-    % precalculate the alteration factors to the coefficients
-    % these are static and not influenced by the c(i)
-    factorMinMax = 1 + xi/(Emax + 2*Emed + Emin);
-    factorMed = 1 - xi/(Emax + 2*Emed + Emin);
-    
-elseif bit == 0 && B - A <= emb_str
-    
-    insertion = true;
-    fprintf('B-A=%d\n',B-A);
-    
-    xi = abs(emb_str+A-B);
-    
-    % precalculate the alteration factors to the coefficients
-    % these are static and not influenced by the c(i)
-    factorMinMax = 1 - xi/(Emax + 2*Emed + Emin);
-    factorMed = 1 + xi/(Emax + 2*Emed + Emin);
+    if bit == 1 && A-B < emb_str
         
-else
-    % we do absoluteley nothing
-end
-
-if(insertion)
-    Smin = strMap('min');
-    Smed = strMap('med');
-    Smax = strMap('max');
-    for i=1:SUBBAND_LENGTH
-        Smin.coefArray(i) = Smin.coefArray(i) * factorMinMax;
-        Smed.coefArray(i) = Smed.coefArray(i) * factorMed;
-        Smax.coefArray(i) = Smax.coefArray(i) * factorMinMax;
+        insertion = true;
+        
+        %     fprintf('A-B=%d\n',A-B);
+        
+        % we have to modify the coefficients
+        
+        xi = abs(emb_str-A+B);
+        
+        % precalculate the alteration factors to the coefficients
+        % these are static and not influenced by the c(i)
+        factorMinMax = 1 + xi/(Emax + 2*Emed + Emin);
+        factorMed = 1 - xi/(Emax + 2*Emed + Emin);
+        
+    elseif bit == 0 && B - A <= emb_str
+        
+        insertion = true;
+        %     fprintf('B-A=%d\n',B-A);
+        
+        xi = abs(emb_str+A-B);
+        
+        % precalculate the alteration factors to the coefficients
+        % these are static and not influenced by the c(i)
+        factorMinMax = 1 - xi/(Emax + 2*Emed + Emin);
+        factorMed = 1 + xi/(Emax + 2*Emed + Emin);
+        
+    else
+        % do absoluteley nothing
     end
     
-    modDecompositionVector = decompositionVector;
-    for i=1:SUBBAND_LENGTH
-        modDecompositionVector(S(1).posArray(i)) = S(1).coefArray(i);
-        modDecompositionVector(S(2).posArray(i)) = S(2).coefArray(i);
-        modDecompositionVector(S(3).posArray(i)) = S(3).coefArray(i);
+    if(insertion)
+        Smin = strMap('min');
+        Smed = strMap('med');
+        Smax = strMap('max');
+        for i=1:SUBBAND_LENGTH
+            Smin.coefArray(i) = Smin.coefArray(i) * factorMinMax;
+            Smed.coefArray(i) = Smed.coefArray(i) * factorMed;
+            Smax.coefArray(i) = Smax.coefArray(i) * factorMinMax;
+        end
+        
+        modDecompositionVector = decompositionVector;
+        for i=1:SUBBAND_LENGTH
+            modDecompositionVector(S(1).posArray(i)) = S(1).coefArray(i);
+            modDecompositionVector(S(2).posArray(i)) = S(2).coefArray(i);
+            modDecompositionVector(S(3).posArray(i)) = S(3).coefArray(i);
+        end
+        
+        %diff_C = C - mod_C;
+        %plot(diff_C(1:3*SUBBAND_LENGTH));
+        
+        modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, DWT_WAVELET);
+    else
+        modSignalSegment = origSignalSegment;
     end
     
-    %diff_C = C - mod_C;
-    %plot(diff_C(1:3*SUBBAND_LENGTH));
-
-    modifiedSignalSegment = waverec(modDecompositionVector, bookkeepingVector, DWT_WAVELET);
-else
-    modifiedSignalSegment = originalSignalSegment;
+    % check for imperceptability - modify esf if need be
+    
+    audiowrite('tmp/original.wav', origSignalSegment,48000);
+    audiowrite('tmp/modified.wav', modSignalSegment, 48000);
+    
+    odg = PQevalAudio('tmp/original.wav','tmp/modified.wav');
+    
+    if not( -2 <= odg )
+    %if not( -2 <= odg <= 0)
+       esf = esf - 0.01;
+       fprintf('ODG: %d | ESF: %d\n', odg, esf);
+       if(esf <= 0)
+          perceptable = false;
+       end
+    else    
+       perceptable = false;
+    end
 end
 
 end

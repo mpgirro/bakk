@@ -10,10 +10,10 @@ smap = containers.Map('KeyType','char','ValueType','any');
 emap = containers.Map('KeyType','double','ValueType','any');
 
 for i=1:3
-	emap(subbands(i).E) = subbands(i);
+	emap(subbands(i).energy) = subbands(i);
 end
 
-unsorted_E = [subbands(:).E];
+unsorted_E = [subbands(:).energy];
 sorted_E = sort(unsorted_E);
 
 smap('min') = emap(sorted_E(1));

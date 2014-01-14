@@ -11,7 +11,7 @@ end
 
 S(1).posArray = [1 : AWA.SUBBAND_LENGTH];
 S(2).posArray = [AWA.SUBBAND_LENGTH+1 : 2*AWA.SUBBAND_LENGTH];
-S(3).posArray = [2*AWA.SUBBAND_LENGTH : 3*AWA.SUBBAND_LENGTH];
+S(3).posArray = [2*AWA.SUBBAND_LENGTH+1 : 3*AWA.SUBBAND_LENGTH];
 
 for i=1:AWA.SUBBAND_COUNT
     % copy corresponding coefficients

@@ -61,7 +61,7 @@ insertion = false;
 
 if bit == 1 && A-B >= emb_str
     %do nothing - bit '1' can already be seen as encoded
-elseif bit == 0 && B-A >= em_str
+elseif bit == 0 && B-A >= emb_str
     %do nothing - bit '0' can already be seen as encoded
 else
     

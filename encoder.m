@@ -7,7 +7,7 @@ addpath('PQevalAudio/Patt');
 
 
 path = ['resources',filesep,'audio',filesep,'flute.wav'];
-[signal,fs] = wavread(path);
+[signal,fs] = audioread(path);
 
 % resample if need be - PQevalAudio only works with 48kHz
 if fs ~= 48000

@@ -1,4 +1,4 @@
-function [ modSignalSegment ] = encode_bit( origSignalSegment, bit )
+function [ modSignalSegment ] = insertbit( origSignalSegment, bit )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 %

@@ -24,13 +24,18 @@ origSignal = signal;
 
 payload = [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0];
 
-segmentLength = (3*8 * 64); % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
+segmentLength = (3*AWA.SUBBAND_LENGTH * 2 ^ AWA.DWT_LEVELS); % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
 segmentCount = floor(size(signal)/segmentLength);
 
 windowStart=1;
 windowEnd = segmentLength;
 for i=1:segmentCount
     
+    % if whole payload is inserted we do not need to continue
+    if i > size(payload)
+        break;
+    end
+        
     signalSegment = signal(windowStart:windowEnd);
     
     modSignalSegment = insertbit(signalSegment,payload(i));
@@ -48,8 +53,8 @@ audiowrite('watermarked_audio.wav',modSignal, 48000);
     
 %plot( [1:size(signal)], signal)
 
-% aplayer = audioplayer(signal,fs);
-% aplayer.play();
+aplayer = audioplayer(modSignal,48000);
+aplayer.play();
 
 
 % wavwrite(signal,fs,'test.wav')

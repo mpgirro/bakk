@@ -8,7 +8,7 @@ addpath('PQevalAudio/Patt');
 path = 'watermarked_audio.wav';
 [signal,fs] = wavread(path);
 
-segmentLength = (3*8 * 64); % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
+segmentLength = (3*AWA.SUBBAND_LENGTH * 2 ^ AWA.DWT_LEVELS); % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
 segmentCount = floor(size(signal)/segmentLength);
 
 payloadBuffer = [];

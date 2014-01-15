@@ -2,18 +2,18 @@ function [ bit ] = extractbit( signalSegment )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-[decompositionVector,bookkeepingVector] = wavedec(signalSegment, AWA.DWT_LEVELS, AWA.DWT_WAVELET);
+[decompositionVector,bookkeepingVector] = wavedec(signalSegment, APC.DWT_LEVELS, APC.DWT_WAVELET);
 
 % create unique class instances, therefore don't use repmat(Subband(),3,1)
-for i=1:AWA.SUBBAND_COUNT
+for i=1:APC.SUBBAND_COUNT
     S(i) = Subband();
 end
 
-S(1).posArray = [1 : AWA.SUBBAND_LENGTH];
-S(2).posArray = [AWA.SUBBAND_LENGTH+1 : 2*AWA.SUBBAND_LENGTH];
-S(3).posArray = [2*AWA.SUBBAND_LENGTH+1 : 3*AWA.SUBBAND_LENGTH];
+S(1).posArray = [1 : APC.SUBBAND_LENGTH];
+S(2).posArray = [APC.SUBBAND_LENGTH+1 : 2*APC.SUBBAND_LENGTH];
+S(3).posArray = [2*APC.SUBBAND_LENGTH+1 : 3*APC.SUBBAND_LENGTH];
 
-for i=1:AWA.SUBBAND_COUNT
+for i=1:APC.SUBBAND_COUNT
     % copy corresponding coefficients
     S(i).coefArray = decompositionVector(S(i).posArray);
     

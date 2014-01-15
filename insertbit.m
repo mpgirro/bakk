@@ -4,18 +4,18 @@ function [ modSignalSegment ] = insertbit( origSignalSegment, bit )
 %
 %   
 
-[decompositionVector,bookkeepingVector] = wavedec(origSignalSegment, AWA.DWT_LEVELS, AWA.DWT_WAVELET);
+[decompositionVector,bookkeepingVector] = wavedec(origSignalSegment, APC.DWT_LEVELS, APC.DWT_WAVELET);
 
 % create unique class instances, therefore don't use repmat(Subband(),3,1)
-for i=1:AWA.SUBBAND_COUNT
+for i=1:APC.SUBBAND_COUNT
     S(i) = Subband();
 end
 
-S(1).posArray = [1 : AWA.SUBBAND_LENGTH];
-S(2).posArray = [AWA.SUBBAND_LENGTH+1 : 2*AWA.SUBBAND_LENGTH];
-S(3).posArray = [2*AWA.SUBBAND_LENGTH+1 : 3*AWA.SUBBAND_LENGTH];
+S(1).posArray = [1 : APC.SUBBAND_LENGTH];
+S(2).posArray = [APC.SUBBAND_LENGTH+1 : 2*APC.SUBBAND_LENGTH];
+S(3).posArray = [2*APC.SUBBAND_LENGTH+1 : 3*APC.SUBBAND_LENGTH];
 
-for i=1:AWA.SUBBAND_COUNT
+for i=1:APC.SUBBAND_COUNT
     % copy corresponding coefficients
     S(i).coefArray = decompositionVector(S(i).posArray);
     
@@ -42,11 +42,11 @@ B = Emed - Emin;
 % esf = 3*emb_str/sum( decompositionVector(1:3*SUBBAND_LENGTH));
 
 % embedding strength factor
-esf = AWA.EMBEDDING_STRENGTH_FACTOR;
+esf = APC.EMBEDDING_STRENGTH_FACTOR;
 
     
 % emb_str...embedding strength (S im paper)
-emb_str = (esf * sum( decompositionVector(1:3*AWA.SUBBAND_LENGTH) )) / 3;
+emb_str = (esf * sum( decompositionVector(1:3*APC.SUBBAND_LENGTH) )) / 3;
 
 % satisfy equation (8)
 if emb_str >= 2*Emed/(Emed+Emax) * (Emax-Emin)
@@ -65,7 +65,7 @@ end
 fprintf('bit=%d\n',bit);
 fprintf('A-B=%8f\n',A-B);
 fprintf('B-A=%8f\n',B-A);
-fprintf('S=%8f\n\n',emb_str);
+fprintf('S=%8f\n',emb_str);
 
 insertion = false;
 
@@ -111,14 +111,14 @@ if(insertion)
     Smin = strMap('min');
     Smed = strMap('med');
     Smax = strMap('max');
-    for i=1:AWA.SUBBAND_LENGTH
+    for i=1:APC.SUBBAND_LENGTH
         Smin.coefArray(i) = Smin.coefArray(i) * factorMinMax;
         Smed.coefArray(i) = Smed.coefArray(i) * factorMed;
         Smax.coefArray(i) = Smax.coefArray(i) * factorMinMax;
     end
     
     modDecompositionVector = decompositionVector;
-    for i=1:AWA.SUBBAND_LENGTH
+    for i=1:APC.SUBBAND_LENGTH
         modDecompositionVector(S(1).posArray(i)) = S(1).coefArray(i);
         modDecompositionVector(S(2).posArray(i)) = S(2).coefArray(i);
         modDecompositionVector(S(3).posArray(i)) = S(3).coefArray(i);
@@ -132,12 +132,17 @@ if(insertion)
     %diff_C = C - mod_C;
     %plot(diff_C(1:3*SUBBAND_LENGTH));
     
-    modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, AWA.DWT_WAVELET);
+    modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, APC.DWT_WAVELET);
+
+%     r = snr(origSignalSegment,modSignalSegment)
+%     fprintf('SNR=%8f\n',r);
+    rauschen = abs(origSignalSegment) - abs(modSignalSegment);
+    plot(rauschen);
+    
 else
     modSignalSegment = origSignalSegment;
 end
-    
-
+<    fprintf('\n');
 
 end
 

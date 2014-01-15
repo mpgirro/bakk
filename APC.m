@@ -1,4 +1,4 @@
-classdef AWA % Audio-Watermarking-Algorithm
+classdef APC % Algorithm-Parameter-Constants
     properties (Constant = true)
         DWT_WAVELET = 'db2';
         DWT_LEVELS = 6;

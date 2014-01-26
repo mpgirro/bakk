@@ -72,16 +72,16 @@ ES = ES - 0.1*ES;
 
 insertion = false;
 
-if bit == 1 && A-B > ES
+if bit == 1 && A-B >= ES
     %do nothing - bit '1' can already logically encoded
-elseif bit == 0 && B-A > ES
+elseif bit == 0 && B-A >= ES
     %do nothing - bit '0' can already logically encoded
 else
     
     % engery level differences do not satisfy the logic yet
     % we need to do some adjustments
     
-    if bit == 1 && A-B <= ES
+    if bit == 1 && A-B < ES
     
         insertion = true;
         
@@ -94,7 +94,7 @@ else
         factorMinMax = 1 + xi/(Emax + 2*Emed + Emin);
         factorMed 	 = 1 - xi/(Emax + 2*Emed + Emin);
     
-    elseif bit == 0 && B-A <= ES
+    elseif bit == 0 && B-A < ES
     
         insertion = true;
         %     fprintf('B-A=%d\n',B-A);
@@ -161,13 +161,12 @@ end
 
 % - - - final checks - - - 
 
-extracted_bit = extractbit( modSignalSegment );
+[extracted_bit, all_coef] = extractbit( modSignalSegment );
 fprintf('[CHECK] %g | %c | %g', bit, mod_bit, extracted_bit);
 if bit ~= extracted_bit
 	fprintf(' [!] Emin=%4f, Emed=%4f, Emax=%4f, Emin_mod=%4f, Emed_mod=%4f, Emax_mod=%4f', Emin, Emed, Emax, Emin_mod, Emed_mod, Emax_mod );
-%	Smin.coefArray
-%	Smed.coefArray
-	Smax.coefArray
+	modDecompositionVector(1:3*AlgoConst.SUBBAND_LENGTH)
+	all_coef
 end
 fprintf('\n');
 

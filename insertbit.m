@@ -129,9 +129,9 @@ if(insertion)
 	
 	
 	% DEBUG - - - - - - - - - - 
-	Emin_mod = sum(abs(Smin.coefArray(i)));
-	Emed_mod = sum(abs(Smed.coefArray(i)));
-	Emax_mod = sum(abs(Smax.coefArray(i)));
+	Emin_mod = sum(abs(Smin.coefArray(:)));
+	Emed_mod = sum(abs(Smed.coefArray(:)));
+	Emax_mod = sum(abs(Smax.coefArray(:)));
 
 	A_mod = Emax_mod - Emed_mod;
 	B_mod = Emed_mod - Emin_mod;

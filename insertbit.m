@@ -146,11 +146,21 @@ if(insertion)
 	modDecompositionVector(Smed.posArray(:)) = Smed.coefArray(:);
 	modDecompositionVector(Smax.posArray(:)) = Smax.coefArray(:);
 	
-        
-%     audiowrite('tmp/orig_dwt.wav',decompositionVector,48000);
-%     audiowrite('tmp/mod_dwt.wav',modDecompositionVector,48000);
+
+%    % Best don't do this at home, kids!
+%    audiowrite('tmp/original.wav',decompositionVector,48000);
+%    audiowrite('tmp/modified.wav',modDecompositionVector,48000);
 %     
 %     odg = PQevalAudio('tmp/orig_dwt.wav','tmp/mod_dwt.wav')
+%
+%	% http://www.mathworks.de/de/help/matlab/ref/system.html
+%	[status,cmdout] = system('bin/PQevalAudio tmp/original.wav tmp/modified.wav');
+%	cmdoutLen = size(cmdout);
+%	str = 'Objective Difference Grade: ';
+%	strLen = size(str);
+%	odgOutPos = findstr(cmdout,str);
+%	odgVal = cmdout(odgOutPos+strLen(2):cmdoutLen(2));
+%	odg = str2double(odgVal)	
 
     modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, AlgoConst.DWT_WAVELET);
 

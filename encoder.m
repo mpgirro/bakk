@@ -36,14 +36,12 @@ for i=1:segmentCount
         break;
     end
         
+	% insert bit into segment
     signalSegment = signal(windowStart:windowEnd);
-    
     modSignalSegment = insertbit(signalSegment,payload(i));
-%    fprintf(['[ENCODER CHECK]: payload %g | %g extracted\n'],payload(i),extractbit(modSignalSegment));
-%    fprintf('\n');
-    
     signal(windowStart:windowEnd) = modSignalSegment;
-    
+
+	% move the window to the next slice
     windowStart = windowStart + segmentLength;
     windowEnd = windowEnd + segmentLength;
 end
@@ -51,15 +49,12 @@ end
 modSignal = signal;
 
 audiowrite('watermarked_audio.wav',modSignal, 48000);
-
     
 %plot( [1:size(signal)], signal)
 
 % aplayer = audioplayer(modSignal,48000);
 % aplayer.play();
 
-
-% wavwrite(signal,fs,'test.wav')
 
 
 

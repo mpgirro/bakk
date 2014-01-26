@@ -37,10 +37,6 @@ A = Emax - Emed;
 B = Emed - Emin;
 
 
-
-% emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin);
-% esf = 3*emb_str/sum( decompositionVector(1:3*SUBBAND_LENGTH));
-
 % embedding strength factor
 esf = AlgoConst.EMBEDDING_STRENGTH_FACTOR;
 
@@ -48,21 +44,23 @@ esf = AlgoConst.EMBEDDING_STRENGTH_FACTOR;
 % emb_str...embedding strength (S im paper)
 emb_str = (esf * sum( abs(decompositionVector(1:3*AlgoConst.SUBBAND_LENGTH)) )) / 3;
 
-% satisfy equation (8)
-if emb_str >= 2*Emed/(Emed+Emax) * (Emax-Emin)
-%    fprintf('reduceing S from %8f ',emb_str);
-    emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin);
-%    fprintf('to %8f\n',emb_str);
-end
-
 % satisfy equation (11)
 if emb_str >= 2*Emed/(Emed+Emin) * (Emax-Emin)
 %    fprintf('reduceing S from %8f ',emb_str);
     emb_str = 2*Emed/(Emed+Emin) * (Emax-Emin);
-%    fprintf('to %8f\n',emb_str);
+%    fprintf('to %8f [satisfying (11)]\n',emb_str);
 end
 
-fprintf('PAYLOAD: %g\n',bit);
+% satisfy equation (8)
+if emb_str >= 2*Emed/(Emed+Emax) * (Emax-Emin)
+%    fprintf('reduceing S from %8f ',emb_str);
+    emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin);
+%    fprintf('to %8f [satisfying (8)]\n',emb_str);
+end
+
+
+
+% fprintf('PAYLOAD: %g\n',bit);
 % fprintf('A-B=%8f\n',A-B);
 % fprintf('B-A=%8f\n',B-A);
 % fprintf('S=%8f\n',emb_str);
@@ -80,7 +78,7 @@ else
     % engery level differences do not satisfy the logic yet
     % we need to do some adjustments
     
-    if bit == 1
+    if bit == 1 && A-B < emb_str
     
         insertion = true;
         
@@ -93,9 +91,9 @@ else
         % precalculate the alteration factors to the coefficients
         % these are static and not influenced by the c(i)
         factorMinMax = 1 + xi/(Emax + 2*Emed + Emin);
-        factorMed = 1 - xi/(Emax + 2*Emed + Emin);
+        factorMed 	 = 1 - xi/(Emax + 2*Emed + Emin);
     
-    elseif bit == 0
+    elseif bit == 0 && B-A < emb_str
     
         insertion = true;
         %     fprintf('B-A=%d\n',B-A);
@@ -105,9 +103,15 @@ else
         % precalculate the alteration factors to the coefficients
         % these are static and not influenced by the c(i)
         factorMinMax = 1 - xi/(Emax + 2*Emed + Emin);
-        factorMed = 1 + xi/(Emax + 2*Emed + Emin);
+        factorMed 	 = 1 + xi/(Emax + 2*Emed + Emin);
+	else
+		fprintf('Oh boy, there is something really wrong here\n'); 
     end
 end
+
+% - - - debugging - - -
+mod_bit = 'X';
+% - - - 
 
 if(insertion)
     
@@ -116,11 +120,33 @@ if(insertion)
     Smin = strMap('min');
     Smed = strMap('med');
     Smax = strMap('max');
+	
     for i=1:AlgoConst.SUBBAND_LENGTH
         Smin.coefArray(i) = Smin.coefArray(i) * factorMinMax;
         Smed.coefArray(i) = Smed.coefArray(i) * factorMed;
         Smax.coefArray(i) = Smax.coefArray(i) * factorMinMax;
     end
+	
+	
+	% debugging - - - - - - - - - - - 
+
+	Emin_mod = sum(Smin.coefArray(i));
+	Emed_mod = sum(Smed.coefArray(i));
+	Emax_mod = sum(Smax.coefArray(i));
+
+	A_mod = Emax_mod - Emed_mod;
+	B_mod = Emed_mod - Emin_mod;
+
+	if A_mod > B_mod
+		mod_bit = '1';
+%		 fprintf('[INSERTION-CHECK] encoded: 1\n');
+	 else
+		 mod_bit = '0';
+%		 fprintf('[INSERTION-CHECK] encoded: 0\n'); 
+	 end
+
+	%  - - - - - - - - - - - - - - - - - 
+	
     
     modDecompositionVector = decompositionVector;
     for i=1:AlgoConst.SUBBAND_LENGTH
@@ -151,27 +177,19 @@ else
     modSignalSegment = origSignalSegment;
 end
 
-% debugging - - - - - - - - - - - 
 
-Smin = strMap('min');
-Smed = strMap('med');
-Smax = strMap('max');
+% - - - final checks - - - 
 
-Emin_mod = sum(Smin.coefArray(i));
-Emed_mod = sum(Smed.coefArray(i));
-Emax_mod = sum(Smax.coefArray(i));
+extracted_bit = extractbit( modSignalSegment );
+appendix = '';
+if bit ~= extracted_bit
+	appendix = '[!!!]';
+end
+fprintf('[CHECK] %g | %c | %g %s\n', bit, mod_bit, extracted_bit, appendix );
 
-A_mod = Emax_mod - Emed_mod;
-B_mod = Emed_mod - Emin_mod;
 
-if A_mod > B_mod
-	 fprintf('[CHECK] encoded: 1\n');
- else
-	 fprintf('[CHECK] encoded: 0\n'); 
- end
+% - - - - - - - - - - - -
 
-        
-%  - - - - - - - - - - - - - - - - - 
 
 end
 

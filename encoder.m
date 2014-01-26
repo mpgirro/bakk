@@ -39,8 +39,8 @@ for i=1:segmentCount
     signalSegment = signal(windowStart:windowEnd);
     
     modSignalSegment = insertbit(signalSegment,payload(i));
-    fprintf(['[ENCODER CHECK]: payload %g | %g extracted\n'],payload(i),extractbit(modSignalSegment));
-    fprintf('\n');
+%    fprintf(['[ENCODER CHECK]: payload %g | %g extracted\n'],payload(i),extractbit(modSignalSegment));
+%    fprintf('\n');
     
     signal(windowStart:windowEnd) = modSignalSegment;
     

@@ -24,7 +24,7 @@ origSignal = signal;
 
 payload = [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0];
 
-segmentLength = (3*APC.SUBBAND_LENGTH * 2 ^ APC.DWT_LEVELS); % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
+segmentLength = (3*AlgoConst.SUBBAND_LENGTH * 2 ^ AlgoConst.DWT_LEVELS); % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
 segmentCount = floor(size(signal)/segmentLength);
 
 windowStart=1;
@@ -39,6 +39,8 @@ for i=1:segmentCount
     signalSegment = signal(windowStart:windowEnd);
     
     modSignalSegment = insertbit(signalSegment,payload(i));
+    fprintf('Encoding check: Payload bit=%f - %f extracted bit\n',payload(i),extractbit(modSignalSegment));
+    fprintf('\n');
     
     signal(windowStart:windowEnd) = modSignalSegment;
     
@@ -53,8 +55,8 @@ audiowrite('watermarked_audio.wav',modSignal, 48000);
     
 %plot( [1:size(signal)], signal)
 
-aplayer = audioplayer(modSignal,48000);
-aplayer.play();
+% aplayer = audioplayer(modSignal,48000);
+% aplayer.play();
 
 
 % wavwrite(signal,fs,'test.wav')

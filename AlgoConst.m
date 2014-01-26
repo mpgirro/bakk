@@ -1,4 +1,4 @@
-classdef APC % Algorithm-Parameter-Constants
+classdef AlgoConst % Algorithm Constants
     properties (Constant = true)
         DWT_WAVELET = 'db2';
         DWT_LEVELS = 6;

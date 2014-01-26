@@ -11,19 +11,19 @@ for i=1:AlgoConst.SUBBAND_COUNT
     S(i) = Subband();
 end
 
-S(1).posArray = [1 : AlgoConst.SUBBAND_LENGTH];
-S(2).posArray = [AlgoConst.SUBBAND_LENGTH+1 : 2*AlgoConst.SUBBAND_LENGTH];
-S(3).posArray = [2*AlgoConst.SUBBAND_LENGTH+1 : 3*AlgoConst.SUBBAND_LENGTH];
+S(1).posArray = [ 1 : AlgoConst.SUBBAND_LENGTH ];
+S(2).posArray = [ AlgoConst.SUBBAND_LENGTH+1 : 2*AlgoConst.SUBBAND_LENGTH ];
+S(3).posArray = [ 2*AlgoConst.SUBBAND_LENGTH+1 : 3*AlgoConst.SUBBAND_LENGTH ];
 
 for i=1:AlgoConst.SUBBAND_COUNT
     % copy corresponding coefficients
-    S(i).coefArray = decompositionVector(S(i).posArray);
+    S(i).coefArray = decompositionVector(S(i).posArray(:));
     
     % we only sum up the absolute values, so apply abs() to every element
     %S(i).coefArray = arrayfun(@abs,S(i).coefArray);
     
     % calculate the energy level
-     S(i).energy = sum(abs(S(i).coefArray));
+     S(i).energy = sum(abs(S(i).coefArray(:)));
 end
 
 [energyMap, strMap] = drawmaps(S);
@@ -40,64 +40,66 @@ B = Emed - Emin;
 % embedding strength factor
 esf = AlgoConst.EMBEDDING_STRENGTH_FACTOR;
 
-% emb_str...embedding strength (S im paper)
-emb_str = (esf * sum( abs(decompositionVector(1:3*AlgoConst.SUBBAND_LENGTH)) )) / 3;
+% ES...embedding strength (S im paper)
+ES = (esf * sum(abs(decompositionVector(1:3*AlgoConst.SUBBAND_LENGTH)) )) / 3;
 
 % satisfy equation (11)
-if emb_str >= 2*Emed/(Emed+Emin) * (Emax-Emin)
-%    fprintf('reduceing S from %8f ',emb_str);
-    emb_str = 2*Emed/(Emed+Emin) * (Emax-Emin);
-%    fprintf('to %8f [satisfying (11)]\n',emb_str);
+if ES >= 2*Emed / (Emed+Emin) * (Emax-Emin)
+%    fprintf('reduceing S from %8f ',ES);
+    ES = 2*Emed / (Emed+Emin) * (Emax-Emin);
+%    fprintf('to %8f [satisfying (11)]\n',ES);
 end
 
 % satisfy equation (8)
-if emb_str >= 2*Emed/(Emed+Emax) * (Emax-Emin)
-%    fprintf('reduceing S from %8f ',emb_str);
-    emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin);
-%    fprintf('to %8f [satisfying (8)]\n',emb_str);
+if ES >= 2*Emed / (Emed+Emax) * (Emax-Emin)
+%    fprintf('reduceing S from %8f ',ES);
+    ES = 2*Emed / (Emed+Emax) * (Emax-Emin);
+%    fprintf('to %8f [satisfying (8)]\n',ES);
 end
 
 
 % THIS IS A SECURITY MARGIN OF MY OWN DESIGN
-% emb_str = emb_str - 0.1*emb_str;
+% to make sure that E'med < E'max
+% if not, it could be that E'med = E'max
+ES = ES - 0.1*ES;
 
 
 
 % fprintf('PAYLOAD: %g\n',bit);
 % fprintf('A-B=%8f\n',A-B);
 % fprintf('B-A=%8f\n',B-A);
-% fprintf('S=%8f\n',emb_str);
+% fprintf('S=%8f\n',ES);
 
 insertion = false;
 
-if bit == 1 && A-B >= emb_str
+if bit == 1 && A-B > ES
     %do nothing - bit '1' can already logically encoded
-elseif bit == 0 && B-A >= emb_str
+elseif bit == 0 && B-A > ES
     %do nothing - bit '0' can already logically encoded
 else
     
     % engery level differences do not satisfy the logic yet
     % we need to do some adjustments
     
-    if bit == 1 && A-B < emb_str
+    if bit == 1 && A-B <= ES
     
         insertion = true;
         
         %     fprintf('A-B=%d\n',A-B);
         
-        xi = abs(emb_str-A+B);
+        xi = abs(ES-A+B);
         
         % precalculate the alteration factors to the coefficients
         % these are static and not influenced by the c(i)
         factorMinMax = 1 + xi/(Emax + 2*Emed + Emin);
         factorMed 	 = 1 - xi/(Emax + 2*Emed + Emin);
     
-    elseif bit == 0 && B-A < emb_str
+    elseif bit == 0 && B-A <= ES
     
         insertion = true;
         %     fprintf('B-A=%d\n',B-A);
         
-        xi = abs(emb_str+A-B);
+        xi = abs(ES+A-B);
         
         % precalculate the alteration factors to the coefficients
         % these are static and not influenced by the c(i)
@@ -118,11 +120,6 @@ if(insertion)
     Smed = strMap('med');
     Smax = strMap('max');
 	
-%    for i=1:AlgoConst.SUBBAND_LENGTH
-%        Smin.coefArray(i) = Smin.coefArray(i) * factorMinMax;
-%        Smed.coefArray(i) = Smed.coefArray(i) * factorMed;
-%        Smax.coefArray(i) = Smax.coefArray(i) * factorMinMax;
-%    end
 	Smin.coefArray(:) = Smin.coefArray(:) .* factorMinMax;
 	Smed.coefArray(:) = Smed.coefArray(:) .* factorMed;
 	Smax.coefArray(:) = Smax.coefArray(:) .* factorMinMax;
@@ -144,15 +141,10 @@ if(insertion)
 	%  - - - - - - - - - - - - - 
     
     modDecompositionVector = decompositionVector;
-%    for i=1:AlgoConst.SUBBAND_LENGTH
-%        modDecompositionVector(S(1).posArray(i)) = S(1).coefArray(i);
-%        modDecompositionVector(S(2).posArray(i)) = S(2).coefArray(i);
-%        modDecompositionVector(S(3).posArray(i)) = S(3).coefArray(i);
-%    end
 	
-	modDecompositionVector(S(1).posArray(:)) = S(1).coefArray(:);
-	modDecompositionVector(S(2).posArray(:)) = S(2).coefArray(:);
-	modDecompositionVector(S(3).posArray(:)) = S(3).coefArray(:);
+	modDecompositionVector(Smin.posArray(:)) = Smin.coefArray(:);
+	modDecompositionVector(Smed.posArray(:)) = Smed.coefArray(:);
+	modDecompositionVector(Smax.posArray(:)) = Smax.coefArray(:);
 	
         
 %     audiowrite('tmp/orig_dwt.wav',decompositionVector,48000);
@@ -173,6 +165,9 @@ extracted_bit = extractbit( modSignalSegment );
 fprintf('[CHECK] %g | %c | %g', bit, mod_bit, extracted_bit);
 if bit ~= extracted_bit
 	fprintf(' [!] Emin=%4f, Emed=%4f, Emax=%4f, Emin_mod=%4f, Emed_mod=%4f, Emax_mod=%4f', Emin, Emed, Emax, Emin_mod, Emed_mod, Emax_mod );
+%	Smin.coefArray
+%	Smed.coefArray
+	Smax.coefArray
 end
 fprintf('\n');
 

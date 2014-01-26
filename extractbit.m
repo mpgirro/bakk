@@ -18,10 +18,10 @@ for i=1:AlgoConst.SUBBAND_COUNT
     S(i).coefArray = decompositionVector(S(i).posArray);
     
     % we only sum up the absolute values, so apply abs() to every element
-    S(i).coefArray = arrayfun(@abs,S(i).coefArray);
+    %S(i).coefArray = arrayfun(@abs,S(i).coefArray);
     
     % calculate the energy level
-    S(i).energy = sum(S(i).coefArray);
+    S(i).energy = sum(abs(S(i).coefArray));
 end
 
 [energyMap, strMap] = drawmaps(S);
@@ -33,8 +33,6 @@ Emax = strMap('max').energy;
 % calculate energy difference 
 A = Emax - Emed; 
 B = Emed - Emin;
-
-
 
 if A > B
     bit = 1;

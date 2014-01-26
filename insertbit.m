@@ -20,10 +20,10 @@ for i=1:AlgoConst.SUBBAND_COUNT
     S(i).coefArray = decompositionVector(S(i).posArray);
     
     % we only sum up the absolute values, so apply abs() to every element
-    S(i).coefArray = arrayfun(@abs,S(i).coefArray);
+    %S(i).coefArray = arrayfun(@abs,S(i).coefArray);
     
     % calculate the energy level
-    S(i).energy = sum(S(i).coefArray);
+     S(i).energy = sum(abs(S(i).coefArray));
 end
 
 [energyMap, strMap] = drawmaps(S);
@@ -40,7 +40,6 @@ B = Emed - Emin;
 % embedding strength factor
 esf = AlgoConst.EMBEDDING_STRENGTH_FACTOR;
 
-    
 % emb_str...embedding strength (S im paper)
 emb_str = (esf * sum( abs(decompositionVector(1:3*AlgoConst.SUBBAND_LENGTH)) )) / 3;
 
@@ -57,6 +56,10 @@ if emb_str >= 2*Emed/(Emed+Emax) * (Emax-Emin)
     emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin);
 %    fprintf('to %8f [satisfying (8)]\n',emb_str);
 end
+
+
+% THIS IS A SECURITY MARGIN OF MY OWN DESIGN
+% emb_str = emb_str - 0.1*emb_str;
 
 
 
@@ -181,12 +184,11 @@ end
 % - - - final checks - - - 
 
 extracted_bit = extractbit( modSignalSegment );
-appendix = '';
+fprintf('[CHECK] %g | %c | %g', bit, mod_bit, extracted_bit);
 if bit ~= extracted_bit
-	appendix = '[!!!]';
+	fprintf(' [!] Emin=%4f, Emed=%4f, Emax=%4f, Emin_mod=%4f, Emed_mod=%4f, Emax_mod=%4f', Emin, Emed, Emax, Emin_mod, Emed_mod, Emax_mod );
 end
-fprintf('[CHECK] %g | %c | %g %s\n', bit, mod_bit, extracted_bit, appendix );
-
+fprintf('\n');
 
 % - - - - - - - - - - - -
 

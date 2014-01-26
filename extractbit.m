@@ -34,6 +34,8 @@ Emax = strMap('max').energy;
 A = Emax - Emed; 
 B = Emed - Emin;
 
+
+
 if A > B
     bit = 1;
 else

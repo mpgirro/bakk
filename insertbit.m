@@ -46,35 +46,35 @@ esf = AlgoConst.EMBEDDING_STRENGTH_FACTOR;
 
     
 % emb_str...embedding strength (S im paper)
-emb_str = (esf * sum( decompositionVector(1:3*AlgoConst.SUBBAND_LENGTH) )) / 3;
+emb_str = (esf * sum( abs(decompositionVector(1:3*AlgoConst.SUBBAND_LENGTH)) )) / 3;
 
 % satisfy equation (8)
 if emb_str >= 2*Emed/(Emed+Emax) * (Emax-Emin)
-    fprintf('reduceing S from %8f ',emb_str);
+%    fprintf('reduceing S from %8f ',emb_str);
     emb_str = 2*Emed/(Emed+Emax) * (Emax-Emin);
-    fprintf('to %8f\n',emb_str);
+%    fprintf('to %8f\n',emb_str);
 end
 
 % satisfy equation (11)
 if emb_str >= 2*Emed/(Emed+Emin) * (Emax-Emin)
-    fprintf('reduceing S from %8f ',emb_str);
+%    fprintf('reduceing S from %8f ',emb_str);
     emb_str = 2*Emed/(Emed+Emin) * (Emax-Emin);
-    fprintf('to %8f\n',emb_str);
+%    fprintf('to %8f\n',emb_str);
 end
 
-fprintf('bit=%d\n',bit);
-fprintf('A-B=%8f\n',A-B);
-fprintf('B-A=%8f\n',B-A);
-fprintf('S=%8f\n',emb_str);
+fprintf('PAYLOAD: %g\n',bit);
+% fprintf('A-B=%8f\n',A-B);
+% fprintf('B-A=%8f\n',B-A);
+% fprintf('S=%8f\n',emb_str);
 
 insertion = false;
 
 if bit == 1 && A-B >= emb_str
     %do nothing - bit '1' can already logically encoded
-    fprintf('encoding bit: 1\n');
+%    fprintf('encoding bit: 1\n');
 elseif bit == 0 && B-A >= emb_str
     %do nothing - bit '0' can already logically encoded
-    fprintf('encoding bit: 0\n');
+%    fprintf('encoding bit: 0\n');
 else
     
     % engery level differences do not satisfy the logic yet
@@ -111,7 +111,7 @@ end
 
 if(insertion)
     
-    fprintf('Modifying energy levels\n');
+%    fprintf('Modifying energy levels\n');
     
     Smin = strMap('min');
     Smed = strMap('med');
@@ -147,7 +147,7 @@ if(insertion)
 %     plot(rauschen);
     
 else
-    fprintf('Energy levels already ok - not doing anything\n');
+%    fprintf('Energy levels already ok - not doing anything\n');
     modSignalSegment = origSignalSegment;
 end
 
@@ -165,9 +165,9 @@ A_mod = Emax_mod - Emed_mod;
 B_mod = Emed_mod - Emin_mod;
 
 if A_mod > B_mod
-	 fprintf('[CHECK] encoded bit: 1\n');
+	 fprintf('[CHECK] encoded: 1\n');
  else
-	 fprintf('[CHECK] encoded bit: 0\n'); 
+	 fprintf('[CHECK] encoded: 0\n'); 
  end
 
         

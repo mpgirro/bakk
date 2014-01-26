@@ -167,7 +167,6 @@ if bit ~= extracted_bit
 	fprintf(' [!] Emin=%4f, Emed=%4f, Emax=%4f, Emin_mod=%4f, Emed_mod=%4f, Emax_mod=%4f', Emin, Emed, Emax, Emin_mod, Emed_mod, Emax_mod );
 	modDecompositionVector(1:2)
 	all_coef(1:2)
-	test_C(1:2)
 end
 fprintf('\n');
 

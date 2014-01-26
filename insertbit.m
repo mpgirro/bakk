@@ -72,10 +72,8 @@ insertion = false;
 
 if bit == 1 && A-B >= emb_str
     %do nothing - bit '1' can already logically encoded
-%    fprintf('encoding bit: 1\n');
 elseif bit == 0 && B-A >= emb_str
     %do nothing - bit '0' can already logically encoded
-%    fprintf('encoding bit: 0\n');
 else
     
     % engery level differences do not satisfy the logic yet
@@ -86,8 +84,6 @@ else
         insertion = true;
         
         %     fprintf('A-B=%d\n',A-B);
-        
-        % we have to modify the coefficients
         
         xi = abs(emb_str-A+B);
         
@@ -112,71 +108,61 @@ else
     end
 end
 
-% - - - debugging - - -
+% DEBUG - - - - - - - - - - 
 mod_bit = 'X';
-% - - - 
+%  - - - - - - - - - - - - - 
 
 if(insertion)
-    
-%    fprintf('Modifying energy levels\n');
     
     Smin = strMap('min');
     Smed = strMap('med');
     Smax = strMap('max');
 	
-    for i=1:AlgoConst.SUBBAND_LENGTH
-        Smin.coefArray(i) = Smin.coefArray(i) * factorMinMax;
-        Smed.coefArray(i) = Smed.coefArray(i) * factorMed;
-        Smax.coefArray(i) = Smax.coefArray(i) * factorMinMax;
-    end
+%    for i=1:AlgoConst.SUBBAND_LENGTH
+%        Smin.coefArray(i) = Smin.coefArray(i) * factorMinMax;
+%        Smed.coefArray(i) = Smed.coefArray(i) * factorMed;
+%        Smax.coefArray(i) = Smax.coefArray(i) * factorMinMax;
+%    end
+	Smin.coefArray(:) = Smin.coefArray(:) .* factorMinMax;
+	Smed.coefArray(:) = Smed.coefArray(:) .* factorMed;
+	Smax.coefArray(:) = Smax.coefArray(:) .* factorMinMax;
 	
 	
-	% debugging - - - - - - - - - - - 
-
-	Emin_mod = sum(Smin.coefArray(i));
-	Emed_mod = sum(Smed.coefArray(i));
-	Emax_mod = sum(Smax.coefArray(i));
+	% DEBUG - - - - - - - - - - 
+	Emin_mod = sum(abs(Smin.coefArray(i)));
+	Emed_mod = sum(abs(Smed.coefArray(i)));
+	Emax_mod = sum(abs(Smax.coefArray(i)));
 
 	A_mod = Emax_mod - Emed_mod;
 	B_mod = Emed_mod - Emin_mod;
 
 	if A_mod > B_mod
 		mod_bit = '1';
-%		 fprintf('[INSERTION-CHECK] encoded: 1\n');
 	 else
 		 mod_bit = '0';
-%		 fprintf('[INSERTION-CHECK] encoded: 0\n'); 
 	 end
-
-	%  - - - - - - - - - - - - - - - - - 
-	
+	%  - - - - - - - - - - - - - 
     
     modDecompositionVector = decompositionVector;
-    for i=1:AlgoConst.SUBBAND_LENGTH
-        modDecompositionVector(S(1).posArray(i)) = S(1).coefArray(i);
-        modDecompositionVector(S(2).posArray(i)) = S(2).coefArray(i);
-        modDecompositionVector(S(3).posArray(i)) = S(3).coefArray(i);
-    end
-    
-
-    
+%    for i=1:AlgoConst.SUBBAND_LENGTH
+%        modDecompositionVector(S(1).posArray(i)) = S(1).coefArray(i);
+%        modDecompositionVector(S(2).posArray(i)) = S(2).coefArray(i);
+%        modDecompositionVector(S(3).posArray(i)) = S(3).coefArray(i);
+%    end
+	
+	modDecompositionVector(S(1).posArray(:)) = S(1).coefArray(:);
+	modDecompositionVector(S(2).posArray(:)) = S(2).coefArray(:);
+	modDecompositionVector(S(3).posArray(:)) = S(3).coefArray(:);
+	
+        
 %     audiowrite('tmp/orig_dwt.wav',decompositionVector,48000);
 %     audiowrite('tmp/mod_dwt.wav',modDecompositionVector,48000);
 %     
 %     odg = PQevalAudio('tmp/orig_dwt.wav','tmp/mod_dwt.wav')
-    
-    %diff_C = C - mod_C;
-    %plot(diff_C(1:3*SUBBAND_LENGTH));
-    
-    modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, AlgoConst.DWT_WAVELET);
 
-%     r = snr(origSignalSegment,modSignalSegment)
-%     fprintf('SNR=%8f\n',r);
-%     rauschen = abs(origSignalSegment) - abs(modSignalSegment);
-%     plot(rauschen);
+    modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, AlgoConst.DWT_WAVELET);
     
 else
-%    fprintf('Energy levels already ok - not doing anything\n');
     modSignalSegment = origSignalSegment;
 end
 

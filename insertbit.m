@@ -129,33 +129,7 @@ if(insertion)
         modDecompositionVector(S(3).posArray(i)) = S(3).coefArray(i);
     end
     
-    % debugging - - - - - - - - - - - 
-    
-    %Emax modified should be
-    Emax_mod_sb = sum(strMap('max').coefArray);
-    
-    %Emed modified should be
-    Emed_mod_sb = sum(strMap('med').coefArray);
-    
-    %Emin modified should be
-    Emin_mod_sb = sum(strMap('min').coefArray);
-            
-    if bit == 1
-        Emax_mod_is = Emax * (1 + xi/(Emax+2*Emed +Emin));
-        Emed_mod_is = Emed * (1 - xi/(Emax+2*Emed +Emin));
-        Emin_mod_is = Emin * (1 + xi/(Emax+2*Emed +Emin));
-        fprintf('encoding bit: 1\n');
-    else
-        Emax_mod_is = Emax * (1 - xi/(Emax+2*Emed +Emin));
-        Emed_mod_is = Emed * (1 + xi/(Emax+2*Emed +Emin));
-        Emin_mod_is = Emin * (1 - xi/(Emax+2*Emed +Emin));
-        fprintf('encoding bit: 0\n');
-    end
-    
-    fprintf('E?max=%8f (IST) | E?max=%8f (SB) | IST-SB=%8f (DIFF)\n',Emax_mod_is, Emax_mod_sb, Emax_mod_is-Emax_mod_sb);
-    fprintf('E?med=%8f (IST) | E?med=%8f (SB) | IST-SB=%8f (DIFF)\n',Emed_mod_is, Emed_mod_sb, Emed_mod_is-Emed_mod_sb);
-    fprintf('E?min=%8f (IST) | E?min=%8f (SB) | IST-SB=%8f (DIFF)\n',Emin_mod_is, Emin_mod_sb, Emin_mod_is-Emin_mod_sb);
-    %  - - - - - - - - - - - - - - - - - 
+
     
 %     audiowrite('tmp/orig_dwt.wav',decompositionVector,48000);
 %     audiowrite('tmp/mod_dwt.wav',modDecompositionVector,48000);
@@ -176,6 +150,28 @@ else
     fprintf('Energy levels already ok - not doing anything\n');
     modSignalSegment = origSignalSegment;
 end
+
+% debugging - - - - - - - - - - - 
+
+Smin = strMap('min');
+Smed = strMap('med');
+Smax = strMap('max');
+
+Emin_mod = sum(Smin.coefArray(i));
+Emed_mod = sum(Smed.coefArray(i));
+Emax_mod = sum(Smax.coefArray(i));
+
+A_mod = Emax_mod - Emed_mod;
+B_mod = Emed_mod - Emin_mod;
+
+if A_mod > B_mod
+	 fprintf('[CHECK] encoded bit: 1\n');
+ else
+	 fprintf('[CHECK] encoded bit: 0\n'); 
+ end
+
+        
+%  - - - - - - - - - - - - - - - - - 
 
 end
 

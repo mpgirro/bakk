@@ -1,4 +1,4 @@
-function [payloadBuffer, bufferLength] = decoder( inputData, inputType )
+function [payloadBuffer, payloadLength] = decoder( inputData, inputType )
 
 addpath('PQevalAudio/CB');
 addpath('PQevalAudio/MOV');

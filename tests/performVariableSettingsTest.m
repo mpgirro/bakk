@@ -8,6 +8,9 @@
 % The results will be written in an excel sheet. 
 
 PAYLOAD_LENGTH = 1000;
+XLS_PATH = 'results-variable-settings-test.xls';
+
+
 path = ['resources',filesep,'audio',filesep,'der-affe-ist-gut.wav'];
 [signal,fs] = audioread(path);
 
@@ -15,6 +18,9 @@ path = ['resources',filesep,'audio',filesep,'der-affe-ist-gut.wav'];
 payload = round(rand(PAYLOAD_LENGTH,1));
 
 encodingData = {signal, fs, payload};
+
+settingsCount = 1;
+resultArray = ['Wavelet','DWT Level','Subband Length','Strength Factor', 'inserted [bit]', 'misclassified'];
 
 % do for every possible combinartion of settings
 for wavelet = {'db1', 'db2', 'db3'}	
@@ -31,11 +37,11 @@ for wavelet = {'db1', 'db2', 'db3'}
 		        AlgoConst.EMBEDDING_STRENGTH_FACTOR = strengtFactor;
 				
 				% insert payload into signal
-				[resultSignal, newfs] = encoder( encodingData, 'data' );
+				[resultSignal, encodedBitCount] = encoder( encodingData, 'data' );
 				
 				% decode payload from new signal
-				decodingData = {resultSignal, newfs};
-				[decodedPayload, bitCount] = decoder(decodingData,'signal');
+				decodingData = {resultSignal, fs};
+				[decodedPayload, decodedBitCount] = decoder(decodingData,'signal');
 				
 				% + compare payloads
 				
@@ -43,12 +49,16 @@ for wavelet = {'db1', 'db2', 'db3'}
 				
 				% + write a function to get the odg with the binary!
 				
-				% + write the results into an excel sheets
-					
+				resultRow = [wavelet, dwtLevel, subbandLength, strengtFactor, ]
+				
+				resultArray(settingsCount)
+				settingsCount = settingsCount + 1;
 			end			
 		end
 	end
 end
+
+xlswrite(XLS_PATH,resultArray)
 
 fprintf('Tests finished\n');
 

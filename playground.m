@@ -1,61 +1,58 @@
-
-addpath('PQevalAudio');
-addpath('PQevalAudio/CB');
-addpath('PQevalAudio/MOV');
-addpath('PQevalAudio/Misc');
-addpath('PQevalAudio/Patt');
+PAYLOAD_LENGTH = 1000;
+XLS_PATH = 'results-variable-settings-test.xls';
 
 
-path = ['..',filesep,'Audio',filesep,'Test Snippets',filesep,'flute.wav'];
-[signal,fs] = wavread(path);
+path = ['resources',filesep,'audio',filesep,'der-affe-ist-gut.wav'];
+[signal,fs] = audioread(path);
 
-% resample if need be - PQevalAudio only works with 48kHz
-if fs ~= 48000
-    signal = resample(signal, 48000, fs);
-    fs = 48000;
+% create random payload
+payload = round(rand(PAYLOAD_LENGTH,1));
+
+encodingData = {signal, fs, payload};
+
+settingsCount = 1;
+resultArray = ['Wavelet','DWT Level','Subband Length','Strength Factor', 'inserted [bit]', 'misclassified', 'ODG (PQevalAudio)'];
+
+% set new temporary algorithm settings
+wavelet = AlgoSettings.DWT_WAVELET;
+dwtLevel = AlgoSettings.DWT_LEVELS;
+subbandLength = AlgoSettings.SUBBAND_LENGTH;
+strengthFactor = AlgoSettings.EMBEDDING_STRENGTH_FACTOR;
+
+fprintf('Performing test for Wavelet: %s | Level: %g | Length: %g | Strength: %g\n', wavelet, dwtLevel,subbandLength,strengthFactor);
+
+% insert payload into signal
+[resultSignal, encodedBitCount] = encoder( encodingData, 'data' );
+fprintf('Encoded: %g bits\n', encodedBitCount);
+
+% decode payload from new signal
+decodingData = {resultSignal, fs};
+[decodedPayload, decodedBitCount] = decoder(decodingData,'signal');
+fprintf('Decoded: %g bits\n', decodedBitCount);
+
+% + compare payloads
+misclassifiedBits = 0;
+
+% the first 1..encodedBitCount decoded bits can be part of the real payload
+% the rest is just classified due to the nature of the signal and holds no
+% true encoded data
+for i=1:encodedBitCount 	
+	if payload(i) ~= decodedPayload(i)
+		misclassifiedBits = misclassifiedBits + 1;
+	end	
 end
+fprintf('misclassified: %g bits\n', misclassifiedBits);
 
-origSignal = signal;
+% calculate ODG with PQevalAudio
+odg_PQ = odgFromPQevalAudioBinary( signal, fs, resultSignal, fs);
 
-% aplayer = audioplayer(signal,fs);
-% aplayer.play();
+% add results to the resultArray
+resultRow = [wavelet, dwtLevel, subbandLength, strengtFactor, encodedBitCount, misclassifiedBits, odg_PQ];
 
-%plot( [1:size(signal)], signal)
-
-payload = [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0];
-
-segment_length = (3*8 * 64); % (3L * 2^ * (Lw+Ls), segment length to encode 1 bit
-segment_count = floor(size(signal)/segment_length);
-
-window_start=1;
-window_end = segment_length;
-for i=1:segment_count
-    
-    signal_segment = signal(window_start:window_end);
-    
-    mod_signal_segment = encode_bit(signal_segment,payload(i));
-    
-    signal(window_start:window_end) = mod_signal_segment;
-    
-    window_start = window_start + segment_length;
-    window_end = window_end + segment_length;
-end
-
-modSignal = signal;
-
-% we need to resample
-if fs ~= 48000
-    origSignal = resample(origSignal, 48000, fs);
-    modSignal = resample(modSignal, 48000, fs);
-end
-    
-%plot( [1:size(signal)], signal)
-
-% aplayer = audioplayer(signal,fs);
-% aplayer.play();
+resultArray(settingsCount);
+settingsCount = settingsCount + 1;
 
 
-% wavwrite(signal,fs,'test.wav')
+xlswrite(XLS_PATH,resultArray)
 
-
-
+fprintf('Test finished\n');

@@ -1,4 +1,4 @@
-function [modSignal, insertedBitCount ] = encoder( inputData, inputType )
+function [modSignal, encodedBitCount ] = encoder( inputData, inputType )
 
 addpath('PQevalAudio');
 addpath('PQevalAudio/CB');
@@ -62,7 +62,7 @@ for i=1:segmentCount
 end
 
 modSignal = signal;
-insertedBitCount = i;
+encodedBitCount = i-1;
 
 % resample back to original 
 % if fs ~= input_fs

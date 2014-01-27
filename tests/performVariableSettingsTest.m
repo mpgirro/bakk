@@ -20,7 +20,7 @@ payload = round(rand(PAYLOAD_LENGTH,1));
 encodingData = {signal, fs, payload};
 
 settingsCount = 1;
-resultArray = ['Wavelet','DWT Level','Subband Length','Strength Factor', 'inserted [bit]', 'misclassified'];
+resultArray = ['Wavelet','DWT Level','Subband Length','Strength Factor', 'inserted [bit]', 'misclassified', 'ODG (PQevalAudio)'];
 
 % do for every possible combinartion of settings
 for wavelet = {'db1', 'db2', 'db3'}	
@@ -31,10 +31,10 @@ for wavelet = {'db1', 'db2', 'db3'}
 				fprintf('Performing test for Wavelet: %s | Level: %g | Length: %g | Strength: %g\n', wavelet, dwtLevel,subbandLength,strengthFactor);
 				
 				% set new temporary algorithm settings
-		        AlgoConst.DWT_WAVELET = wavelet;
-		        AlgoConst.DWT_LEVELS = dwtLevel;
-		        AlgoConst.SUBBAND_LENGTH = subbandLength;
-		        AlgoConst.EMBEDDING_STRENGTH_FACTOR = strengtFactor;
+		        AlgoSettings.DWT_WAVELET = wavelet;
+		        AlgoSettings.DWT_LEVELS = dwtLevel;
+		        AlgoSettings.SUBBAND_LENGTH = subbandLength;
+		        AlgoSettings.EMBEDDING_STRENGTH_FACTOR = strengtFactor;
 				
 				% insert payload into signal
 				[resultSignal, encodedBitCount] = encoder( encodingData, 'data' );
@@ -44,12 +44,22 @@ for wavelet = {'db1', 'db2', 'db3'}
 				[decodedPayload, decodedBitCount] = decoder(decodingData,'signal');
 				
 				% + compare payloads
+				misclassifiedBits = 0;
 				
-				% + calculate odg with PQeval audio for whole signal - might not be good, but no harm in collecting the data
+				% the first 1..encodedBitCount decoded bits can be part of the real payload
+				% the rest is just classified due to the nature of the signal and holds no
+				% true encoded data
+				for i=1:encodedBitCount 	
+					if payload(i) ~= decodedPayload(i)
+						misclassifiedBits = misclassifiedBits + 1;
+					end	
+				end
 				
-				% + write a function to get the odg with the binary!
+				% calculate ODG with PQevalAudio
+				odg_PQ = odgFromPQevalAudioBinary( signal, fs, resultSignal, fs)
 				
-				resultRow = [wavelet, dwtLevel, subbandLength, strengtFactor, ]
+				% add results to the resultArray
+				resultRow = [wavelet, dwtLevel, subbandLength, strengtFactor, encodedBitCount, misclassifiedBits, odg_PQ]
 				
 				resultArray(settingsCount)
 				settingsCount = settingsCount + 1;

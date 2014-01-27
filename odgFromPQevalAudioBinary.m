@@ -20,7 +20,7 @@ function [odg] = odgFromPQevalAudioBinary( refSignal, refFs, testSignal, testFs)
 	outputLength = size(cmdout);
 	odgLine = 'Objective Difference Grade: ';
 	odgLineLength = size(odgLine);
-	odgLinePos = findstr(cmdout,str);
+	odgLinePos = findstr(cmdout,odgLine);
 	odgVal = cmdout(odgLinePos+odgLineLength(2):outputLength(2));
 	odg = str2double(odgVal);
 

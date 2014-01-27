@@ -2,18 +2,18 @@ function [ bit, all_coef ] = extractbit( signalSegment )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-[decompositionVector,bookkeepingVector] = wavedec(signalSegment, AlgoConst.DWT_LEVELS, AlgoConst.DWT_WAVELET);
+[decompositionVector,bookkeepingVector] = wavedec(signalSegment, AlgoSettings.DWT_LEVELS, AlgoSettings.DWT_WAVELET);
 
 % create unique class instances, therefore don't use repmat(Subband(),3,1)
-for i=1:AlgoConst.SUBBAND_COUNT
+for i=1:AlgoSettings.SUBBAND_COUNT
     S(i) = Subband();
 end
 
-S(1).posArray = [ 1 : AlgoConst.SUBBAND_LENGTH ];
-S(2).posArray = [ AlgoConst.SUBBAND_LENGTH+1 : 2*AlgoConst.SUBBAND_LENGTH ];
-S(3).posArray = [ 2*AlgoConst.SUBBAND_LENGTH+1 : 3*AlgoConst.SUBBAND_LENGTH ];
+S(1).posArray = [ 1 : AlgoSettings.SUBBAND_LENGTH ];
+S(2).posArray = [ AlgoSettings.SUBBAND_LENGTH+1 : 2*AlgoSettings.SUBBAND_LENGTH ];
+S(3).posArray = [ 2*AlgoSettings.SUBBAND_LENGTH+1 : 3*AlgoSettings.SUBBAND_LENGTH ];
 
-for i=1:AlgoConst.SUBBAND_COUNT
+for i=1:AlgoSettings.SUBBAND_COUNT
     % copy corresponding coefficients
     S(i).coefArray = decompositionVector(S(i).posArray(:));
     
@@ -42,7 +42,7 @@ end
 
 % fprintf('Emin=%4f, Emed=%4f, Emax=%4f\n', Emin, Emed, Emax );
 % max_coef = strMap('max').coefArray(:);
-all_coef = decompositionVector(1:3*AlgoConst.SUBBAND_LENGTH);
+all_coef = decompositionVector(1:3*AlgoSettings.SUBBAND_LENGTH);
 
 end
 

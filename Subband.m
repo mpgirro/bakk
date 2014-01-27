@@ -4,8 +4,8 @@ classdef Subband < handle
     
     properties(SetAccess = public)  
         energy=0;       % Energy Level 
-        coefArray=zeros(AlgoConst.SUBBAND_LENGTH);   % coefficients
-        posArray=zeros(AlgoConst.SUBBAND_LENGTH);    % Absolute Positions of the Coefficients in the Wavelet Coef Band
+        coefArray = zeros(AlgoSettings.SUBBAND_LENGTH);     % coefficients
+        posArray  = zeros(AlgoSettings.SUBBAND_LENGTH);     % Absolute Positions of the Coefficients in the Wavelet Coef Band
     end
         
 end

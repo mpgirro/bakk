@@ -4,18 +4,18 @@ function [ modSignalSegment ] = insertbit( origSignalSegment, bit )
 %
 %   
 
-[decompositionVector,bookkeepingVector] = wavedec(origSignalSegment, AlgoConst.DWT_LEVELS, AlgoConst.DWT_WAVELET);
+[decompositionVector,bookkeepingVector] = wavedec(origSignalSegment, AlgoSettings.DWT_LEVELS, AlgoSettings.DWT_WAVELET);
 
 % create unique class instances, therefore don't use repmat(Subband(),3,1)
-for i=1:AlgoConst.SUBBAND_COUNT
+for i=1:AlgoSettings.SUBBAND_COUNT
     S(i) = Subband();
 end
 
-S(1).posArray = [ 1 : AlgoConst.SUBBAND_LENGTH ];
-S(2).posArray = [ AlgoConst.SUBBAND_LENGTH+1 : 2*AlgoConst.SUBBAND_LENGTH ];
-S(3).posArray = [ 2*AlgoConst.SUBBAND_LENGTH+1 : 3*AlgoConst.SUBBAND_LENGTH ];
+S(1).posArray = [ 1 : AlgoSettings.SUBBAND_LENGTH ];
+S(2).posArray = [ AlgoSettings.SUBBAND_LENGTH+1 : 2*AlgoSettings.SUBBAND_LENGTH ];
+S(3).posArray = [ 2*AlgoSettings.SUBBAND_LENGTH+1 : 3*AlgoSettings.SUBBAND_LENGTH ];
 
-for i=1:AlgoConst.SUBBAND_COUNT
+for i=1:AlgoSettings.SUBBAND_COUNT
     % copy corresponding coefficients
     S(i).coefArray = decompositionVector(S(i).posArray(:));
     
@@ -38,10 +38,10 @@ B = Emed - Emin;
 
 
 % embedding strength factor
-esf = AlgoConst.EMBEDDING_STRENGTH_FACTOR;
+esf = AlgoSettings.EMBEDDING_STRENGTH_FACTOR;
 
 % ES...embedding strength (S im paper)
-ES = (esf * sum(abs(decompositionVector(1:3*AlgoConst.SUBBAND_LENGTH)) )) / 3;
+ES = (esf * sum(abs(decompositionVector(1:3*AlgoSettings.SUBBAND_LENGTH)) )) / 3;
 
 % satisfy equation (11)
 if ES >= 2*Emed / (Emed+Emin) * (Emax-Emin)
@@ -162,7 +162,7 @@ if(insertion)
 %	odgVal = cmdout(odgOutPos+strLen(2):cmdoutLen(2));
 %	odg = str2double(odgVal)	
 
-    modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, AlgoConst.DWT_WAVELET);
+    modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, AlgoSettings.DWT_WAVELET);
 
 else
     modSignalSegment = origSignalSegment;

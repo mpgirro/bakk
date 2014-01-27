@@ -35,7 +35,7 @@ for wavelet = {'db1', 'db2', 'db3'}
 				
 				% decode payload from new signal
 				decodingData = {resultSignal, newfs};
-				decodedPayload = decoder(decodingData,'signal');
+				[decodedPayload, bitCount] = decoder(decodingData,'signal');
 				
 				% + compare payloads
 				

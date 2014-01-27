@@ -19,8 +19,8 @@ payload = round(rand(PAYLOAD_LENGTH,1));
 
 encodingData = {signal, fs, payload};
 
+resultArray = {{'Wavelet' 'DWT Level' 'Subband Length' 'Strength Factor'  'inserted [bit]' 'misclassified' 'ODG (PQevalAudio)'}};
 settingsCount = 1;
-resultArray = ['Wavelet','DWT Level','Subband Length','Strength Factor', 'inserted [bit]', 'misclassified', 'ODG (PQevalAudio)'];
 
 % do for every possible combinartion of settings
 for wavelet = {'db1', 'db2', 'db3'}	
@@ -56,13 +56,14 @@ for wavelet = {'db1', 'db2', 'db3'}
 				end
 				
 				% calculate ODG with PQevalAudio
-				odg_PQ = odgFromPQevalAudioBinary( signal, fs, resultSignal, fs)
-				
+				odg_PQ = odgFromPQevalAudioBinary( signal, fs, resultSignal, fs);
+
 				% add results to the resultArray
-				resultRow = [wavelet, dwtLevel, subbandLength, strengtFactor, encodedBitCount, misclassifiedBits, odg_PQ]
-				
-				resultArray(settingsCount)
+				resultRow = {wavelet dwtLevel subbandLength strengtFactor encodedBitCount misclassifiedBits odg_PQ};
+				resultRow = cellfun(@num2str, resultRow);
+
 				settingsCount = settingsCount + 1;
+				resultArray{settingsCount} = resultRow;
 			end			
 		end
 	end

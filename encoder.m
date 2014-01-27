@@ -1,4 +1,4 @@
-function [modSignal,fs] = encoder( inputData, inputType )
+function [modSignal, insertedBitCount ] = encoder( inputData, inputType )
 
 addpath('PQevalAudio');
 addpath('PQevalAudio/CB');
@@ -16,7 +16,7 @@ else
 	switch inputType
 		case 'path'
 			path = inputData;
-			[signal,fs] = audioread(path);
+			[signal,input_fs] = audioread(path);
 		case 'data'
 			signal = inputData{1};
 			fs = inputData{2};
@@ -27,10 +27,10 @@ end
 
 
 % resample if need be - PQevalAudio only works with 48kHz
-if fs ~= 48000
-    signal = resample(signal, 48000, fs);
-    fs = 48000;
-end
+% if input_fs ~= 48000
+%    signal = resample(signal, 48000, input_fs);
+%    fs = 48000;
+% end
 
 origSignal = signal;
 
@@ -62,8 +62,13 @@ for i=1:segmentCount
 end
 
 modSignal = signal;
+insertedBitCount = i;
 
-audiowrite('watermarked_audio.wav',modSignal, 48000);
+% resample back to original 
+% if fs ~= input_fs
+% 	 signal = resample(signal, input_fs, 48000);
+% end
+audiowrite('watermarked_audio.wav',modSignal, fs);
     
 %plot( [1:size(signal)], signal)
 

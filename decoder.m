@@ -21,7 +21,7 @@ else
 	end
 end
 
-segmentLength = (3*AlgoSettings.SUBBAND_LENGTH * 2 ^ AlgoSettings.DWT_LEVELS); % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
+segmentLength = (3*Setting.getSubbandLength * 2 ^ Setting.getDwtLevel); % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
 segmentCount = floor(size(signal)/segmentLength);
 
 payloadBuffer = [];

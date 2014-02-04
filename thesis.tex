@@ -1,0 +1,144 @@
+\documentclass[a4paper,11pt,twoside]{memoir}
+\chapterstyle{veelo}
+
+\usepackage{TUINFDA}
+
+\usepackage{url}
+\usepackage{hyperref}					% links in pdf
+\usepackage{graphicx}            			% Figures
+\usepackage{verbatim}            			% Code-Environment
+\usepackage[lined,linesnumbered,algochapter]{algorithm2e} % Algorithm-Environment
+
+\usepackage{pgf}					
+\usepackage{tikz}					% tikz graphics
+\usetikzlibrary{arrows,automata}
+
+\usepackage{ngerman}
+\usepackage[ngerman]{babel}
+\usepackage{bibgerm,cite}       % Deutsche Bezeichnungen, Automatisches Zusammenfassen von Literaturstellen
+\usepackage[ngerman]{varioref}  % Querverweise
+% to use the german charset include cp850 for MS-DOS, ansinew for Windows and latin1 for Linux.
+% \usepackage[latin1]{inputenc}
+
+\thesistitle{Title of the Thesis}
+\thesissubtitle{Optional Subtitle} % optional
+\thesisdate{TT.MM.JJJJ}
+
+% all titles and designations have to be gender-related!
+\thesisdegree{Diplom-Ingenieurin}{Diplom-Ingenieurin}
+\thesiscurriculum{Wirtschaftsinformatik}{Business Informatics} % your study
+\thesisverfassung{Verfasserin} % Verfasser
+\thesisauthor{Martina Musterfrau} % your name
+\thesisauthoraddress{Musterplatz 1, 1111 Wien} % your address
+\thesismatrikelno{0123456} % your registration number
+
+\thesisbetreins{o.Univ.-Prof. Dipl.-Ing. Mag. Dr. Monika Musterprofessorin}
+\thesisbetrzwei{Dr. Vorname Familienname}
+\thesisbetrdrei{Dr. Vorname Familienname} % optional
+
+% define page numbering styles
+\makepagestyle{numberCorner}
+\makeevenfoot{numberCorner}{\thepage}{}{}
+\makeoddfoot{numberCorner}{}{}{\thepage}
+
+% define custom macros for specific formats or names
+\newcommand{\uml}[1]{\texttt{#1}}
+\newcommand{\cd}{\textsf{Class Diagram}}
+
+\begin{document}
+
+\captionnamefont{\bfseries}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   FRONTMATTER    %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\frontmatter
+\pagenumbering{roman}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   TITLEPAGES    %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% the german title page is required as first page
+\include{titlepage}
+
+% an english translation may follow
+\include{titlepage_en} % optional
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   ERKLAERUNG DER SELBSTAENDIGKEIT   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\cleardoublepage
+\selectlanguage{ngerman}
+\input{chapters/erklaerung}
+\selectlanguage{english}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   ACKNOWLEDGEMENTS    %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% optional acknowledgements may be included in german or in english
+%\input{chapters/danksagung} 		% optional
+\input{chapters/acknowledgements}	% optional
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   ABSTARCT    %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{chapters/abstract_en}
+\cleardoublepage
+\selectlanguage{ngerman}
+\input{chapters/abstract_de}
+\selectlanguage{english}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   CONTENTS    %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% uncomment to set document language to german (results in "Inhaltsverzeichnis", "Kapitel", "Abbildung", etc. instead of "Contents", "Chapter", and "Figure"), otherwise the document's language is english
+%\selectlanguage{ngerman}
+
+\setcounter{tocdepth}{1}
+
+\cleardoublepage
+\pagestyle{numberCorner}
+\tableofcontents*
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   MAINMATTER    %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\mainmatter
+\pagenumbering{arabic}
+\pagestyle{numberCorner}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Introduction}
+\label{ch:intro}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{chapters/introduction}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Typographic Design}
+\label{ch:typo}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{chapters/design}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Bibliographic Issues}
+\label{ch:bibliographic}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{chapters/bibliographic}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BACKMATTER %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

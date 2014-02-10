@@ -7,11 +7,13 @@
 % and/or application problems with every setting. 
 % The results will be written in an excel sheet. 
 
+addpath('..');
+
 PAYLOAD_LENGTH = 1000;
 XLS_PATH = 'results-variable-settings-test.xls';
 
 
-path = ['resources',filesep,'audio',filesep,'der-affe-ist-gut.wav'];
+path = ['../resources',filesep,'audio',filesep,'der-affe-ist-gut.wav'];
 [signal,fs] = audioread(path);
 
 % create random payload
@@ -27,14 +29,15 @@ for wavelet = {'db1', 'db2', 'db3'}
 	for dwtLevel = [1:10]
 		for subbandLength = [5:15]
 			for strengthFactor = [1:10]
-				
-				fprintf('Performing test for Wavelet: %s | Level: %g | Length: %g | Strength: %g\n', wavelet, dwtLevel,subbandLength,strengthFactor);
+                
+				fprintf('Performing test for Wavelet: %s | Level: %g | Length: %g | Strength: %g\n', wavelet{1}, dwtLevel,subbandLength,strengthFactor);
 				
 				% set new temporary algorithm settings
-		        AlgoSettings.DWT_WAVELET = wavelet;
-		        AlgoSettings.DWT_LEVELS = dwtLevel;
-		        AlgoSettings.SUBBAND_LENGTH = subbandLength;
-		        AlgoSettings.EMBEDDING_STRENGTH_FACTOR = strengtFactor;
+                sObj = SettingSingleton.instance();
+                sObj.setDwtWavelet(wavelet{1});
+                sObj.setDwtLevel(dwtLevel);
+                sObj.setSubbandLength(subbandLength);
+                sObj.setEmbeddingStrengthFactor(strengthFactor);
 				
 				% insert payload into signal
 				[resultSignal, encodedBitCount] = encoder( encodingData, 'data' );
@@ -49,18 +52,20 @@ for wavelet = {'db1', 'db2', 'db3'}
 				% the first 1..encodedBitCount decoded bits can be part of the real payload
 				% the rest is just classified due to the nature of the signal and holds no
 				% true encoded data
-				for i=1:encodedBitCount 	
-					if payload(i) ~= decodedPayload(i)
-						misclassifiedBits = misclassifiedBits + 1;
-					end	
-				end
+% 				for i=1:encodedBitCount 	
+% 					if payload(i) ~= decodedPayload(i)
+% 						misclassifiedBits = misclassifiedBits + 1;
+% 					end	
+% 				end
 				
 				% calculate ODG with PQevalAudio
-				odg_PQ = odgFromPQevalAudioBinary( signal, fs, resultSignal, fs);
+% 				odg_PQ = odgFromPQevalAudioBinary( signal, fs, resultSignal, fs);
 
+                [number,ratio] = biterr(payload(1:encodedBitCount),decodedPayload(1:encodedBitCount)) 
+                
 				% add results to the resultArray
-				resultRow = {wavelet dwtLevel subbandLength strengtFactor encodedBitCount misclassifiedBits odg_PQ};
-				resultRow = cellfun(@num2str, resultRow);
+				resultRow = {wavelet dwtLevel subbandLength strengthFactor encodedBitCount misclassifiedBits odg_PQ};
+				resultRow = cellfun(@num2str, resultRow)
 
 				settingsCount = settingsCount + 1;
 				resultArray{settingsCount} = resultRow;

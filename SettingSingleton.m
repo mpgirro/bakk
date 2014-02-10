@@ -18,7 +18,7 @@ classdef SettingSingleton < handle
     end
     
     methods(Static)
-        % Concrete implementation.  See Singleton superclass.
+        
         function obj = instance()
             persistent uniqueInstance
             if isempty(uniqueInstance)
@@ -28,6 +28,7 @@ classdef SettingSingleton < handle
                 obj = uniqueInstance;
             end
         end
+        
     end
     
     methods % Public Access
@@ -67,7 +68,6 @@ classdef SettingSingleton < handle
         function [seglen] = getCoefficientSegmentLength(obj)
             seglen = (3*obj.subband_length * 2 ^ obj.dwt_level);
         end
-        
     end
     
 end

@@ -42,15 +42,16 @@ Emed = decomposition.Emed;
 Emax = decomposition.Emax;
 A = decomposition.A;
 B = decomposition.B;
+subbandMap = decomposition.SubbandMap;
 decompositionVector = decomposition.DecompositionVector;
-
+bookkeepingVector = decomposition.BookkeepingVector;
 
 % embedding strength factor
-esf = Setting.getEmbeddingStrengthFactor;
+esf = Setting.embedding_strength_factor;
 %esf = AlgoSettings.EMBEDDING_STRENGTH_FACTOR;
 
 % ES...embedding strength (S im paper)
-ES = (esf * sum(abs(decompositionVector(1:3*Setting.getSubbandLength)) )) / 3;
+ES = (esf * sum(abs(decompositionVector(1:3*Setting.subband_length)) )) / 3;
 
 % satisfy equation (11)
 if ES >= 2*Emed / (Emed+Emin) * (Emax-Emin)
@@ -125,9 +126,9 @@ mod_bit = 'X';
 
 if(insertion)
     
-    Smin = strMap('min');
-    Smed = strMap('med');
-    Smax = strMap('max');
+    Smin = subbandMap('min');
+    Smed = subbandMap('med');
+    Smax = subbandMap('max');
 	
 	Smin.coefArray(:) = Smin.coefArray(:) .* factorMinMax;
 	Smed.coefArray(:) = Smed.coefArray(:) .* factorMed;
@@ -171,7 +172,7 @@ if(insertion)
 %	odgVal = cmdout(odgOutPos+strLen(2):cmdoutLen(2));
 %	odg = str2double(odgVal)	
 
-    modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, AlgoSettings.DWT_WAVELET);
+    modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, Setting.dwt_wavelet);
 
 else
     modSignalSegment = origSignalSegment;

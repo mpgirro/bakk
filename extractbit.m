@@ -47,7 +47,7 @@ end
 % fprintf('Emin=%4f, Emed=%4f, Emax=%4f\n', Emin, Emed, Emax );
 % max_coef = strMap('max').coefArray(:);
 %all_coef = decompositionVector(1:3*Setting.getSubbandLength);
-all_coef = decomposition.DecompositionVector(1:3*Setting.getSubbandLength);
+all_coef = decomposition.DecompositionVector(1:3*Setting.subband_length);
 
 end
 

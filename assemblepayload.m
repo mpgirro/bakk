@@ -20,7 +20,6 @@ wmkSize = size(watermark);
 
 % check if watermark needs dummy bits
 % extend watermark if need be
-mod(wmkSize(2), wmkSegmentLength)
 if mod(wmkSize(2), wmkSegmentLength) ~= 0
    missing = wmkSegmentLength - mod(wmkSize(2), wmkSegmentLength);
    watermark(wmkSize(2)+1: wmkSize(2)+missing) = 0;

@@ -1,25 +1,25 @@
 function [payloadBuffer, payloadLength] = decoder( inputData, inputType )
 
-addpath('PQevalAudio/CB');
-addpath('PQevalAudio/MOV');
-addpath('PQevalAudio/Misc');
-addpath('PQevalAudio/Patt');
-
-
-
-if nargin < 1
-	path = 'watermarked_audio.wav';
-	[signal,fs] = audioread(path);
-else
-	switch inputType
-		case 'path'
-			path = inputData;
-			[signal,fs] = audioread(path);
-		case 'signal'
-			signal = inputData{1};
-			fs = inputData{2};
-	end
-end
+% addpath('PQevalAudio/CB');
+% addpath('PQevalAudio/MOV');
+% addpath('PQevalAudio/Misc');
+% addpath('PQevalAudio/Patt');
+% 
+% 
+% 
+% if nargin < 1
+% 	path = 'watermarked_audio.wav';
+% 	[signal,fs] = audioread(path);
+% else
+% 	switch inputType
+% 		case 'path'
+% 			path = inputData;
+% 			[signal,fs] = audioread(path);
+% 		case 'signal'
+% 			signal = inputData{1};
+% 			fs = inputData{2};
+% 	end
+% end
 
 segmentLength = Setting.coefficient_segment_length; % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
 segmentCount = floor(size(signal)/segmentLength);

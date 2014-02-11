@@ -5,6 +5,8 @@ classdef SettingSingleton < handle
         dwt_level;
         subband_length;
         embedding_strength_factor;
+        synchronization_code;
+        watermark_segment_length;
     end
     
     methods(Access=private)
@@ -14,6 +16,8 @@ classdef SettingSingleton < handle
             newObj.setDwtLevel(6);
             newObj.setSubbandLength(8);
             newObj.setEmbeddingStrengthFactor(10);
+            newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
+            newObj.setWmkSegmentLength(8);
         end
     end
     
@@ -65,9 +69,22 @@ classdef SettingSingleton < handle
             obj.embedding_strength_factor = esf;
         end
         
-        function [seglen] = getCoefficientSegmentLength(obj)
-            seglen = (3*obj.subband_length * 2 ^ obj.dwt_level);
+        function sc = getSynchronizationCode(obj)
+            sc = obj.synchronization_code;
         end
+        
+        function setSynchronizationCode(obj, sc)
+            obj.synchronization_code = sc;
+        end
+        
+        function wsl = getWmkSegmentLength(obj)
+            wsl = obj.watermark_segment_length;
+        end
+        
+        function setWmkSegmentLength(obj, wsl)
+            obj.watermark_segment_length = wsl;
+        end
+
     end
     
 end

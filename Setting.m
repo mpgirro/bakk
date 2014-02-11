@@ -27,12 +27,28 @@ classdef Setting
             esf = sObj.getEmbeddingStrengthFactor;
         end
         
+        function code = sync_code()
+            sObj = SettingSingleton.instance();
+            code = sObj.getSynchronizationCode;
+        end
+        
+        function length = sync_segment_length()
+            sObj = SettingSingleton.instance();
+            codeSize = size(sObj.getSynchronizationCode);
+            length = codeSize(2);
+        end
+        
+        function length = wmk_segment_length()
+            sObj = SettingSingleton.instance();
+            length = sObj.getWmkSegmentLength;
+        end
         
         % Signal Sample Segment Length needed to encode 1 bit
         function [length] = coefficient_segment_length()
             sObj = SettingSingleton.instance();
-            length = sObj.getCoefficientSegmentLength;
+            length = 3* sObj.getSubbandLength * 2 ^ sObj.getDwtLevel;
         end
+  
         
     end
 end

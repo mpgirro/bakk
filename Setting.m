@@ -32,15 +32,15 @@ classdef Setting
             code = sObj.getSynchronizationCode;
         end
         
-        function length = sync_segment_length()
+        function length = sync_sequence_length()
             sObj = SettingSingleton.instance();
             codeSize = size(sObj.getSynchronizationCode);
             length = codeSize(2);
         end
         
-        function length = wmk_segment_length()
+        function length = wmk_sequence_length()
             sObj = SettingSingleton.instance();
-            length = sObj.getWmkSegmentLength;
+            length = sObj.getWmkSequenceLength;
         end
         
         % Signal Sample Segment Length needed to encode 1 bit

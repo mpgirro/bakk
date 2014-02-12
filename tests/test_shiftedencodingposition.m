@@ -6,6 +6,6 @@ outputPath  = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
 [signal,fs] = audioread(path);
 
 signalSize = size(signal);
-[modSignal, encodedBitCount] = encoder(signal(7529:signalSize(1)), wmkData);
+[modSignal, encodedBitCount] = encoder(signal(4765:signalSize(1)), wmkData);
 
 audiowrite(outputPath,modSignal, fs);

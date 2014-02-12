@@ -1,40 +1,5 @@
 function [modSignal, encodedBitCount ] = encoder( inputSignal, watermark )
 
-%  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
-% addpath('PQevalAudio');
-% addpath('PQevalAudio/CB');
-% addpath('PQevalAudio/MOV');
-% addpath('PQevalAudio/Misc');
-% addpath('PQevalAudio/Patt');
-
-% payload = [1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0,1,1,0,0];
-% 
-% if nargin < 1
-% 	path = ['resources',filesep,'audio',filesep,'flute.wav'];
-% 	[signal,fs] = audioread(path);
-% else
-% 	switch inputType
-% 		case 'path'
-% 			path = inputData;
-% 			[signal,input_fs] = audioread(path);
-% 		case 'data'
-% 			signal = inputData{1};
-% 			fs = inputData{2};
-% 			payload = inputData{3};
-% 	end
-% end
-
-% resample if need be - PQevalAudio only works with 48kHz
-% if input_fs ~= 48000
-%    signal = resample(signal, 48000, input_fs);
-%    fs = 48000;
-% end
-
-%origSignal = inputSignal;
-
-%  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
-
 % create payload containing synccodes and watermark segments
 payload = assemblepayload(watermark);
 
@@ -43,38 +8,51 @@ signal = inputSignal;
 segmentLength = Setting.coefficient_segment_length;
 segmentCount = floor(size(inputSignal)/segmentLength);
 
-windowStart=1;
-windowEnd = segmentLength;
-for i=1:segmentCount
+signalSize      = size(signal); 
+signalSize      = signalSize(1);
+syncSequenceLen = Setting.sync_sequence_length; % amount of bits in one synccode
+wmkSequenceLen  = Setting.wmk_sequence_length;  % amount of bits in one wmk sequence
+syncSegmentLen  = syncSequenceLen * segmentLength; % amount of samples needed to encode one synccode
+wmkSegmentLen   = wmkSequenceLen * segmentLength;  % amount of samples needed to encode one wmk data block
+dataStructSequenceLen   = syncSequenceLen + wmkSequenceLen;
+dataStructSegmentLen    = syncSegmentLen + wmkSegmentLen;
+dataStructInsertionCapacity = floor(signalSize/dataStructSegmentLen);
+
+sampleCursor = 1;
+dataStructInsertionCount = 0;
+
+% Theoretical limit of bit that can be encoded into this sample sequence.
+% In general, there will be less bits encoded, because we stop as soon as
+% the signal can't hold any more data structures for we only encode whole
+% structures. 
+bitEncodingCapacity = floor(signalSize/ segmentLength);
+
+for i=1:bitEncodingCapacity
+   
+    window = sampleCursor : sampleCursor+segmentLength-1;
     
-    % if whole payload is inserted we do not need to continue
-    if i > size(payload)
+    signalSegment = signal(window);
+    modSignalSegment = insertbit(signalSegment,payload(i));
+    signal(window) = modSignalSegment;
+    
+    sampleCursor = sampleCursor+segmentLength;
+    
+    if mod(i,dataStructSequenceLen) == 0
+        dataStructInsertionCount = dataStructInsertionCount+1;
+    end
+    
+    % Check if we reached the data structure limit this signal can hold. We
+    % can stop if this is the case
+    if dataStructInsertionCount >= dataStructInsertionCapacity
         break;
     end
-        
-	% insert bit into segment
-    signalSegment = signal(windowStart:windowEnd);
-    modSignalSegment = insertbit(signalSegment,payload(i));
-    signal(windowStart:windowEnd) = modSignalSegment;
-
-	% move the window to the next slice
-    windowStart = windowStart + segmentLength;
-    windowEnd = windowEnd + segmentLength;
+    
 end
 
 modSignal = signal;
-encodedBitCount = i-1;
+encodedBitCount = i;
 
-% resample back to original 
-% if fs ~= input_fs
-% 	 signal = resample(signal, input_fs, 48000);
-% end
-%audiowrite('watermarked_audio.wav',modSignal, fs);
-    
-%plot( [1:size(signal)], signal)
-
-% aplayer = audioplayer(modSignal,48000);
-% aplayer.play();
+fprintf('Encoded %d bit total in %d data struct packages holding %d watermark bit\n',encodedBitCount,dataStructInsertionCount, dataStructInsertionCount * wmkSequenceLen);
 
 end
 

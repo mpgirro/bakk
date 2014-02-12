@@ -17,6 +17,5 @@ for i=1:wmkSequenceLen
   
 end
 
-
 end
 

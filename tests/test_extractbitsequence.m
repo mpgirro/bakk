@@ -1,5 +1,6 @@
 % just read the encoded bit sequence of a signal
 
+clear;
 
 path   = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
 

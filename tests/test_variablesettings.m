@@ -7,6 +7,9 @@
 % and/or application problems with every setting. 
 % The results will be written in an excel sheet. 
 
+
+clear;
+
 addpath('..');
 
 PAYLOAD_LENGTH = 1000;

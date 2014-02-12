@@ -1,4 +1,6 @@
 
+clear;
+
 addpath('../');
 
 path   = ['..',filesep,'results',filesep,'watermarked_audio.wav'];

@@ -1,5 +1,5 @@
 function [ found ] = synccodedetector( sample_sequence )
-%UNTITLED checks if a sequence of signal samples holds a synccode
+%SYNCCODEDETECTOR checks if a sequence of signal samples holds a synccode
 %   Checks if a sequence of signal samples encode a synchronization code.
 %   To encode 1 bit, there are coefficient_segment_length sample values
 %   necessary. Each synccode has a length of sync_sequence_length. Therefore

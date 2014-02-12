@@ -2,6 +2,8 @@ function [modSignal, encodedBitCount ] = encoder( inputSignal, watermark )
 
 % create payload containing synccodes and watermark segments
 payload = assemblepayload(watermark);
+payloadSize = size(payload);
+payloadSize = payloadSize(2);
 
 signal = inputSignal;
 
@@ -28,6 +30,11 @@ dataStructInsertionCount = 0;
 bitEncodingCapacity = floor(signalSize/ segmentLength);
 
 for i=1:bitEncodingCapacity
+    
+    % no need to do more than necessary
+    if i > payloadSize
+        break;
+    end
    
     window = sampleCursor : sampleCursor+segmentLength-1;
     

@@ -1,1 +1,0 @@
-% sync code detector

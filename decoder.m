@@ -1,54 +1,5 @@
 function [watermark] = decoder( signal )
 
-% addpath('PQevalAudio/CB');
-% addpath('PQevalAudio/MOV');
-% addpath('PQevalAudio/Misc');
-% addpath('PQevalAudio/Patt');
-%
-%
-%
-% if nargin < 1
-% 	path = 'watermarked_audio.wav';
-% 	[signal,fs] = audioread(path);
-% else
-% 	switch inputType
-% 		case 'path'
-% 			path = inputData;
-% 			[signal,fs] = audioread(path);
-% 		case 'signal'
-% 			signal = inputData{1};
-% 			fs = inputData{2};
-% 	end
-% end
-
-% segmentLength = Setting.coefficient_segment_length; % (3L * 2^k * (Lw+Ls), segment length to encode 1 bit (Lw+Ls=1, dwt level k=6, subband length L=8)
-% segmentCount = floor(size(signal)/segmentLength);
-%
-% payloadBuffer = [];
-% payloadLength = 0;
-%
-% windowStart=1;
-% windowEnd = segmentLength;
-% for i=1:segmentCount
-%
-%     signalSegment = signal(windowStart:windowEnd);
-%
-%     bit = extractbit(signalSegment);
-%
-%     % add the bit to the recovered payload
-%     payloadLength = payloadLength + 1;
-%     payloadBuffer(payloadLength) = bit;
-%
-%     windowStart = windowStart + segmentLength;
-%     windowEnd = windowEnd + segmentLength;
-% end
-%
-% payloadLength = i; % how many bits did we read?
-
-
-
-% ---
-
 signalSize      = size(signal);
 segmentWidth    = Setting.coefficient_segment_length; % # samples needed to encode 1 bit
 segmentCount    = floor(size(signal)/segmentWidth);  % theoretical max amount of segments fitting in this signal, assuming the payload is encoded at sample nr 1
@@ -59,8 +10,11 @@ wmkSegmentLen   = wmkSequenceLen * segmentWidth;  % amount of samples needed to 
 maxWmkSeqCount  = floor(segmentCount / (syncSequenceLen + wmkSequenceLen)); % there is always a sync sequence and a wmk sequence encoded together
 maxWmkBitcount  = maxWmkSeqCount * wmkSequenceLen;
 wmkBuffer       = zeros([1, maxWmkBitcount(1)]); % preallocate wmk buffer space for speed
-wmkBufferIndex  = 1;
 
+dataStructSegmentLen = syncSegmentLen + wmkSegmentLen;
+dataStructInsertionCapacity = floor(signalSize(1)/dataStructSegmentLen);
+
+wmkBufferCursor = 1;
 sampleCursor = 1;
 
 % Calculate the last sample it makes sense to start searching in. After
@@ -83,8 +37,8 @@ for i=1:lastSampleToStartSearching
         wmkDataWindow = sampleCursor : sampleCursor+wmkSegmentLen-1;
         wmkData = wmkdataextractor(signal(wmkDataWindow));
         
-        wmkBuffer(wmkBufferIndex : wmkBufferIndex+wmkSequenceLen-1) = wmkData;
-        wmkBufferIndex = wmkBufferIndex+wmkSequenceLen;
+        wmkBuffer(wmkBufferCursor : wmkBufferCursor+wmkSequenceLen-1) = wmkData;
+        wmkBufferCursor = wmkBufferCursor+wmkSequenceLen;
         
         % move sample cursor to the end of the window
         sampleCursor = sampleCursor + wmkSegmentLen;
@@ -95,25 +49,23 @@ for i=1:lastSampleToStartSearching
     
     % check if there is still space left in the signal to encode more 
     % (sync, wmk)-data-structures
-    if sampleCursor + syncSegmentLen + wmkSegmentLen > lastSampleToStartSearching
+    if sampleCursor + syncSegmentLen + wmkSegmentLen > signalSize(1)
         break;
     end
     
     
 end
 
-if wmkBufferIndex == 1
+if wmkBufferCursor == 1
     % oh boy, we did not find any sync codes and
     % therefore have no watermark data
     watermark = [];
 else
-    % be preallocated space for the theoratically maximum of watermark data
+    % we preallocated space for the theoratically maximum of watermark data
     % bit. but in general we will not have found as many bit. so return
     % only the valid data
-    watermark = wmkBuffer(1:wmkBufferIndex-1);
+    watermark = wmkBuffer(1:wmkBufferCursor-1);
 end
-
-wmkBuffer(1:wmkBufferIndex-1)
 
 end
 

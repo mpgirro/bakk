@@ -23,7 +23,10 @@ dataStructExtractionCount = 0;
 % corresponting watermark sequence. Therefore, the following bit are random
 lastSampleToStartSearching = signalSize(1)-(syncSegmentLen + wmkSegmentLen);
 
-for i=1:lastSampleToStartSearching
+fprintf('Watermark data:\n');
+
+%for i=1:lastSampleToStartSearching
+while sampleCursor <= lastSampleToStartSearching
     
     syncCodeWindow = sampleCursor : sampleCursor+syncSegmentLen-1;% -1 due to the nature of matlab sequence notation
     
@@ -40,6 +43,10 @@ for i=1:lastSampleToStartSearching
         
         wmkBuffer(wmkBufferCursor : wmkBufferCursor+wmkSequenceLen-1) = wmkData;
         wmkBufferCursor = wmkBufferCursor+wmkSequenceLen;
+        
+        fmt=[repmat('%d ',1,wmkSequenceLen) '\n'];
+        fprintf(fmt,wmkData');
+       
         
         % move sample cursor to the end of the window
         sampleCursor = sampleCursor + wmkSegmentLen;
@@ -71,8 +78,6 @@ else
 end
 
 fprintf('Decoded %d watermark bits in %d data struct packages\n',wmkBufferCursor-1,dataStructExtractionCount);
-fmt=['Watermark data: ' repmat('%d ',1,wmkBufferCursor-1) '\n'];
-fprintf(fmt,watermark');
 
 end
 

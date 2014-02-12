@@ -16,6 +16,7 @@ dataStructInsertionCapacity = floor(signalSize(1)/dataStructSegmentLen);
 
 wmkBufferCursor = 1;
 sampleCursor = 1;
+dataStructExtractionCount = 0;
 
 % Calculate the last sample it makes sense to start searching in. After
 % this point, the signal is not able to hold and entire sync code +
@@ -42,6 +43,8 @@ for i=1:lastSampleToStartSearching
         
         % move sample cursor to the end of the window
         sampleCursor = sampleCursor + wmkSegmentLen;
+        
+        dataStructExtractionCount = dataStructExtractionCount+1;
     else
         % BAD! shift sample cursor one element and try again
         sampleCursor = sampleCursor+1;
@@ -66,6 +69,10 @@ else
     % only the valid data
     watermark = wmkBuffer(1:wmkBufferCursor-1);
 end
+
+fprintf('Decoded %d watermark bits in %d data struct packages\n',wmkBufferCursor-1,dataStructExtractionCount);
+fmt=['Watermark data: ' repmat('%d ',1,wmkBufferCursor-1) '\n'];
+fprintf(fmt,watermark');
 
 end
 

@@ -1,4 +1,4 @@
-function [odg] = odgFromPQevalAudioBinary( refSignal, refFs, testSignal, testFs)
+function [odg] = odgFromEaqualExe( refSignal, refFs, testSignal, testFs)
 
 	% resample if need be - PQevalAudio only works with 48kHz
 %	if refFs ~= 48000

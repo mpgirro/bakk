@@ -7,6 +7,7 @@ classdef SettingSingleton < handle
         embedding_strength_factor;
         synchronization_code;
         watermark_sequence_length;
+        synccode_redundancy_rate;
     end
     
     methods(Access=private)
@@ -19,6 +20,7 @@ classdef SettingSingleton < handle
             newObj.setSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
             %newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
             newObj.setWmkSequenceLength(8);
+            newObj.setSyncCodeRedundancyRate(3);
         end
     end
     
@@ -85,6 +87,15 @@ classdef SettingSingleton < handle
         function setWmkSequenceLength(obj, wsl)
             obj.watermark_sequence_length = wsl;
         end
+        
+        function rr = getSyncCodeRedundancyRate(obj)
+            rr = obj.synccode_redundancy_rate;
+        end
+        
+        function setSyncCodeRedundancyRate(obj, rr)
+            obj.synccode_redundancy_rate = rr;
+        end
+        
 
     end
     

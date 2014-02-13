@@ -1,4 +1,4 @@
-function [modSignal, encodedBitCount ] = encoder( inputSignal, watermark )
+function [modSignal, encodedBitCount ] = encoder( inputSignal, watermark, fs )
 
 % create payload containing synccodes and watermark segments
 payload = assemblepayload(watermark);
@@ -59,10 +59,19 @@ end
 modSignal = signal;
 encodedBitCount = i;
 
+% now lets calculate the ODGs
+refSignal   = inputSignal(1:sampleCursor-1);
+testSignal  = modSignal(1:sampleCursor-1);
+
+odg_eaqual = odgFromEaqualExe(refSignal, fs, testSignal, fs);
+odg_pqeval = odgFromPQevalAudioBinary(refSignal, fs, testSignal, fs);
+
 fprintf('Encoding complete\n');
 fprintf('%d bit total payload\n',encodedBitCount);
 fprintf('%d data struct packages\n',dataStructCount);
 fprintf('%d watermark data bits\n',dataStructCount * wmkSequenceLen);
+fprintf('ODG: %f (PQevalAudio)\n',odg_pqeval);
+fprintf('ODG: %f (EAQUAL)\n',odg_eaqual);
 
 end
 

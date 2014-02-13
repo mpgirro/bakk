@@ -5,7 +5,7 @@ classdef SettingSingleton < handle
         dwt_level;
         subband_length;
         embedding_strength_factor;
-        synchronization_code;
+        base_synchronization_code;
         watermark_sequence_length;
         synccode_redundancy_rate;
     end
@@ -17,7 +17,7 @@ classdef SettingSingleton < handle
             newObj.setDwtLevel(6);
             newObj.setSubbandLength(8);
             newObj.setEmbeddingStrengthFactor(10);
-            newObj.setSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
+            newObj.setBaseSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
             %newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
             newObj.setWmkSequenceLength(8);
             newObj.setSyncCodeRedundancyRate(3);
@@ -72,12 +72,12 @@ classdef SettingSingleton < handle
             obj.embedding_strength_factor = esf;
         end
         
-        function sc = getSynchronizationCode(obj)
-            sc = obj.synchronization_code;
+        function sc = getBaseSynchronizationCode(obj)
+            sc = obj.base_synchronization_code;
         end
         
-        function setSynchronizationCode(obj, sc)
-            obj.synchronization_code = sc;
+        function setBaseSynchronizationCode(obj, sc)
+            obj.base_synchronization_code = sc;
         end
         
         function wsl = getWmkSequenceLength(obj)

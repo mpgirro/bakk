@@ -27,15 +27,18 @@ classdef Setting
             esf = sObj.getEmbeddingStrengthFactor;
         end
         
+        
+        % sync code = base sync code with local redundancy applied
         function code = sync_code()
             sObj = SettingSingleton.instance();
-            baseCode        = sObj.getSynchronizationCode;
+            baseCode        = sObj.getBaseSynchronizationCode;
             redundancyRate  = Setting.synccode_redundancy_rate;
     
             % e.g. makes [1,0,1] to [1,1,1,0,0,0,1,1,1] if redundancyRate = 3
             code = reshape(repmat(baseCode,redundancyRate,1),[],1)'; % don't forget the ' at the end!
         end
         
+        % the length of the sync code with local redundancy applied!
         function length = sync_sequence_length()
             codeSize = size(Setting.sync_code);
             length = codeSize(2);

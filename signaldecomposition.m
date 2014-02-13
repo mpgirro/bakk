@@ -9,10 +9,12 @@ end
 
 bandWidth = Setting.subband_length;
 
-subbands(1).posArray = [ 1 : bandWidth ];
-subbands(2).posArray = [ bandWidth+1 : 2*bandWidth ];
-subbands(3).posArray = [ 2*bandWidth+1 : 3*bandWidth ];
+% associate every subband with the corresponding coefficient indizes
+subbands(1).posArray = 1 : bandWidth;
+subbands(2).posArray = bandWidth+1 : 2*bandWidth;
+subbands(3).posArray = 2*bandWidth+1 : 3*bandWidth;
 
+% copy coefficient values and calculate abs energy band sum
 for i=1:Setting.SUBBAND_COUNT
     % copy corresponding coefficients
     subbands(i).coefArray = decompositionVector(subbands(i).posArray(:));
@@ -21,25 +23,27 @@ for i=1:Setting.SUBBAND_COUNT
     subbands(i).energy = sum(abs(subbands(i).coefArray(:)));
 end
 
-
+% create a map to easily reference the min|med|max energy subbands
 %   emap...Energy -> classpointer
 %   smap...String -> classpointer
 energyMap = containers.Map('KeyType','double','ValueType','any');
 subbandMap = containers.Map('KeyType','char','ValueType','any');
 
-
-for i=1:3
+for i=1:Setting.SUBBAND_COUNT
     energyMap(subbands(i).energy) = subbands(i);
 end
 
+% sort the energy values
 unsorted_E = [subbands(:).energy];
 sorted_E = sort(unsorted_E);
 
+% connect subbands with their associated energy value, e.g.
+% min -> Subband where E = min
 subbandMap('min') = energyMap(sorted_E(1));
 subbandMap('med') = energyMap(sorted_E(2));
 subbandMap('max') = energyMap(sorted_E(3));
 
-
+% read the energy values
 Emin = subbandMap('min').energy;
 Emed = subbandMap('med').energy;
 Emax = subbandMap('max').energy;
@@ -48,7 +52,7 @@ Emax = subbandMap('max').energy;
 A = Emax - Emed;
 B = Emed - Emin;
 
-% TODO: wir werden alle werte in eine structur spucken
+% return the calcuvalted values in a struct
 decomposition = struct( 'Signal', signalSegment, ...
     'DecompositionVector', decompositionVector, ...
     'BookkeepingVector', bookkeepingVector, ...

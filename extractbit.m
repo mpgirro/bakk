@@ -1,7 +1,7 @@
-function [ bit, all_coef ] = extractbit( signalSegment )
-%UNTITLED Summary of this function goes here
+function [ bit ] = extractbit( signalSegment )
+%EXTRACTBIT Extract the bit value encoded by the dwt coefficient subbands
+%in a signal segment
 %   Detailed explanation goes here
-
 
 decomposition = signaldecomposition( signalSegment );
 A = decomposition.A;
@@ -12,11 +12,6 @@ if A > B
 else
     bit = 0;
 end
-
-% fprintf('Emin=%4f, Emed=%4f, Emax=%4f\n', Emin, Emed, Emax );
-% max_coef = strMap('max').coefArray(:);
-%all_coef = decompositionVector(1:3*Setting.getSubbandLength);
-all_coef = decomposition.DecompositionVector(1:3*Setting.subband_length);
 
 end
 

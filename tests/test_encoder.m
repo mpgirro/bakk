@@ -6,13 +6,13 @@ addpath('../');
 wmkData = repmat([1,1,1,1,0,0,0,0],1,1000);
 %wmkData = [1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0,1,1,1,1,0,0,0,0];
 
-inputPath   = ['..',filesep,'resources',filesep,'audio',filesep,'der-affe-ist-gut.wav'];
-%inputPath   = ['..',filesep,'resources',filesep,'audio',filesep,'flute.wav'];
+%inputPath   = ['..',filesep,'resources',filesep,'audio',filesep,'der-affe-ist-gut.wav'];
+inputPath   = ['..',filesep,'resources',filesep,'audio',filesep,'flute.wav'];
 outputPath  = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
 
 [signal,fs] = audioread(inputPath);
 
-[modSignal, encodedBitCount] = encoder(signal, wmkData);
+[modSignal, encodedBitCount] = encoder(signal, wmkData, fs);
 
 dataStructLen = Setting.sync_sequence_length + Setting.wmk_sequence_length; % in bit
 encodedStructCount = floor(encodedBitCount/dataStructLen);

@@ -18,10 +18,10 @@ syncSegmentLen  = syncSequenceLen * segmentLength; % amount of samples needed to
 wmkSegmentLen   = wmkSequenceLen * segmentLength;  % amount of samples needed to encode one wmk data block
 dataStructSequenceLen   = syncSequenceLen + wmkSequenceLen;
 dataStructSegmentLen    = syncSegmentLen + wmkSegmentLen;
-dataStructInsertionCapacity = floor(signalSize/dataStructSegmentLen);
+dataStructCapacity = floor(signalSize/dataStructSegmentLen);
 
 sampleCursor = 1;
-dataStructInsertionCount = 0;
+dataStructCount = 0;
 
 % Theoretical limit of bit that can be encoded into this sample sequence.
 % In general, there will be less bits encoded, because we stop as soon as
@@ -45,12 +45,12 @@ for i=1:bitEncodingCapacity
     sampleCursor = sampleCursor+segmentLength;
     
     if mod(i,dataStructSequenceLen) == 0
-        dataStructInsertionCount = dataStructInsertionCount+1;
+        dataStructCount = dataStructCount+1;
     end
     
     % Check if we reached the data structure limit this signal can hold. We
     % can stop if this is the case
-    if dataStructInsertionCount >= dataStructInsertionCapacity
+    if dataStructCount >= dataStructCapacity
         break;
     end
     
@@ -59,7 +59,10 @@ end
 modSignal = signal;
 encodedBitCount = i;
 
-fprintf('Encoded %d bit total in %d data struct packages holding %d watermark bit\n',encodedBitCount,dataStructInsertionCount, dataStructInsertionCount * wmkSequenceLen);
+fprintf('Encoding complete\n');
+fprintf('%d bit total payload\n',encodedBitCount);
+fprintf('%d data struct packages\n',dataStructCount);
+fprintf('%d watermark data bits\n',dataStructCount * wmkSequenceLen);
 
 end
 

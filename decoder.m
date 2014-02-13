@@ -12,11 +12,11 @@ maxWmkBitcount  = maxWmkSeqCount * wmkSequenceLen;
 wmkBuffer       = zeros([1, maxWmkBitcount(1)]); % preallocate wmk buffer space for speed
 
 dataStructSegmentLen = syncSegmentLen + wmkSegmentLen;
-dataStructInsertionCapacity = floor(signalSize(1)/dataStructSegmentLen);
+dataStructCapacity = floor(signalSize(1)/dataStructSegmentLen);
 
 wmkBufferCursor = 1;
 sampleCursor = 1;
-dataStructExtractionCount = 0;
+dataStructCount = 0;
 
 % Calculate the last sample it makes sense to start searching in. After
 % this point, the signal is not able to hold and entire sync code +
@@ -51,7 +51,7 @@ while sampleCursor <= lastSampleToStartSearching
         % move sample cursor to the end of the window
         sampleCursor = sampleCursor + wmkSegmentLen;
         
-        dataStructExtractionCount = dataStructExtractionCount+1;
+        dataStructCount = dataStructCount+1;
     else
         % BAD! shift sample cursor one element and try again
         sampleCursor = sampleCursor+1;
@@ -59,7 +59,7 @@ while sampleCursor <= lastSampleToStartSearching
     
     % check if there is still space left in the signal to encode more 
     % (sync, wmk)-data-structures
-    if sampleCursor + syncSegmentLen + wmkSegmentLen > signalSize(1)
+    if sampleCursor + dataStructSegmentLen > signalSize(1)
         break;
     end
     
@@ -77,7 +77,10 @@ else
     watermark = wmkBuffer(1:wmkBufferCursor-1);
 end
 
-fprintf('Decoded %d watermark bits in %d data struct packages\n',wmkBufferCursor-1,dataStructExtractionCount);
+fprintf('Decoding complete\n');
+fprintf('%d bit total payload\n',dataStructCount*syncSequenceLen + dataStructCount*wmkSequenceLen);
+fprintf('%d data struct packages\n',dataStructCount);
+fprintf('%d watermark data bits\n',wmkBufferCursor-1);
 
 end
 

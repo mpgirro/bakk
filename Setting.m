@@ -33,8 +33,7 @@ classdef Setting
         end
         
         function length = sync_sequence_length()
-            sObj = SettingSingleton.instance();
-            codeSize = size(sObj.getSynchronizationCode);
+            codeSize = size(Setting.sync_code);
             length = codeSize(2);
         end
         

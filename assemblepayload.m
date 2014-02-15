@@ -11,7 +11,7 @@ function [ payload ] = assemblepayload( watermark )
 %   extended with dummy bits. 
 
 syncCode = Setting.sync_code;
-syncSequenceLength  = Setting.sync_sequence_length;
+syncSequenceLength  = Setting.synccode_block_sequence_length;
 wmkBlockSequenceLength   = Setting.wmk_block_sequence_length;
 
 wmkSize = size(watermark);

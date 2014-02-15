@@ -14,7 +14,7 @@ outputPath  = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
 
 [modSignal, encodedBitCount] = encoder(signal, wmkData, fs);
 
-dataStructLen = Setting.sync_sequence_length + Setting.wmk_block_sequence_length; % in bit
+dataStructLen = Setting.synccode_block_sequence_length + Setting.wmk_block_sequence_length; % in bit
 encodedStructCount = floor(encodedBitCount/dataStructLen);
 %fprintf('Encoded %d bit total in %d data struct packages holding %d watermark bit\n',encodedBitCount,encodedStructCount, encodedStructCount * Setting.wmk_sequence_length);
 

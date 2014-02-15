@@ -14,7 +14,7 @@ function [ found ] = synccodedetector( sample_sequence )
 sampleSize  = size(sample_sequence);
 windowWidth = Setting.frame_length;
 syncCode    = Setting.sync_code;
-codeLength  = Setting.sync_sequence_length;
+codeLength  = Setting.synccode_block_sequence_length;
 readCode    = zeros([1,codeLength]);
 
 windowStart = 1;

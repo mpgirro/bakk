@@ -12,7 +12,7 @@ segmentCount = floor(size(inputSignal)/segmentLength);
 
 signalSize      = size(signal); 
 signalSize      = signalSize(1);
-syncSequenceLen = Setting.sync_sequence_length; % amount of bits in one synccode
+syncSequenceLen = Setting.synccode_block_sequence_length; % amount of bits in one synccode
 wmkSequenceLen  = Setting.wmk_block_sequence_length;  % amount of bits in one wmk sequence
 syncSegmentLen  = syncSequenceLen * segmentLength; % amount of samples needed to encode one synccode
 wmkSegmentLen   = wmkSequenceLen * segmentLength;  % amount of samples needed to encode one wmk data block

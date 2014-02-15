@@ -32,20 +32,29 @@ classdef Setting
             code = sObj.getSynchronizationCode;
         end
         
-        function length = sync_sequence_length()
-            codeSize = size(Setting.sync_code);
-            length = codeSize(2);
-        end
+%         function length = sync_sequence_length()
+%             codeSize = size(Setting.sync_code);
+%             length = codeSize(2);
+%         end
         
         function length = wmk_block_sequence_length()
             sObj = SettingSingleton.instance();
             length = sObj.getWmkDataBlockSequenceLength;
         end
         
-        % Signal Sample Segment Length needed to encode 1 bit
+        % amount of samples needed to encode 1 bit
         function [length] = frame_length()
             sObj = SettingSingleton.instance();
             length = 3* sObj.getSubbandLength * 2 ^ sObj.getDwtLevel;
+        end
+        
+        function length = synccode_block_sample_length()
+            length = Setting.frame_length * Setting.synccode_block_sequence_length;
+        end
+        
+        function length = synccode_block_sequence_length()
+            codeSize = size(Setting.sync_code);
+            length = codeSize(2);
         end
   
         

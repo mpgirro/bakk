@@ -7,18 +7,18 @@ payloadSize = payloadSize(2);
 
 signal = inputSignal;
 
-segmentLength = Setting.coefficient_segment_length;
-segmentCount = floor(size(inputSignal)/segmentLength);
+frameLength = Setting.frame_length;
+segmentCount = floor(size(inputSignal)/frameLength);
 
 signalSize      = size(signal); 
 signalSize      = signalSize(1);
-syncSequenceLen = Setting.sync_sequence_length; % amount of bits in one synccode
-wmkSequenceLen  = Setting.wmk_sequence_length;  % amount of bits in one wmk sequence
-syncSegmentLen  = syncSequenceLen * segmentLength; % amount of samples needed to encode one synccode
-wmkSegmentLen   = wmkSequenceLen * segmentLength;  % amount of samples needed to encode one wmk data block
-dataStructSequenceLen   = syncSequenceLen + wmkSequenceLen;
-dataStructSegmentLen    = syncSegmentLen + wmkSegmentLen;
-dataStructCapacity = floor(signalSize/dataStructSegmentLen);
+syncSequenceLen = Setting.synccode_block_sequence_length; % amount of bits in one synccode
+wmkSequenceLen  = Setting.wmkdata_block_sequence_length;  % amount of bits in one wmk sequence
+syncSampleLen   = Setting.synccode_block_sample_length; % amount of samples needed to encode one synccode
+wmkSampleLen    = Setting.wmkdata_block_sample_length;  % amount of samples needed to encode one wmk data block
+dataStructSequenceLen   = Setting.datastruct_block_sequence_length;
+dataStructSampleLen     = Setting.datastruct_block_sample_length;
+dataStructCapacity = floor(signalSize/dataStructSampleLen);
 
 sampleCursor = 1;
 dataStructCount = 0;
@@ -27,7 +27,7 @@ dataStructCount = 0;
 % In general, there will be less bits encoded, because we stop as soon as
 % the signal can't hold any more data structures for we only encode whole
 % structures. 
-bitEncodingCapacity = floor(signalSize/ segmentLength);
+bitEncodingCapacity = floor(signalSize/ frameLength);
 
 for i=1:bitEncodingCapacity
     
@@ -36,13 +36,13 @@ for i=1:bitEncodingCapacity
         break;
     end
    
-    window = sampleCursor : sampleCursor+segmentLength-1;
+    window = sampleCursor : sampleCursor+frameLength-1;
     
     signalSegment = signal(window);
     modSignalSegment = insertbit(signalSegment,payload(i));
     signal(window) = modSignalSegment;
     
-    sampleCursor = sampleCursor+segmentLength;
+    sampleCursor = sampleCursor+frameLength;
     
     if mod(i,dataStructSequenceLen) == 0
         dataStructCount = dataStructCount+1;

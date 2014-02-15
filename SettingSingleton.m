@@ -5,9 +5,10 @@ classdef SettingSingleton < handle
         dwt_level;
         subband_length;
         embedding_strength_factor;
-        base_synchronization_code;
-        watermark_sequence_length;
-        synccode_redundancy_rate;
+        bufferzone_scaling_factor;
+        synchronization_code;
+        wmk_data_block_sequence_length; % amount of bits encoded in one wmk data block
+
     end
     
     methods(Access=private)
@@ -17,10 +18,10 @@ classdef SettingSingleton < handle
             newObj.setDwtLevel(6);
             newObj.setSubbandLength(8);
             newObj.setEmbeddingStrengthFactor(10);
-            newObj.setBaseSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
+            newObj.setBufferzoneScalingFactor(0.1);
+            newObj.setSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
             %newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
-            newObj.setWmkSequenceLength(8);
-            newObj.setSyncCodeRedundancyRate(3);
+            newObj.setWmkDataBlockSequenceLength(8);
         end
     end
     
@@ -72,29 +73,30 @@ classdef SettingSingleton < handle
             obj.embedding_strength_factor = esf;
         end
         
-        function sc = getBaseSynchronizationCode(obj)
-            sc = obj.base_synchronization_code;
+        function bzsf = getBufferzoneScalingFactor(obj)
+           bzsf = obj.bufferzone_scaling_factor;
         end
         
-        function setBaseSynchronizationCode(obj, sc)
-            obj.base_synchronization_code = sc;
+        function setBufferzoneScalingFactor(obj, bzsf)
+            obj.bufferzone_scaling_factor = bzsf;
         end
         
-        function wsl = getWmkSequenceLength(obj)
-            wsl = obj.watermark_sequence_length;
+        function sc = getSynchronizationCode(obj)
+            sc = obj.synchronization_code;
         end
         
-        function setWmkSequenceLength(obj, wsl)
-            obj.watermark_sequence_length = wsl;
+        function setSynchronizationCode(obj, sc)
+            obj.synchronization_code = sc;
         end
         
-        function rr = getSyncCodeRedundancyRate(obj)
-            rr = obj.synccode_redundancy_rate;
+        function wsl = getWmkDataBlockSequenceLength(obj)
+            wsl = obj.wmk_data_block_sequence_length;
         end
         
-        function setSyncCodeRedundancyRate(obj, rr)
-            obj.synccode_redundancy_rate = rr;
+        function setWmkDataBlockSequenceLength(obj, wsl)
+            obj.wmk_data_block_sequence_length = wsl;
         end
+    
         
 
     end

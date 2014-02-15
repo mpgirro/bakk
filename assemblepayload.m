@@ -11,8 +11,8 @@ function [ payload ] = assemblepayload( watermark )
 %   extended with dummy bits. 
 
 syncCode = Setting.sync_code;
-syncSequenceLength  = Setting.sync_sequence_length;
-wmkSequenceLength   = Setting.wmk_sequence_length;
+syncSequenceLength  = Setting.synccode_block_sequence_length;
+wmkBlockSequenceLength   = Setting.wmkdata_block_sequence_length;
 
 wmkSize = size(watermark);
 
@@ -20,24 +20,24 @@ wmkSize = size(watermark);
 
 % check if watermark needs dummy bits
 % extend watermark if need be
-if mod(wmkSize(2), wmkSequenceLength) ~= 0
-   missing = wmkSequenceLength - mod(wmkSize(2), wmkSequenceLength);
+if mod(wmkSize(2), wmkBlockSequenceLength) ~= 0
+   missing = wmkBlockSequenceLength - mod(wmkSize(2), wmkBlockSequenceLength);
    watermark(wmkSize(2)+1: wmkSize(2)+missing) = 0;
    wmkSize = size(watermark);
 end
 
 
-wmkSegmentCount = ceil(wmkSize(2)/wmkSequenceLength);
+wmkSegmentCount = ceil(wmkSize(2)/wmkBlockSequenceLength);
 
 
 % reshape the watermark, so we can index the segments easily
-watermark = reshape(watermark, wmkSequenceLength, wmkSegmentCount);
+watermark = reshape(watermark, wmkBlockSequenceLength, wmkSegmentCount);
 watermark = watermark';
 
 
 % for each wmk_segment there is a sync_code
 % therefore total payload length is as follows:
-payloadLength = syncSequenceLength * wmkSegmentCount + wmkSequenceLength * wmkSegmentCount;
+payloadLength = syncSequenceLength * wmkSegmentCount + wmkBlockSequenceLength * wmkSegmentCount;
 
 payload = zeros([1, payloadLength]); % preallocate 1 x bitCount array 
 
@@ -52,8 +52,8 @@ for i=1:wmkSegmentCount
     
     % insert watermark segment
     payload(windowStart:windowEnd) = watermark(i,:);
-    windowStart = windowStart   + wmkSequenceLength;
-    windowEnd   = windowEnd     + wmkSequenceLength;
+    windowStart = windowStart   + wmkBlockSequenceLength;
+    windowEnd   = windowEnd     + wmkBlockSequenceLength;
     
 end
 

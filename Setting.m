@@ -31,35 +31,50 @@ classdef Setting
         % sync code = base sync code with local redundancy applied
         function code = sync_code()
             sObj = SettingSingleton.instance();
-            baseCode        = sObj.getBaseSynchronizationCode;
-            redundancyRate  = Setting.synccode_redundancy_rate;
-    
-            % e.g. makes [1,0,1] to [1,1,1,0,0,0,1,1,1] if redundancyRate = 3
-            code = reshape(repmat(baseCode,redundancyRate,1),[],1)'; % don't forget the ' at the end!
+            code = sObj.getSynchronizationCode;
+%             baseCode        = sObj.getBaseSynchronizationCode;
+%             redundancyRate  = Setting.synccode_redundancy_rate;
+%     
+%             % e.g. makes [1,0,1] to [1,1,1,0,0,0,1,1,1] if redundancyRate = 3
+%             code = reshape(repmat(baseCode,redundancyRate,1),[],1)'; % don't forget the ' at the end!
         end
         
-        % the length of the sync code with local redundancy applied!
-        function length = sync_sequence_length()
-            codeSize = size(Setting.sync_code);
-            length = codeSize(2);
-        end
-        
-        function length = wmk_sequence_length()
-            sObj = SettingSingleton.instance();
-            length = sObj.getWmkSequenceLength;
-        end
-        
-        % Signal Sample Segment Length needed to encode 1 bit
-        function [length] = coefficient_segment_length()
+        % amount of samples needed to encode 1 bit
+        function [length] = frame_length()
             sObj = SettingSingleton.instance();
             length = 3* sObj.getSubbandLength * 2 ^ sObj.getDwtLevel;
         end
         
-        function rr = synccode_redundancy_rate()
+        function length = bufferzone_length()
             sObj = SettingSingleton.instance();
-            rr = sObj.getSyncCodeRedundancyRate;
+            length = floor(Setting.frame_length * sObj.getBufferzoneScalingFactor);
         end
-  
+        
+        function length = synccode_block_sequence_length()
+            codeSize = size(Setting.sync_code);
+            length = codeSize(2);
+        end
+        
+        function length = wmkdata_block_sequence_length()
+            sObj = SettingSingleton.instance();
+            length = sObj.getWmkDataBlockSequenceLength;
+        end
+        
+        function length = datastruct_block_sequence_length()
+            length = Setting.synccode_block_sequence_length + Setting.wmkdata_block_sequence_length;
+        end
+        
+        function length = synccode_block_sample_length()
+            length = Setting.frame_length * Setting.synccode_block_sequence_length;
+        end
+        
+        function length = wmkdata_block_sample_length()
+            length = Setting.frame_length * Setting.wmkdata_block_sequence_length;
+        end
+        
+        function length = datastruct_block_sample_length()
+            length = Setting.synccode_block_sample_length + Setting.wmkdata_block_sample_length;
+        end
         
     end
 end

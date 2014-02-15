@@ -8,6 +8,7 @@ payloadSize = payloadSize(2);
 signal = inputSignal;
 
 frameLength     = Setting.frame_length;
+frameDataSampleLen = Setting.frame_data_samples_length;
 signalSize      = size(signal); 
 signalSize      = signalSize(1);
 segmentCount    = floor( signalSize / frameLength );
@@ -35,7 +36,7 @@ for i=1:bitEncodingCapacity
         break;
     end
    
-    window = sampleCursor : sampleCursor+frameLength-1;
+    window = sampleCursor : sampleCursor+frameDataSampleLen-1;
     
     signalSegment = signal(window);
     modSignalSegment = insertbit(signalSegment,payload(i));

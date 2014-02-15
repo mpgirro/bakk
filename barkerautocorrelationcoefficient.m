@@ -1,4 +1,4 @@
-function [ autocorrelation_coefficient ] = barker_function( signalCode )
+function [ autocorrelation_coefficient ] = barkerautocorrelationcoefficient( signalCode )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 

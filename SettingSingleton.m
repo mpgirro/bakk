@@ -6,7 +6,7 @@ classdef SettingSingleton < handle
         subband_length;
         embedding_strength_factor;
         synchronization_code;
-        watermark_sequence_length;
+        wmk_data_block_sequence_length; % amount of bits encoded in one wmk data block
     end
     
     methods(Access=private)
@@ -18,7 +18,7 @@ classdef SettingSingleton < handle
             newObj.setEmbeddingStrengthFactor(10);
             newObj.setSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
             %newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
-            newObj.setWmkSequenceLength(8);
+            newObj.setWmkDataBlockSequenceLength(8);
         end
     end
     
@@ -78,12 +78,12 @@ classdef SettingSingleton < handle
             obj.synchronization_code = sc;
         end
         
-        function wsl = getWmkSequenceLength(obj)
-            wsl = obj.watermark_sequence_length;
+        function wsl = getWmkDataBlockSequenceLength(obj)
+            wsl = obj.wmk_data_block_sequence_length;
         end
         
-        function setWmkSequenceLength(obj, wsl)
-            obj.watermark_sequence_length = wsl;
+        function setWmkDataBlockSequenceLength(obj, wsl)
+            obj.wmk_data_block_sequence_length = wsl;
         end
 
     end

@@ -30,7 +30,16 @@ for i=1:codeLength
     
 end
 
-found = isequal(syncCode,readCode);
+% that is the dummy way, but there is no error correction in that
+% found = isequal(syncCode,readCode);
+
+autocorrelation = barkerautocorrelationcoefficient(readCode);
+
+if autocorrelation > Setting.barker_threshold
+    found = 1;
+else 
+    found = 0;
+end
 
 end
 

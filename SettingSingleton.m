@@ -21,7 +21,7 @@ classdef SettingSingleton < handle
             newObj.setBufferzoneScalingFactor(0);
             %newObj.setSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
             %newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
-            newObj.setSynchronizationCode([1, 1, 1, 0, 0, 0, 1, 1, 1, 0, 0, 0]);
+            newObj.setSynchronizationCode(13); % barker code 13
             newObj.setWmkDataBlockSequenceLength(8);
         end
     end
@@ -86,8 +86,19 @@ classdef SettingSingleton < handle
             sc = obj.synchronization_code;
         end
         
+        % input argument must be member of [1, 2, 3, 4, 5, 7, 11, 13]
+        % (valid barker code
         function setSynchronizationCode(obj, sc)
-            obj.synchronization_code = sc;
+            
+            % check if argument valid, set to maximum else
+            if any([1, 2, 3, 4, 5, 7, 11, 13] == sc) == 0
+                sc = 13;
+            end
+            
+            hBCode = comm.BarkerCode('Length',sc,'SamplesPerFrame',sc,'OutputDataType', 'int8');
+            seq = step(hBCode);
+            seq(seq==-1) = 0;
+            obj.synchronization_code = seq';
         end
         
         function wsl = getWmkDataBlockSequenceLength(obj)

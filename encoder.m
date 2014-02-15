@@ -36,7 +36,7 @@ for i=1:bitEncodingCapacity
         break;
     end
    
-    window = sampleCursor : sampleCursor+frameDataSampleLen-1;
+    window = sampleCursor : sampleCursor+frameLength-1;
     
     signalSegment = signal(window);
     modSignalSegment = insertbit(signalSegment,payload(i));

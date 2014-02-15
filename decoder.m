@@ -1,18 +1,19 @@
 function [watermark] = decoder( signal )
 
 signalSize      = size(signal);
+signalSize      = signalSize(1);
 frameLength     = Setting.frame_length; % # samples needed to encode 1 bit
 segmentCount    = floor(signalSize/frameLength);  % theoretical max amount of segments fitting in this signal, assuming the payload is encoded at sample nr 1
 syncSequenceLen = Setting.synccode_block_sequence_length; % amount of bits in one synccode
 wmkSequenceLen  = Setting.wmkdata_block_sequence_length;  % amount of bits in one wmk sequence
 syncSampleLen   = Setting.synccode_block_sample_length; % amount of samples needed to encode one synccode
 wmkSampleLen    = Setting.wmkdata_block_sample_length;  % amount of samples needed to encode one wmk data block
-maxWmkSeqCount  = floor(segmentCount / (syncSequenceLen + wmkSequenceLen)); % there is always a sync sequence and a wmk sequence encoded together
+dataStructSampleLen = Setting.datastruct_package_sample_length;
+dataStructSequenceLen   = Setting.datastruct_package_sequence_length;
+dataStructCapacity = floor(signalSize/dataStructSampleLen);
+maxWmkSeqCount  = floor(segmentCount / dataStructSequenceLen ); % there is always a sync sequence and a wmk sequence encoded together
 maxWmkBitcount  = maxWmkSeqCount * wmkSequenceLen;
 wmkBuffer       = zeros([1, maxWmkBitcount(1)]); % preallocate wmk buffer space for speed
-
-dataStructSampleLen = Setting.datastruct_package_sample_length;
-dataStructCapacity = floor(signalSize(1)/dataStructSampleLen);
 
 wmkBufferCursor = 1;
 sampleCursor = 1;
@@ -21,7 +22,7 @@ dataStructCount = 0;
 % Calculate the last sample it makes sense to start searching in. After
 % this point, the signal is not able to hold and entire sync code +
 % corresponting watermark sequence. Therefore, the following bit are random
-lastSampleToStartSearching = signalSize(1)-(syncSampleLen + wmkSampleLen);
+lastSampleToStartSearching = signalSize-dataStructSampleLen;
 
 fprintf('Watermark data:\n');
 
@@ -53,15 +54,19 @@ while sampleCursor <= lastSampleToStartSearching
         
         dataStructCount = dataStructCount+1;
     else
-        % BAD! shift sample cursor one element and try again
-        sampleCursor = sampleCursor+1;
+        % BAD! shift sample cursor and try again
+        sampleCursor = sampleCursor+100;
     end
     
-    % check if there is still space left in the signal to encode more 
-    % (sync, wmk)-data-structures
-    if sampleCursor + dataStructSampleLen > signalSize(1)
-        break;
+    if dataStructCount > dataStructCapacity
+       break; 
     end
+    
+%     % check if there is still space left in the signal to encode more 
+%     % (sync, wmk)-data-structures
+%     if sampleCursor + dataStructSampleLen > signalSize
+%         break;
+%     end
     
     
 end

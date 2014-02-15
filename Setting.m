@@ -60,7 +60,7 @@ classdef Setting
             length = sObj.getWmkDataBlockSequenceLength;
         end
         
-        function length = datastruct_block_sequence_length()
+        function length = datastruct_package_sequence_length()
             length = Setting.synccode_block_sequence_length + Setting.wmkdata_block_sequence_length;
         end
         
@@ -72,7 +72,7 @@ classdef Setting
             length = Setting.frame_length * Setting.wmkdata_block_sequence_length;
         end
         
-        function length = datastruct_block_sample_length()
+        function length = datastruct_package_sample_length()
             length = Setting.synccode_block_sample_length + Setting.wmkdata_block_sample_length;
         end
         

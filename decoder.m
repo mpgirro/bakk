@@ -11,7 +11,7 @@ maxWmkSeqCount  = floor(segmentCount / (syncSequenceLen + wmkSequenceLen)); % th
 maxWmkBitcount  = maxWmkSeqCount * wmkSequenceLen;
 wmkBuffer       = zeros([1, maxWmkBitcount(1)]); % preallocate wmk buffer space for speed
 
-dataStructSampleLen = Setting.datastruct_block_sample_length;
+dataStructSampleLen = Setting.datastruct_package_sample_length;
 dataStructCapacity = floor(signalSize(1)/dataStructSampleLen);
 
 wmkBufferCursor = 1;

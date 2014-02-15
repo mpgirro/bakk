@@ -43,7 +43,7 @@ classdef Setting
         end
         
         % Signal Sample Segment Length needed to encode 1 bit
-        function [length] = coefficient_segment_length()
+        function [length] = frame_length()
             sObj = SettingSingleton.instance();
             length = 3* sObj.getSubbandLength * 2 ^ sObj.getDwtLevel;
         end

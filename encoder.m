@@ -7,7 +7,7 @@ payloadSize = payloadSize(2);
 
 signal = inputSignal;
 
-segmentLength = Setting.coefficient_segment_length;
+segmentLength = Setting.frame_length;
 segmentCount = floor(size(inputSignal)/segmentLength);
 
 signalSize      = size(signal); 

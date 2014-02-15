@@ -5,6 +5,7 @@ classdef SettingSingleton < handle
         dwt_level;
         subband_length;
         embedding_strength_factor;
+        bufferzone_scaling_factor;
         synchronization_code;
         wmk_data_block_sequence_length; % amount of bits encoded in one wmk data block
     end
@@ -16,6 +17,7 @@ classdef SettingSingleton < handle
             newObj.setDwtLevel(6);
             newObj.setSubbandLength(8);
             newObj.setEmbeddingStrengthFactor(10);
+            newObj.setBufferzoneScalingFactor(0.1);
             newObj.setSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
             %newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
             newObj.setWmkDataBlockSequenceLength(8);
@@ -68,6 +70,14 @@ classdef SettingSingleton < handle
         
         function setEmbeddingStrengthFactor(obj, esf)
             obj.embedding_strength_factor = esf;
+        end
+        
+        function bzsf = getBufferzoneScalingFactor(obj)
+           bzsf = obj.bufferzone_scaling_factor;
+        end
+        
+        function setBufferzoneScalingFactor(obj, bzsf)
+            obj.bufferzone_scaling_factor = bzsf;
         end
         
         function sc = getSynchronizationCode(obj)

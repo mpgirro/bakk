@@ -38,6 +38,11 @@ classdef Setting
             length = 3* sObj.getSubbandLength * 2 ^ sObj.getDwtLevel;
         end
         
+        function length = bufferzone_length()
+            sObj = SettingSingleton.instance();
+            length = floor(Setting.frame_length * sObj.getBufferzoneScalingFactor);
+        end
+        
         function length = synccode_block_sequence_length()
             codeSize = size(Setting.sync_code);
             length = codeSize(2);

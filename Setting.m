@@ -37,9 +37,13 @@ classdef Setting
 %             length = codeSize(2);
 %         end
         
-        function length = wmk_block_sequence_length()
+        function length = wmkdata_block_sequence_length()
             sObj = SettingSingleton.instance();
             length = sObj.getWmkDataBlockSequenceLength;
+        end
+        
+        function length = wmkdata_block_sample_length()
+            length = Setting.frame_length * Setting.wmkdata_block_sequence_length;
         end
         
         % amount of samples needed to encode 1 bit

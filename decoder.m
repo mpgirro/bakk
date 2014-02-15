@@ -4,14 +4,14 @@ signalSize      = size(signal);
 segmentWidth    = Setting.frame_length; % # samples needed to encode 1 bit
 segmentCount    = floor(size(signal)/segmentWidth);  % theoretical max amount of segments fitting in this signal, assuming the payload is encoded at sample nr 1
 syncSequenceLen = Setting.synccode_block_sequence_length; % amount of bits in one synccode
-wmkSequenceLen  = Setting.wmk_block_sequence_length;  % amount of bits in one wmk sequence
-syncSegmentLen  = syncSequenceLen * segmentWidth; % amount of samples needed to encode one synccode
-wmkSegmentLen   = wmkSequenceLen * segmentWidth;  % amount of samples needed to encode one wmk data block
+wmkSequenceLen  = Setting.wmkdata_block_sequence_length;  % amount of bits in one wmk sequence
+syncSampleLen   = Setting.synccode_block_sample_length; % amount of samples needed to encode one synccode
+wmkSampleLen    = Setting.wmkdata_block_sample_length;  % amount of samples needed to encode one wmk data block
 maxWmkSeqCount  = floor(segmentCount / (syncSequenceLen + wmkSequenceLen)); % there is always a sync sequence and a wmk sequence encoded together
 maxWmkBitcount  = maxWmkSeqCount * wmkSequenceLen;
 wmkBuffer       = zeros([1, maxWmkBitcount(1)]); % preallocate wmk buffer space for speed
 
-dataStructSegmentLen = syncSegmentLen + wmkSegmentLen;
+dataStructSegmentLen = syncSampleLen + wmkSampleLen;
 dataStructCapacity = floor(signalSize(1)/dataStructSegmentLen);
 
 wmkBufferCursor = 1;
@@ -21,14 +21,14 @@ dataStructCount = 0;
 % Calculate the last sample it makes sense to start searching in. After
 % this point, the signal is not able to hold and entire sync code +
 % corresponting watermark sequence. Therefore, the following bit are random
-lastSampleToStartSearching = signalSize(1)-(syncSegmentLen + wmkSegmentLen);
+lastSampleToStartSearching = signalSize(1)-(syncSampleLen + wmkSampleLen);
 
 fprintf('Watermark data:\n');
 
 %for i=1:lastSampleToStartSearching
 while sampleCursor <= lastSampleToStartSearching
     
-    syncCodeWindow = sampleCursor : sampleCursor+syncSegmentLen-1;% -1 due to the nature of matlab sequence notation
+    syncCodeWindow = sampleCursor : sampleCursor+syncSampleLen-1;% -1 due to the nature of matlab sequence notation
     
     syncCodeFound = synccodedetector(signal(syncCodeWindow));
     
@@ -36,9 +36,9 @@ while sampleCursor <= lastSampleToStartSearching
         % GOOD! this means the next X samples will hold watermark data
         
         % move sample cursor behind the end of the synccode window
-        sampleCursor = sampleCursor + syncSegmentLen;
+        sampleCursor = sampleCursor + syncSampleLen;
         
-        wmkDataWindow = sampleCursor : sampleCursor+wmkSegmentLen-1;
+        wmkDataWindow = sampleCursor : sampleCursor+wmkSampleLen-1;
         wmkData = wmkdataextractor(signal(wmkDataWindow));
         
         wmkBuffer(wmkBufferCursor : wmkBufferCursor+wmkSequenceLen-1) = wmkData;
@@ -49,7 +49,7 @@ while sampleCursor <= lastSampleToStartSearching
        
         
         % move sample cursor to the end of the window
-        sampleCursor = sampleCursor + wmkSegmentLen;
+        sampleCursor = sampleCursor + wmkSampleLen;
         
         dataStructCount = dataStructCount+1;
     else

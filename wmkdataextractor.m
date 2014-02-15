@@ -3,7 +3,7 @@ function [ wmkData ] = wmkdataextractor( sample_sequence )
 %   Detailed explanation goes here
 
 windowWidth = Setting.frame_length;
-wmkSequenceLen = Setting.wmk_block_sequence_length;
+wmkSequenceLen = Setting.wmkdata_block_sequence_length;
 wmkData = zeros([1,wmkSequenceLen]); % preallocate space
 
 sampleCursor = 1;

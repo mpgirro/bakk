@@ -2,7 +2,7 @@ function [watermark] = decoder( signal )
 
 signalSize      = size(signal);
 frameLength     = Setting.frame_length; % # samples needed to encode 1 bit
-segmentCount    = floor(size(signal)/frameLength);  % theoretical max amount of segments fitting in this signal, assuming the payload is encoded at sample nr 1
+segmentCount    = floor(signalSize/frameLength);  % theoretical max amount of segments fitting in this signal, assuming the payload is encoded at sample nr 1
 syncSequenceLen = Setting.synccode_block_sequence_length; % amount of bits in one synccode
 wmkSequenceLen  = Setting.wmkdata_block_sequence_length;  % amount of bits in one wmk sequence
 syncSampleLen   = Setting.synccode_block_sample_length; % amount of samples needed to encode one synccode

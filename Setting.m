@@ -39,15 +39,20 @@ classdef Setting
 %             code = reshape(repmat(baseCode,redundancyRate,1),[],1)'; % don't forget the ' at the end!
         end
         
-        % amount of samples needed to encode 1 bit
-        function [length] = frame_length()
+        
+        function length = frame_data_samples_length()
             sObj = SettingSingleton.instance();
             length = 3* sObj.getSubbandLength * 2 ^ sObj.getDwtLevel;
         end
         
-        function length = bufferzone_length()
+        function length = frame_buffer_samples_length()
             sObj = SettingSingleton.instance();
-            length = floor(Setting.frame_length * sObj.getBufferzoneScalingFactor);
+            length = floor(Setting.frame_data_samples_length * sObj.getBufferzoneScalingFactor);
+        end
+        
+        % amount of samples needed to encode 1 bit
+        function [length] = frame_length()
+           length = Setting.frame_data_samples_length + Setting.frame_buffer_samples_length;
         end
         
         function length = synccode_block_sequence_length()

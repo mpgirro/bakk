@@ -3,7 +3,10 @@ function [ bit ] = extractbit( signalSegment )
 %in a signal segment
 %   Detailed explanation goes here
 
-decomposition = signaldecomposition( signalSegment );
+% only take the samples used for the data, ignore the buffer zone
+window = 1:Setting.frame_data_samples_length;
+
+decomposition = signaldecomposition( signalSegment(window) );
 A = decomposition.A;
 B = decomposition.B;
 

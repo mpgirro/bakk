@@ -4,8 +4,11 @@ function [ modSignalSegment ] = insertbit( origSignalSegment, bit )
 %
 %
 
+% only take the samples used for the data, ignore the buffer zone
+window = 1:Setting.frame_data_samples_length;
+
 % decompose the segment. all this stuff we need to modify the signal
-decomposition = signaldecomposition( origSignalSegment );
+decomposition = signaldecomposition( origSignalSegment(window) );
 Emin = decomposition.Emin;
 Emed = decomposition.Emed;
 Emax = decomposition.Emax;
@@ -94,26 +97,15 @@ if(insertion)
     modDecompositionVector(Smax.posArray(:)) = Smax.coefArray(:);
     
     
-    %    % Best don't do this at home, kids!
-    %    audiowrite('tmp/original.wav',decompositionVector,48000);
-    %    audiowrite('tmp/modified.wav',modDecompositionVector,48000);
-    %
-    %     odg = PQevalAudio('tmp/orig_dwt.wav','tmp/mod_dwt.wav')
-    %
-    %	% http://www.mathworks.de/de/help/matlab/ref/system.html
-    %	[status,cmdout] = system('bin/PQevalAudio tmp/original.wav tmp/modified.wav');
-    %	cmdoutLen = size(cmdout);
-    %	str = 'Objective Difference Grade: ';
-    %	strLen = size(str);
-    %	odgOutPos = findstr(cmdout,str);
-    %	odgVal = cmdout(odgOutPos+strLen(2):cmdoutLen(2));
-    %	odg = str2double(odgVal)
-    
-    modSignalSegment = waverec(modDecompositionVector, bookkeepingVector, Setting.dwt_wavelet);
+    dataSignalSegment = waverec(modDecompositionVector, bookkeepingVector, Setting.dwt_wavelet);
     
 else
-    modSignalSegment = origSignalSegment;
+    dataSignalSegment = origSignalSegment;
 end
+
+% return the modified data samples + buffer zone samples
+modSignalSegment = origSignalSegment;
+modSignalSegment(window) = dataSignalSegment(window);
 
 
 end

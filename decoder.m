@@ -11,8 +11,8 @@ maxWmkSeqCount  = floor(segmentCount / (syncSequenceLen + wmkSequenceLen)); % th
 maxWmkBitcount  = maxWmkSeqCount * wmkSequenceLen;
 wmkBuffer       = zeros([1, maxWmkBitcount(1)]); % preallocate wmk buffer space for speed
 
-dataStructSegmentLen = syncSampleLen + wmkSampleLen;
-dataStructCapacity = floor(signalSize(1)/dataStructSegmentLen);
+dataStructSampleLen = Setting.datastruct_block_sample_length;
+dataStructCapacity = floor(signalSize(1)/dataStructSampleLen);
 
 wmkBufferCursor = 1;
 sampleCursor = 1;
@@ -59,7 +59,7 @@ while sampleCursor <= lastSampleToStartSearching
     
     % check if there is still space left in the signal to encode more 
     % (sync, wmk)-data-structures
-    if sampleCursor + dataStructSegmentLen > signalSize(1)
+    if sampleCursor + dataStructSampleLen > signalSize(1)
         break;
     end
     

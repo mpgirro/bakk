@@ -16,9 +16,9 @@ syncSequenceLen = Setting.synccode_block_sequence_length; % amount of bits in on
 wmkSequenceLen  = Setting.wmkdata_block_sequence_length;  % amount of bits in one wmk sequence
 syncSampleLen   = Setting.synccode_block_sample_length; % amount of samples needed to encode one synccode
 wmkSampleLen    = Setting.wmkdata_block_sample_length;  % amount of samples needed to encode one wmk data block
-dataStructSequenceLen   = syncSequenceLen + wmkSequenceLen;
-dataStructSegmentLen    = syncSampleLen + wmkSampleLen;
-dataStructCapacity = floor(signalSize/dataStructSegmentLen);
+dataStructSequenceLen   = Setting.datastruct_block_sequence_length;
+dataStructSampleLen     = Setting.datastruct_block_sample_length;
+dataStructCapacity = floor(signalSize/dataStructSampleLen);
 
 sampleCursor = 1;
 dataStructCount = 0;

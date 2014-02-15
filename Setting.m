@@ -32,35 +32,43 @@ classdef Setting
             code = sObj.getSynchronizationCode;
         end
         
-%         function length = sync_sequence_length()
-%             codeSize = size(Setting.sync_code);
-%             length = codeSize(2);
-%         end
-        
-        function length = wmkdata_block_sequence_length()
-            sObj = SettingSingleton.instance();
-            length = sObj.getWmkDataBlockSequenceLength;
-        end
-        
-        function length = wmkdata_block_sample_length()
-            length = Setting.frame_length * Setting.wmkdata_block_sequence_length;
-        end
-        
         % amount of samples needed to encode 1 bit
         function [length] = frame_length()
             sObj = SettingSingleton.instance();
             length = 3* sObj.getSubbandLength * 2 ^ sObj.getDwtLevel;
         end
         
-        function length = synccode_block_sample_length()
-            length = Setting.frame_length * Setting.synccode_block_sequence_length;
-        end
-        
         function length = synccode_block_sequence_length()
             codeSize = size(Setting.sync_code);
             length = codeSize(2);
         end
-  
+        
+        function length = wmkdata_block_sequence_length()
+            sObj = SettingSingleton.instance();
+            length = sObj.getWmkDataBlockSequenceLength;
+        end
+        
+        function length = datastruct_block_sequence_length()
+            length = Setting.synccode_block_sequence_length + Setting.wmkdata_block_sequence_length;
+        end
+        
+        function length = synccode_block_sample_length()
+            length = Setting.frame_length * Setting.synccode_block_sequence_length;
+        end
+        
+        function length = wmkdata_block_sample_length()
+            length = Setting.frame_length * Setting.wmkdata_block_sequence_length;
+        end
+        
+        function length = datastruct_block_sample_length()
+            length = Setting.synccode_block_sample_length + Setting.wmkdata_block_sample_length;
+        end
+        
+        
+        
+        
+        
+        
         
     end
 end

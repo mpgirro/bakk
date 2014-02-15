@@ -19,7 +19,9 @@ for i=1:N
     c = c + syncCode(i)*signalCode(i);
 end
 
-autocorrelation_coefficient = c;
+c
+N
+autocorrelation_coefficient = double(c) / double(N);
 
 end
 

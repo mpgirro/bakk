@@ -23,7 +23,7 @@ classdef SettingSingleton < handle
             %newObj.setSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
             %newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
             newObj.setSynchronizationCode(13); % barker code 13
-            newObj.setBarkerThreshold(7);
+            newObj.setBarkerThreshold(0.8);
             newObj.setWmkDataBlockSequenceLength(8);
         end
     end

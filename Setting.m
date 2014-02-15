@@ -32,11 +32,16 @@ classdef Setting
         function code = sync_code()
             sObj = SettingSingleton.instance();
             code = sObj.getSynchronizationCode;
-%             baseCode        = sObj.getBaseSynchronizationCode;
-%             redundancyRate  = Setting.synccode_redundancy_rate;
-%     
-%             % e.g. makes [1,0,1] to [1,1,1,0,0,0,1,1,1] if redundancyRate = 3
-%             code = reshape(repmat(baseCode,redundancyRate,1),[],1)'; % don't forget the ' at the end!
+            %             baseCode        = sObj.getBaseSynchronizationCode;
+            %             redundancyRate  = Setting.synccode_redundancy_rate;
+            %
+            %             % e.g. makes [1,0,1] to [1,1,1,0,0,0,1,1,1] if redundancyRate = 3
+            %             code = reshape(repmat(baseCode,redundancyRate,1),[],1)'; % don't forget the ' at the end!
+        end
+        
+        function threshold = barker_threshold()
+            sObj = SettingSingleton.instance();
+            threshold = sObj.getBarkerThreshold;
         end
         
         
@@ -52,7 +57,7 @@ classdef Setting
         
         % amount of samples needed to encode 1 bit
         function [length] = frame_length()
-           length = Setting.frame_data_samples_length + Setting.frame_buffer_samples_length;
+            length = Setting.frame_data_samples_length + Setting.frame_buffer_samples_length;
         end
         
         function length = synccode_block_sequence_length()

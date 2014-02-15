@@ -7,6 +7,7 @@ classdef SettingSingleton < handle
         embedding_strength_factor;
         bufferzone_scaling_factor;
         synchronization_code;
+        barker_threshold;
         wmk_data_block_sequence_length; % amount of bits encoded in one wmk data block
 
     end
@@ -22,6 +23,7 @@ classdef SettingSingleton < handle
             %newObj.setSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
             %newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
             newObj.setSynchronizationCode(13); % barker code 13
+            newObj.setBarkerThreshold(7);
             newObj.setWmkDataBlockSequenceLength(8);
         end
     end
@@ -99,6 +101,14 @@ classdef SettingSingleton < handle
             seq = step(hBCode);
             seq(seq==-1) = 0;
             obj.synchronization_code = seq';
+        end
+        
+        function bt = getBarkerThreshold(obj)
+            bt = obj.barker_threshold;
+        end
+        
+        function setBarkerThreshold(obj, bt)
+            obj.barker_threshold = bt;
         end
         
         function wsl = getWmkDataBlockSequenceLength(obj)

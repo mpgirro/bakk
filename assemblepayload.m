@@ -10,6 +10,12 @@ function [ payload ] = assemblepayload( watermark )
 %   (data mod wmk_sequence_length = 0), then the watermark has to be
 %   extended with dummy bits.
 
+% TODO: Update comments above:
+% the watermark must be only as long as the audio signal samples can hold
+% the error-corrected-encoded-watermark which should be (depending on the
+% encoding) abourt 1/3 of the bit capacity. if this hold, the payload
+% returned by this function is ensured to fit in the watermark
+
 syncCode = Setting.sync_code;
 syncBlockSequenceLength  = Setting.synccode_block_sequence_length;
 wmkBlockSequenceLength   = Setting.wmkdata_block_sequence_length;
@@ -18,13 +24,13 @@ dataStructBlockSequenceLength = Setting.datastruct_package_sequence_length;
 wmkSize = size(watermark);
 wmkSize = wmkSize(2);
 
-
 % check if watermark needs dummy bits
 % extend watermark if need be
 if mod(wmkSize, wmkBlockSequenceLength) ~= 0
     missing = wmkBlockSequenceLength - mod(wmkSize, wmkBlockSequenceLength);
     watermark(wmkSize+1: wmkSize+missing) = 0;
     wmkSize = size(watermark);
+    wmkSize = wmkSize(2);
 end
 
 

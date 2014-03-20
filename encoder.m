@@ -1,10 +1,5 @@
 function [modSignal, encodedBitCount ] = encoder( inputSignal, watermark, fs )
 
-% create payload containing synccodes and watermark segments
-payload = assemblepayload(watermark);
-payloadSize = size(payload);
-payloadSize = payloadSize(2);
-
 signal = inputSignal;
 
 frameLength     = Setting.frame_length;
@@ -19,6 +14,15 @@ wmkSampleLen    = Setting.wmkdata_block_sample_length;  % amount of samples need
 dataStructSequenceLen   = Setting.datastruct_package_sequence_length;
 dataStructSampleLen     = Setting.datastruct_package_sample_length;
 dataStructCapacity = floor( signalSize / dataStructSampleLen );
+
+wmkCapacity = dataStructCapacity * wmkSequenceLen; % maximun amount of bit capable of embedding
+fprintf('Maximum encoding capacity: %d watermark bits\n',wmkCapacity);
+
+% create payload containing synccodes and watermark segments,
+% only process as many watermark bits as can be encoded
+payload = assemblepayload(watermark(1:wmkCapacity));
+payloadSize = size(payload);
+payloadSize = payloadSize(2);
 
 sampleCursor = 1;
 dataStructCount = 0;

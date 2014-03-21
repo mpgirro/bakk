@@ -8,8 +8,10 @@ classdef SettingSingleton < handle
         bufferzone_scaling_factor;
         synchronization_code;
         barker_threshold;
-        wmk_data_block_sequence_length; % amount of bits encoded in one wmk data block
-
+        bhc_factor;
+        message_length;
+        codeword_length; 
+        
     end
     
     methods(Access=private)
@@ -18,13 +20,14 @@ classdef SettingSingleton < handle
             newObj.setDwtWavelet('db1');
             newObj.setDwtLevel(6);
             newObj.setSubbandLength(8);
-            newObj.setEmbeddingStrengthFactor(1);
+            newObj.setEmbeddingStrengthFactor(10);
             newObj.setBufferzoneScalingFactor(0);
-            %newObj.setSynchronizationCode([1, 0, 1, 0, 1, 0, 1, 1]);
-            %newObj.setSynchronizationCode([1, 1, 0, 0, 1, 1, 0, 0]);
             newObj.setSynchronizationCode(13); % barker code 13
-            newObj.setBarkerThreshold(0.8);
-            newObj.setWmkDataBlockSequenceLength(8);
+            newObj.setBarkerThreshold(0.5);
+%             newObj.setMessageLength(5);
+%             newObj.setCodewordLength(15);
+            newObj.setMessageLength(8);
+            newObj.setCodewordLength(8);
         end
     end
     
@@ -77,7 +80,7 @@ classdef SettingSingleton < handle
         end
         
         function bzsf = getBufferzoneScalingFactor(obj)
-           bzsf = obj.bufferzone_scaling_factor;
+            bzsf = obj.bufferzone_scaling_factor;
         end
         
         function setBufferzoneScalingFactor(obj, bzsf)
@@ -111,16 +114,31 @@ classdef SettingSingleton < handle
             obj.barker_threshold = bt;
         end
         
+        % amount of bits encoded in one wmk data block
         function wsl = getWmkDataBlockSequenceLength(obj)
-            wsl = obj.wmk_data_block_sequence_length;
+            wsl = obj.getCodewordLength;
         end
         
-        function setWmkDataBlockSequenceLength(obj, wsl)
-            obj.wmk_data_block_sequence_length = wsl;
+        % amount of bits that will be error correction encoded 
+        % into one block
+        function ml = getMessageLength(obj)
+            ml = obj.message_length;
         end
-    
         
-
+        function setMessageLength(obj, ml)
+            obj.message_length = ml;
+        end
+        
+        % length of the bit block that result from error correction
+        % encoding when coding message_length bits
+        function cwl = getCodewordLength(obj)
+            cwl = obj.codeword_length;
+        end
+        
+        function setCodewordLength(obj, cwl)
+            obj.codeword_length = cwl;
+        end
+        
     end
     
 end

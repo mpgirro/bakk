@@ -70,6 +70,16 @@ classdef Setting
             length = sObj.getWmkDataBlockSequenceLength;
         end
         
+        function length = message_length()
+            sObj = SettingSingleton.instance();
+            length = sObj.getMessageLength();
+        end
+        
+        function length = codeword_length()
+            sObj = SettingSingleton.instance();
+            length = sObj.getCodewordLength();
+        end
+        
         function length = datastruct_package_sequence_length()
             length = Setting.synccode_block_sequence_length + Setting.wmkdata_block_sequence_length;
         end

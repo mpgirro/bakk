@@ -4,7 +4,7 @@ signal = inputSignal;
 
 frameLength     = Setting.frame_length;
 frameDataSampleLen = Setting.frame_data_samples_length;
-signalSize      = size(signal); 
+signalSize      = size(signal);
 signalSize      = signalSize(1);
 segmentCount    = floor( signalSize / frameLength );
 syncSequenceLen = Setting.synccode_block_sequence_length; % amount of bits in one synccode
@@ -30,7 +30,7 @@ dataStructCount = 0;
 % Theoretical limit of bit that can be encoded into this sample sequence.
 % In general, there will be less bits encoded, because we stop as soon as
 % the signal can't hold any more data structures for we only encode whole
-% structures. 
+% structures.
 bitEncodingCapacity = floor(signalSize/ frameLength );
 
 for i=1:bitEncodingCapacity
@@ -39,7 +39,7 @@ for i=1:bitEncodingCapacity
     if i > payloadSize
         break;
     end
-   
+    
     window = sampleCursor : sampleCursor+frameLength-1;
     
     signalSegment = signal(window);
@@ -63,19 +63,40 @@ end
 modSignal = signal;
 encodedBitCount = i;
 
-% % now lets calculate the ODGs
-% refSignal   = inputSignal(1:sampleCursor-1);
-% testSignal  = modSignal(1:sampleCursor-1);
-% 
-% odg_eaqual = odgFromEaqualExe(refSignal, fs, testSignal, fs);
-% odg_pqeval = odgFromPQevalAudioBinary(refSignal, fs, testSignal, fs);
+% % now lets calculate the ODGs if we can
+refSignal   = inputSignal(1:sampleCursor-1);
+testSignal  = modSignal(1:sampleCursor-1);
+
+eaqual_flag = false;
+odg_eaqual = +1; % undefined ODG value
+try
+    odg_eaqual = odgFromEaqualExe(refSignal, fs, testSignal, fs);
+    eaqual_flag = true;
+    
+catch
+    fprintf('Error calculating ODG with EAQUAL\n');
+end
+
+pqeval_flag = false;
+odg_pqeval = +1; % undefined ODG value
+try
+    odg_pqeval = odgFromPQevalAudioBinary(refSignal, fs, testSignal, fs);
+    pqeval_flag = true;
+catch 
+    fprintf('Error calculating ODG with PQevalAudio\n');
+end
 
 fprintf('Encoding complete\n');
 fprintf('%d bit total payload\n',encodedBitCount);
 fprintf('%d data struct packages\n',dataStructCount);
 fprintf('%d watermark data bits\n',dataStructCount * wmkSequenceLen);
-% fprintf('ODG: %f (PQevalAudio)\n',odg_pqeval);
-% fprintf('ODG: %f (EAQUAL)\n',odg_eaqual);
+if eaqual_flag
+    fprintf('ODG: %f (EAQUAL)\n',odg_eaqual);
+end
+if pqeval_flag
+    fprintf('ODG: %f (PQevalAudio)\n',odg_pqeval);
+    
+end
 
 end
 

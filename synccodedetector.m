@@ -23,7 +23,7 @@ for i=1:codeLength
     window = sampleCursor : sampleCursor+frameLength-1;
     
     frame = synccodeBlock(window);
-    readCode(i) = extractbit(frame);
+    readCode(i) = extractbit(frame, frameLength);
     
     sampleCursor = sampleCursor+frameLength;
     

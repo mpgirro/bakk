@@ -24,6 +24,10 @@ dataStructCount = 0;
 % corresponting watermark sequence. Therefore, the following bit are random
 lastSampleToStartSearching = signalSize-dataStructSampleLen;
 
+% ALL VERY TESTY HERE!
+[ newSignal, success ] = resynchronize( signal );
+% - - - - - - - - - - 
+
 fprintf('Watermark data:\n');
 
 %for i=1:lastSampleToStartSearching
@@ -40,7 +44,7 @@ while sampleCursor <= lastSampleToStartSearching
         sampleCursor = sampleCursor + syncSampleLen;
         
         wmkDataWindow = sampleCursor : sampleCursor+wmkSampleLen-1;
-        wmkData = wmkdataextractor(signal(wmkDataWindow));
+        wmkData = wmkdataextractor(signal(wmkDataWindow), frameLength);
         
         wmkBuffer(wmkBufferCursor : wmkBufferCursor+wmkSequenceLen-1) = wmkData;
         wmkBufferCursor = wmkBufferCursor+wmkSequenceLen;

@@ -1,10 +1,11 @@
-function [ bit ] = extractbit( signalSegment )
+function [ bit ] = extractbit( signalSegment, frameLength )
 %EXTRACTBIT Extract the bit value encoded by the dwt coefficient subbands
 %in a signal segment
 %   Detailed explanation goes here
 
 % only take the samples used for the data, ignore the buffer zone
-window = 1:Setting.frame_data_samples_length;
+window = 1:frameLength;
+%window = 1:Setting.frame_data_samples_length;
 
 decomposition = signaldecomposition( signalSegment(window) );
 A = decomposition.A;

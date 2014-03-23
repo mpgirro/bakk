@@ -31,7 +31,7 @@ while sampleCursor <= lastSampleToStartSearching
     
     syncCodeWindow = sampleCursor : sampleCursor+syncSampleLen-1;% -1 due to the nature of matlab sequence notation
     
-    syncCodeFound = synccodedetector(signal(syncCodeWindow));
+    syncCodeFound = synccodedetector(signal(syncCodeWindow), frameLength);
     
     if syncCodeFound
         % GOOD! this means the next X samples will hold watermark data

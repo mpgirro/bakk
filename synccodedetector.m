@@ -1,4 +1,4 @@
-function [ found ] = synccodedetector( synccodeBlock )
+function [ found ] = synccodedetector( synccodeBlock, frameLength )
 %SYNCCODEDETECTOR checks if a sequence of signal samples holds a synccode
 %   Checks if a sequence of signal samples encode a synchronization code.
 %   To encode 1 bit, there are frame_length sample values
@@ -12,7 +12,6 @@ function [ found ] = synccodedetector( synccodeBlock )
 %   otherwise
 
 sampleSize  = size(synccodeBlock);
-frameLength = Setting.frame_length;
 syncCode    = Setting.sync_code;
 codeLength  = Setting.synccode_block_sequence_length;
 readCode    = zeros([1,codeLength]);

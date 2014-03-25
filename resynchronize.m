@@ -42,13 +42,21 @@ while signalCursor < signalSize-upperBound
             % now do what we are here todo
             resync_success = 1;
             
-            alpha = tmpFrameLength / originalFrameLength;
-            
+            if tmpFrameLength < originalFrameLength
+                % this line should always be executed
+                % but it seems we sometimes have the other case
+                alpha = tmpFrameLength / originalFrameLength;
+            else
+                alpha = originalFrameLength / tmpFrameLength;
+            end
+                
+                
             % preallocate the size for the new signal
             newSignal = zeros([signalSize 1]);
   
             newSignal(1) = oldSignal(1);
-            for i=2:signalSize-1
+            %for i=2:signalSize-1
+            for i=2:numel(oldSignal)-1
                 beta = alpha*i - floor(alpha*i);
                 newSignal(i) = (1-beta)*oldSignal(floor(alpha*i)) + beta*oldSignal(floor(alpha*i)+1);
             end

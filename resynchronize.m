@@ -45,14 +45,14 @@ while signalCursor < signalSize-upperBound
             alpha = tmpFrameLength / originalFrameLength;
             
             % preallocate the size for the new signal
-            newSignal = zeros(signalSize);
-            
+            newSignal = zeros([signalSize 1]);
+  
             newSignal(1) = oldSignal(1);
             for i=2:signalSize-1
                 beta = alpha*i - floor(alpha*i);
                 newSignal(i) = (1-beta)*oldSignal(floor(alpha*i)) + beta*oldSignal(floor(alpha*i)+1);
                 
-                fprintf('%f: %d --> %d', i, oldSignal(i), newSignal(i));
+                fprintf('%f: %d --> %d\n', i, oldSignal(i), newSignal(i));
             end
             newSignal(signalSize) = oldSignal(signalSize);
             

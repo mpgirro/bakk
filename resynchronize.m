@@ -51,8 +51,6 @@ while signalCursor < signalSize-upperBound
             for i=2:signalSize-1
                 beta = alpha*i - floor(alpha*i);
                 newSignal(i) = (1-beta)*oldSignal(floor(alpha*i)) + beta*oldSignal(floor(alpha*i)+1);
-                
-                fprintf('%f: %d --> %d\n', i, oldSignal(i), newSignal(i));
             end
             newSignal(signalSize) = oldSignal(signalSize);
             

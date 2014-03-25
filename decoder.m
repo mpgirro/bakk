@@ -44,7 +44,7 @@ while sampleCursor <= lastSampleToStartSearching
         sampleCursor = sampleCursor + syncSampleLen;
         
         wmkDataWindow = sampleCursor : sampleCursor+wmkSampleLen-1;
-        wmkData = wmkdataextractor(signal(wmkDataWindow), frameLength);
+        wmkData = wmkdataextractor(signal(wmkDataWindow));
         
         wmkBuffer(wmkBufferCursor : wmkBufferCursor+wmkSequenceLen-1) = wmkData;
         wmkBufferCursor = wmkBufferCursor+wmkSequenceLen;

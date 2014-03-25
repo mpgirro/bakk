@@ -11,7 +11,7 @@ sampleCursor = 1;
 for i=1:wmkSequenceLen
     
     window = sampleCursor : sampleCursor+frameLength-1;
-    wmkData(i) = extractbit(sample_sequence(window));
+    wmkData(i) = extractbit(sample_sequence(window), frameLength);
     
     sampleCursor = sampleCursor+frameLength;
   

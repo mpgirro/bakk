@@ -1,4 +1,4 @@
-function [ payload ] = assemblepayload( watermark )
+function [ payload, payloadSize ] = assemblepayload( watermark )
 %UNTITLED Assambles the payload that is to be encoded into a signal
 %   A Watermark can not just be encoded by itself. Due to TSM and for WMK
 %   detection there have to be synchronization code segments, that are
@@ -71,8 +71,7 @@ for i=1:wmkBlockCount
     
 end
 
-
-
+payloadSize = numel(payload);
 
 end
 

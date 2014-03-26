@@ -20,9 +20,9 @@ fprintf('Maximum encoding capacity: %d watermark bits\n',wmkCapacity);
 
 % create payload containing synccodes and watermark segments,
 % only process as many watermark bits as can be encoded
-payload = assemblepayload(watermark(1:wmkCapacity));
-payloadSize = size(payload);
-payloadSize = payloadSize(2);
+fprintf('Assembling payload...');
+[payload, payloadSize] = assemblepayload(watermark(1:wmkCapacity));
+fprintf('DONE\n');
 
 sampleCursor = 1;
 dataStructCount = 0;
@@ -32,6 +32,8 @@ dataStructCount = 0;
 % the signal can't hold any more data structures for we only encode whole
 % structures.
 bitEncodingCapacity = floor(signalSize/ frameLength );
+
+fprintf('Processing signal...');
 
 for i=1:bitEncodingCapacity
     
@@ -62,6 +64,8 @@ end
 
 modSignal = signal;
 encodedBitCount = i;
+
+fprintf('DONE\n');
 
 % % now lets calculate the ODGs if we can
 refSignal   = inputSignal(1:sampleCursor-1);

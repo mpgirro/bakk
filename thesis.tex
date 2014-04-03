@@ -20,21 +20,23 @@
 % to use the german charset include cp850 for MS-DOS, ansinew for Windows and latin1 for Linux.
 % \usepackage[latin1]{inputenc}
 
-\thesistitle{Title of the Thesis}
-\thesissubtitle{Optional Subtitle} % optional
-\thesisdate{TT.MM.JJJJ}
+\thesistitle{Digital Audio Watermarking}
+\thesissubtitle{f\"ur analoge \"Ubertragungsstrecken} % optional
+\thesisdate{\today}
 
 % all titles and designations have to be gender-related!
-\thesisdegree{Diplom-Ingenieurin}{Diplom-Ingenieurin}
-\thesiscurriculum{Wirtschaftsinformatik}{Business Informatics} % your study
-\thesisverfassung{Verfasserin} % Verfasser
-\thesisauthor{Martina Musterfrau} % your name
-\thesisauthoraddress{Musterplatz 1, 1111 Wien} % your address
-\thesismatrikelno{0123456} % your registration number
+%\thesisdegree{Bachelor of Science}
+%\thesiscurriculum{Medieninformatik und Visual Computing} % your study
+\thesisverfassung{Maximilian Irro} % Verfasser
+\thesisauthor{Maximilian Irro} % your name
+\thesisauthoraddress{Pfalzstra{\ss}e 10, 5282 Ranshofen} % your address
+\thesismatrikelno{1026859} % your registration number
 
-\thesisbetreins{o.Univ.-Prof. Dipl.-Ing. Mag. Dr. Monika Musterprofessorin}
-\thesisbetrzwei{Dr. Vorname Familienname}
-\thesisbetrdrei{Dr. Vorname Familienname} % optional
+\thesistype{Bachelorarbeit aus Informatik}
+
+\thesisbetreins{Dipl.-Ing. Mag. Dr. Matthias Zeppelzauer}
+%\thesisbetrzwei{Dr. Vorname Familienname}
+%\thesisbetrdrei{Dr. Vorname Familienname} % optional
 
 % define page numbering styles
 \makepagestyle{numberCorner}
@@ -63,7 +65,7 @@
 \include{titlepage}
 
 % an english translation may follow
-\include{titlepage_en} % optional
+%\include{titlepage_en} % optional
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%   ERKLAERUNG DER SELBSTAENDIGKEIT   %
@@ -95,9 +97,10 @@
 %%%   CONTENTS    %%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % uncomment to set document language to german (results in "Inhaltsverzeichnis", "Kapitel", "Abbildung", etc. instead of "Contents", "Chapter", and "Figure"), otherwise the document's language is english
-%\selectlanguage{ngerman}
+\selectlanguage{ngerman}
 
-\setcounter{tocdepth}{1}
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
 
 \cleardoublepage
 \pagestyle{numberCorner}
@@ -112,25 +115,40 @@
 \pagestyle{numberCorner}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Introduction}
+\chapter{Einf\"uhrung}
 \label{ch:intro}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\input{chapters/introduction}
+\input{chapters/einfuehrung}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Typographic Design}
-\label{ch:typo}
+\chapter{Theoretische Grundlagen}
+\label{ch:theorie}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\input{chapters/design}
+\input{chapters/theorie}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Bibliographic Issues}
-\label{ch:bibliographic}
+\chapter{Methode}
+\label{ch:methode}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\input{chapters/bibliographic}
+\input{chapters/methode}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Analyse}
+\label{ch:analyse}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{chapters/analyse}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Schlussfolgerung und Ausblick}
+\label{ch:ausblick}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\input{chapters/ausblick}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% BACKMATTER %%%%%%%%%%%%%%%%%%%%%%%%%%

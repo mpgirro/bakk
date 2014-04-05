@@ -1,17 +1,27 @@
 \chapter{Methode}
 \label{ch:methode}
 
-\section{Framework}
+In Kapitel \ref{ch:theorie} wurde das mathematische Modell beschrieben, mit welchem ein Bit geschrieben werden kann!!
 
-Modell der embedding und extraction phase
+(ein Signal so ver\"andert werden kann, dass eine eingebettete Sequenz bin\"arer Daten eindeutig rekonstruiert werden kann.)
+
+Ein Signal S wird mit Daten D angereichert, das ist dann S'. S' wird übertragen und durch die Übertragung zu S'' verändert. Nun soll aus S'' wieder D rekonstruiert werden.
+
+Um dieses theoretische Wissen nun in einer Applikation praktisch nutzen zu k\"onnen, muss der Algorithmus in ein Framework eingebettet werden. 
+
+\section{Architektur}
+
+Prinzipiell zerteil sich in mehrere phasen, blockschaltbilder, etc
 
 \section{Watermark Implantierung}
+\label{sec:embedding}
 
 \subsection{Synchronisations-Codes}
 
 wozu sync codes ganz allgemein
 
 \subsection{Fehlerkorrekturverfahren}
+\label{sec:errorcorrection}
 
 Error detection and correction
 
@@ -22,8 +32,9 @@ Error detection and correction
 \subsubsection{Turbo-Codes}
 
 \subsection{Datenstrukturen und Protokoll}
+\label{sec:protokoll}
 
-\subsection{Qualitätskontrolle mittels }
+\subsection{Qualitätskontrolle und ODG }
 
 \subsubsection{Signal-Rauschabstand}
 
@@ -37,13 +48,15 @@ Error detection and correction
 
 
 \section{Watermark Extrahierung}
+\label{sec:extraction}
 
 
 \subsection{Resynchronisaton und Interpolation}
 
 \subsection{Synchronisations-Code Erkennung}
 
-\subsubsection{Barker-Codes}
+\subsubsection{Autokorrelation und Barker-Codes}
+\label{sec:barkercode}
 
 vorteil der barker codes, autocorrelation
 

@@ -20,6 +20,9 @@
 % to use the german charset include cp850 for MS-DOS, ansinew for Windows and latin1 for Linux.
 % \usepackage[latin1]{inputenc}
 
+\makeindex
+
+%\thesistitle{Digital Audio Watermarking f\"ur analoge \"Ubertragungsstrecken}
 \thesistitle{Digital Audio Watermarking}
 \thesissubtitle{f\"ur analoge \"Ubertragungsstrecken} % optional
 \thesisdate{\today}
@@ -83,8 +86,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % optional acknowledgements may be included in german or in english
-%\input{chapters/danksagung} 		% optional
-\input{chapters/acknowledgements}	% optional
+\input{chapters/danksagung} 		% optional
+%\input{chapters/acknowledgements}	% optional
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%   ABSTARCT    %%%%%%%%%%%%%%%%%%%%%%%
@@ -103,7 +106,7 @@
 \selectlanguage{ngerman}
 
 \setcounter{tocdepth}{3}
-\setcounter{secnumdepth}{3}
+\setcounter{secnumdepth}{4}
 
 \cleardoublepage
 \pagestyle{numberCorner}
@@ -145,11 +148,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
-
 \end{appendix}
 
 \bibliographystyle{plain}
+\nocite{*} % include all references, even those not cited
 \bibliography{references}
+
+\printindex
+
 
 \end{document}

@@ -8,6 +8,7 @@
 \usepackage{graphicx}            			% Figures
 \usepackage{verbatim}            			% Code-Environment
 \usepackage[lined,linesnumbered,algochapter]{algorithm2e} % Algorithm-Environment
+\usepackage{amsmath}
 
 \usepackage{pgf}					
 \usepackage{tikz}					% tikz graphics
@@ -19,6 +20,10 @@
 \usepackage[ngerman]{varioref}  % Querverweise
 % to use the german charset include cp850 for MS-DOS, ansinew for Windows and latin1 for Linux.
 % \usepackage[latin1]{inputenc}
+
+%\setcounter{secnumdepth}{3}
+\setsecnumdepth{subsection} % the above line does not seem to work with memoir class
+\setcounter{tocdepth}{2}
 
 \makeindex
 
@@ -105,9 +110,6 @@
 % uncomment to set document language to german (results in "Inhaltsverzeichnis", "Kapitel", "Abbildung", etc. instead of "Contents", "Chapter", and "Figure"), otherwise the document's language is english
 \selectlanguage{ngerman}
 
-\setcounter{tocdepth}{3}
-\setcounter{secnumdepth}{4}
-
 \cleardoublepage
 \pagestyle{numberCorner}
 \tableofcontents*
@@ -143,10 +145,10 @@
 \begin{appendix}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
 \input{appendix/peaq}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
+\input{appendix/beweise}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{appendix}
 

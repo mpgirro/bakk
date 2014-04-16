@@ -1,17 +1,30 @@
-\chapter{Methode}
+\chapter{Framework}
 \label{ch:methode}
 
-In Kapitel \ref{ch:theorie} wurde das mathematische Modell beschrieben, mit welchem ein Bit geschrieben werden kann!!
-
-(ein Signal so ver\"andert werden kann, dass eine eingebettete Sequenz bin\"arer Daten eindeutig rekonstruiert werden kann.)
-
-Ein Signal S wird mit Daten D angereichert, das ist dann S'. S' wird übertragen und durch die Übertragung zu S'' verändert. Nun soll aus S'' wieder D rekonstruiert werden.
-
-Um dieses theoretische Wissen nun in einer Applikation praktisch nutzen zu k\"onnen, muss der Algorithmus in ein Framework eingebettet werden. 
+In Kapitel \ref{ch:theorie} wurde das theoretisch-mathematische Modell beschrieben, mit welchem ein Bit geschrieben und wieder rekonstruiert werden kann. Um dieses Wissen nun praktisch nutzen zu können ist ein Framework notwenig in dem es zur Anwendung kommt. 
 
 \section{Architektur}
 
-Prinzipiell zerteil sich in mehrere phasen, blockschaltbilder, etc
+Das von Shannon und Weaver entwickelte Sender-Empfänger-Modell \cite{shannon2001mathematical} kann herangezogen werden, um den schematischen Aufbau des Frameworks zu modellieren:
+
+\includegraphics{figures/diagram-framework}
+
+
+\begin{figure}[tb]
+	\centering
+	\includegraphics[width=0.7\textwidth]{figures/diagram-framework}
+	\caption{Framework Übersicht}
+	\label{fig:diagram-framework}
+\end{figure}
+
+
+
+
+Diagramme:
+
+* kurzes über das ganze framework, hier am besten nur das watermark als ganzes einzeichnen
+* watermark emedding
+* watermark extraction
 
 \section{Watermark Implantierung}
 \label{sec:embedding}

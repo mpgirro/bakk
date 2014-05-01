@@ -3,14 +3,42 @@
 
 \section{Motivation}
 
-wozu das ganze hier
+Die Digitalisierung unserer Welt schreitet seit mehr als 50 Jahren stetig voran. Immer mehr liegt nur mehr in digitaler Form vor. Und durch die wachsende Vernetzung stehen diese Daten vor allem seit dem neuen Jahrtausend immer mehr Menschen mit immer weniger Aufwand jederzeit zur Verfügung. 
 
-\section{Digital Watermarks}
+Doch es ergibt sich daraus auch ein Problem: \textit{Was liegt eigentlich vor?} Digitale (und vor allem multimediale) Daten sagen per se nichts über ihre Bedeutung aus. Sie bekommen diese durch den Betrachter. Doch aus diversen Gründen, ganz voran alleine um sie sortieren und suchen zu können, ist es aber interessant ihnen bereits vorher eine gewisste Bedeutung zuzuschreiben. Dadruch wurde in den letzten Jahren ein Stichwort groß: \textit{Metadaten}. Metadaten sind \glqq{}Daten über Daten\grqq{}. Mit ihnen wird versucht vorliegende Daten zu beschreiben (z.B. Genre eines Musikstücks), zusätzliche Informationen über sie vorzuhalten (Künstler und Album eines Musikstücks), diese maschinenlesbar bereitszustellen (ID3-Tags bei MP3) und wenn möglich auch direkt mit den Daten zu verknüpfen (Kapitelmarken in MP4/M4B Hörbüchern).
 
-Bisl blabla zu dig. watermarks
+Das Problem bei Metadaten ist sie bereitzustellen und vorzuhalten. Seit dem Ausbau der digitalen Vernetzung liegen Metadaten oft nicht mehr direkt bei den eigentlichen Daten. Oftmals sind sie auf einem externen Server und werden bei Bedarf angefordert. Die Metadaten sind nur dann zugänglich, wenn der Server verfügbar ist und ein Mechanismus existiert mit dem die Daten eindeutig mit den Metadaten am Server verknüpft werden können. 
+Eine Datei kann auch durch eine zusätzliche standardisierte Datei im selben Namespace beschrieben werden (etwa via XML). Kopiert man jedoch nur die ursprünglichen Daten, nicht aber ihre Metadaten, so geht die zusätzliche Information verloren. 
+
+Es ist daher oftmals wünschenswert die Metadaten direkt \textit{in} den eigentlichen Daten vorzuhalten. Eine der vielleicht bekanntestens Formen dieser Art der Metadatenspeicherung sind die bereits oben erwähnten MP3 Tags. Hier werden die Metadaten einfach am Ende des Audiosignals angehängt. Diese Form der Metadatenspeicherung ist vor allem bei digitalen, multimedialen Daten besonders beliebt. Nicht zuletzt die MPEG\footnote{Moving Picture Experts Group. Eine Vereinigung zur Standardisierung von Audio- und Video-Kompressionsalgorithmen und Containerformaten. Am bekanntestens dürfte das MP4 Dateinformat sein.} treibt diese Entwicklung mit ihren Standards auch rege voran. 
+
+\section{Digital und analoge Daten}
+
+Bei digitalen Daten lassen sich die Metadaten oftmals noch recht einfach direkt zu den eigentlichen Daten speichern. Es muss nur einen ensprechenden Standard geben wie diese an die Daten angehängt werden können. Doch vor allem multimediale Daten existieren in der Regel nicht nur in digitaler Form. Spätestens wenn sie konsumiert (betrachtet, gehört) werden sollen müssen sie auf die eine oder andere Art in eine analoge Form gebracht werden. Dabei gehen die Metadaten meistens verloren. Dem wird entgegen gesetzt, dass die Metadaten meistens an diesem Punkt auch angezeigt werden. Die meisten MP3 Player zeigen wärend des Abspielens den Tracktitel und Artist an. Allerdings ist der Lifecycle der Metadaten an dieser Stelle auch beendet. Werden die nun analogen Daten weiter aufgezeichnet, verarbeitet und verwendet, so ist ihre Beschreibung verloren gegangen, wenn sich nicht jemand explizit \glqq{}von Hand\grqq{} darum weiterträgt. Es wäre also Wünschenswert wenn die Metadaten auch im analogen Zustand Teil der Daten wären. 
+
+\section{Digitale Wasserzeichen}
+
+Digitale Wasserzeichen (engl. \textit{Digital Watermarks}) sind sämtliche Verfahren die ein digitales Signal (Audio, Video, aber auch nur einfache Bilder) so verändern, dass in ihm ein weiteres Signal versteckt ist. Da dieses zusätzliche Signal in der Regel unwahrnehmbar ist (oder zumindest sein soll) ist die Einbettung dieses \glqq{}versteckten Signals\grqq{} in der ursprüngliche (das \glqq{}Trägersignal\grqq{}) also eine steganographische Methode.
+Somit kann beispielsweise ein Bild in einem anderen Bild versteckt werden. Zu beachten ist natürlich, dass die Einbettungskapazität durchaus limitiert ist, da die Qualität des Trägersignal nicht maßgeblich beeinträchtigt werden soll. 
+
+Prinzipiell lassen sich Watermarks in 2 Kategorien unterteilen\cite{arnold2000audio}: 
+
+\begin{description}
+	
+	\item[Secret watermarks] sollen unauffindbar, außer für jene die dazu berechtigt sind. Sie stellen einen gesicherten Übertragungskanal zwischen den authorisierten Personen dahr, die zu den versteckten Informationen durch ihr Wissen um ein geheimes Verfahren oder einen geheimen Schlüssel Zugang haben. Die Existenz des Watermarks an sich sollte nach Möglichkeit für Unauthorisierte nicht nachweisbar sein. 
+	
+	\item[Public watermarks] sollen für jeden unter Anwendung des Dekodierungsverfahrens lesbar sein. Sie sind somit ein öffentlicher Übertragungskanal.
+	
+\end{description}
 
 \section{Anwendungsgebiete}
 
+Digitale Wasserzeichen erfreuen sich zunehmender Beliebtheit seitdem es möglich ist praktisch kostenlos perfekte digitale Kopien von Audio, Video, Bildern und Texten herzustellen\cite{mintzer1997effective}. Indem in mediale Daten Wasserzeichen eingebracht werden, wird Urheberschaft kenntlich gemacht und Copyrightanliegen können verfolgt werden. In Bildern wird ein Wasserzeichen eingebracht, das nicht sichtbar ist, trotzdem bei Bedarf aus dem Bild eindeutig extrahiert werden kann. Somit kann überprüfut werden, ob Bilder unlizensiert Verwendung finden. In Musikdateien ermöglichen indivituelle Wasserzeichen zu jedem Track den ursprünglichen Käufer ausfindig zu machen, seitdem es dank des MP3-Komprimierungsverfahrens möglich geworden ist Musikdateien in geringer Datengröße und dennoch guter Qualität problemlos (und oftmals illegal) durch das Internet zu kopieren. Bei Videodaten kann festgestellt werden, ob diese nachträglich verändert wurden (bei Beweisaufnahmen etwa). 
+
+In den Anfangszeiten der digitalen Wasserzeichen wurden auch Überlegungen angestellt wie die aufkommenden DVDs so gekennzeichnet werden könnten, dass eine Kopierung nur im Rahmen des erlaubten Copyrights stattfindet\cite{petitcolas1999information}. Die Idee war alle DVD Player so zu Programmieren, dass sie keine Kopien von kommerziellen Inhalten anfertigen. TV-Austrahlungen würden hingegen so gekennzeichnet, dass sie genau einmal kopiert werden könnten und private Aufnahmen wären unlimitiert kopierbar. 
+
 \section{Ziele}
 
-Was wollte ich eigentlich erreichen
+In dieser Arbeit wird versucht ein öffentliches Watermarkingverfahren für digitale Audiosignale umzusetzen, welches die Übertragungs über eine analoge Übertragungsstrecke (etwa Luft) übersteht. Watermarkingverfahren zum Urheberrechtsschutz sind im aktuellen Stand der Technik bereits weit ausgereift. Hingegen wurde bishher nur wenig Augenmerkt auf die Resistenz bei DA/AD Wandlung gelegt, da dies zur Beseitigung der Copyright-Watermarks kaum ein angewandter Angriffsvektor ist. Die Auswirkungen auf die resultierende Qualität sind in der Regel zu massiv. 
+Diese Arbeit beschreibt die Implementierung des Watermarkingverfahrens für D/A-A/D Wandlung von Shijun Xiang\cite{xiang2007robust} und die im Rahmen der Evaluierung durchgeführten Erweiterungen und Modifikationen. 
+

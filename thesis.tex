@@ -56,6 +56,8 @@
 \newcommand{\uml}[1]{\texttt{#1}}
 \newcommand{\cd}{\textsf{Class Diagram}}
 
+\newcommand{\pageintentionallyleftblank}[1]{\cleartooddpage[\vspace*{\fill} #1 \vspace*{\fill}]}
+
 % define newline hight between two paragraphs - by default there is none
 \setlength{\parskip}{0.15in}
 
@@ -125,15 +127,21 @@
 \pagestyle{numberCorner}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pageintentionallyleftblank{This page would be intentionally left blank if we would not wish to inform about that.}
 \input{chapters/einfuehrung}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pageintentionallyleftblank{THIS PAGE ACCIDENTALLY PRINTED ON}
 \input{chapters/theorie}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{chapters/methode}
+\cleardoublepage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{chapters/analyse}
+\cleardoublepage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{chapters/ausblick}
+\cleardoublepage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

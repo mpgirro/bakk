@@ -9,6 +9,9 @@
 \usepackage{verbatim}            			% Code-Environment
 \usepackage[lined,linesnumbered,algochapter]{algorithm2e} % Algorithm-Environment
 \usepackage{amsmath}
+\usepackage{CJKutf8}				% Japanische, Chinesisch, Koreanisch
+\usepackage{wrapfig}
+\usepackage{listings}				% source code listings
 
 \usepackage{pgf}	
 \usepackage{svg}				
@@ -21,6 +24,28 @@
 \usepackage[ngerman]{varioref}  % Querverweise
 % to use the german charset include cp850 for MS-DOS, ansinew for Windows and latin1 for Linux.
 % \usepackage[latin1]{inputenc}
+
+%%%%%%%%%%%%%%
+%%% DRAFT WATERMARK -- remove when finished!
+\usepackage[firstpage]{draftwatermark}
+%%%%%%%%%%%%%%
+
+% Define Program Code Styles
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+%  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+
 
 %\setcounter{secnumdepth}{3}
 \setsecnumdepth{subsection} % the above line does not seem to work with memoir class
@@ -53,13 +78,10 @@
 \makeoddfoot{numberCorner}{}{}{\thepage}
 
 % define custom macros for specific formats or names
-\newcommand{\uml}[1]{\texttt{#1}}
-\newcommand{\cd}{\textsf{Class Diagram}}
-
 \newcommand{\pageintentionallyleftblank}[1]{\cleartooddpage[\vspace*{\fill} #1 \vspace*{\fill}]}
 
 % define newline hight between two paragraphs - by default there is none
-\setlength{\parskip}{0.15in}
+%\setlength{\parskip}{0.15in}
 
 \begin{document}
 
@@ -84,7 +106,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%   ERKLAERUNG DER SELBSTAENDIGKEIT   %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\cleardoublepage
+\pageintentionallyleftblank{This page intentionally left blank.}
 \selectlanguage{ngerman}
 \input{chapters/erklaerung}
 \selectlanguage{english}
@@ -93,6 +115,10 @@
 %%%   ACKNOWLEDGEMENTS    %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\pageintentionallyleftblank{\noindent This page intentionally has nothing but text\\
+explaining why this page has nothing but text\\
+explaining that this page would otherwise have been left blank\\
+and would otherwise have been left blank.}
 % optional acknowledgements may be included in german or in english
 \input{chapters/danksagung} 		% optional
 %\input{chapters/acknowledgements}	% optional
@@ -101,9 +127,11 @@
 %%%   ABSTARCT    %%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\pageintentionallyleftblank{This page intentionally left blank.}
 \input{chapters/abstract_en}
-\cleardoublepage
 \selectlanguage{ngerman}
+
+\pageintentionallyleftblank{Diese Seite wurde absichtlich leer gelassen.}
 \input{chapters/abstract_de}
 \selectlanguage{english}
 
@@ -113,10 +141,19 @@
 % uncomment to set document language to german (results in "Inhaltsverzeichnis", "Kapitel", "Abbildung", etc. instead of "Contents", "Chapter", and "Figure"), otherwise the document's language is english
 \selectlanguage{ngerman}
 
-\cleardoublepage
+\pageintentionallyleftblank{Hoc vellum voluntater album mansum est.}
 \pagestyle{numberCorner}
 \tableofcontents*
 	
+%\pageintentionallyleftblank{}
+\listoffigures
+
+%\listofalgorithms
+
+%\lstlistoflistings
+
+%\pageintentionallyleftblank{}
+%\listoftables
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%   MAINMATTER    %%%%%%%%%%%%%%%%%%%%%
@@ -127,21 +164,20 @@
 \pagestyle{numberCorner}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\pageintentionallyleftblank{This page would be intentionally left blank if we would not wish to inform about that.}
+\pageintentionallyleftblank{\begin{CJK}{UTF8}{min}這頁故意地被留下空白\end{CJK}}
 \input{chapters/einfuehrung}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pageintentionallyleftblank{THIS PAGE ACCIDENTALLY PRINTED ON}
 \input{chapters/theorie}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pageintentionallyleftblank{\begin{CJK}{UTF8}{min}このページは計画的にブランクを残ている\end{CJK}}
 \input{chapters/methode}
-\cleardoublepage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pageintentionallyleftblank{Pa\^{g}on intence vaka.}
 \input{chapters/analyse}
-\cleardoublepage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pageintentionallyleftblank{}
 \input{chapters/ausblick}
-\cleardoublepage
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -155,17 +191,22 @@
 \begin{appendix}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pageintentionallyleftblank{}
 \input{appendix/peaq}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{appendix/beweise}
+%\pageintentionallyleftblank{}
+%\input{appendix/beweise}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \end{appendix}
 
-\bibliographystyle{plain}
+%\bibliographystyle{plain} % alphabetically I think
+\bibliographystyle{ieeetr} % order by appearance
 \nocite{*} % include all references, even those not cited
+\pageintentionallyleftblank{}
 \bibliography{references}
 
+\pageintentionallyleftblank{}
 \printindex
 
 

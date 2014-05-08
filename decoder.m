@@ -15,8 +15,11 @@ maxWmkSeqCount  = floor(segmentCount / dataStructSequenceLen ); % there is alway
 maxWmkBitcount  = maxWmkSeqCount * wmkSequenceLen;
 wmkBuffer       = zeros([1, maxWmkBitcount(1)]); % preallocate wmk buffer space for speed
 
+messageLength = Setting.message_length;
+codewordLength = Setting.codeword_length;
+
 wmkBufferCursor = 1;
-sampleCursor = 1;
+sampleCursor    = 1;
 dataStructCount = 0;
 
 % Calculate the last sample it makes sense to start searching in. After
@@ -28,7 +31,7 @@ lastSampleToStartSearching = signalSize-dataStructSampleLen;
 [ newSignal, success ] = resynchronize( signal );
 % - - - - - - - - - - 
 
-fprintf('Watermark data:\n');
+fprintf('Information data:\n');
 
 %for i=1:lastSampleToStartSearching
 while sampleCursor <= lastSampleToStartSearching
@@ -46,10 +49,10 @@ while sampleCursor <= lastSampleToStartSearching
         wmkDataWindow = sampleCursor : sampleCursor+wmkSampleLen-1;
         wmkData = wmkdataextractor(signal(wmkDataWindow));
         
-        wmkBuffer(wmkBufferCursor : wmkBufferCursor+wmkSequenceLen-1) = wmkData;
-        wmkBufferCursor = wmkBufferCursor+wmkSequenceLen;
+        wmkBuffer(wmkBufferCursor : wmkBufferCursor+messageLength-1) = wmkData;
+        wmkBufferCursor = wmkBufferCursor+messageLength;
         
-        fmt=[repmat('%d ',1,wmkSequenceLen) '\n'];
+        fmt=[repmat('%d ',1,messageLength) '\n'];
         fprintf(fmt,wmkData');
        
         

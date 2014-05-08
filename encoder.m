@@ -11,17 +11,38 @@ syncSequenceLen = Setting.synccode_block_sequence_length; % amount of bits in on
 wmkSequenceLen  = Setting.wmkdata_block_sequence_length;  % amount of bits in one wmk sequence
 syncSampleLen   = Setting.synccode_block_sample_length; % amount of samples needed to encode one synccode
 wmkSampleLen    = Setting.wmkdata_block_sample_length;  % amount of samples needed to encode one wmk data block
-dataStructSequenceLen   = Setting.datastruct_package_sequence_length;
-dataStructSampleLen     = Setting.datastruct_package_sample_length;
-dataStructCapacity = floor( signalSize / dataStructSampleLen );
+packageBitLen   = Setting.datastruct_package_sequence_length;
+packageSampleLen     = Setting.datastruct_package_sample_length;
+messageLength   = Setting.message_length;
+codewordLength  = Setting.codeword_length;
 
-wmkCapacity = dataStructCapacity * wmkSequenceLen; % maximun amount of bit capable of embedding
-fprintf('Maximum encoding capacity: %d watermark bits\n',wmkCapacity);
+packageCapacity  = floor( signalSize / packageSampleLen );
+bitCapacity      = floor(signalSize/frameLength);
+
+codewordBitCapacity = packageCapacity * wmkSequenceLen; % maximun amount of codewords capable of embedding
+messageBitCapacity  = codewordBitCapacity / codewordLength * messageLength;
+
+fprintf('Signal capacity ANALYSIS:\n');
+fprintf('   %d bits total\n',bitCapacity);
+fprintf('   %d information bits\n',messageBitCapacity);
+fprintf('   %d packages\n',packageCapacity);
+%fprintf('Maximum encoding capacity: %d information bits\n',codewordBitCapacity);
+
+wmkLen = numel(watermark);
+fprintf('Watermark consists of %d bits - ',wmkLen);
+if codewordBitCapacity >= wmkLen
+    fprintf('signal size sufficient\n');
+else
+    fprintf('signal to short, skipping %d watermark bits!\n', wmkLen-codewordBitCapacity);
+end
+
+% lower bound will be used to determin processed wmk data
+wmkbound = min(codewordBitCapacity,wmkLen);
 
 % create payload containing synccodes and watermark segments,
 % only process as many watermark bits as can be encoded
 fprintf('Assembling payload...');
-[payload, payloadSize] = assemblepayload(watermark(1:wmkCapacity));
+[payload, payloadSize] = assemblepayload(watermark(1:wmkbound));
 fprintf('DONE\n');
 
 sampleCursor = 1;
@@ -50,13 +71,13 @@ for i=1:bitEncodingCapacity
     
     sampleCursor = sampleCursor+frameLength;
     
-    if mod(i,dataStructSequenceLen) == 0
+    if mod(i,packageBitLen) == 0
         dataStructCount = dataStructCount+1;
     end
     
     % Check if we reached the data structure limit this signal can hold. We
     % can stop if this is the case
-    if dataStructCount >= dataStructCapacity
+    if dataStructCount >= packageCapacity
         break;
     end
     
@@ -90,10 +111,10 @@ catch
     fprintf('Error calculating ODG with PQevalAudio\n');
 end
 
-fprintf('Encoding complete\n');
-fprintf('%d bit total payload\n',encodedBitCount);
-fprintf('%d data struct packages\n',dataStructCount);
-fprintf('%d watermark data bits\n',dataStructCount * wmkSequenceLen);
+fprintf('Encoding complete, written:\n');
+fprintf('   %d bits total\n',encodedBitCount);
+fprintf('   %d packages\n',dataStructCount);
+fprintf('   %d information bits\n',dataStructCount * messageLength);
 if eaqual_flag
     fprintf('ODG: %f (EAQUAL)\n',odg_eaqual);
 end

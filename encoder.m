@@ -22,7 +22,7 @@ bitCapacity      = floor(signalSize/frameLength);
 codewordBitCapacity = packageCapacity * wmkSequenceLen; % maximun amount of codewords capable of embedding
 messageBitCapacity  = codewordBitCapacity / codewordLength * messageLength;
 
-fprintf('Signal capacity ANALYSIS:\n');
+fprintf('Signal capacity analysis:\n');
 fprintf('   %d bits total\n',bitCapacity);
 fprintf('   %d information bits\n',messageBitCapacity);
 fprintf('   %d packages\n',packageCapacity);

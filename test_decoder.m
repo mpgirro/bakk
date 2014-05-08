@@ -1,13 +1,17 @@
 
 clear;
 
-addpath('../');
+path = ['results',filesep,'watermarked_audio.wav'];
+%path = ['results',filesep,'recording.wav'];
+%path = ['results',filesep,'watermarked-der-affe-ist-gut.wav'];
+%path = ['results',filesep,'recording-soundkarte-der-affe-ist-gut.wav'];
+%path = ['results',filesep,'recording-soundkarte-ISP-leicht-gemacht.wav'];
+%path = ['results',filesep,'recording-mikrofon-ISP-leicht-gemacht.wav'];
+%path = ['results',filesep,'watermarked-ISP-leicht-gemacht.wav'];
 
-path = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
-%path = ['..',filesep,'results',filesep,'DA-AD-test-3.wav'];
 
+fprintf('processing %s\n',path);
 [signal,fs] = audioread(path);
-
 watermark = decoder(signal);
 
 messageLength = Setting.message_length;

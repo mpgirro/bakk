@@ -1335,7 +1335,7 @@
     <node id="n74">
       <data key="d6">
         <y:ShapeNode>
-          <y:Geometry height="15.400000000000006" width="75.99999999999994" x="145.00000000000006" y="151.20000000000002"/>
+          <y:Geometry height="15.400000000000006" width="75.99999999999994" x="131.0" y="158.2"/>
           <y:Fill color="#FFFFFF" transparent="false"/>
           <y:BorderStyle color="#FFFFFF" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="18.1328125" modelName="custom" textColor="#000000" visible="true" width="71.32421875" x="2.3378906249999716" y="-1.366406249999983">Buffer Zone<y:LabelModel>
@@ -1439,17 +1439,20 @@
         <y:PolyLineEdge>
           <y:Path sx="27.01048623758983" sy="7.869184976463657" tx="0.0" ty="-15.0"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
+          <y:Arrows source="none" target="none"/>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>
     </edge>
     <edge id="e1" source="n74" target="n61">
+      <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="35.99946591801246" sy="7.706617631377261" tx="0.0" ty="-15.0"/>
+          <y:Path sx="0.0" sy="0.0" tx="0.0" ty="-15.0">
+            <y:Point x="223.0" y="165.89999999999998"/>
+          </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
-          <y:Arrows source="none" target="standard"/>
+          <y:Arrows source="none" target="none"/>
           <y:BendStyle smoothed="false"/>
         </y:PolyLineEdge>
       </data>

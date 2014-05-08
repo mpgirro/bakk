@@ -17,10 +17,10 @@ Die Definitionen sind nicht in alphabetischer Reihenfolge angeführt, da versuch
 \item[Signal (sig)] \hfill \\
 Ein Signal ist eine physikalisch messbare Gr\"o{\ss}e. Wir betrachten hier nur Audiosignal. Ein analoges Audiosignal ist eine \"Uberlagerung von T\"onen welches nur durch das physikalische Medium auf dem es sich ausbreitet (z.B. Luft) existiert. Ein digitales Audiosignal ist eine Folge von zeit- und wertediskret abgetasteten Messwerten eines analogen Signals. Dieses kann durch einen Algorithmus manipuliert (siehe ~\ref{sec:embedding}) oder verarbeitet (siehe ~\ref{sec:extraction}) werden.
 
-\item[Analog-Digital Wandlung (AD)] \hfill \\ \index{DA/AD Wandlung} \index{A/D-Wandlung}
+\item[Analog-Digital Wandlung (AD)] \hfill \\ \index{D/A-A/D Wandlung} \index{A/D-Wandlung}
 Ein analoges Signal kann durch ein geeignetes Instrument (i.A. ein Mikrofon) als digitales Signal aufgezeichnet werden. Dabei geht Information verloren, da analoge Signale aus einer unendlichen Anzahl an \"uberlagerten Schwingungen bestehen, digitale Repr\"asentationen allerdings nur eine endliche Anzahl an Zust\"anden annehmen k\"onnen. 
 
-\item[Digital-Analog Wandlung (DA)] \hfill \\ \index{DA/AD Wandlung} \index{D/A-Wandlung}
+\item[Digital-Analog Wandlung (DA)] \hfill \\ \index{D/A-A/D Wandlung} \index{D/A-Wandlung}
 Ein digitales Signal kann durch einen geeigneten Mechanismus (z.B. einen Lautsprecher) wieder in ein analoges Signal umgewandelt werden. Aufgrund des Informationsverlustes der AD-Wandlung dieses Signal im Allgemeinen nicht mit dem urspr\"unglich aufgenommenen ident. 
 
 \item[Diskrete Wavelet-Transformation (DWT)] \hfill \\ \index{Diskrete Wavelet-Tansformation}
@@ -30,7 +30,6 @@ Die diskrete Wavelet-Transformation ist eine zeit- und wertediskret (da es sich 
 Die Ergebnisse der DWT. Sie beschreiben das zugrundeliegende Signal in seinem Frequenzbereich. $\left\{{c}_{i}\right\}$ bezeichnet die (indizierte) Gesamtmenge der Koeffizienten eines Signals, $c_i$ ein spezifisches Element. 
 
 \item[DWT-Level (${D}_{k}$)] \hfill \\
-
 Die DWT kann aus einer Kaskade von Hoch- und Tiefpassfiltern realisiert werden. Daraus ergibt sich ein Binärbaum. Jede Verzweigungsebene dieses Baumes ist ein DWT-Level. Je größer der Level, desto genauer ist die Auflösung der Koeffizienten. 
 
 \item[Wavelet (${f}_{w}$)] \hfill \\
@@ -42,7 +41,7 @@ Eine indizierte Teilmenge der DWT-Koeffizienten $\langle{c}_{i},{c}_{i+{L}_{E}}\
 \item[Subband-Length (${L}_{E}$)] \hfill \\ \index{Subband-Length}
 Die L\"ange eines DWT Koeffizienten Subbandes, also die Anzahl an Koeffizienten darin. ${L}_{E} = |\langle{c}_{i},{c}_{i+{L}_{E}}\rangle|$.
 
-\item[Subband Energy (E)] \hfill \\
+\item[Subband Energy (E)] \hfill \\ \index{Subband Energy}
 Das Energiepotential, welches in einem DWT Koeffizienten Subband $S$ enthalten ist. Sind die Koeffizienten von $S$ aus dem Intervall $[k, k+{L}_{E}]$, so berechnet sich E f\"ur S wie folgt:
 	
 	\begin{equation}
@@ -51,12 +50,9 @@ Das Energiepotential, welches in einem DWT Koeffizienten Subband $S$ enthalten i
 	
 \item[Embedding Strength Factor (esf)] \hfill \\ \index{Embedding Strength Factor}
 \index{Embedding Strength Factor}
-
-Kontrollparameter um die Stärke der Signalveränderung zu kontrollieren. Der \textit{Embedding Strength Factor} sollte unter der Bedingung der Unhörbarkeit des Watermarks maximiert werden (siehe Kapitel \ref{sec:qualitaetskontrolle})
+Kontrollparameter um die Stärke der Signalveränderung zu kontrollieren. Der \textit{Embedding Strength Factor} sollte unter der Bedingung der Unhörbarkeit des Watermarks\index{Watermark} maximiert werden (siehe Kapitel \ref{sec:qualitaetskontrolle})
 	
-\item[Embedding Strength (ES)] \hfill \\ \index{Embedding Strength}
-\index{Embedding Strength}
-
+\item[Embedding Strength (ES)] \hfill \\ \index{Embedding Strength} 
 Eine Entscheidungsvariable nach der Teile des Signals modifiziert werden, um den logischen Wert 0 oder 1 zu beschreiben. Die \textit{Embedding Strength} berechnet sich wie folgt:
 
 	\begin{equation}
@@ -76,26 +72,24 @@ Ein digitales Watermark ist die Information (also die Bitfolge), die in ein Sign
 Die Anzahl an Bits des Watermarks. Aus dieser ergibt sich (in Abh\"angigkeit diverser Parameter, siehe \ref{sec:payloadperformance}) die L\"ange die ein Signal haben muss um das Watermark vollst\"andig aufnehmen zu k\"onnen. $wmk(i)$ bezeichnet das Bit an der Stelle $i$ des Watermarks, mit $i\in[1,{L}_{w}]$
 
 \item[Message] \hfill \\ \index{Message}
-Die Watermark Daten werden in kleinere Einheiten zerteil, die durch einen Synchronisations-Code gekennzeichnet in das Signal eingeflochten werden. Jeder dieser Einheiten ist eine \textit{Message}. 
+Die Watermark\index{Watermark} Daten werden in kleinere Einheiten zerteil, die durch einen Synchronisations-Code gekennzeichnet in das Signal eingeflochten werden. Jeder dieser Einheiten ist eine \textit{Message}. 
 	
 \item[Message-Length (${L}_{m}$)] \hfill \\ \index{Message-Length}
-Die L\"ange einer Watermark Sequence bzw Message in Bit. Es muss gelten: 
+Die L\"ange einer Message in Bit. Es muss gelten: 
 	 \begin{equation}
 		 {L}_{w} \pmod{{L}_{m}} = 0 \quad\mbox{und}\quad {L}_{w}\geq{L}_{m} \label{equ:wmkseqlength}
 	 \end{equation}
 	 
 \item[Codeword] \hfill \\ \index{Codeword}
-
-In Kapitel \ref{sec:errorcorrection} werden wir um die Stabilit\"at auf der analogen Übertragungsstrecke zu verbessern das Watermark aus kodierungstheoretischer Sicht betrachten, weswegen wir die Messages mit einem Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} resistenter gegen Bitfehler machen. Das die Messages kodiert werden, nennen wird diese anschließend \textit{Codewords}).
+In Kapitel \ref{sec:errorcorrection} werden wir um die Stabilit\"at auf der analogen Übertragungsstrecke zu verbessern das Watermark\index{Watermark} aus kodierungstheoretischer Sicht betrachten, weswegen wir die Messages mit einem Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} resistenter gegen Bitfehler machen. Da die Messages kodiert werden, nennen wird diese anschließend \textit{Codewords}).
 
 \item[Codeword-Length (${L}_{c}$)] \hfill \\ \index{Codeword-Length}
-
 Die Länge eines Codewords. Allgemein gilt ${L}_{c} > {L}_{m}$. Gültige Parameter für ${L}_{m}$ und ${L}_{c}$ hängen vom jeweiligen Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} ab.
 	 
 \item[Sample Section] \hfill \\ \index{Sample Section}
 Ein Teil eines Signal. Digitale Signale werden als Listen von Abtastwerten (\textit{Samples}) repräsentiert, daher ist eine Sample Section eine Folge aufeinander folgender Samples. In eine Sample Section werden wir immer genau ein Bit einbringen.
 	 
-\item[Sample-Section-Length (${N}_{s}$)] \hfill \\
+\item[Sample-Section-Length (${N}_{s}$)] \hfill \\ \index{Sample-Section-Length}
 Die Anzahl an Samples die ben\"otigt werden, um 1 Bit zu kodieren. 
 
 	 \begin{equation}
@@ -106,10 +100,12 @@ Die Anzahl an Samples die ben\"otigt werden, um 1 Bit zu kodieren.
 
 \section{Diskrete Wavelet-Transformation} \index{Diskrete Wavelet-Tansformation|(} \index{DWT|see{Diskrete Wavelet-Tansformation}}
 	
-Zur Beantwortung der Frage wie das Signal ver\"andert werden kann existieren verschiedene Ans\"atze. Es gibt Verfahren die das Signal direkt im Zeitbereich modifizieren \cite{bassia2001robust}\cite{lie2006robust}, also konkrete Abtastpunkte des Signals direkt bearbeiten. Andere ver\"andern die Koeffizienten der durch die Fouriertransformation oder die Kosinustransformation erzeugten Frequenzspektrums \cite{chang2012location}\cite{??} oder der Cepstrum-Domain\footnote{\textit{Ceprstrum}: Kunstwort durch Vertauschung der Buchstaben des engl. \textit{Spectrum}. Der Cepstrum-Bereich wird durch die Fouriertransformation des logarithmischen Frequenzspektrums eines Signals aufgespannt}\cite{lee2000digital}\cite{li2000transparent}. Es existieren auch Ans\"atze welche die Information durch Phasenverschiebungen innerhalb des Signals einbringen \cite{dong2004data}\cite{ansari2004data} oder solche die mehrere Methoden gleichzeitig bem\"uhen \cite{chang2012location}\cite{lei2012multipurpose}. Wir wollen hier die Koeffizienten der diskrete Wavelet-Transformation (DWT) eines Signals ver\"andern. Aus den modifizierten Koeffizienten kann durch die inverse DWT wieder ein Signal rekonstruiert werden. 
+Zur Beantwortung der Frage wie das Signal ver\"andert werden kann existieren verschiedene Ans\"atze. Es gibt Verfahren die das Signal direkt im Zeitbereich modifizieren \cite{bassia2001robust}\cite{lie2006robust}, also konkrete Abtastpunkte des Signals direkt bearbeiten. Andere ver\"andern die Koeffizienten der durch die Fouriertransformation oder die Kosinustransformation erzeugten Frequenzspektrums \cite{chang2012location}, der Wavelet-Transformation\cite{tang2005digital} oder der Cepstrum-Domain\footnote{\textit{Ceprstrum}: Kunstwort durch Vertauschung der Buchstaben des engl. \textit{Spectrum}. Der Cepstrum-Bereich wird durch die Fouriertransformation des logarithmischen Frequenzspektrums eines Signals aufgespannt}\cite{lee2000digital}\cite{li2000transparent}. Es existieren auch Ans\"atze welche die Information durch Phasenverschiebungen innerhalb des Signals einbringen \cite{dong2004data}\cite{ansari2004data} oder solche die mehrere Methoden gleichzeitig bem\"uhen \cite{chang2012location}\cite{lei2012multipurpose}. Wir wollen hier die Koeffizienten der diskrete Wavelet-Transformation (DWT) eines Signals ver\"andern. Aus den modifizierten Koeffizienten kann durch die inverse DWT wieder ein Signal rekonstruiert werden. 
 	
-Die Beschreibung der diversen mathematischen Raffinessen welche die Wavelet-Transformation erst m\"oglich machen wollen wir an dieser Stellen anderen \"uberlassen (z.B. \cite{??}). Es sei nur gesagt, das sie praktisch durch eine Reihe zeitdiskreter Filter berechnet werden kann und die DWT so implementiert ist. 
+Die Beschreibung der diversen mathematischen Raffinessen welche die Wavelet-Transformation erst m\"oglich machen wollen wir an dieser Stellen anderen \"uberlassen (z.B. \cite{polikar1996engineer}). Es sei nur gesagt, das sie praktisch durch eine Reihe zeitdiskreter Filter berechnet werden kann und die DWT so implementiert ist. 
 \index{Diskrete Wavelet-Tansformation|)}
+
+\pagebreak
 
 \section{Einbettungsstrategie}
 \label{sec:embeddingstragety}
@@ -118,9 +114,9 @@ Um nun ein Bit stabil in einem Teil eines Signals (einer \textit{Sample Section}
 
 Um die Veränderungen für den menschlichen Hörapparat möglichst unwahrnehmbar zu gestalten, gleichzeitig aber vor digitalen Komprimierungsverfahren\footnote{Kompressionsverfahren für multimediale Daten sind oftmals verlustbehaftet (z.B MP3). Sie nutzen den Umstand aus, dass die menschlichen Sinneswahrnehmungen (visuelles System, akustisches System) nicht das volle Spektrum der vorhandenen Reize erfassen können und/oder das Hirn die Wahrnehmungen reduziert. Die Kompressionsalgorithmen sind daher bemüht \glqq{unnötigen}\grqq{} Daten zu reduzieren.} geschützt zu sein, werden wir die niederfrequenten DWT-Koeffizienten verändern. 
 
-Für eine Sample Section mit ${N}_{s}$ \index{Sample Section} Samples berechnen wir unter Verwendung der Wavelet-Funktion ${f}_{w}$ ihre ${D}_{k}$-Level DWT-Koeffizienten $c$. Aus den Koeffizienten bilden wir 3 disjunkte Subbänder ${S}_{1}$, ${S}_{2}$ und ${S}_{3}$, wobei ${S}_{1}$ die niederfrequentesten Koeffizienten $\langle{c}_{1},{c}_{{L}_{E}}\rangle$ enthält. Analog dazu setzen sich ${S}_{2}$ aus den Koeffizienten $\langle{c}_{{L}_{E}+1},{c}_{2{L}_{E}}\rangle$ und ${S}_{3}$ aus $\langle{c}_{2{L}_{E}+1},{c}_{3{L}_{E}}\rangle$ zusammen. 
+Für eine Sample Section mit ${N}_{s}$\index{Sample Section}\index{Sample-Section-Length} Samples berechnen wir unter Verwendung der Wavelet-Funktion ${f}_{w}$ ihre ${D}_{k}$-Level DWT-Koeffizienten $c$. Aus den Koeffizienten bilden wir 3 disjunkte Subbänder ${S}_{1}$, ${S}_{2}$ und ${S}_{3}$, wobei ${S}_{1}$ die niederfrequentesten Koeffizienten $\langle{c}_{1},{c}_{{L}_{E}}\rangle$ enthält. Analog dazu setzen sich ${S}_{2}$ aus den Koeffizienten $\langle{c}_{{L}_{E}+1},{c}_{2{L}_{E}}\rangle$ und ${S}_{3}$ aus $\langle{c}_{2{L}_{E}+1},{c}_{3{L}_{E}}\rangle$ zusammen. 
 
-Für jedes Subband ${S}_{i}$ berechnen wir unter Anwendung von Formel (\ref{equ:energy}) das Energiepotenzial des Subbandes ${E}_{i}$. Die Wahl von ${L}_{E}$ steht an sich frei, ist jedoch ein Kompromiss zwischen der Einbettungskapazität (wie später gezeigt wird), dem Signal-Rauschabstand des resultierenden Signals (welcher sich auf die Qualität auswirkt\cite{xiang2007robust}, siehe Kapitel \ref{sec:qualitaetskontrolle}) und der Robustheit des Watermarks. Im Allgemeinen gilt: Je größer ${L}_{E}$, desto widerstandsfähiger das Watermark.
+Für jedes Subband ${S}_{i}$ berechnen wir unter Anwendung von Formel (\ref{equ:energy}) das Energiepotenzial\index{Subband Energy} des Subbandes\index{Subband} ${E}_{i}$. Die Wahl von ${L}_{E}$ steht an sich frei, ist jedoch ein Kompromiss zwischen der Einbettungskapazität (wie später gezeigt wird), dem Signal-Rauschabstand des resultierenden Signals (welcher sich auf die Qualität auswirkt\cite{xiang2007robust}, siehe Kapitel \ref{sec:qualitaetskontrolle}) und der Robustheit des Watermarks\index{Watermark}. Im Allgemeinen gilt: Je größer ${L}_{E}$, desto widerstandsfähiger das Watermark.
 
 Die 3 Energiewerte werden anschließend der Größe nach sortiert. Es gilt: ${E}_{min}\leq{E}_{med}\leq{E}_{max}$ da ${E}_{min}=min({E}_{1}, {E}_{2}, {E}_{3}), {E}_{med}=med({E}_{1}, {E}_{2}, {E}_{3})$ und ${E}_{max}=max({E}_{1}, {E}_{2}, {E}_{3})$, wobei $min$ das Minimum, $med$ den Median und $max$ das Maximum bezeichnet. 
 
@@ -153,7 +149,7 @@ Folgende Regeln angewendet auf die Koeffizienten ${c}_{i},\quad i=1\dots{3\cdot{
 		  \label{equ:modifcoef_case1}
 	 \end{equation}
 	 
-${S}_{min}$ ist das Subband mit Energiepotential ${E}_{min}$, äquivalent ${S}_{med}$ und ${S}_{max}$. $|\xi| = |A-B-ES| = ES-A+B = ES - {E}_{max} + 2\cdot {E}_{med} - {E}_{min}$ da $A-B<ES$. Aus Formel (\ref{equ:modifcoef_case1}) ergeben sich folgende neue Sachverhalte:
+${S}_{min}$ ist das Subband\index{Subband} mit Energiepotential\index{Subband Energy} ${E}_{min}$, äquivalent ${S}_{med}$ und ${S}_{max}$. $|\xi| = |A-B-ES| = ES-A+B = ES - {E}_{max} + 2\cdot {E}_{med} - {E}_{min}$ da $A-B<ES$. Aus Formel (\ref{equ:modifcoef_case1}) ergeben sich folgende neue Sachverhalte:
 	 
 	 %\begin{equation}
 	 \begin{eqnarray*}
@@ -177,7 +173,7 @@ wobei ${E'}_{max}$, ${E'}_{med}$ und ${E'}_{min}$ den maximalen, mittleren und m
 
 \subsubsection{Fall 2: a = 0 und B-A < ES}
 
-Wie in Fall 1 führen wir auch hier Regeln ein, mit denen wir die Subbandkoeffizienten ${c}_{i},\quad i=1\dots{3\cdot{L}_{E}}$ anpassen, damit sie Formel \ref{equ:embeddingrelationships} erfüllen:
+Wie in Fall 1 führen wir auch hier Regeln ein, mit denen wir die Subbandkoeffizienten\index{Subband} ${c}_{i},\quad i=1\dots{3\cdot{L}_{E}}$ anpassen, damit sie Formel \ref{equ:embeddingrelationships} erfüllen:
 
 	 \begin{equation}
 		 {c'}_{i} = \begin{cases}
@@ -206,12 +202,12 @@ Dieses Mal kann es sich ergeben, dass ${E'}_{med} > {E'}_{max}$, da sich ${E}_{m
 		\label{equ:embeddingstrengthconstraint_case2}
 	\end{equation}
 
-Formal können wir nun eine Funktion $f$ definieren, die eine Menge an Samples und einen binären Wert $a$ in eine neue Menge an Samples überführt, also die Abbildung $f: {\mathbb{R}}^{{N}_{s}} \times \left\{0,1\right\} \mapsto  {\mathbb{R}}^{{N}_{s}}$, wobei hier natürlich zu bedenken ist, dass ${\mathbb{R}}^{{N}_{s}}$ aufgrund des numerischen Fehlers nur die abbildbare Teilmenge der reellen Zahlen beschreibt. 
+Formal können wir nun eine Funktion $f$ definieren, die eine Menge an Samples und einen binären Wert $a$ in eine neue Menge an Samples überführt, also die Abbildung $f: {\mathbb{R}}^{{N}_{s}} \times \left\{0,1\right\} \mapsto  {\mathbb{R}}^{{N}_{s}}$\index{Sample-Section-Length}, wobei hier natürlich zu bedenken ist, dass ${\mathbb{R}}^{{N}_{s}}$ aufgrund des numerischen Fehlers nur die abbildbare Teilmenge der reellen Zahlen beschreibt. 
 
 \section{Ausdehnung auf mehrere Bit}
 \label{sec:embeddingstragety_bitsequence}
 
-Um eine Bitsequenz $({a}_{i})$ in ein Signal einzubetten, muss dieses in $n$ disjunkte Partitionen ${P}_{i}, {1}\leq{i}\leq{n}$ unterteilt werden. Jede ${P}_{i}\subseteq{sig}$ wird nach dem oben beschriebenen Verfahren mit genau einem binären Informationswert angereichert, d.h. ${P}_{i}'=f({P}_{i}, {a}_{i}), {a}_{i} = wmk(i)\in\left\{0,1\right\}$. Das mit dem Watermark angereicherte Signal $sig'$ wird durch die Konkatenation der modifizierten Partitionen ${P}_{i}'$ erzeugt. Für die Teilfolgen $\langle{sig}_{k},{sig}_{l}\rangle$ gilt:
+Um eine Bitsequenz $({a}_{i})$ in ein Signal einzubetten, muss dieses in $n$ disjunkte Partitionen ${P}_{i}, {1}\leq{i}\leq{n}$ unterteilt werden. Jede ${P}_{i}\subseteq{sig}$ wird nach dem oben beschriebenen Verfahren mit genau einem binären Informationswert angereichert, d.h. ${P}_{i}'=f({P}_{i}, {a}_{i}), {a}_{i} = wmk(i)\in\left\{0,1\right\}$. Das mit dem Watermark\index{Watermark} angereicherte Signal $sig'$ wird durch die Konkatenation der modifizierten Partitionen ${P}_{i}'$ erzeugt. Für die Teilfolgen $\langle{sig}_{k},{sig}_{l}\rangle$ gilt:
 
 	\begin{equation}
 		\langle{sig'}_{k},{sig'}_{l}\rangle = {P}_{i}'\circ{P}_{i+1}' \quad\mbox{mit}\quad k=i \cdot {N}_{s},\quad l=(i+2) \cdot {N}_{s},\quad {1}\leq{i}\leq{n-1}.
@@ -249,7 +245,7 @@ Um eine Bitsequenz $({a}_{i})$ aus einem Signal zu extrahieren, muss $sig''$ äq
 
 \section{Einbettungskapazit\"at}
 
-Wie bereits aus Kapitel \ref{sec:definitionen} bekannt ist, werden für die Implantierung eines Bits genau $N_s$ Samples benötig. Damit können wir eine Aussage über den Zusammenhang zwischen zeitlicher Länge, Bitkapazität und Abtastrate treffen. 
+Wie bereits aus Kapitel \ref{sec:definitionen} bekannt ist, werden für die Implantierung eines Bits genau $N_s$\index{Sample-Section-Length} Samples benötig. Damit können wir eine Aussage über den Zusammenhang zwischen zeitlicher Länge, Bitkapazität und Abtastrate treffen. 
 
 Bei der Analog-Digital-Wandlung wird ein Signal abgetastet, d.h. es werden zu definierten Zeitpunkten Messwerte aufgenommen. Man nennt dies die sog. \textit{Abtastrate}\index{Abtastrate} (oder \textit{Samplerate}) $f_s$. Erfüllt diese das sog. Nyquist-Shannon-Abtasttheorem\cite{shannon1949communication}, d.h. gilt: 
 
@@ -278,7 +274,7 @@ Sollen genau $n$ Bit in einem Signal untergebracht werden, so musst das Signal m
 	 
 Sekunden ergibt. 
 
-In Kapitel \ref{sec:protokoll} werden wir sehen, dass es durchaus Sinn macht nicht alle Samples für die Einbettung von Informationen zu verwenden, um die Stabilität des gesamten Watermarks zu verbessern. 
+In Kapitel \ref{sec:protokoll} werden wir sehen, dass es durchaus Sinn macht nicht alle Samples für die Einbettung von Informationen zu verwenden, um die Stabilität des gesamten Watermarks\index{Watermark} zu verbessern. 
 
 
 

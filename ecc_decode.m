@@ -6,7 +6,7 @@ ecm = Setting.error_correcion_methode;
 
 switch ecm
     case 'LR'
-        % TODO
+        % TODO local redundancy
     case 'BCH'
         message = bchdecode(codeword);
     case 'RS'

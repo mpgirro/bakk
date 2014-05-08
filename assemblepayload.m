@@ -21,6 +21,9 @@ syncBlockSequenceLength  = Setting.synccode_block_sequence_length;
 wmkBlockSequenceLength   = Setting.wmkdata_block_sequence_length;
 dataStructBlockSequenceLength = Setting.datastruct_package_sequence_length;
 
+messageLength = Setting.message_length;
+codewordLength = Setting.codeword_length;
+
 wmkSize = size(watermark);
 wmkSize = wmkSize(2);
 
@@ -33,18 +36,28 @@ if mod(wmkSize, wmkBlockSequenceLength) ~= 0
     wmkSize = wmkSize(2);
 end
 
-
+% how many messages would fit into the signal
 wmkBlockCount = ceil(wmkSize/wmkBlockSequenceLength);
 
+ % how much bigger is a codeword compared to the message
+codemessageRatio = codewordLength / messageLength;
+
+% how much longer the coded watermark will be
+codeSize = wmkSize * codemessageRatio;
+
+% how many blocks will the codewords need
+codeBlockCount = ceil(codeSize/codewordLength);
 
 % reshape the watermark, so we can index the segments easily
-watermark = reshape(watermark, wmkBlockSequenceLength, wmkBlockCount);
+watermark = reshape(watermark, messageLength, codeBlockCount);
+%watermark = reshape(watermark, wmkBlockSequenceLength, wmkBlockCount);
 watermark = watermark';
 
 
 % for each wmk_segment there is a sync_code
 % therefore total payload length is as follows:
-payloadLength = dataStructBlockSequenceLength * wmkBlockCount;
+payloadLength = dataStructBlockSequenceLength * codeBlockCount;
+%payloadLength = dataStructBlockSequenceLength * wmkBlockCount;
 
 payload = zeros([1, payloadLength]); % preallocate 1 x bitCount array
 
@@ -64,7 +77,12 @@ for i=1:wmkBlockCount
     window = payloadCursor : payloadCursor+wmkBlockSequenceLength-1;
     
     % insert watermark block
-    payload(window) = watermark(i,:);
+    messageBlock = watermark(i,:);
+    codewordBlock = ecc_encode(messageBlock);
+    payload(window) = codewordBlock;
+    
+    %fmt=[repmat('%d ',1,messageLength) '==ecc==> ' repmat('%d ',1,codewordLength) '\n'];
+    %fprintf(fmt,messageBlock',codewordBlock');
     
     % move cursor to the next sync block
     payloadCursor = payloadCursor + wmkBlockSequenceLength;

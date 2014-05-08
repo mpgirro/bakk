@@ -60,7 +60,7 @@ Eine Entscheidungsvariable nach der Teile des Signals modifiziert werden, um den
 	\end{equation}
 		
 \item[Synchronisation-Code (sync)] \hfill \\ \index{Synchronisations-Code}
-Ein Synchronisations-Code ist eine willk\"urlich gew\"ahlte Bitfolge die benutzt wird, um einen Bereich in einem Signal zu kennzeichnen. Es existieren Folgen die Vorteile gegen\"uber einer zuf\"allig Gew\"ahlten haben. N\"aheres dazu in Kapitel \ref{sec:barkercode}.
+Ein Synchronisations-Code ist eine willk\"urlich gew\"ahlte Bitfolge die benutzt wird, um einen Bereich in einem Signal zu kennzeichnen. Es existieren Folgen die Vorteile gegen\"uber einer zuf\"allig Gew\"ahlten haben. N\"aheres dazu in Kapitel \ref{sec:barker-code}.
 
 \item[Synchronisations-Code-Length (${L}_{s}$)] \hfill \\ \index{Synchronisations-Code-Length}
 Die L\"ange der Bitsequenz eines Synchronisation-Codes. $sync(i)$ bezeichnet das Bit an der Stelle $i$ des Synchronisation-Codes, mit $i\in[1,{L}_{s}]$
@@ -81,13 +81,13 @@ Die L\"ange einer Message in Bit. Es muss gelten:
 	 \end{equation}
 	 
 \item[Codeword] \hfill \\ \index{Codeword}
-In Kapitel \ref{sec:errorcorrection} werden wir um die Stabilit\"at auf der analogen Übertragungsstrecke zu verbessern das Watermark\index{Watermark} aus kodierungstheoretischer Sicht betrachten, weswegen wir die Messages mit einem Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} resistenter gegen Bitfehler machen. Da die Messages kodiert werden, nennen wird diese anschließend \textit{Codewords}).
+In Kapitel \ref{sec:errorcorrection} werden wir um die Stabilit\"at auf der analogen Übertragungsstrecke zu verbessern das Watermark\index{Watermark} aus kodierungstheoretischer Sicht\index{Kodierungstheorie} betrachten, weswegen wir die Messages mit einem Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} resistenter gegen Bitfehler machen. Da die Messages kodiert werden, nennen wird diese anschließend \textit{Codewords}.
 
 \item[Codeword-Length (${L}_{c}$)] \hfill \\ \index{Codeword-Length}
 Die Länge eines Codewords. Allgemein gilt ${L}_{c} > {L}_{m}$. Gültige Parameter für ${L}_{m}$ und ${L}_{c}$ hängen vom jeweiligen Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} ab.
 	 
 \item[Sample Section] \hfill \\ \index{Sample Section}
-Ein Teil eines Signal. Digitale Signale werden als Listen von Abtastwerten (\textit{Samples}) repräsentiert, daher ist eine Sample Section eine Folge aufeinander folgender Samples. In eine Sample Section werden wir immer genau ein Bit einbringen.
+Ein Teil eines Signal. Digitale Signale werden als Listen von Abtastwerten (engl. \textit{Samples}) repräsentiert, daher ist eine Sample Section eine Folge aufeinander folgender Samples. In eine Sample Section werden wir immer genau ein Bit einbringen.
 	 
 \item[Sample-Section-Length (${N}_{s}$)] \hfill \\ \index{Sample-Section-Length}
 Die Anzahl an Samples die ben\"otigt werden, um 1 Bit zu kodieren. 

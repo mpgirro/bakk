@@ -101,6 +101,11 @@ classdef Setting
             length = Setting.synccode_block_sample_length + Setting.wmkdata_block_sample_length;
         end
         
+        function odg_bool = consider_odg()
+            sObj = SettingSingleton.instance();
+            odg_bool = sObj.getConsiderODG();
+        end
+        
     end
 end
 

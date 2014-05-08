@@ -13,7 +13,8 @@ classdef SettingSingleton < handle
         codeword_length; 
         error_correction_methode; % BCH, RS, local redundancy, LDPC
         % this is a list of available error correction methods
-        ecm_available = {'BCH' 'RS' 'LR' 'LDPC' 'none'}; 
+        ecm_available = {'BCH' 'RS' 'LR' 'LDPC' 'none'};
+        odg_bool;
     end
     
     methods(Access=private)
@@ -29,6 +30,7 @@ classdef SettingSingleton < handle
             newObj.setErrorCorrectionMethode('BCH');
             newObj.setMessageLength(5);     
             newObj.setCodewordLength(15);
+            newObj.setConsiderODG(1);
         end
     end
     
@@ -151,6 +153,14 @@ classdef SettingSingleton < handle
             else
                 fprintf('WARNING: Error Correction Methode "%s" not available\n', ecm);
             end 
+        end
+        
+        function odgb = getConsiderODG(obj)
+            odgb = obj.odg_bool;
+        end
+        
+        function setConsiderODG(obj,odgb)
+            obj.odg_bool = odgb;
         end
         
     end

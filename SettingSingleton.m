@@ -11,7 +11,9 @@ classdef SettingSingleton < handle
         bhc_factor;
         message_length;
         codeword_length; 
-        
+        error_correction_methode; % BCH, RS, local redundancy, LDPC
+        % this is a list of available error correction methods
+        ecm_available = {'BCH' 'RS' 'LR' 'LDPC' 'none'}; 
     end
     
     methods(Access=private)
@@ -23,11 +25,12 @@ classdef SettingSingleton < handle
             newObj.setEmbeddingStrengthFactor(10);
             newObj.setBufferzoneScalingFactor(0);
             newObj.setSynchronizationCode(13); % barker code 13
-            newObj.setBarkerThreshold(0.5);
-%             newObj.setMessageLength(5);
-%             newObj.setCodewordLength(15);
-            newObj.setMessageLength(8);
-            newObj.setCodewordLength(8);
+            newObj.setBarkerThreshold(0.8);
+            newObj.setErrorCorrectionMethode('BCH');
+            newObj.setMessageLength(5);     
+            newObj.setCodewordLength(15);
+%             newObj.setMessageLength(8);
+%             newObj.setCodewordLength(8);
         end
     end
     
@@ -137,6 +140,19 @@ classdef SettingSingleton < handle
         
         function setCodewordLength(obj, cwl)
             obj.codeword_length = cwl;
+        end
+        
+        function ecm = getErrorCorrectionMethode(obj)
+            ecm = obj.error_correction_methode;
+        end
+        
+        function setErrorCorrectionMethode(obj,ecm)
+            % check if ecm is a supported error correction methode
+            if any(ismember(obj.ecm_available,ecm))
+                obj.error_correction_methode = ecm;
+            else
+                fprintf('WARNING: Error Correction Methode "%s" not available\n', ecm);
+            end 
         end
         
     end

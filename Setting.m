@@ -80,6 +80,11 @@ classdef Setting
             length = sObj.getCodewordLength();
         end
         
+        function ecm = error_correcion_methode()
+           sObj = SettingSingleton.instance();
+           ecm = sObj.getErrorCorrectionMethode();
+        end
+        
         function length = datastruct_package_sequence_length()
             length = Setting.synccode_block_sequence_length + Setting.wmkdata_block_sequence_length;
         end

@@ -8,6 +8,8 @@ path = ['results',filesep,'watermarked_audio.wav'];
 %path = ['results',filesep,'recording-soundkarte-ISP-leicht-gemacht.wav'];
 %path = ['results',filesep,'recording-mikrofon-ISP-leicht-gemacht.wav'];
 %path = ['results',filesep,'watermarked-ISP-leicht-gemacht.wav'];
+path = ['results',filesep,'watermarked-mp3-der-affe-ist-gut.mp3'];
+%path = ['results',filesep,'watermarked-mp3-ISP-leicht-gemacht.mp3'];
 
 
 fprintf('processing %s\n',path);

@@ -1,9 +1,9 @@
-function [ pure_data ] = bchdecode( bhc_data )
+function [ message ] = bchdecode( codeword )
 %UNTITLED2 Summary of this function goes here
 %   Detailed explanation goes here
 
 hDec = comm.BCHDecoder;
-pure_data = step(hDec, bhc_data');
+message = step(hDec, codeword');
 
 end
 

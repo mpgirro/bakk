@@ -8,11 +8,11 @@ switch ecm
     case 'LR'
         % TODO
     case 'BCH'
-        message = bchencode(codeword);
+        message = bchdecode(codeword);
     case 'RS'
-        message = rsencode(codeword);
+        message = rsdecode(codeword);
     case 'LDPC'
-        message = ldpcencode(codeword);
+        message = ldpcdecode(codeword);
     case 'none'
         message = codeword;
 end

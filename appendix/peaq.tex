@@ -1,22 +1,37 @@
 \chapter{PEAQ Implementierungen}
 \label{ch:peaq}
 
+Im Rahmen des dieser Arbeit wurden diverse PEAQ Implementierungen getestet. Hier findet sich eine Übersicht der dabei gesammelten Erfahrungen.
+
 \section{EAQUAL}
 
-Das de facto Tool der Wahl in der gängigen Literatur \cite{xiang2007robust}\cite{kraetzer2006transparency}
+Das de facto Tool der Wahl in der gängigen Literatur\cite{xiang2007robust}\cite{kraetzer2006transparency}. EAQUAL (Evaluation of Audio QUALity) ist aktuell als Version 0.1.3alpha verfügbar, eine aktive Weiterentwicklung allerdings nicht erkennbar. Der Sourcecode ist verfügbar, allerdings nur unter MS Visual C++ 6 kompilierbar. Ein unixbasierter Makefile-Ansatz ist zwar vorhanden, nach Angaben der Readme allerdings nur auf einer Linux Maschine getestet worden. Auf allen hier getesteten Maschinen war der Builtprozess erfolglos und ohne Aussicht auf eine einfache Behebung. 
+
+Ein Windows Executable ist vorhanden und akzeptiert per Command Line Referenzen auf Audiofiles. Um das Watermark zu testen muss daher immer das implantierte und das unberührte Signal zuerst auf den Persistenzspeicher geschrieben werden. Teilweise bricht die Verarbeitung mit (auch undokumentierten) Fehlercodes einfach ab.
+
+Per Wine (Windows compatibility layer für POSIX Systeme) lässt sich das Tool auch per Unix Terminal verwenden. Die Performance ist hier um ca. den Faktor 5 schlechter.
 
 \section{PQevalAudio}
 
+Bei PQevalAudio handelt es sich um eine frei verfügbare Implementierung von P. Kabald\cite{kabal2002examination} die allerdings nicht vollkommen Standardkonform ist.
+
+Der Vorteil von PQevalAudio (aktuell \textit{PQevalAudio v2r0}) ist die Verfügbarkeit einer MATLAB Library zusätzlich zu einem Binary Executable. Das die Implementierung dieser Arbeit in MATLAB vorgenommen wurde war PQevalAudio daher initial besonders interessant. Leider benötigen beide Referenzen die Signale als Files auf der Festplatte. Es wurde versucht die Library so umzuschreiben, dass sie mit MATLAB Datenstrukturen als Input arbeitet. Es hat sich aber sehr schnell gezeigt, dass die einzelnen Komponenten der Bibliothek eine sehr hohe Kopplung aufweisen, weswegen in vertretbarer Zeit kein Erfolg dieser Bemühung absehbar war.
+
+Auch wenn es teilweise in der Literatur noch als die zuverlässigste Implementierung bezeichnet wird\cite{nishimura2013objective}, so zeigte die Beobachtung eine gewisse Nutzlosigkeit der Ergebnisse. Der ODG ist normiert als ein Wert zwischen -4 und 0. PQevalAudio liefert hingegen nicht selten einen positiven Wert, was eine sinnvolle verwertbare Interpretation unmöglich macht.
+
+Positiv ist zu bemerken, dass das Projekt vergleichsweise gut dokumentiert ist und offenbar aktuell nach wie vor gepflegt wird.
+
 \section{peaqb}
 
-Bei \texttt{peaqb} handelt es sich um die Bemühung eine Implementation der Recommendation ITU-R BS.1387-1 als freie offene Software zu schaffen. Initiier im Jahr 2003 liegt seit dem 14. März 2013 das GPLv2 lizensierte Tool in der Version 1.0 Beta vor. Zu finden ist das Projekt auf der Softwareentwicklungsplattform Sourceforge\footnote{\url{http://sourceforge.net/projects/peaqb/}}, welche sich nicht ganz unbegr\"undet in den letzten Jahre den Beinahmen \glqq Friedhof der Open Source Projekte\grqq{} eingefangen hat. Der Grund daf\"ur ist auch an diesem Projekt leider zu sp\"uhren. 
+Bei \texttt{peaqb} handelt es sich um die Bemühung eine Implementation der Recommendation ITU-R BS.1387-1 als freie offene Software zu schaffen. Initiier im Jahr 2003 liegt seit dem 14. März 2013 das GPLv2 lizensierte Tool in der Version 1.0.3 Beta vor. Zu finden ist das Projekt auf der Softwareentwicklungsplattform Sourceforge\footnote{\url{http://sourceforge.net/projects/peaqb/}}, welche sich nicht ganz unbegr\"undet in den letzten Jahre den Beinahmen \glqq Friedhof der Open Source Projekte\grqq{} eingefangen hat. Der Grund daf\"ur ist auch an diesem Projekt leider zu sp\"uhren. 
 
-Die Versuche \texttt{peaqb} für die Signal-Qualitätssicherung zu bem\"uhen haben schnell gezeigt, dass das Tool noch sehr instabil ist. In den meisten F/"allen terminiert das Programm mit einem Segmentation Fault. Falls es in der Lage ist Endergebnisse zu berechnen, so sind diese oftmals ähnlich zu PQevalAudio unbrauchbar, da sie entweder ebenfalls in nicht definierten Bereichen liegen oder mit der subjektiven H\"orwahrnehmung einfach nicht \"ubereinstimmen. 
+Die Versuche \texttt{peaqb} für die Signal-Qualitätssicherung zu bem\"uhen haben schnell gezeigt, dass das Tool noch sehr instabil ist. In den meisten Fällen terminiert das Programm mit einem Segmentation Fault. Falls es in der Lage ist Endergebnisse zu berechnen, so sind diese oftmals ähnlich zu PQevalAudio unbrauchbar, da sie entweder ebenfalls in nicht definierten Bereichen liegen oder mit der subjektiven H\"orwahrnehmung einfach nicht \"ubereinstimmen. Die Ergebnisse von \cite{kondo2012use} nach denen \texttt{peaqb} die genauesten Ergebnisse liefert (verglichen mit EAQUAL und PQevalAudio) konnten nicht nachvollzogen werden.
 
 Eine Weiterentwicklung jenseits einer Version 1.0 Beta ist nicht abzusehen. 
 
 \section{OPERA}
 
+OPERA ist eine Software von OPTICOM welche neben dem PEAQ Basic Model auch das Advanced Model unterstützt. Dieses Tool scheint seit Version 3 (nach Angabe des Herstellers) das de facto Standard Tool zur Bewertung der Soundqualität in der Industrie zu sein. Da allerdings die Literatur sich nicht auf dieses Tool stützen, und OPTICOM auch auf ihrer Produktseite keine klaren Angaben zu Lizenzierung uns Preis angibt (man solle nachfragen), ist davon auszugehen, dass es für den (wissenschaftlichen) \glqq{}Normalgebrauch\grqq{} nicht zu bezahlen sein wird.
 
 
 

@@ -21,17 +21,17 @@ Wir das neue digitale Signal auf analoger Ebene übertragen, muss eine D/A-Wandl
 
 Jede analoge Übertragung geschieht auf einem analogem Trägermedium, da Schall nicht im leeren Raum existieren kann, sondern sich auf einem Medium ausbreiten muss. Für den menschlichen Hörapparat ist dies normalerweise die Luft. Aber auch in Wasser kann sich Schall ausbreiten\footnote{Hier sogar viel besser. Viele Meereslebewesen nutzen diesen Umstand sehr stark aus, da sich Licht unter Wasser nur wenige 100 Meter ausbreitet. Auch das Sonar basiert darauf.} sowie in Festkörpern. In letzteren liegt oftmals das Signal nicht direkt als Schallwelle vor, sondern im Falle eines Audiokabels etwa als elektrisches Signal. 
 
-Doch egal welches Medium benutzt wird, jeder Übertragungskanal\index{Übertragungskanal} verändert das Signal durch seine Umwelteinflüsse wärend es ihn durchläuft. In der Luft etwa kommen die übrigen Geräusche der Umgebung hinzu, u.a. auch die Eigenreflexion der Schallwelle an der Umbegung. 
-Wir wollen uns mit den diversen Formen und Ursachen von Störsignalen nicht näher befassen. Für uns ist wichtig, dass die Störung das Signal verändern. Das mit Informationen angereicherte, modifizierte Signal überlagert sich also mit den Störungen. Dies wird sich in der Regel negativ auf das Watermark auswirken. 
+Doch egal welches Medium benutzt wird, jeder Übertragungskanal\index{Übertragungskanal} verändert das Signal durch seine Umwelteinflüsse während es ihn durchläuft. In der Luft etwa kommen die übrigen Geräusche der Umgebung hinzu, u.a. auch die Eigenreflexion der Schallwelle an der Umgebung. 
+Wir wollen uns mit den diversen Formen und Ursachen von Störsignalen nicht näher befassen. Für uns ist wichtig, dass jede Störung das Signal verändert. Das mit Informationen angereicherte, modifizierte Signal überlagert sich also mit den Störungen. Dies wird sich in der Regel negativ auf das Watermark auswirken. 
 
 Um das Watermark rekonstruieren zu können, muss das Signal zuerst wieder in eine digitale Form gebracht werden. Dies geschieht durch eine A/D-Wandlung\index{A/D-Wandlung}. Eine Schallwelle wird durch ein Mikrofon aufgenommen, ein elektrisches Signal durch den Line-in Eingang einer Soundkarte umgewandelt. 
 
-Das Decodermodul versucht anschließend, das Watermark zu rekonstruieren. Hier gilt es 2 Probleme zu überwinden. Erstens muss das Watermark erkannt werden, d.h. der Decoder muss herausfinden wo eingebettete Daten sind. Dazu werden wir sog. \textit{Synchronisations-Codes} mit speziellen Eigenschaften bemühen (näheres in Abschnitt \ref{sec:barker-code}). Und zweitens müssen die eingeflochtenen Bits wieder \textit{richtig} rekonsturiert werden. Aufgrund des Störsignals welches im Übertragungskanal\index{Übertragungskanal} das Signal in Mitleidenschaft zieht kann sich dies durchaus als schwierig herausstellen. Zur Erhöhung der Resistenz werden in Abschnitt \ref{sec:errorcorrection} Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} eingeführt. Es sei allerdings an dieser Stelle bereits darauf hingewiesen, dass das Signal im Allgemeinen so weit deformiert werden kann, dass auch die Fehlerkorrektur eine sowohl vollständige wie auch richtige Rekonstruktion nicht gewährleisten kann. 
+Das Decodermodul versucht anschließend, das Watermark zu rekonstruieren. Hier gilt es 2 Probleme zu überwinden. Erstens muss das Watermark erkannt werden, d.h. der Decoder muss herausfinden wo eingebettete Daten sind. Dazu werden wir sog. \textit{Synchronisations-Codes} mit speziellen Eigenschaften bemühen (näheres in Abschnitt \ref{sec:barker-code}). Und zweitens müssen die eingeflochtenen Bits wieder \textit{richtig} rekonstruiert werden. Aufgrund des Störsignals welches im Übertragungskanal\index{Übertragungskanal} das Signal in Mitleidenschaft zieht kann sich dies durchaus als schwierig herausstellen. Zur Erhöhung der Resistenz werden in Abschnitt \ref{sec:errorcorrection} Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} eingeführt. Es sei allerdings an dieser Stelle bereits darauf hingewiesen, dass das Signal im Allgemeinen so weit deformiert werden kann, dass auch die Fehlerkorrektur eine sowohl vollständige wie auch richtige Rekonstruktion nicht gewährleisten kann. 
 
 \section{Watermark Implantierung}
 \label{sec:embedding}
 
-Der Implantationsprozess wird schematisch in Abbildung \ref{fig:diagram-encoder} modelliert. Ein anzureicherndes digitales Audiosignal wird zunächst in gleich große Bereiche segmentiert, d.h. die Samples des Signals werden in Gruppen zu je $N_s$ Samples zerteilt. In jede Gruppe (sog. \textit{Sample Section}\index{Sample Section}) wird genau 1 Bit kodiert. Der Einbettungsprozess geschieht in der DWT-Domain, daher werden die DWT-Koeffizienten \index{DWT-Koeffizienten} der Sample Section berechnet (eine Samples Section besteht aus einer Reihen aufeinandere folgender Messpunkte eines Signal - sie beschreiben also einen Teil eines Signal und können ganz einfach wieder als eigenständiges Signal betrachtet werden). 
+Der Implantationsprozess wird schematisch in Abbildung \ref{fig:diagram-encoder} modelliert. Ein anzureicherndes digitales Audiosignal wird zunächst in gleich große Bereiche segmentiert, d.h. die Samples des Signals werden in Gruppen zu je $N_s$ Samples zerteilt. In jede Gruppe (sog. \textit{Sample Section}\index{Sample Section}) wird genau 1 Bit kodiert. Der Einbettungsprozess geschieht in der DWT-Domain, daher werden die DWT-Koeffizienten \index{DWT-Koeffizienten} der Sample Section berechnet (eine Samples Section besteht aus einer Reihen aufeinander folgender Messpunkte eines Signal - sie beschreiben also einen Teil eines Signal und können ganz einfach wieder als eigenständiges Signal betrachtet werden). 
 
 \begin{figure}[h]
 	\centering
@@ -43,14 +43,14 @@ Der Implantationsprozess wird schematisch in Abbildung \ref{fig:diagram-encoder}
 
 Jede Sample Section bekommt ein Bit der Bitsequenz, die das Signal beherbergen soll. Diese Sequenz setzt sich zusammen aus einer Kombination der mit Redundanz angereicherten (Abschnitt \ref{sec:errorcorrection}) eigentlichen Informationen und der Synchronisation-Codes\index{Synchronisations-Code}. Die Einbettung jedes Bit geschieht nach dem in Abschnitt \ref{sec:embeddingstragety} beschriebenen Algorithmus durch Veränderung der DWT-Koeffizienten\index{DWT-Koeffizienten}. Um das neue nun angereicherte Signal nun herzustellen werden auf die DWT-Koeffizienten eine inverse DWT-Transformation (IDWT)\index{inverse DWT-Transformation} angewandt. Diese resultiert in einer neuen Samples Section. Diese ersetzen im neuen Signal die unimplantierten Samples der korrelierenden Sample Section. 
 
-Um sicherzustellen das das Watermark unhörbar in die Sample Section implantiert wurde, wird noch eine Qualitätskontrolle vorgenommen. Dazu wird für ein Signalstück der sog. \textit{Objective Difference Grade} (ODG) berechnet. Erfüllt dieser einen vorgegebenen Grenzwert, so ist das Signal zu störhaft verändert worden und das Bit muss neu implantiert werden. Um eine weniger inversive Veränderung sicherzustellen wird die in Formel \ref{equ:embeddingstrength} eingeführte \textit{Embedding Strength Factor} (esf)\index{Embedding Strength Factor} reduziert was dazu führt, dass die DWT-Koeffizienten durch weniger stark verändert werden.
+Um sicherzustellen, dass das Watermark unhörbar in die Sample Section implantiert wurde, wird noch eine Qualitätskontrolle vorgenommen. Dazu wird für ein Signalstück der sog. \textit{Objective Difference Grade} (ODG) berechnet. Erfüllt dieser einen vorgegebenen Grenzwert, so ist das Signal zu störhaft verändert worden und das Bit muss neu implantiert werden. Um eine weniger invasive Veränderung sicherzustellen wird die in Formel \ref{equ:embeddingstrength} eingeführte \textit{Embedding Strength Factor} (esf)\index{Embedding Strength Factor} reduziert was dazu führt, dass die DWT-Koeffizienten durch weniger stark verändert werden.
 
 \subsection{Synchronisations-Codes}
 \index{Synchronisations-Code|(}
 
 Das Rekonstruktionsprinzip (vgl. \ref{sec:reconstruction}) bestimmt für das Verhältnis der niederfrequenten DWT-Koeffizienten eines Signal einen Bitwert. Prinzipiell kann dieses Verfahren auf jede beliebige Menge an Samples angewandt werden und daraus einen Bitwert generieren. 
 
-Das Problem ist nun zu erkennen wo das Signal absichtlich verändert wurde und wo daher tatsächlich eingebrachte Bits liegen. In der Literatur findet sich dazu das Konzept der Synchron\-isation-Codes\cite{xiang2007robust}\cite{chang2012location}\cite{li2000transparent}\cite{ansari2004data}\cite{huang2002blind}\cite{petrovic1999data}\cite{wu2005efficiently}. Prinzipiell handelt es sich dabei um einen Mechanismus, der bestimmte Bereiche eines Signals markiert. Jedem Marker folgt ein Teil der eigentlichen Information. Die Umsetzung der Markers kann sich durchaus von der eigentlichen Watermarkingmethode unterscheiden, in diesem Fall wird allerdings das selbe Modifikationsprinzip herangezogen. 
+Das Problem ist nun zu erkennen wo das Signal absichtlich verändert wurde und wo daher tatsächlich eingebrachte Bits liegen. In der Literatur findet sich dazu das Konzept der Synchron\-isations-Codes\cite{xiang2007robust}\cite{chang2012location}\cite{li2000transparent}\cite{ansari2004data}\cite{huang2002blind}\cite{petrovic1999data}\cite{wu2005efficiently}. Prinzipiell handelt es sich dabei um einen Mechanismus, der bestimmte Bereiche eines Signals markiert. Jedem Marker folgt ein Teil der eigentlichen Information. Die Umsetzung der Markers kann sich durchaus von der eigentlichen Watermarkingmethode unterscheiden, in diesem Fall wird allerdings das selbe Modifikationsprinzip herangezogen. 
 Ein Synchronisation-Code besteht hier aus einer festgelegten Bitsequenz die als Marker dient. Wenn die Bitsequenz dekodiert wird, ist dies das Indiz das Informationsbits folgen. 
 
 \subsubsection{Autokorrelation und Barker-Codes}
@@ -77,9 +77,9 @@ Das Problem in diesem Beispiel ist, dass die $sync$ eine sehr hohe \textit{Autok
 	 	\label{equ:barker-correlation}
 	 \end{equation}
 
-wobei $N$ die Code Länge bezeichnet, erfüllen. Es lässt sich zeigen, dass die Summe bei einer Verschiebung wie im Beispiel oben immer sehr klein ist, außer die Codes Überdecken sich exakt. Gleichzeitig bleibt die Summe immer noch sehr groß (nahe an 1) wenn bei vollständiger überdeckung innerhalb des Codes eine Zahl kippt. Ein gekipptest Bit wirkt sich also nicht so massiv auf die Erkennung des Codes aus wie eine falsche Überdeckung. Barker-Codes eignen sich daher hervorragend als Synchronisations-Code Sequenz. 
+wobei $N$ die Code Länge bezeichnet, erfüllen. Es lässt sich zeigen, dass die Summe bei einer Verschiebung wie im Beispiel oben immer sehr klein ist, außer die Codes Überdecken sich exakt. Gleichzeitig bleibt die Summe immer noch sehr groß (nahe an 1) wenn bei vollständiger Überdeckung innerhalb des Codes eine Zahl kippt. Ein gekipptes Bit wirkt sich also nicht so massiv auf die Erkennung des Codes aus wie eine falsche Überdeckung. Barker-Codes eignen sich daher hervorragend als Synchronisations-Code Sequenz. 
 
-Die Länge der verwendeten Barker Sequenz wirkt sich natürlich auch auf die Erkennungsgenauigkeit aus. Hier wird der längste Barker-Code \textsf{+1 +1 +1 +1 +1 -1 -1 +1 -1 -1 +1 -1 +1} verwendet. Der Vollständigkeit halber sei noch darauf hingewießen, dass wir nur Binärwerte kodieren können, weswegen $-1$ auf den Wert $0$ abgebildet wird. Bei der Erkennung von $sync$ muss dies natürlich wieder rückgängig gemacht werden.
+Die Länge der verwendeten Barker Sequenz wirkt sich natürlich auch auf die Erkennungsgenauigkeit aus. Hier wird der längste Barker-Code \textsf{+1 +1 +1 +1 +1 -1 -1 +1 -1 -1 +1 -1 +1} verwendet. Der Vollständigkeit halber sei noch darauf hingewiesen, dass wir nur Binärwerte kodieren können, weswegen $-1$ auf den Wert $0$ abgebildet wird. Bei der Erkennung von $sync$ muss dies natürlich wieder rückgängig gemacht werden.
 
 Synchronisations-Codes werden genau wie die eigentlichen Informationen (die \glqq{}Nutzlast\grqq{}) übertragen. Jeder eingebrachte $sync$ belastet daher die Transportkapazität des Signals. Es können also abhängig von der Informationsblocklänge bedeutend weniger Informationsbits effektiv in einem fixen Zeitfenster transportiert werden. 
 
@@ -90,7 +90,7 @@ Synchronisations-Codes werden genau wie die eigentlichen Informationen (die \glq
 \label{sec:errorcorrection}
 \index{Fehlerkorrekturverfahren|(}
 
-Die Barker-Codes\index{Barker-Code} bringen eine gewisse Resistenz gegen Bitfehler mit sich. Die Informationsbit haben diese im Allegmeinen nicht. Der Übertragungskanal\index{Übertragungskanal} kann aber das Signal so weit beeinflussen, dass nicht alle Bits korrekt rekonstruiert werden. Es ist daher wünscheswert eine Methode zu verwenden welche derartige Bitfehler nicht nur erkennt, sondern auch korrigieren kann. Mit derartigen Modellen beschäftigt sich die \textit{Kodierungstheorie}.
+Die Barker-Codes\index{Barker-Code} bringen eine gewisse Resistenz gegen Bitfehler mit sich. Die Informationsbit haben diese im Allgemeinen nicht. Der Übertragungskanal\index{Übertragungskanal} kann aber das Signal so weit beeinflussen, dass nicht alle Bits korrekt rekonstruiert werden. Es ist daher wünschenswert eine Methode zu verwenden welche derartige Bitfehler nicht nur erkennt, sondern auch korrigieren kann. Mit derartigen Modellen beschäftigt sich die \textit{Kodierungstheorie}.
 
 Wir verwenden hier eine Vorwärtsfehlerkorrektur\index{Vorwärtsfehlerkorrektur} (in der englischen Literator \textit{forward error correction}\index{forward error correction|see{Vorwärtsfehlerkorrektur}}, daher kurz FEC) bei dem die Daten mit einem \textit{error-correcting code} \index{error-correcting code} (ECC) bewusst mit redundanten Daten angereichert werden. Aus dieser Redundanz lässt sich anschließend prüfen ob Daten richtig rekonstruiert wurden und bei nicht zu starker Fehlerrate die tatsächliche Information auch wieder herstellen. 
 
@@ -124,7 +124,7 @@ Verwendet wird die MATLAB Implementierung der Communication System Toolbox\footn
 \label{sec:protokoll}
 \index{Protokoll}
 
-Jeder digitale Kommunikationsprozess basiert auf einem Protokoll welches alle Teilnehmer beherrschen müssen. So auch dieser hier, denn wenn gleich der Übertragnungskanal auch analog sein mag, so werden doch digitale Daten übermittelt. Nicht nur gewähtleistet ein definiertes Protokoll die korrekte Verarbeitung, die Abstrahierung erlaubt auch ein einfacheres Verständnis von Aufbau, Funktion und Zusammenspiel der einzelnen Teile. 
+Jeder digitale Kommunikationsprozess basiert auf einem Protokoll welches alle Teilnehmer beherrschen müssen. So auch dieser hier, denn wenn gleich der Übertragungskanal auch analog sein mag, so werden doch digitale Daten übermittelt. Nicht nur gewährleistet ein definiertes Protokoll die korrekte Verarbeitung, die Abstrahierung erlaubt auch ein einfacheres Verständnis von Aufbau, Funktion und Zusammenspiel der einzelnen Teile. 
 
 \begin{figure}[h]
 	\centering
@@ -135,22 +135,22 @@ Jeder digitale Kommunikationsprozess basiert auf einem Protokoll welches alle Te
 
 \subsubsection{Sample Section}
 
-Zunächst wird das Signal, welches durch zeit- und wertediskreten Samplewerten beschrieben wird in Bereiche segmentiert. Es werden jeweil $N_s$ Samples benötigt um 1 Bit zu transportieren. Dementsprechend werden genau die benötigte Anzahl aufeinanderfolgender Samples zu einer \textit{Sample Section} gruppiert.  
+Zunächst wird das Signal, welches durch zeit- und wertediskreten Samplewerten beschrieben wird in Bereiche segmentiert. Es werden jeweils $N_s$ Samples benötigt um 1 Bit zu transportieren. Dementsprechend werden genau die benötigte Anzahl aufeinanderfolgender Samples zu einer \textit{Sample Section} gruppiert.  
 
-\subsubsection{Buffer-Zones}
-\index{Buffer-Zones}
+\subsubsection{Buffer Zones}
+\index{Buffer Zones}
 
 Um Interferenz zwischen den einzelnen Sample Sections zu vermeiden befinden sich zwischen ihnen sog. \textit{Buffer Zones}. Dabei handelt es sich im eine an sich beliebige Anzahl an Samples, die aber nicht zur Informationsübertragung verwendet werden. Prinzipiell können die Pufferzonen auch mit Sampleanzahl 0 definiert werden, allerdings führen Umweltfaktoren wie die Sensitivität des Aufnahmegerätes (und anderer A/D Einflüsse \index{A/D-Wandlung}) dazu, dass sich die Sample Sections überlagern\cite{chang2012location}. Das Ergebnis ist sog. \textit{Inter-Symbol-Interferenz}\footnote{Ein Symbol ist ein Element aus einem Alphabets. In binären Systemen ist das Alphabet daher die Menge $\{0,1\}$.}. Die Auswirkung ist u.a. ein schlechteres Matching der Barker-Codes\index{Barker-Code} bei der Synchronisations-Code Erkennung\index{Synchronisations-Code}.
 
 \subsubsection{Frame}
 \index{Frame}
 
-Um die Buffer-Zones einfacher handzuhaben werden Sie in den \textit{Frames} wegabstrahiert. Alle höheren Schichten sehen ein Frame als die logische Einheit die ein Symbol (also ein Bit) transportiert. Einzig und allein die Framebehandlung muss über Position und Länge der Pufferzonen bescheid wissen.
+Um die Buffer Zones einfacher handzuhaben werden Sie in den \textit{Frames} wegabstrahiert. Alle höheren Schichten sehen ein Frame als die logische Einheit die ein Symbol (also ein Bit) transportiert. Einzig und allein die Framebehandlung muss über Position und Länge der Pufferzonen bescheid wissen.
 
 \subsubsection{Sync Block}
 \index{Sync Block}
 
-Ein Synchronisations-Code\index{Synchronisations-Code} besteht aus $L_s$ Bit, daher sind ebenso viele Frames notwenig um ein $sync$ zu schreiben. Diese Gruppe an Frames wird als \textit{Sync Block} bezeichnet.
+Ein Synchronisations-Code\index{Synchronisations-Code} besteht aus $L_s$ Bit, daher sind ebenso viele Frames notwendig um ein $sync$ zu schreiben. Diese Gruppe an Frames wird als \textit{Sync Block} bezeichnet.
 
 \subsubsection{Information Block}
 \index{Information Block}
@@ -172,13 +172,13 @@ typedef struct package {
 } package_t;
 \end{lstlisting}
 
-Mithilfe dieses lässt sich der Übermittelungsprozess eines Watermarks konzeptionell beschreiben als eine Partitionierung des Watermarks in Messages geeignetter Länge (bedingt durch das Verhältnis $L_m$ zu $L_c$ des ECC\index{Fehlerkorrekturverfahren}) und deren Versand durch ein Packet. 
+Somit lässt sich der Übermittelungsprozess eines Watermarks konzeptionell beschreiben als eine Partitionierung des Watermarks in Messages geeigneter Länge (bedingt durch das Verhältnis $L_m$ zu $L_c$ des ECC\index{Fehlerkorrekturverfahren}) und deren Versand durch Pakete.
 
 \subsubsection{Parallelen zum OSI-Modell}
 
-Vergleicht man dieses Protokoll mit dem OSI-Modell\footnote{\textit{Open Systems Interconnection Model}, auch ISO-OSI-Modell. Ein Netzwerkprotokolle mit Schichtenarchitektur. Wird heute vor allem als Referenzmodell herangezogen.} so ergibt sich folgendes: Frames (und somit auch Sample Sections und Buffer-Zones) sind hier Teil des \textit{Physical Layer} (Schicht 1), welcher sich um die Bitübertragung kümmert. Packages und deren Sync bzw. Information Blocks kümmern sich um  die Segmentierung von Bitdatenströmen in Blöcke und die Kanalkodierung. Sie bilden daher den \textit{Data Link Layer} (Schicht 2) ab.
+Vergleicht man dieses Protokoll mit dem OSI-Modell\footnote{\textit{Open Systems Interconnection Model}, auch ISO-OSI-Modell. Ein Netzwerkprotokolle mit Schichtenarchitektur. Wird heute vor allem als Referenzmodell herangezogen.} so erkennt man folgendes: Frames (und somit auch Sample Sections und Buffer Zones) sind hier Teil des \textit{Physical Layer} (Schicht 1), welcher sich um die Bitübertragung kümmert. Packages und deren Sync bzw. Information Blocks kümmern sich um  die Segmentierung von Bitdatenströmen in Blöcke und die Kanalkodierung. Sie bilden daher den \textit{Data Link Layer} (Schicht 2) ab.
  
-Viele packetbasierte Netzwerkprotokolle definieren einen \textit{Header} (der das Packet beschreibt) und eine \textit{Payload} (die \glqq{}Nutzlast\grqq{}). Diesem entspricht auch ein Data Struct Package wenn man den Sync Block als Header (auch wenn er nur angibt das es sich überhaupt um ein Packet handelt) und den Information Block als Payload auffasst.
+Viele paketbasierte Netzwerkprotokolle definieren einen \textit{Header} (der das Packet beschreibt) und eine \textit{Payload} (die \glqq{}Nutzlast\grqq{}). Diesem entspricht auch ein Data Struct Package wenn man den Sync Block als Header (auch wenn er nur angibt das es sich überhaupt um ein Packet handelt) und den Information Block als Payload auffasst.
 
 
 \subsection{Qualitätskontrolle}
@@ -230,7 +230,7 @@ distortion} (WMD) beschreiben\cite{xiang2007robust}\cite{steinebach2002audio}. D
 Um diesen Effekt der D/A-Wandlung aufzuheben, muss versucht werden die Synchronisation-Codes wiederherzustellen. Man nennt diesen Vorgang \textit{Resynchronisation}\index{Resynchronisation}. Verschiedene Resynchronisationsansätze existieren, hier wird ein sog. \textit{brute-force approach}\index{brute-force approach} angewandt und wie in \cite{steinebach2011re} vorgeschlagen auf ein Suchintervall von -10\% bis +10\% beschränkt. 
 
 Die TSM bewirkt, dass das Signal auf seiner Zeitachse gestreckt oder gestaucht wird. Für das Watermark bedeutet das, dass ein Bit nicht mehr in $N_s$ Samples kodiert ist, sondern durch mehr oder weniger Samples ${N}_{s}'$ beschrieben wird. 
-Zuerst gild es die neue Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ von $0.9 \cdot {N}_{s}$ bis $1.1 \cdot {N}_{s}$ durchgetestet und nach Synchronisations-Codes\index{Synchronisations-Code} gesucht. Algorithmus \ref{alg:resync} illustriert diesen Vorgang:
+Zuerst gilt es die neue Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ von $0.9 \cdot {N}_{s}$ bis $1.1 \cdot {N}_{s}$ durchgetestet und nach Synchronisations-Codes\index{Synchronisations-Code} gesucht. Algorithmus \ref{alg:resync} illustriert diesen Vorgang:
 
 \begin{algorithm}[h]
 	\SetKwData{Framelen}{framelen}
@@ -283,7 +283,7 @@ Wurde ein $sync$ gefunden, so kann man das Verhältnis zwischen neuer und alter 
 		\label{equ:resampling_factor}
 	\end{equation}
 
-berechnet werden. Mit $\alpha$ können nun alle Samples als Vorverarbeitungsschritt auf ihren ursprünglichen Wert rückinterpoliert werden. Verschiedene Interpolationsverfahren führen hier zu keinem merklichen Unterschied\cite{xiang2007robust}, weswegen eine lineare Lagrange-Interpolaton\index{Lagrange-Interpolation} verwendet wird. Somit können die neuen Samplewerte $f''(i)$ durch
+berechnet werden. Mit $\alpha$ können nun alle Samples als Vorverarbeitungsschritt auf ihren ursprünglichen Wert rückinterpoliert werden. Verschiedene Interpolationsverfahren führen hier zu keinem merklichen Unterschied\cite{xiang2007robust}, weswegen eine lineare Lagrange-Interpolation\index{Lagrange-Interpolation} verwendet wird. Somit können die neuen Samplewerte $f''(i)$ durch
 
 	\begin{equation}
 		f''(i) = \begin{cases}
@@ -304,7 +304,7 @@ Nach der Resynchronisation kann das Signal schrittweise durchlaufen und nach $sy
 
 Erfolgt ein Match auf den Synchronisations-Code, so sind die folgenden $L_c$ Bit als Informationsbits aufzufassen. Da es sich um ein Codeword\index{Codeword} handelt, muss noch der Dekodierungsalgorithmus des ECC\index{Fehlerkorrekturverfahren} angewendet werden, um die Message\index{Message} zu erhalten. Die einzelnen Messages ergeben schließlich zusammengesetzt die eigentliche Information. 
 
-Wie man sich anhand der Abbildung \ref{fig:protocol} leicht überlegen kann, können immer nachdem ein Codeword erfolgreich gelesen wurde die folgenden $L_c$ Samples Sektions \index{Sample Section} auf der Suche nach weiteren $sync$ Sequenzen übersprungen werden.
+Wie man sich anhand der Abbildung \ref{fig:protocol} leicht überlegen kann, können immer nachdem ein Codeword erfolgreich gelesen wurde die folgenden $L_c$ Samples Sections \index{Sample Section} auf der Suche nach weiteren $sync$ Sequenzen übersprungen werden.
 
 
 

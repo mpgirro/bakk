@@ -11,8 +11,8 @@ bin_numbers = de2bi(0:max_binnum,'left-msb');
 informationData = reshape(bin_numbers',1,numel(bin_numbers));
 
 %inputPath   = ['resources',filesep,'der-affe-ist-gut.wav'];
-inputPath   = ['resources',filesep,'ISP-leicht-gemacht.m4a'];
-%inputPath   = ['resources',filesep,'flute.wav'];
+%inputPath   = ['resources',filesep,'ISP-leicht-gemacht.m4a'];
+inputPath   = ['resources',filesep,'flute.wav'];
 outputPath  = ['results',filesep,'watermarked_audio.wav'];
 
 [signal,fs] = audioread(inputPath);

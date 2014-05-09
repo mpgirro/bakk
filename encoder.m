@@ -45,8 +45,7 @@ fprintf('Assembling payload...');
 [payload, payloadSize] = assemblepayload(watermark(1:wmkbound));
 fprintf('DONE\n');
 
-sampleCursor = 1;
-dataStructCount = 0;
+
 
 % Theoretical limit of bit that can be encoded into this sample sequence.
 % In general, there will be less bits encoded, because we stop as soon as
@@ -54,74 +53,109 @@ dataStructCount = 0;
 % structures.
 bitEncodingCapacity = floor(signalSize/ frameLength );
 
-fprintf('Processing signal...');
 
-for i=1:bitEncodingCapacity
+
+odg_quality = false; % status flag for ODG signal quality check
+esf = Setting.embedding_strength_factor;
+
+while( not(odg_quality) && esf >= 0.5 )
     
-    % no need to do more than necessary
-    if i > payloadSize
+    % set these here in case we have to do all this more than once
+    signal = inputSignal; 
+    sampleCursor = 1;
+    dataStructCount = 0;
+    
+    fprintf('Processing signal (esf=%1.1f)...',esf);
+    for i=1:bitEncodingCapacity
+        
+        % no need to do more than necessary
+        if i > payloadSize
+            break;
+        end
+        
+        window = sampleCursor : sampleCursor+frameLength-1;
+        
+        signalSegment = signal(window);
+        modSignalSegment = insertbit(signalSegment,payload(i));
+        signal(window) = modSignalSegment;
+        
+        sampleCursor = sampleCursor+frameLength;
+        
+        if mod(i,packageBitLen) == 0
+            dataStructCount = dataStructCount+1;
+        end
+        
+        % Check if we reached the data structure limit this signal can hold. We
+        % can stop if this is the case
+        if dataStructCount >= packageCapacity
+            break;
+        end
+        
+    end
+    
+    modSignal = signal;
+    encodedBitCount = i;
+    
+    fprintf('DONE\n');
+    
+    % % now lets calculate the ODGs if we can
+    refSignal   = inputSignal(1:sampleCursor-1);
+    testSignal  = modSignal(1:sampleCursor-1);
+    
+    
+    % check the ODG values
+    eaqual_flag = false;
+    odg_eaqual = +1; % undefined ODG value
+    try
+        odg_eaqual = odgFromEaqualExe(refSignal, fs, testSignal, fs);
+        eaqual_flag = true;
+    catch
+        fprintf('Error calculating ODG with EAQUAL\n');
+    end
+    
+    pqeval_flag = false;
+    odg_pqeval = +1; % undefined ODG value
+    try
+        odg_pqeval = odgFromPQevalAudioBinary(refSignal, fs, testSignal, fs);
+        pqeval_flag = true;
+    catch
+        fprintf('Error calculating ODG with PQevalAudio\n');
+    end
+    
+    % print the ODG values
+    if eaqual_flag
+        fprintf('ODG: %f (EAQUAL)\n',odg_eaqual);
+        if -2 <= odg_eaqual <= 0
+            odg_quality = true;
+        end
+    end
+    if pqeval_flag
+        fprintf('ODG: %f (PQevalAudio)\n',odg_pqeval);
+        %if -2 <= odg_pqeval <= 0
+        if odg_pqeval >= -2 && odg_pqeval <= 0
+            odg_quality = true;
+        end
+    end
+    
+    % if flag not set, we don't care for the odg --> break anyway
+    if not(Setting.consider_odg)
         break;
     end
     
-    window = sampleCursor : sampleCursor+frameLength-1;
-    
-    signalSegment = signal(window);
-    modSignalSegment = insertbit(signalSegment,payload(i));
-    signal(window) = modSignalSegment;
-    
-    sampleCursor = sampleCursor+frameLength;
-    
-    if mod(i,packageBitLen) == 0
-        dataStructCount = dataStructCount+1;
+    % check if signal is good to go
+    if not(odg_quality) 
+        esf = esf - 0.1;
+        fprintf('Quality check failed. Restart procedure\n');
+        continue;
     end
     
-    % Check if we reached the data structure limit this signal can hold. We
-    % can stop if this is the case
-    if dataStructCount >= packageCapacity
-        break;
-    end
-    
-end
-
-modSignal = signal;
-encodedBitCount = i;
-
-fprintf('DONE\n');
-
-% % now lets calculate the ODGs if we can
-refSignal   = inputSignal(1:sampleCursor-1);
-testSignal  = modSignal(1:sampleCursor-1);
-
-eaqual_flag = false;
-odg_eaqual = +1; % undefined ODG value
-try
-    odg_eaqual = odgFromEaqualExe(refSignal, fs, testSignal, fs);
-    eaqual_flag = true;
-    
-catch
-    fprintf('Error calculating ODG with EAQUAL\n');
-end
-
-pqeval_flag = false;
-odg_pqeval = +1; % undefined ODG value
-try
-    odg_pqeval = odgFromPQevalAudioBinary(refSignal, fs, testSignal, fs);
-    pqeval_flag = true;
-catch 
-    fprintf('Error calculating ODG with PQevalAudio\n');
 end
 
 fprintf('Encoding complete, written:\n');
 fprintf('   %d bits total\n',encodedBitCount);
 fprintf('   %d packages\n',dataStructCount);
 fprintf('   %d information bits\n',dataStructCount * messageLength);
-if eaqual_flag
-    fprintf('ODG: %f (EAQUAL)\n',odg_eaqual);
-end
-if pqeval_flag
-    fprintf('ODG: %f (PQevalAudio)\n',odg_pqeval);
-    
-end
+
 
 end
 

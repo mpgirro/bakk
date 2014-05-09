@@ -12,11 +12,11 @@ if testFs ~= 48000
 end
 
 % write signals to harddrive
-audiowrite('../tmp/refSignal.wav',  refSignal,  refFs);
-audiowrite('../tmp/testSignal.wav', testSignal, testFs);
+audiowrite('tmp/refSignal.wav',  refSignal,  refFs);
+audiowrite('tmp/testSignal.wav', testSignal, testFs);
 
 % http://www.mathworks.de/de/help/matlab/ref/system.html
-[status,cmdout] = system('../lib/bin/PQevalAudio ../tmp/refSignal.wav ../tmp/testSignal.wav');
+[status,cmdout] = system('lib/bin/PQevalAudio tmp/refSignal.wav tmp/testSignal.wav');
 
 if status == 0
     outputLength = size(cmdout);

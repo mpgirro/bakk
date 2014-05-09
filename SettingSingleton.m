@@ -23,14 +23,14 @@ classdef SettingSingleton < handle
             newObj.setDwtWavelet('db1');
             newObj.setDwtLevel(6);
             newObj.setSubbandLength(8);
-            newObj.setEmbeddingStrengthFactor(10);
+            newObj.setEmbeddingStrengthFactor(1);
             newObj.setBufferzoneScalingFactor(0.1);
             newObj.setSynchronizationCode(13); % barker code 13
             newObj.setBarkerThreshold(0.8);
             newObj.setErrorCorrectionMethode('BCH');
             newObj.setMessageLength(5);     
             newObj.setCodewordLength(15);
-            newObj.setConsiderODG(1);
+            newObj.setConsiderODG(false);
         end
     end
     

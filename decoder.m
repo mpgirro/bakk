@@ -31,7 +31,7 @@ lastSampleToStartSearching = signalSize-dataStructSampleLen;
 [ newSignal, success ] = resynchronize( signal );
 % - - - - - - - - - - 
 
-fprintf('Information data:\n');
+fprintf('Extracted messages:\n');
 
 %for i=1:lastSampleToStartSearching
 while sampleCursor <= lastSampleToStartSearching

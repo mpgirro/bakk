@@ -12,8 +12,14 @@
 % use Helvetica for \sffamily, times for the rest
 \usepackage[T1]{fontenc}
 \usepackage[scaled]{helvet}
-\usepackage{times}
-\usepackage{courier}
+%\usepackage[default]{droidserif}
+%\usepackage[defaultsans]{droidsans}
+%\usepackage{pandora}
+%\usepackage{txfonts}
+%\usepackage{tgtermes}
+%\usepackage{mathptmx}
+%\usepackage{times}
+%\usepackage{courier}
 \usepackage{amssymb} % \centerdot
 
 % load english and ngerman
@@ -45,8 +51,14 @@
 \makerunningwidth{tuinftitlepage}{\tuinf@headwidth}
 
 % font sizes for the titlepage
-\newcommand{\thesistitlefontHUGE}{\fontsize{30}{34}\selectfont}
-\newcommand{\thesistitlefonthuge}{\fontsize{20}{23}\selectfont}
+\newcommand{\thesistitlefontHUGE}{
+	\fontfamily{mathptmx}
+%	\fontseries{m}
+	\fontsize{30}{34}
+	\selectfont
+}
+%\newcommand{\thesistitlefonthuge}{\fontsize{20}{23}\selectfont}
+\newcommand{\thesistitlefonthuge}{\fontsize{26}{30}\selectfont}
 \newcommand{\thesistitlefontLARGE}{\fontsize{17}{22}\selectfont}
 \newcommand{\thesistitlefontLarge}{\fontsize{14}{18}\selectfont}
 \newcommand{\thesistitlefontlarge}{\fontsize{12}{14.5}\selectfont}
@@ -60,7 +72,7 @@
   \rule{\tuinf@footwidth}{0.5pt}
 
   \begin{minipage}[t][1cm][t]{\tuinf@footwidth}%
-    \sffamily%
+%    \sffamily%
     \centering%
     \thesistitlefontnormalsize%
     %

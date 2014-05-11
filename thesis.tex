@@ -12,6 +12,7 @@
 \usepackage{CJKutf8}				% Japanische, Chinesisch, Koreanisch
 \usepackage{wrapfig}
 \usepackage{listings}				% source code listings
+\usepackage{glossaries}
 
 \usepackage{pgf}	
 \usepackage{svg}				
@@ -45,17 +46,18 @@
   stringstyle=\color{orange},
 }
 
-
+\renewcommand*{\glspostdescription}{} % remove dots at the end of each entry
 
 %\setcounter{secnumdepth}{3}
 \setsecnumdepth{subsection} % the above line does not seem to work with memoir class
 \setcounter{tocdepth}{2}
 \setlength\parindent{0pt}
 
+\makeglossaries
 \makeindex
 
-%\thesistitle{Digital Audio Watermarking f\"ur analoge \"Ubertragungsstrecken}
-\thesistitle{Digital Audio Watermarking}
+%\thesistitle{DIGITAL AUDIO-WATERMARKING}
+\thesistitle{Digital Audio-Watermarking}
 \thesissubtitle{f\"ur analoge \"Ubertragungsstrecken} % optional
 \thesisdate{\today}
 
@@ -68,7 +70,7 @@
 \thesismatrikelno{1026859} % your registration number
 
 %\thesistype{Bachelorarbeit aus Informatik}
-\thesistype{Bachelorarbeit}
+\thesistype{BACHELORARBEIT}
 
 \thesisbetreins{Dipl.-Ing. Mag. Dr. Matthias Zeppelzauer}
 %\thesisbetrzwei{Dr. Vorname Familienname}
@@ -210,6 +212,10 @@ and would otherwise have been left blank.}
 \nocite{*} % include all references, even those not cited
 \pageintentionallyleftblank{Denna sida har avsiktligen lämnats blank.}
 \bibliography{references}
+
+\pageintentionallyleftblank{Lorem Ipsum.}
+\include{glossar}
+\printglossaries
 
 \pageintentionallyleftblank{De Seitn homs obsichtlich la lossn.}
 \printindex

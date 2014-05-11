@@ -11,7 +11,7 @@ Das von Shannon und Weaver entwickelte Sender-Empfänger-Modell \cite{shannon200
 	\centering
 	%\includesvg[width=0.7\textwidth]{figures/diagram-framework.svg}
 	\includegraphics[width=0.9\textwidth]{figures/diagram-framework.pdf}
-	\caption{Schematischer Aufbau des Frameworks}
+	\caption{Das Framework im Kommunikationsprozess}
 	\label{fig:diagram-framework}
 \end{figure}
 
@@ -260,7 +260,7 @@ Zuerst gilt es die neue Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ 
 \Upperbound = 1.1 * \Ns\;
 \Cursor = 1\;
 
-\While{ \Cursor < \Size-\Upperbound and not \Found }{
+\While{ \Cursor < \Size - \Upperbound and not \Found }{
 	\Framelen = \Lowerbound\;
 	\While{\Framelen < \Upperbound}{
 		\Testwindow = \Sig[\Cursor,\Framelen]\;

@@ -39,15 +39,22 @@
 
 \begin{minipage}[t][2.8cm][s]{\textwidth}%
 \centering
-\thesistitlefontHUGE\sffamily\bfseries\tuinfthesistitle\\
+	\thesistitlefontHUGE
+	%\sffamily % COMMENT THIS FOR COMPUTER MODERN VERSION
+	\bfseries \tuinfthesistitle\\
 %\bigskip
 \vspace{2mm}
-{\thesistitlefonthuge\sffamily\bfseries\tuinfthesissubtitle}
+{	\thesistitlefonthuge
+	%\sffamily % COMMENT THIS FOR COMPUTER MODERN VERSION
+	\bfseries \tuinfthesissubtitle
+}
 \end{minipage}
 
 \vspace{2.2cm}
 
-{\thesistitlefontLARGE\sffamily \tuinfthesistype}
+{\thesistitlefontLARGE
+%\sffamily
+ \tuinfthesistype}
 
 \vspace{18mm}
 
@@ -67,22 +74,29 @@
 %
 %\vspace{6.5mm}
 
-{\thesistitlefontlarge\sffamily von}
+{\thesistitlefontlarge
+%\sffamily
+ von}
 
 \vspace{18mm}
 
-{\thesistitlefontLarge\sffamily\bfseries \tuinfthesisauthor}
+{\thesistitlefontLarge
+%\sffamily
+%\bfseries 
+\tuinfthesisauthor}
 
 \vspace{1.5mm}
 
-{\thesistitlefontlarge\sffamily Matrikelnummer \tuinfthesismatrikelno} 
+{\thesistitlefontlarge
+%\sffamily
+ Matrikelnummer \tuinfthesismatrikelno} 
 
 \vspace{2.5cm} %default: 1.4cm
 
 
 
 \begin{minipage}[t][4cm][t]{\textwidth}%
-  \vspace{0pt}\raggedright\thesistitlefontnormalsize\sffamily
+  \vspace{0pt}\raggedright\thesistitlefontnormalsize %\sffamily
   %
   \centering
   
@@ -99,7 +113,7 @@
 \end{minipage}
 
 \vspace{0mm}
-\raggedright\thesistitlefontnormalsize\sffamily
+\raggedright\thesistitlefontnormalsize %\sffamily
 \begin{minipage}[t][1.6cm][t]{\textwidth}%
   %
   \centering

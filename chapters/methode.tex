@@ -54,6 +54,8 @@ Das Rekonstruktionsprinzip (vgl. \ref{sec:reconstruction}) bestimmt für das Ver
 Das Problem ist nun zu erkennen wo das Signal absichtlich verändert wurde und wo daher tatsächlich eingebrachte Bits liegen. In der Literatur findet sich dazu das Konzept der Synchron\-isations-Codes\cite{xiang2007robust}\cite{chang2012location}\cite{li2000transparent}\cite{ansari2004data}\cite{huang2002blind}\cite{petrovic1999data}\cite{wu2005efficiently}. Prinzipiell handelt es sich dabei um einen Mechanismus, der bestimmte Bereiche eines Signals markiert. Jedem Marker folgt ein Teil der eigentlichen Information. Die Umsetzung der Markers kann sich durchaus von der eigentlichen Watermarkingmethode unterscheiden, in diesem Fall wird allerdings das selbe Modifikationsprinzip herangezogen. 
 Ein Synchronisation-Code besteht hier aus einer festgelegten Bitsequenz die als Marker dient. Wenn die Bitsequenz dekodiert wird, ist dies das Indiz das Informationsbits folgen. 
 
+Im Folgenden steht $sync$ als Synonym für die Bitsequenz des Synchronisations-Codes und ${L}_{s}$ ist die L\"ange der Bitsequenz (Anzahl an Bit) von $sync$. $sync(i)$ bezeichnet das Bit an der Stelle $i$ des Synchronisation-Codes, mit $i\in[1,{L}_{s}]$.
+
 \subsubsection{Autokorrelation und Barker-Codes}
 \label{sec:barker-code}
 
@@ -69,7 +71,7 @@ Die logische Schlussfolgerung ist, dass eine Bitsequenz mit dem Synchronisations
 	\label{fig:sync-code-detection}
 \end{wrapfigure}
 
-Abbildung \ref{fig:sync-code-detection} skizziert das Erkennen eines Synchronisations-Codes $sync$\index{Synchronisations-Code}. Der Code wird immer mit einem Block Bits gleicher Länge des extrahierten Bitstroms verglichen. Die in der Skizze blau hervorgehobenen Bits sind das eingebettete $sync$. Die rot markierten Bits signalisieren jene Zeichen, die beim aktuellen Vergleich übereinstimmen. In diesem Beispiel beträgt die Übereinstimmung zwischen erkanntem und tatsächlichem $sync$ 75\% bei einer Synchronisation-Code Wortlänge von 8 Bit. Würde der Erkennungsschwellwert 0.75 betragen, so wäre nun $sync$ erkannt worden. Aus der Skizze ist aber ersichtlich, dass hier der tatsächlich Match erst 2 Shifts später erfolgt. Die anschließend gelesenen Informationsbits würden also teilweise aus dem Ende von $sync$\index{Synchronisations-Code} bestehen. Umgekehrt würden auch 2 echte Bits des Informationsblock\index{Information Block} nicht gelesen werden.
+Abbildung \ref{fig:sync-code-detection} skizziert das Erkennen eines Synchronisations-Codes $sync$\index{Synchronisations-Code}. Der Code wird immer mit einem Block Bits gleicher \mbox{Länge} des extrahierten Bitstroms verglichen. Die in der Skizze blau hervorgehobenen Bits sind das ein\-gebettete $sync$. Die rot markierten Bits signal\-isieren jene Zeichen, die beim \mbox{aktuellen} Vergleich über\-einstimmen. In diesem Beispiel beträgt die Über\-einstimmung zwischen er\-kanntem und tatsächlichem $sync$ 75\% bei einer Synchronisation-Code Wortlänge von 8 Bit. Würde der Erkennungsschwellwert 0.75 betragen, so wäre nun $sync$ erkannt worden. Aus der Skizze ist aber ersichtlich, dass hier der tatsächlich Match erst 2 Shifts später erfolgt. Die anschließend gelesenen Informationsbits würden also teilweise aus dem Ende von $sync$\index{Synchronisations-Code} bestehen. Umgekehrt würden auch 2 echte Bits des Informationsblock\index{Information Block} nicht gelesen werden.
 
 Das Problem in diesem Beispiel ist, dass $sync$\index{Synchronisations-Code} eine sehr hohe \textit{Autokorrelation}\index{Autokorrelation} besitzt. In anderen Worten ist $sync$ (als Signal aufgefasst) sehr ähnlich zu sich selbst, weswegen 75\% Überdeckung auch zu 75\% Übereinstimmung führen. Die Lösung ist für $sync$\index{Synchronisations-Code} ein Sequenz mit minimaler Autokorrelation zu wählen. In der Literatur\cite{huang2002blind}\cite{lie2006robust}\cite{chang2012location} erfreuen sich die sog. \textit{Barker-Codes}\cite{barker1953group} großer Beliebtheit. Dabei handelt es sich um 9 Zahlensequenzen von denen der längste 13 Zeichen umfasst, welche alle die Bedingung der Autokorrelations-Funktion:
 
@@ -87,8 +89,6 @@ Synchronisations-Codes werden genau wie die eigentlichen Informationen (die \glq
 \index{Barker-Code|)}
 \index{Synchronisations-Code|)}
 
-\pagebreak
-
 \subsection{Fehlerkorrekturverfahren} 
 \label{sec:errorcorrection}
 \index{Fehlerkorrekturverfahren|(}
@@ -99,7 +99,15 @@ Wir verwenden hier eine Vorwärtsfehlerkorrektur\index{Vorwärtsfehlerkorrektur}
 
 In der Kodierungstheorie bezeichnet man mit \textit{Message}\index{Message} die Information die es zu übertragen gilt und mit \textit{Codeword}\index{Codeword} die mit Redundanz angereicherte Message. Im Informationsblock\index{\index{Information Block}} der einem jeden Synchronisations-Code\index{Synchronisations-Code} folgt befindet sich daher immer ein vollständiges Codeword um hier ggf. Übertragungsfehler auszugleichen. 
 
-Die im Folgenden angeführten Verfahren werden unterstützt:
+Bezeichnen wir mit $wmk$ das zu übertragende Watermark und mit ${L}_{w}$ seine Länge (sog. \textit{Watermark-Length}\index{Watermark-Length}, die Anzahl an Bit) dieses Watermarks, wobei $wmk(i)$ das Bit an der Stelle $i$ mit $i\in[1,{L}_{w}]$ referenziert, so ergeben sich folgende Bedingungen. Für die Bit-L\"ange einer Message ${L}_{m}$, genannt \textit{Message-Length}\index{Message-Length}, muss gelten:
+
+	 \begin{equation}
+		 {L}_{w} \pmod{{L}_{m}} = 0 \quad\mbox{und}\quad {L}_{w}\geq{L}_{m} 		\label{equ:wmkseqlength}
+	 \end{equation} 
+
+und für die Bit-Länge eines Codewords ${L}_{c}$ (sog. \textit{Codeword-Length}\index{Codeword-Length}) gilt allgemein ${L}_{c} > {L}_{m}$
+\\
+Gültige Parameter für ${L}_{m}$ und ${L}_{c}$ hängen vom jeweiligen Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} ab. Die im Folgenden angeführten Verfahren werden unterstützt:
 
 \subsubsection{BCH-Codes}
 \index{BCH-Codes}
@@ -143,12 +151,12 @@ Zunächst wird das Signal, welches durch zeit- und wertediskreten Samplewerten b
 \subsubsection{Buffer Zones}
 \index{Buffer Zones}
 
-Um Interferenz zwischen den einzelnen Sample Sections zu vermeiden befinden sich zwischen ihnen sog. \textit{Buffer Zones}. Dabei handelt es sich um eine an sich beliebige Anzahl an Samples, die aber nicht zur Informationsübertragung verwendet werden. Bei der Verarbeitung der Samples werden die Buffer Zones einfach übersprungen. Prinzipiell können die Pufferzonen auch mit Sampleanzahl 0 definiert werden, allerdings führen Umweltfaktoren wie die Sensitivität des Aufnahmegerätes (und anderer A/D Einflüsse \index{A/D-Wandlung}) dazu, dass sich die Sample Sections überlagern\cite{chang2012location}. Das Ergebnis ist sog. \textit{Inter-Symbol-Interferenz}\footnote{Ein Symbol ist ein Element aus einem Alphabet. In binären Systemen ist das Alphabet also die Menge $\{0,1\}$.}. Die Auswirkung ist u.a. ein schlechteres Matching der Barker-Codes\index{Barker-Code} bei der Synchronisations-Code Erkennung\index{Synchronisations-Code}.
+Um Interferenz zwischen den einzelnen Sample Sections zu vermeiden befinden sich zwischen ihnen sog. \textit{Buffer Zones}. Dabei handelt es sich um eine an sich beliebige Anzahl an Samples, die aber nicht zur Informationsübertragung verwendet werden. Bei der Verarbeitung der Samples werden die Buffer Zones einfach übersprungen. Prinzipiell können die Pufferzonen auch mit Sampleanzahl ${N}_{BZ} = 0$ definiert werden, allerdings führen Umweltfaktoren wie die Sensitivität des Aufnahmegerätes (und anderer A/D Einflüsse \index{A/D-Wandlung}) dazu, dass sich die Sample Sections überlagern\cite{chang2012location}. Das Ergebnis ist sog. \textit{Inter-Symbol-Interferenz}\footnote{Ein Symbol ist ein Element aus einem Alphabet. In binären Systemen ist das Alphabet also die Menge $\{0,1\}$.}. Die Auswirkung ist u.a. ein schlechteres Matching der Barker-Codes\index{Barker-Code} bei der Synchronisations-Code Erkennung\index{Synchronisations-Code}.
 
 \subsubsection{Frame}
 \index{Frame}
 
-Um die Buffer Zones einfacher handzuhaben werden Sie in den \textit{Frames} wegabstrahiert. Alle höheren Schichten sehen ein Frame als die logische Einheit die ein Symbol (also ein Bit) transportiert. Einzig und allein die Frameverarbeitung muss über Position und Länge der Pufferzonen bescheid wissen.
+Um die Buffer Zones einfacher handzuhaben werden Sie in den \textit{Frames} wegabstrahiert. Alle höheren Schichten sehen ein Frame als die logische Einheit die ein Symbol (also ein Bit) transportiert. Einzig und allein die Frameverarbeitung muss über Position und Länge der Pufferzonen bescheid wissen. Für die höhere Schichten ist ein Bit in den ${N}_{F}$ Samples eines Frames, mit ${N}_{F} = {N}_{s} + {N}_{BZ}$, kodiert.
 
 \subsubsection{Sync Block}
 \index{Sync Block}
@@ -181,7 +189,7 @@ Somit lässt sich der Übermittelungsprozess eines Watermarks\index{Watermark} k
 
 \subsubsection{Parallelen zum OSI-Modell}
 
-Vergleicht man dieses Protokoll mit dem OSI-Modell\index{OSI-Modell}\footnote{\textit{Open Systems Interconnection Model}, auch ISO-OSI-Modell. Ein Netzwerkprotokolle mit Schichtenarchitektur. Wird heute vor allem als Referenzmodell herangezogen.} so erkennt man folgendes: Frames\index{Frame} (und somit auch Sample Sections und Buffer Zones) sind hier Teil des \textit{Physical Layer} (Schicht 1), welcher sich um die Bitübertragung kümmert. Packages und deren Sync bzw. Information Blocks kümmern sich um  die Segmentierung von Bitdatenströmen in Blöcke und die Kanalkodierung. Sie bilden daher den \textit{Data Link Layer} (Schicht 2) ab.
+Vergleicht man dieses Protokoll mit dem OSI-Modell\index{OSI-Modell}\footnote{\textit{Open Systems Interconnection Model}, auch ISO-OSI-Modell. Ein Netzwerkprotokolle mit Schichtenarchitektur. Früher tatsächlich in Verwendung, wird heute vor allem als Referenzmodell herangezogen.} so erkennt man folgendes: Frames\index{Frame} (und somit auch Sample Sections und Buffer Zones) sind hier Teil des \textit{Physical Layer} (Schicht 1), welcher sich um die Bitübertragung kümmert. Packages und deren Sync bzw. Information Blocks kümmern sich um  die Segmentierung von Bitdatenströmen in Blöcke und die Kanalkodierung. Sie bilden daher den \textit{Data Link Layer} (Schicht 2) ab.
  
 \subsection{Qualitätskontrolle}
 \label{sec:qualitaetskontrolle}
@@ -197,7 +205,9 @@ Definiert in der ITU-T Recommendation P.800\cite{rec1996p} handelt es sich beim 
 \subsubsection{Signal-Rauschabstand (SNR)} 
 \index{Signal-Rauschabstand}
 
-Der Signal-Rauschabstand oder Signal-Rausch-Verhältnis (engl. \textit{signal-to-noise ratio}, daher kurz SNR) bewertet die technische Qualität eines Signals welches von einem Störsignal überlagert wird. Hier ist zu beachten, dass mit Störsignal nicht jenes im analogen Übertragungskanal\index{\"Ubertragungskanal} gemeint ist. Die Veränderung eines Audiosignals durch das Watermark\index{Watermark} kann bezogen auf das ursprünglich unmodifizierte Signal ebenfalls als Störsignal interpretiert werden. Der SNR berechnet sich als $SNR = Nutzsignalleistung / Rauschsignalleistung$, seine Bestimmung ist daher sehr einfach. Leider handelt es sich dabei um eine technisch objektive Güteeigenschaft die das menschliche Hörsystem nicht mit einbezieht und daher als Bewertungskriterium dementsprechend schlecht geeignet ist\cite{xiang2007robust}.
+Der Signal-Rauschabstand oder Signal-Rausch-Verhältnis (engl. \textit{signal-to-noise ratio}, daher kurz SNR) bewertet die technische Qualität eines Signals welches von einem Störsignal überlagert wird. Hier ist zu beachten, dass mit Störsignal nicht jenes im analogen Übertragungskanal\index{\"Ubertragungskanal} gemeint ist. Die Veränderung eines Audiosignals durch das Watermark\index{Watermark} kann bezogen auf das ursprünglich unmodifizierte Signal ebenfalls als Störsignal interpretiert werden. 
+
+Der SNR berechnet sich als $SNR = Nutzsignalleistung / Rauschsignalleistung$, seine Bestimmung ist daher sehr einfach. Leider handelt es sich dabei um eine technisch objektive Güteeigenschaft die das menschliche Hörsystem nicht mit einbezieht und daher als Bewertungskriterium dementsprechend schlecht geeignet ist\cite{xiang2007robust}.
 
 \subsubsection{Objective Difference Grade (ODG)} 
 \index{Objective Difference Grade}
@@ -229,7 +239,7 @@ Bei der Erkennung der Synchronisations-Codes kann es im Allgemeinen zu Problemen
 distortion}\textit{wave magnitude
 distortion} (WMD) beschreiben\cite{xiang2007robust}\cite{steinebach2002audio}. Die TSM kann das Auffinden der Synchronisation-Codes verhindern. Das Prinzip kann daher auch gezielt eingesetzt werden, um ein existierendes Watermark\index{Watermark} zu zerstören (etwa um einen Urheberrechtlichsschutz aufzuheben). Dies wird als \textit{Synchronization attack}\index{Synchronization attack} bezeichnet.
 
-Um diesen Effekt der D/A-Wandlung\index{D/A-Wandlung} aufzuheben, muss versucht werden die Synchronisation-Codes wiederherzustellen. Man nennt diesen Vorgang \textit{Resynchronisation}\index{Resynchronisation}. Verschiedene Resynchronisationsansätze existieren, hier wird ein sog. \textit{brute-force approach}\index{brute-force approach} angewandt und wie in \cite{steinebach2011re} vorgeschlagen auf ein Suchintervall von -10\% bis +10\% beschränkt. 
+Um diesen Effekt der D/A-Wandlung\index{D/A-Wandlung} aufzuheben, muss versucht werden die Synchron\-isations\--Codes wieder\-herzustellen. Man nennt diesen Vorgang \textit{Resynchronisation}\index{Resynchronisation}. Verschiedene Resynchronisationsansätze existieren, hier wird ein sog. \textit{brute-force approach}\index{brute-force approach} angewandt und wie in \cite{steinebach2011re} vorgeschlagen auf ein Suchintervall von -10\% bis +10\% beschränkt. 
 
 Die TSM bewirkt, dass das Signal auf seiner Zeitachse gestreckt oder gestaucht wird. Für das Watermark\index{Watermark} bedeutet das, dass ein Bit nicht mehr in $N_s$\index{Sample-Section-Length} Samples kodiert ist, sondern durch mehr oder weniger Samples ${N}_{s}'$ beschrieben wird. 
 Zuerst gilt es die neue Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ von $0.9 \cdot {N}_{s}$ bis $1.1 \cdot {N}_{s}$ durchgetestet und nach Synchronisations-Codes\index{Synchronisations-Code} gesucht. Algorithmus \ref{alg:resync} illustriert diesen Vorgang:

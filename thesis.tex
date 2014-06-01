@@ -12,7 +12,8 @@
 \usepackage{CJKutf8}				% Japanische, Chinesisch, Koreanisch
 \usepackage{wrapfig}
 \usepackage{listings}				% source code listings
-\usepackage{glossaries}
+\usepackage[toc]{glossaries}
+
 
 \usepackage{pgf}	
 \usepackage{svg}				
@@ -29,6 +30,8 @@
 %%%%%%%%%%%%%%
 %%% DRAFT WATERMARK -- remove when finished!
 \usepackage[firstpage]{draftwatermark}
+\SetWatermarkText{DRAFT}
+\SetWatermarkScale{5}
 %%%%%%%%%%%%%%
 
 % Define Program Code Styles
@@ -215,7 +218,7 @@ and would otherwise have been left blank.}
 
 \pageintentionallyleftblank{Lorem Ipsum.}
 \include{glossar}
-\printglossaries
+\printglossary[title=Glossar]
 
 \pageintentionallyleftblank{De Seitn homs obsichtlich la lossn.}
 \printindex

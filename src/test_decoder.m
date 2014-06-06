@@ -1,17 +1,17 @@
 
 clear;
 
-%path = ['results',filesep,'watermarked_audio.wav'];
+path = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
 %path = ['results',filesep,'recording.wav'];
 %path = ['results',filesep,'watermarked-der-affe-ist-gut.wav'];
 %path = ['results',filesep,'watermarked-ISP-leicht-gemacht.wav'];
 %path = ['results',filesep,'recording-soundkarte-der-affe-ist-gut.wav'];
 %path = ['results',filesep,'recording-soundkarte-ISP-leicht-gemacht.wav'];
 %path = ['results',filesep,'recording-mikrofon-ISP-leicht-gemacht.wav'];
+%path = ['results',filesep,'recording-mikrofon-flute.wav'];
 %path = ['results',filesep,'watermarked-mp3-der-affe-ist-gut.mp3'];
 %path = ['results',filesep,'watermarked-mp3-ISP-leicht-gemacht.mp3'];
-path = ['results',filesep,'watermarked-mp3-flute.mp3'];
-
+%path = ['results',filesep,'watermarked-mp3-flute.mp3'];
 
 fprintf('processing %s\n',path);
 [signal,fs] = audioread(path);

@@ -41,7 +41,7 @@ wmkbound = min(codewordBitCapacity,wmkLen);
 
 % create payload containing synccodes and watermark segments,
 % only process as many watermark bits as can be encoded
-fprintf('Assembling payload...');
+fprintf('Assembling packages...');
 [payload, payloadSize] = assemblepayload(watermark(1:wmkbound));
 fprintf('DONE\n');
 
@@ -139,6 +139,7 @@ while( not(odg_quality) && esf >= 0.5 )
     
     % if flag not set, we don't care for the odg --> break anyway
     if not(Setting.consider_odg)
+        fprintf('ODG ignored\n');
         break;
     end
     

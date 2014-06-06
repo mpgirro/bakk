@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+streamfile="teststream"
+tooldir="../bin"
+
 if [ $# -ne 3 ]
 then
 	echo "usage: ./stirmark_test <testfile> <samplerate> <channels>"
@@ -10,9 +13,6 @@ fi
 testfile=$1
 samplerate=$2
 channels=$3
-
-# this will be 
-streamfile="teststream"
 
 # run these attack with these params on the file
 attack_list=(	"AddNoise:100"
@@ -26,13 +26,13 @@ attack_list=(	"AddNoise:100"
 			)
 			
 # first convert the audio file to a stream
-./read_write_stream -f $testfile -c 1 > $streamfile
+$tooldir/read_write_stream -f $testfile -c 1 > $streamfile
  
 # run all attacks and convert results to audiofiles
 for attack in "${attack_list[@]}" ; do
     attack_name=${attack%%:*}
     attack_param=${attack#*:}
-    ./smfa2 --$attack_name $attack_param -s $samplerate < $streamfile | ./read_write_stream -p -s $samplerate -c 1 -f ${testfile%.wav}-attacked-$attack_name-$attack_param.wav
+    $tooldir/smfa2 --$attack_name $attack_param -s $samplerate < $streamfile | $tooldir/read_write_stream -p -s $samplerate -c 1 -f ${testfile%.wav}-attacked-$attack_name-$attack_param.wav
 done
 
 

@@ -1,14 +1,29 @@
 \chapter{Analyse}
 \label{ch:analyse}
 
-
+Um die Effizient des implementierten Verfahrens bewerten zu können wurde es einer umfangreichen Evaluierung unterzogen. Die Ergebnisse sind in diesem Kapitel gesammelt. 
 
 \section{Payload Performance}
 \label{sec:payloadperformance}
 
-\section{Stirmark Benchmarks}
+TBD
 
-Hierfür wird wohl Stirmark Benchmarks\cite{petitcolas2000watermarking}\cite{petitcolas2004stirmark} (\url{http://www.petitcolas.net/fabien/watermarking/stirmark/}) verwendet werden
+\section{Watermark Hörbarkeit}
+
+\section{Robustheit mittels Stirmark Benchmarks}
+
+Lange war es ein Problem verschiedene Watermarkingverfahren miteinander zu vergleichen, da die Kriterien nach denen getestet wurde von jedem Enwtickler selbst definiert wurden. Es fehle ein entsprechender Standard. Zu diesem Zweck wurden Anfang des neuen Jahrtausends die sog. \textit{StirMark Benchmarks}\index{Stirmark Benchmark} definiert\cite{petitcolas2000watermarking}\cite{petitcolas2004stirmark}, die derzeit in der Version 4.0 vorliegen. Dabei handelt es sich um ein definiertes Set an Angriffsverfahren\index{Angriffverfahren} die auf markierte Daten angewendet werden können. Eine Auswertung der so bearbeiteten Daten und ein Vergleich mit dem Original erlaubt somit Rückschlüsse auf die Stärken und Schwächen eines Watermarkingalgorithmuses, besonders auf verschiedene Angriffsfamilien (wie wir noch sehen werden), sowie eine Vergleich mit anderen Watermarkingverfahren. Jedoch werden nicht alle Angriffsszenarien welche testenswert wären auch definiert und bereitgestellt\cite{steinebach2002stirmark}.
+
+Für die Auswertung von Audiodaten gibt es eine dedizierte \textit{Stirmark for Audio} Version\cite{stirmarkforaudio}. Auf deren Verwendung wir kurz in Anhang \ref{ch:stirmarkaudio} eingegangen, da sich die Verwendung als nicht trivial herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine, weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu abstrahieren\cite{petitcolas2001public}. Eine Umsetzung dieser ist jedoch nicht abzusehen. 
+
+Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese Implementierung wurde mit den in den folgenden Testergebnissen angegebenen Parameter strapaziert, welche mit jenen von Xiangs Evaluierung\cite{xiang2007robust} übereinstimmen, insofern sie rekonstruiert werden konnten - einige der Angaben passen nicht auf die von Stirmark for Audio bereitsgestellte API. 
+
+Wie in \cite{lang2004stirmark} eingehend erläutert wird sind die Parameter entscheident für die Auswirkung auf das Audiosignal. Die 3 größen Signaltypen Sprache, Musik und Geräusch haben alle unterschiedliche Stärken und Schwächen gegenüber einem Angriffstyp und dessen Variationen definiert durch seine Parameter. 
+
+Da die Testdaten von Xiang nicht vorhanden sind, wurden verschiedene Audiosignale getestet die sowohl zu Xiangs Testdaten ähnliche Inhalte wie auch weitere abbilden. Im Folgenden finden sich die Ergebnisse einer 19 Sekunden langen Audioaufnahme, welches versucht sowohl Sprache wie auch Musik und Arten von Geräuschen abzubilden. Die relativen Ergebnisse sind exemplarisch vergleichbar mit den weiteren E
+
+
+ 
 
 \section{Manuelle Synchronisation}
 

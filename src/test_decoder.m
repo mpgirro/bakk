@@ -1,7 +1,9 @@
 
 clear;
 
-path = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
+%path = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
+path = ['..',filesep,'results',filesep,'watermarked-holgi.wav'];
+%path = ['..',filesep,'results',filesep,'watermarked-flute.wav'];
 %path = ['results',filesep,'recording.wav'];
 %path = ['results',filesep,'watermarked-der-affe-ist-gut.wav'];
 %path = ['results',filesep,'watermarked-ISP-leicht-gemacht.wav'];
@@ -15,7 +17,7 @@ path = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
 
 fprintf('processing %s\n',path);
 [signal,fs] = audioread(path);
-watermark = decoder(signal);
+watermark = decoder(signal,fs);
 
 messageLength = Setting.message_length;
 wmk_bin = reshape(watermark, messageLength, numel(watermark)/messageLength)';

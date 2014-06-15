@@ -13,9 +13,9 @@ resync_success = int8(0);
 fprintf('Starting resynchronisation...');
 
 originalFrameLength = Setting.frame_length;
-stepLength = floor(originalFrameLength * 0.005); % we will change the framelength in 0.5% steps
-lowerBound = floor(originalFrameLength - 0.1 * originalFrameLength);
-upperBound = floor(originalFrameLength + 0.1 * originalFrameLength);
+stepLength = floor(originalFrameLength * 0.01); % we will change the framelength in 0.5% steps
+lowerBound = floor(originalFrameLength - 0.05 * originalFrameLength);
+upperBound = floor(originalFrameLength + 0.05 * originalFrameLength);
 
 signalSize = size(oldSignal);
 signalSize = signalSize(1);

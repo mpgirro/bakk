@@ -1,4 +1,4 @@
-function [watermark] = decoder( signal, fs )
+function [watermark] = eval_decoder( signal )
 
 signalSize      = size(signal);
 signalSize      = signalSize(1);
@@ -22,16 +22,13 @@ wmkBufferCursor = 1;
 sampleCursor    = 1;
 dataStructCount = 0;
 
+packets_lost = 0;
+payload_damaged = 0;
+
 % Calculate the last sample it makes sense to start searching in. After
 % this point, the signal is not able to hold and entire sync code +
 % corresponting watermark sequence. Therefore, the following bit are random
 lastSampleToStartSearching = signalSize-dataStructSampleLen;
-
-% ALL VERY TESTY HERE!
-[ newSignal, success ] = resynchronize( signal );
-%audiowrite(['..',filesep,'tmp',filesep,'resynchronized-signal.wav'],newSignal, fs);
-%signal = newSignal;
-% - - - - - - - - - - 
 
 fprintf('Extracted messages:\n');
 
@@ -41,42 +38,47 @@ while sampleCursor <= lastSampleToStartSearching
     syncCodeWindow = sampleCursor : sampleCursor+syncSampleLen-1;% -1 due to the nature of matlab sequence notation
     
     syncCodeFound = synccodedetector(signal(syncCodeWindow), frameLength);
-    
-    if syncCodeFound
-        % GOOD! this means the next X samples will hold watermark data
-        
-        % move sample cursor behind the end of the synccode window
-        sampleCursor = sampleCursor + syncSampleLen;
-        
-        wmkDataWindow = sampleCursor : sampleCursor+wmkSampleLen-1;
-        wmkData = wmkdataextractor(signal(wmkDataWindow));
-        
-        wmkBuffer(wmkBufferCursor : wmkBufferCursor+messageLength-1) = wmkData;
-        wmkBufferCursor = wmkBufferCursor+messageLength;
-        
-        fmt=[repmat('%d ',1,messageLength) '--> %d\n'];
-        wmk_dec = bi2de(wmkData','left-msb');
-        fprintf(fmt,wmkData', wmk_dec);
-       
-        
-        % move sample cursor to the end of the window
-        sampleCursor = sampleCursor + wmkSampleLen;
-        
-        dataStructCount = dataStructCount+1;
-    else
-        % BAD! shift sample cursor and try again
-        sampleCursor = sampleCursor+100;
+    if ~syncCodeFound
+        packets_lost = packets_lost + 1;
     end
+    
+    % GOOD! this means the next X samples will hold watermark data
+    
+    % move sample cursor behind the end of the synccode window
+    sampleCursor = sampleCursor + syncSampleLen;
+    
+    wmkDataWindow = sampleCursor : sampleCursor+wmkSampleLen-1;
+    wmkData = wmkdataextractor(signal(wmkDataWindow));
+    
+    wmkBuffer(wmkBufferCursor : wmkBufferCursor+messageLength-1) = wmkData;
+    wmkBufferCursor = wmkBufferCursor+messageLength;
+    
+    fmt=[repmat('%d ',1,messageLength) '--> %d (SOLL %d) \t > %c\n'];
+    wmk_dec = bi2de(wmkData','left-msb');
+    decode_success = 'X';
+    if wmk_dec == dataStructCount
+        decode_success = 'O';
+    else
+        payload_damaged = payload_damaged + 1;
+    end
+    fprintf(fmt,wmkData', wmk_dec, dataStructCount, decode_success);
+    
+    
+    % move sample cursor to the end of the window
+    sampleCursor = sampleCursor + wmkSampleLen;
+    
+    dataStructCount = dataStructCount+1;
+    
     
     if dataStructCount > dataStructCapacity
-       break; 
+        break;
     end
     
-%     % check if there is still space left in the signal to encode more 
-%     % (sync, wmk)-data-structures
-%     if sampleCursor + dataStructSampleLen > signalSize
-%         break;
-%     end
+    %     % check if there is still space left in the signal to encode more
+    %     % (sync, wmk)-data-structures
+    %     if sampleCursor + dataStructSampleLen > signalSize
+    %         break;
+    %     end
     
     
 end
@@ -97,6 +99,11 @@ fprintf('%d bit total payload\n',dataStructCount*syncSequenceLen + dataStructCou
 fprintf('%d data struct packages\n',dataStructCount);
 fprintf('%d watermark data bits\n',wmkBufferCursor-1);
 
+fprintf('Packets lost: %d\n',packets_lost);
+fprintf('Damaged payloads: %d\n',payload_damaged);
+
 end
+
+
 
 

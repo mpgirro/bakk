@@ -10,15 +10,42 @@ TBD
 
 \section{Watermark Hörbarkeit}
 
+Die Resultate werden von der Implementierung immer mit den Tools EAQUAL und PQevalAudio bewertet. Dabei hat sich gezeigt, dass der berechnete ODG\index{Objective Difference Grade} bei einer $\mbox{esf}=1$ meistens kleiner $-3$ liegt, wobei PQevalAudio traditionell etwas schlechter bewertet. Per Definition des PEAQ\index{Perceptual Evaluation of Audio Quality} Standards werden Werte kleiner $-2$ als \glqq{}Slightly annoying\grqq{} eingestuft und ab $-3$ gelten die Signalveränderungen als \glqq{}Annoying\grqq{}. In subjektiven Hörtests mit verschiedenen handelsüblichen Kopfhörern wie sie etwa bei Smartphones beiliegen bestätigen diese Einschätzungen. Über Laptop oder PC Lautsprecher sind die Watermarks hingegen selten bis gar nicht wahrzunehmen. 
+
+Dennoch ist in diesen Fällen eine Reduktion der Embedding Strength\index{Embedding Strength} über den Embedding Strength Factor\index{Embedding Strength Factor} (esf) vorgesehen. Jedoch hat sich ebenfalls gezeigt, dass eine interative Reduktion des esf um 10\% kaum eine Auswirkung auf die resultierenden ODGs hat.
+
 \section{Robustheit mittels Stirmark Benchmarks}
 
 Lange war es ein Problem verschiedene Watermarkingverfahren miteinander zu vergleichen, da die Kriterien nach denen getestet wurde von jedem Enwtickler selbst definiert wurden. Es fehlte ein entsprechender Standard. Zu diesem Zweck wurden Anfang des neuen Jahrtausends die sog. \textit{StirMark Benchmarks}\index{Stirmark Benchmark} definiert\cite{petitcolas2000watermarking}\cite{petitcolas2004stirmark}, die derzeit in der Version 4.0 vorliegen. Dabei handelt es sich um ein definiertes Set an Angriffsverfahren\index{Angriffverfahren} die auf markierte Daten angewendet werden können. Eine Auswertung der so bearbeiteten Daten und ein Vergleich mit dem Original erlaubt Rückschlüsse auf die Stärken und Schwächen eines Watermarkingalgorithmuses, besonders auf verschiedene Angriffsfamilien (wie wir noch sehen werden), sowie eine Vergleich mit anderen Watermarkingverfahren. Jedoch werden nicht alle Angriffsszenarien welche testenswert wären auch definiert und bereitgestellt\cite{steinebach2002stirmark}.
 
 Für die Auswertung von Audiodaten gibt es eine dedizierte \textit{Stirmark for Audio} Version\cite{stirmarkforaudio} (aktuelle v1.3.2). Auf deren Verwendung wir kurz in Anhang \ref{ch:stirmarkaudio} eingegangen, da sich die Verwendung als nicht trivial herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine, weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu abstrahieren\cite{petitcolas2001public}. Eine Umsetzung dieser ist jedoch nicht abzusehen. 
 
-Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese Implementierung wurde mit den in den folgenden Testergebnissen angegebenen Parameter strapaziert, welche mit jenen von Xiangs Evaluierung\cite{xiang2007robust} übereinstimmen, insofern sie rekonstruiert werden konnten. Einige der Angaben passen jedoch nicht auf die von Stirmark for Audio bereitsgestellte API. 
+Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese Implementierung wurde mit den in den folgenden Testergebnissen angegebenen Parameter strapaziert, welche mit jenen von Xiangs Evaluierung\cite{xiang2007robust} übereinstimmen, insofern sie rekonstruiert werden konnten. Einige der Angaben passen jedoch nicht auf die von Stirmark for Audio bereitsgestellte API. Andere Angriffe werden zwar als besonders effektiv aufgezählt, ihre Parameter jedoch nicht angegeben, was einen Vergleich ebenfalls nicht ermöglicht. 
 
-Wie in \cite{lang2004stirmark} eingehend erläutert wird sind die Parameter entscheident für die Auswirkung auf das Audiosignal. Die 3 größen Signaltypen Sprache, Musik und Geräusch haben alle unterschiedliche Stärken und Schwächen gegenüber einem Angriffstyp und dessen Variationen definiert durch seine Parameter. 
+Wie in \cite{lang2004stirmark} eingehend erläutert wird sind die Parameter der Angriffe entscheident für die Auswirkung auf das Audiosignal. Die 3 größen Signaltypen Sprache, Musik und Geräusch haben alle unterschiedliche Stärken und Schwächen gegenüber einem Angriffstyp und dessen Variationen definiert durch seine Parameter. 
+
+Tabelle \ref{tab:algo_settings} zeigt die Parameter mit denen die Implementierung den Watermarkungprozess durchgeführt hat. 
+
+\begin{table}[h]
+\begin{tabular}{lrl}
+\hline
+\textbf{Parameter}                       & \textbf{Wert} & \textbf{Kommentar}                       \\ \hline
+Wavelet-Function (${f}_{w}$)             & db1           &                                          \\
+DWT-Level (${D}_{k}$)                    & 6             &                                          \\
+Subband-Length (${N}_{E}$)               & 8             &                                          \\
+Embedding Strength Factor (esf)          & 1             & Schreiben am math. möglichen Limit       \\
+Bufferzone Scaling Factor                & 0.1           & 10\% der Sample Section Length           \\
+Synchronisations Code Length (${L}_{s}$) & 13            & Barker Code mit 13 Bit                   \\
+Barker Threshold (${T}_{s}$)             & 0.8           &                                          \\
+Error Correction Methode                 & BCH           &                                          \\
+Message-Length (${L}_{m}$)               & 5             &                                          \\
+Codeword-Length (${L}_{c}$)              & 15            &                                          \\
+ODG                             		 & false         & erzwinge maximale Watermarkstärke  		\\ \hline
+                                                                   
+\end{tabular}                             
+\caption{Parameter der Implementierung für die Testfälle}
+\label{tab:algo_settings}
+\end{table}	
 
 Da die Testdaten von Xiang nicht vorhanden sind, wurden verschiedene Audiosignale getestet die sowohl zu den von Xiang beschriebenen Testdateninhalten wie auch weitere abbilden. In Tabelle \ref{tab:stirmark} finden sich die Ergebnisse einer 19 Sekunden langen Audioaufnahme, welches versucht sowohl Sprache wie auch Musik und Arten von Geräuschen abzubilden. Die \textit{Bitfehlerhäufigkeit}\index{Bit error rate} (engl. \textit{Bit error rate},  BER) hat sich dabei als relativ repräsentativ für die übrigen Testdaten herausgestellt. 
 
@@ -26,11 +53,11 @@ Die verwendeten Abkürzungen stehen hier für:
 
 \begin{description}
 	
-\item[PL] \textit{Packet loss}\index{Packet loss}. Ein Paket wird als verloren klassifiziert, wenn der Synccode-Threshold\index{Synccode-Threshold} von der gelesenen Synccode\index{Synchronisations-Code} Bitsequenz nicht überschritten wurde, das die Bits zu sehr in Mitleidenschaft gezogen worden sind. Das Paket wäre somit nicht als solches erkannt worden. 
+\item[PL] \textit{Package loss}\index{Package loss}. Ein Paket wird als verloren klassifiziert, wenn der Synccode-Threshold\index{Synccode-Threshold} von der gelesenen Synccode\index{Synchronisations-Code} Bitsequenz nicht überschritten wurde, das die Bits zu sehr in Mitleidenschaft gezogen worden sind. Das Paket wäre somit nicht als solches erkannt worden. 
 
-\item[DM] \textit{Damaged message}. Die Anzahl jener Pakete deren Informations Bits so fehlerhaft sind, dass das Codeword\index{Codeword} nicht mehr in die korrekte Message\index{Message} übersetzt werden konnte. Die Message ist daher unbrauchbar.
+\item[DM] \textit{Damaged message}. Jener Pakete deren Informations Bits so fehlerhaft sind, dass das Codeword\index{Codeword} nicht mehr in die korrekte Message\index{Message} übersetzt werden konnte. Die Message ist daher unbrauchbar.
 
-\item[EMB] \textit{Erroneous message bits}. Absolutwert gekippter Bits in allen Messages des Signals. 
+\item[EMB] \textit{Erroneous message bits}. Absolute Anzahl gekippter Bits in allen Messages des Signals. 
 
 \item[BER] \textit{Bit error rate}\index{Bit error rate}. Das Verhältnis 
 
@@ -42,43 +69,51 @@ Die verwendeten Abkürzungen stehen hier für:
 
 Sync Blöcke \index{Sync Block} und Informations Blöcke\index{Information Block} wurden seperat behandelt. Somit wurde sichergestellt, dass auch die Daten der nicht erkannten Pakete analysiert werden konnten.  
 
+		
+		
+		
+
 \begin{table}[h]
 \small
 \begin{tabular}{llrrrr}
 \hline
 \multicolumn{1}{c}{\textbf{Angriff}} & \multicolumn{1}{c}{\textbf{Parameter}} & \multicolumn{1}{c}{\textbf{PL}} & \multicolumn{1}{c}{\textbf{DM}} & \multicolumn{1}{c}{\textbf{EMB}} & \multicolumn{1}{c}{\textbf{BER}} \\ \hline
-Original                             &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
-AddDynNoise                          & Strength=20                            & 10/17                           & 4                               & 7                                & 8.24\%                           \\
-AddNoise                             & Strength=100                           & 6/17                            & 0                               & 0                                & 0\%                              \\
-AddNoise                             & Strength=500                           & 15/17                           & 2                               & 4                                & 4.71\%                           \\
-AddNoise                             & Strength=900                           & 15/17                           & 5                               & 10                               & 11.76\%                          \\
-AddSinus                             & Amplitude=900, Frequency=1300          & 15/17                           & 11                              & 25                               & 29.41\%                          \\
-Amplify                              & Factor=50                              & 0/17                            & 0                               & 0                                & 0\%                              \\
-CutSamples                           & RemoveDist=10, RemoveNumber=1          & 17/17                           & 14                              & \multicolumn{2}{r}{FAILED}                                          \\
-Echo                                 & Period=10                              & 15/17                           & 11                              & 27                               & 31.76\%                          \\
-Echo                                 & Period=50                              & 17/17                           & 14                              & 36                               & 42.35\%                          \\
-Exchange                             &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
-ExtraStereo                          & Strength=30                            & 0/17                            & 0                               & 0                                & 0\%                              \\
-ExtraStereo                          & Strength=50                            & 0/17                            & 0                               & 0                                & 0\%                              \\
-ExtraStereo                          & Strength=70                            & 1/17                            & 0                               & 0                                & 0\%                              \\
-FFT\_Invert                          & FFTSIZE=16384                          & 0/17                            & 0                               & 0                                & 0\%                              \\
-FFT\_RealReverse                     & FFTSIZE=16384                          & 17/17                           & 18                              & \multicolumn{2}{r}{FAILED}                                          \\
-FlippSample                          & Period=10, FlippCount=2, FlippDist=6   & 12/17                           & 6                               & 12                               & 14.12\%                          \\
-Invert                               &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
-RC\_LowPass                          & LowPassFrequency=9000                  & 0/17                            & 0                               & 0                                & 0\%                              \\
-Smooth                               &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
-Smooth2                              &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
-Stat1                                &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
-ZeroCross                            & ZeroCross=1000                         & 6/17                            & 0                               & 0                                & 0\%                              \\
-ZeroLength                           & ZeroLength=10                          & 17/17                           & 15                              & 40                               & 47.06\%                          \\ \hline
+Original         &                                      & 0\%    & 0\%    & 0   & 0\%    \\
+AddDynNoise      & Strength=20                          & 58,8\% & 23,5\% & 7   & 8,2\%  \\
+AddNoise         & Strength=100                         & 35,3\% & 0\%    & 0   & 0\%    \\
+AddNoise         & Strength=500                         & 88,2\% & 11,8\% & 4   & 4,7\%  \\
+AddNoise         & Strength=900                         & 88,2\% & 29,4\% & 10  & 11,8\% \\
+AddSinus         & Amplitude=900, Frequency=1300        & 88,2\% & 64,7\% & 25  & 29,4\% \\
+Amplify          & Factor=50                            & 0\%    & 0\%    & 0   & 0\%    \\
+CutSamples       & RemoveDist=10, RemoveNumber=1        & 100\%  & 82,4\% & 37  & 43,5\% \\
+Echo             & Period=10                            & 88,2\% & 64,7\% & 27  & 31,8\% \\
+Echo             & Period=50                            & 100\%  & 82,4\% & 36  & 42,4\% \\
+Exchange         &                                      & 0\%    & 0\%    & 0   & 0\%    \\
+ExtraStereo      & Strength=30                          & 0\%    & 0\%    & 0   & 0\%    \\
+ExtraStereo      & Strength=50                          & 0\%    & 0\%    & 0   & 0\%    \\
+ExtraStereo      & Strength=70                          & 5,9\%  & 0\%    & 0   & 0\%    \\
+FFT\_Invert      & FFTSIZE=16384                        & 0\%    & 0\%    & 0   & 0\%    \\
+FFT\_RealReverse & FFTSIZE=16384                        & 100\%  & 100\%  & 41  & 48,2\% \\
+FlippSample      & Period=10, FlippCount=2, FlippDist=6 & 70,6\% & 35,3\% & 12  & 14,1\% \\
+Invert           &                                      & 0\%    & 0\%    & 0   & 0\%    \\
+RC\_LowPass      & LowPassFrequency=9000                & 0\%    & 0\%    & 0   & 0\%    \\
+Smooth           &                                      & 0\%    & 0\%    & 0   & 0\%    \\
+Smooth2          &                                      & 0\%    & 0\%    & 0   & 0\%    \\
+Stat1            &                                      & 0\%    & 0\%    & 0   & 0\%    \\
+ZeroCross        & ZeroCross=1000                       & 35,3\% & 0\%    & 0   & 0\%    \\
+ZeroLength       & ZeroLength=10                        & 100\%  & 88,2\% & 40  & 47,1\% \\ \hline
 \end{tabular}
 
 \caption{Robustheit gegen die \textit{Stirmark for Audio} Angriffe}
 \label{tab:stirmark}
 \end{table}
 
-Tabelle \ref{tab:stirmark} zeigt sehr schön auf, wo die Schwächen des Watermarkingverfahren liegen. Sämtliche verfahren, welche das Frequenzspektrum des Signals beeinflussen, wirken sich negativ auf die BER\index{Bit error rate} aus. Besonders jene Verfahren die die Sampleanzahl beeinflussen
+Aus Tabelle \ref{tab:stirmark} ist gut zu erkennen, wo die Schwächen des Watermarkingverfahren liegen. Sämtliche Angriffe die das Frequenzspektrum des Signals beeinflussen wirken sich negativ auf die BER\index{Bit error rate} aus. Hier zeigt sich aber auch, dass die Fehlerkorrektur sehr wohl wirksam ist. So kann sie wie man sieht vor allem bei additivem Noise den resultierenden Fehler vergleichsweise klein halten. 
+Allerdings seit hier darauf hingewießen, dass trotz vergleichsweise moderatem BER dennoch viele Pakete unreparierbar beschädigt werden. Die Literatur beschränkt sich oftmals auf die reine Bewertung des BER, ohne auf diesen Umstand einzugehen. 
+
+Anders sieht es für die Synchronisations-Codes aus. Der Package loss\index{Package loss} ist vergleichsweise viel höher. Offenbar ist der Synccode-Threshold\index{Synccode-Threshold}) ${T}_{s}$ zu restriktiv, um die Bitfehler in den \texttt{sync} Sequenzen auszugleichen.
  
+\newpage
 
 \section{Manuelle Synchronisation}
 
@@ -92,23 +127,14 @@ Um die Ursachen für die scheiterne Übertragung im analogen Bereich zu analysie
 
 + error correction
 
-\section{Robustheit}
+\section{Resampling}
 
-\subsection{MP3}
+Jedes Testsignal wurde auf die Abtastraten\index{Abtastrate} 8000, 11025, 22050, 44100 und 48000 gesampled. Bei jedes Sampling Rate außer der ursprünglichen liegt ein vollständiger Datenverlust vor. Dies verwundert weiter auch nicht, bedenkt man Formel \ref{equ:samplseclength} die definiert wie viele Samples für die Kodierung eines Bits notwendig sind. Ein Resampling bedeutet aber das eine fixe Signallänge (in Sekunden) in nachher mehr oder weniger Abtastwerten abgebildet wird. Somit bilden die vom Algorithmus bei der Dekodierung betrachteten Samplewerte einen falschen Zeitraum ab, in dem natürlich keine gültigen Bits enthalten sind. 
 
-\subsection{Lautstärke}
+\section{Kompression}
 
-\subsection{Rauschen}
+Die Implementierung wurde gegen die verlustbehafteten Kompressionsverfahren\index{Kompressionsverfahren} \textit{MP3}, \textit{Ogg Vorbis} und \textit{AAC} bei den Bitraten 32kHz, 64kHz, 96kHz und 128kHz getestet. Hierbei hat sich eine hohe Robustheit herausgestellt. Es trat nie ein fehlerhaftes Bit auf.  
 
-\subsection{Übertragungskanäle}
-
-\subsubsection{Digital}
-
-\subsubsection{Analog}
-
-\paragraph{Signalkabel}
-
-\paragraph{Luft}
 
 
 

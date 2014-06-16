@@ -54,7 +54,7 @@ Das Rekonstruktionsprinzip (vgl. \ref{sec:reconstruction}) bestimmt für das Ver
 Das Problem ist nun zu erkennen wo das Signal absichtlich verändert wurde und wo daher tatsächlich eingebrachte Bits liegen. In der Literatur findet sich dazu das Konzept der Synchron\-isations-Codes\cite{xiang2007robust}\cite{chang2012location}\cite{li2000transparent}\cite{ansari2004data}\cite{huang2002blind}\cite{petrovic1999data}\cite{wu2005efficiently}. Prinzipiell handelt es sich dabei um einen Mechanismus, der bestimmte Bereiche eines Signals markiert. Jedem Marker folgt ein Teil der eigentlichen Information. Die Umsetzung der Markers kann sich durchaus von der eigentlichen Watermarkingmethode unterscheiden, in diesem Fall wird allerdings das selbe Modifikationsprinzip herangezogen. 
 Ein Synchronisation-Code besteht hier aus einer festgelegten Bitsequenz die als Marker dient. Wenn die Bitsequenz dekodiert wird, ist dies das Indiz das Informationsbits folgen. 
 
-Im Folgenden steht $sync$ als Synonym für die Bitsequenz des Synchronisations-Codes und ${L}_{s}$ ist die L\"ange der Bitsequenz (Anzahl an Bit) von $sync$. $sync(i)$ bezeichnet das Bit an der Stelle $i$ des Synchronisation-Codes, mit $i\in[1,{L}_{s}]$.
+Im Folgenden steht \texttt{sync} als Synonym für die Bitsequenz des Synchronisations-Codes und ${L}_{s}$ ist die L\"ange der Bitsequenz (Anzahl an Bit) von \texttt{sync}. $sync(i)$ bezeichnet das Bit an der Stelle $i$ des Synchronisation-Codes, mit $i\in[1,{L}_{s}]$.
 
 \subsubsection{Autokorrelation und Barker-Codes}
 \label{sec:barker-code}
@@ -67,13 +67,13 @@ Die logische Schlussfolgerung ist, dass eine Bitsequenz mit dem Synchronisations
 
 \begin{wrapfigure}{r}{0.45\textwidth}
 	\includegraphics[width=0.45\textwidth]{figures/figure-sync-code-detection.pdf}
-	\caption{$sync$ Erkennung}
+	\caption{\texttt{sync} Erkennung}
 	\label{fig:sync-code-detection}
 \end{wrapfigure}
 
-Abbildung \ref{fig:sync-code-detection} skizziert das Erkennen eines Synchronisations-Codes $sync$\index{Synchronisations-Code}. Der Code wird immer mit einem Block Bits gleicher \mbox{Länge} des extrahierten Bitstroms verglichen. Die in der Skizze blau hervorgehobenen Bits sind das ein\-gebettete $sync$. Die rot markierten Bits signal\-isieren jene Zeichen, die beim \mbox{aktuellen} Vergleich über\-einstimmen. In diesem Beispiel beträgt die Über\-einstimmung zwischen er\-kanntem und tatsächlichem $sync$ 75\% bei einer Synchronisation-Code Wortlänge von 8 Bit. Würde der Erkennungsschwellwert (oder \textit{Synccode-Threshold}\index{Synccode-Threshold}) ${T}_{s}$ 0.75 betragen, so wäre nun $sync$ erkannt worden. Aus der Skizze ist aber ersichtlich, dass hier der tatsächlich Match erst 2 Shifts später erfolgt. Die anschließend gelesenen Informationsbits würden also teilweise aus dem Ende von $sync$\index{Synchronisations-Code} bestehen. Umgekehrt würden auch 2 echte Bits des Informationsblock\index{Information Block} nicht gelesen werden.
+Abbildung \ref{fig:sync-code-detection} skizziert das Erkennen eines Synchronisations-Codes \texttt{sync}\index{Synchronisations-Code}. Der Code wird immer mit einem Block Bits gleicher \mbox{Länge} des extrahierten Bitstroms verglichen. Die in der Skizze blau hervorgehobenen Bits sind das ein\-gebettete \texttt{sync}. Die rot markierten Bits signal\-isieren jene Zeichen, die beim \mbox{aktuellen} Vergleich über\-einstimmen. In diesem Beispiel beträgt die Über\-einstimmung zwischen er\-kanntem und tatsächlichem \texttt{sync} 75\% bei einer Synchronisation-Code Wortlänge von 8 Bit. Würde der Erkennungsschwellwert (oder \textit{Synccode-Threshold}\index{Synccode-Threshold}) ${T}_{s}$ 0.75 betragen, so wäre nun \texttt{sync} erkannt worden. Aus der Skizze ist aber ersichtlich, dass hier der tatsächlich Match erst 2 Shifts später erfolgt. Die anschließend gelesenen Informationsbits würden also teilweise aus dem Ende von \texttt{sync}\index{Synchronisations-Code} bestehen. Umgekehrt würden auch 2 echte Bits des Informationsblock\index{Information Block} nicht gelesen werden.
 
-Das Problem in diesem Beispiel ist, dass $sync$\index{Synchronisations-Code} eine sehr hohe \textit{Autokorrelation}\index{Autokorrelation} besitzt. In anderen Worten ist $sync$ (als Signal aufgefasst) sehr ähnlich zu sich selbst, weswegen 75\% Überdeckung auch zu 75\% Übereinstimmung führen. Die Lösung ist für $sync$\index{Synchronisations-Code} ein Sequenz mit minimaler Autokorrelation zu wählen. In der Literatur\cite{huang2002blind}\cite{lie2006robust}\cite{chang2012location} erfreuen sich die sog. \textit{Barker-Codes}\cite{barker1953group} großer Beliebtheit. Dabei handelt es sich um 9 Zahlensequenzen von denen der längste 13 Zeichen umfasst, welche alle die Bedingung der Autokorrelations-Funktion:
+Das Problem in diesem Beispiel ist, dass \texttt{sync}\index{Synchronisations-Code} eine sehr hohe \textit{Autokorrelation}\index{Autokorrelation} besitzt. In anderen Worten ist \texttt{sync} (als Signal aufgefasst) sehr ähnlich zu sich selbst, weswegen 75\% Überdeckung auch zu 75\% Übereinstimmung führen. Die Lösung ist für \texttt{sync}\index{Synchronisations-Code} ein Sequenz mit minimaler Autokorrelation zu wählen. In der Literatur\cite{huang2002blind}\cite{lie2006robust}\cite{chang2012location} erfreuen sich die sog. \textit{Barker-Codes}\cite{barker1953group} großer Beliebtheit. Dabei handelt es sich um 9 Zahlensequenzen von denen der längste 13 Zeichen umfasst, welche alle die Bedingung der Autokorrelations-Funktion:
 
 	 \begin{equation}
 		 | \sum\limits_{j=1}^{N-v} a_j {a}_{j+} | \leq 1 \quad\mbox{mit}\quad 1 \leq v < N \quad\mbox{und}\quad a_j \in {-1,+1}
@@ -82,9 +82,9 @@ Das Problem in diesem Beispiel ist, dass $sync$\index{Synchronisations-Code} ein
 
 wobei $N$ die Code Länge bezeichnet, erfüllen. Es lässt sich zeigen, dass die Summe bei einer Verschiebung wie im Beispiel oben immer sehr klein ist, außer die Codes Überdecken sich exakt. Gleichzeitig bleibt die Summe immer noch sehr groß (nahe an 1) wenn bei vollständiger Überdeckung innerhalb des Codes eine Zahl kippt. Ein gekipptes Bit wirkt sich also nicht so massiv auf die Erkennung des Codes aus wie eine falsche Überdeckung. Barker-Codes eignen sich daher hervorragend als Synchronisations-Code Sequenz. 
 
-Die Länge der verwendeten Barker Sequenz wirkt sich natürlich auch auf die Erkennungsgenauigkeit aus. Hier wird der längste Barker-Code \textsf{+1 +1 +1 +1 +1 -1 -1 +1 -1 -1 +1 -1 +1} verwendet. Der Vollständigkeit halber sei noch darauf hingewiesen, dass wir nur Binärwerte kodieren können, weswegen $-1$ auf den Wert $0$ abgebildet wird. Bei der Erkennung von $sync$ muss dies natürlich entsprechend bedacht werden.
+Die Länge der verwendeten Barker Sequenz wirkt sich natürlich auch auf die Erkennungsgenauigkeit aus. Hier wird der längste Barker-Code \textsf{+1 +1 +1 +1 +1 -1 -1 +1 -1 -1 +1 -1 +1} verwendet. Der Vollständigkeit halber sei noch darauf hingewiesen, dass wir nur Binärwerte kodieren können, weswegen $-1$ auf den Wert $0$ abgebildet wird. Bei der Erkennung von \texttt{sync} muss dies natürlich entsprechend bedacht werden.
 
-Synchronisations-Codes werden genau wie die eigentlichen Informationen (die \glqq{}Nutzlast\grqq{}) übertragen. Jeder eingebrachte $sync$\index{Synchronisations-Code} belastet daher die Transportkapazität des Signals. Es können also abhängig von der Informationsblocklänge bedeutend weniger Informationsbits effektiv in einem fixen Zeitfenster transportiert werden. 
+Synchronisations-Codes werden genau wie die eigentlichen Informationen (die \glqq{}Nutzlast\grqq{}) übertragen. Jeder eingebrachte \texttt{sync}\index{Synchronisations-Code} belastet daher die Transportkapazität des Signals. Es können also abhängig von der Informationsblocklänge bedeutend weniger Informationsbits effektiv in einem fixen Zeitfenster transportiert werden. 
 
 \index{Barker-Code|)}
 \index{Synchronisations-Code|)}
@@ -162,7 +162,7 @@ Um die Buffer Zones einfacher handzuhaben werden Sie in den \textit{Frames} wega
 \subsubsection{Sync Block}
 \index{Sync Block}
 
-Ein Synchronisations-Code\index{Synchronisations-Code} besteht aus $L_s$\index{Synchronisations-Code-Length} Bit, daher sind ebenso viele Frames notwendig um ein $sync$ zu schreiben. Diese Gruppe an Frames wird als \textit{Sync Block} bezeichnet.
+Ein Synchronisations-Code\index{Synchronisations-Code} besteht aus $L_s$\index{Synchronisations-Code-Length} Bit, daher sind ebenso viele Frames notwendig um ein \texttt{sync} zu schreiben. Diese Gruppe an Frames wird als \textit{Sync Block} bezeichnet.
 
 \subsubsection{Information Block}
 \index{Information Block}
@@ -225,6 +225,8 @@ Offensichtlich ist es als notwendig ein automatisch berechenbares Qualitätskrit
 Leider hat sich recht bald herausgestellt, dass die Berechnung des ODGs nicht hinreichend genau spezifiziert ist\cite{kabal2002examination}\cite{campeanu2005peaq}, was sich auch in der Qualität der derzeit vorhandenen Tools wiederspiegelt. Eine kurze Evaluierung gängiger PEAQ Implementierungen findet sich in Anhang \ref{ch:peaq}.
 
 \index{Qualitätskontrolle|)}
+
+\newpage
 
 \section{Watermark Extrahierung}
 \label{sec:extraction}
@@ -291,11 +293,11 @@ Zuerst gilt es die neue Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ 
 	\Cursor = \Cursor + 0.1 * \Lowerbound\; 
 }
 
-\caption{$sync$ Erkennung bei der Resynchronisation}
+\caption{\texttt{sync} Erkennung in der Resynchronisationsphase}
 \label{alg:resync}
 \end{algorithm}
 
-Wurde ein $sync$\index{Synchronisations-Code} gefunden, so kann man das Verhältnis zwischen neuer und alter Sampleanzahl
+Wurde ein \texttt{sync}\index{Synchronisations-Code} gefunden, so kann man das Verhältnis zwischen neuer und alter Sampleanzahl
 
 	\begin{equation}
 		\alpha = { {N}_{s}' \over {N}_{s} }
@@ -320,11 +322,11 @@ wobei $f'(i)$ die alten Werte und $\beta = \alpha \cdot i - \lfloor \alpha \cdot
 
 \subsection{Datenextrahierung}
 
-Nach der Resynchronisation kann das Signal schrittweise durchlaufen und nach $sync$ Sequenzen gescannt werden. Dabei wird das Signal genau so wie in der Implementierungsphase in Samples Sections zerteilt, die DWT-Koeffizienten für die Samples berechnet und nach dem Prinzip aus Kapitel \ref{sec:reconstruction} für jedes Segment ein binärer Wert bestimmt. Anschließend werden immer $L_s$\index{Synchronisations-Code-Length} aufeinander folgende Binärwerte auf ihre Übereinstimmung mit dem Synchronisations-Code\index{Synchronisations-Code} $sync$ überprüft.
+Nach der Resynchronisation kann das Signal schrittweise durchlaufen und nach \texttt{sync} Sequenzen gescannt werden. Dabei wird das Signal genau so wie in der Implementierungsphase in Samples Sections zerteilt, die DWT-Koeffizienten für die Samples berechnet und nach dem Prinzip aus Kapitel \ref{sec:reconstruction} für jedes Segment ein binärer Wert bestimmt. Anschließend werden immer $L_s$\index{Synchronisations-Code-Length} aufeinander folgende Binärwerte auf ihre Übereinstimmung mit dem Synchronisations-Code\index{Synchronisations-Code} \texttt{sync} überprüft.
 
 Erfolgt ein Match auf den Synchronisations-Code, so sind die folgenden $L_c$\index{Codeword-Length} Bit als Informationsbits aufzufassen. Da es sich um ein Codeword\index{Codeword} handelt, muss noch der Dekodierungsalgorithmus des ECC\index{error-correcting code} angewendet werden, um die Message\index{Message} zu erhalten. Die einzelnen Messages ergeben schließlich zusammengesetzt die eigentliche Information. 
 
-Wie man sich anhand der Abbildung \ref{fig:protocol} leicht überlegen kann, können immer nachdem ein Codeword erfolgreich gelesen wurde die folgenden $L_c$\index{Codeword-Length} Samples Sections \index{Sample Section} auf der Suche nach weiteren $sync$\index{Synchronisations-Code} Sequenzen übersprungen werden.
+Wie man sich anhand der Abbildung \ref{fig:protocol} leicht überlegen kann, können immer nachdem ein Codeword erfolgreich gelesen wurde die folgenden $L_c$\index{Codeword-Length} Samples Sections \index{Sample Section} auf der Suche nach weiteren \texttt{sync}\index{Synchronisations-Code} Sequenzen übersprungen werden.
 
 
 

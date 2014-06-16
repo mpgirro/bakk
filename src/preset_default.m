@@ -1,7 +1,5 @@
 clear;
 
-addpath('../');
-
 % create a new object
 sObj = SettingSingleton.instance();
 

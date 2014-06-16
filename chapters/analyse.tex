@@ -12,17 +12,72 @@ TBD
 
 \section{Robustheit mittels Stirmark Benchmarks}
 
-Lange war es ein Problem verschiedene Watermarkingverfahren miteinander zu vergleichen, da die Kriterien nach denen getestet wurde von jedem Enwtickler selbst definiert wurden. Es fehle ein entsprechender Standard. Zu diesem Zweck wurden Anfang des neuen Jahrtausends die sog. \textit{StirMark Benchmarks}\index{Stirmark Benchmark} definiert\cite{petitcolas2000watermarking}\cite{petitcolas2004stirmark}, die derzeit in der Version 4.0 vorliegen. Dabei handelt es sich um ein definiertes Set an Angriffsverfahren\index{Angriffverfahren} die auf markierte Daten angewendet werden können. Eine Auswertung der so bearbeiteten Daten und ein Vergleich mit dem Original erlaubt somit Rückschlüsse auf die Stärken und Schwächen eines Watermarkingalgorithmuses, besonders auf verschiedene Angriffsfamilien (wie wir noch sehen werden), sowie eine Vergleich mit anderen Watermarkingverfahren. Jedoch werden nicht alle Angriffsszenarien welche testenswert wären auch definiert und bereitgestellt\cite{steinebach2002stirmark}.
+Lange war es ein Problem verschiedene Watermarkingverfahren miteinander zu vergleichen, da die Kriterien nach denen getestet wurde von jedem Enwtickler selbst definiert wurden. Es fehlte ein entsprechender Standard. Zu diesem Zweck wurden Anfang des neuen Jahrtausends die sog. \textit{StirMark Benchmarks}\index{Stirmark Benchmark} definiert\cite{petitcolas2000watermarking}\cite{petitcolas2004stirmark}, die derzeit in der Version 4.0 vorliegen. Dabei handelt es sich um ein definiertes Set an Angriffsverfahren\index{Angriffverfahren} die auf markierte Daten angewendet werden können. Eine Auswertung der so bearbeiteten Daten und ein Vergleich mit dem Original erlaubt Rückschlüsse auf die Stärken und Schwächen eines Watermarkingalgorithmuses, besonders auf verschiedene Angriffsfamilien (wie wir noch sehen werden), sowie eine Vergleich mit anderen Watermarkingverfahren. Jedoch werden nicht alle Angriffsszenarien welche testenswert wären auch definiert und bereitgestellt\cite{steinebach2002stirmark}.
 
-Für die Auswertung von Audiodaten gibt es eine dedizierte \textit{Stirmark for Audio} Version\cite{stirmarkforaudio}. Auf deren Verwendung wir kurz in Anhang \ref{ch:stirmarkaudio} eingegangen, da sich die Verwendung als nicht trivial herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine, weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu abstrahieren\cite{petitcolas2001public}. Eine Umsetzung dieser ist jedoch nicht abzusehen. 
+Für die Auswertung von Audiodaten gibt es eine dedizierte \textit{Stirmark for Audio} Version\cite{stirmarkforaudio} (aktuelle v1.3.2). Auf deren Verwendung wir kurz in Anhang \ref{ch:stirmarkaudio} eingegangen, da sich die Verwendung als nicht trivial herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine, weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu abstrahieren\cite{petitcolas2001public}. Eine Umsetzung dieser ist jedoch nicht abzusehen. 
 
-Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese Implementierung wurde mit den in den folgenden Testergebnissen angegebenen Parameter strapaziert, welche mit jenen von Xiangs Evaluierung\cite{xiang2007robust} übereinstimmen, insofern sie rekonstruiert werden konnten - einige der Angaben passen nicht auf die von Stirmark for Audio bereitsgestellte API. 
+Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese Implementierung wurde mit den in den folgenden Testergebnissen angegebenen Parameter strapaziert, welche mit jenen von Xiangs Evaluierung\cite{xiang2007robust} übereinstimmen, insofern sie rekonstruiert werden konnten. Einige der Angaben passen jedoch nicht auf die von Stirmark for Audio bereitsgestellte API. 
 
 Wie in \cite{lang2004stirmark} eingehend erläutert wird sind die Parameter entscheident für die Auswirkung auf das Audiosignal. Die 3 größen Signaltypen Sprache, Musik und Geräusch haben alle unterschiedliche Stärken und Schwächen gegenüber einem Angriffstyp und dessen Variationen definiert durch seine Parameter. 
 
-Da die Testdaten von Xiang nicht vorhanden sind, wurden verschiedene Audiosignale getestet die sowohl zu Xiangs Testdaten ähnliche Inhalte wie auch weitere abbilden. Im Folgenden finden sich die Ergebnisse einer 19 Sekunden langen Audioaufnahme, welches versucht sowohl Sprache wie auch Musik und Arten von Geräuschen abzubilden. Die relativen Ergebnisse sind exemplarisch vergleichbar mit den weiteren E
+Da die Testdaten von Xiang nicht vorhanden sind, wurden verschiedene Audiosignale getestet die sowohl zu den von Xiang beschriebenen Testdateninhalten wie auch weitere abbilden. In Tabelle \ref{tab:stirmark} finden sich die Ergebnisse einer 19 Sekunden langen Audioaufnahme, welches versucht sowohl Sprache wie auch Musik und Arten von Geräuschen abzubilden. Die \textit{Bitfehlerhäufigkeit}\index{Bit error rate} (engl. \textit{Bit error rate},  BER) hat sich dabei als relativ repräsentativ für die übrigen Testdaten herausgestellt. 
 
+Die verwendeten Abkürzungen stehen hier für:
 
+\begin{description}
+	
+\item[PL] \textit{Packet loss}\index{Packet loss}. Ein Paket wird als verloren klassifiziert, wenn der Synccode-Threshold\index{Synccode-Threshold} von der gelesenen Synccode\index{Synchronisations-Code} Bitsequenz nicht überschritten wurde, das die Bits zu sehr in Mitleidenschaft gezogen worden sind. Das Paket wäre somit nicht als solches erkannt worden. 
+
+\item[DM] \textit{Damaged message}. Die Anzahl jener Pakete deren Informations Bits so fehlerhaft sind, dass das Codeword\index{Codeword} nicht mehr in die korrekte Message\index{Message} übersetzt werden konnte. Die Message ist daher unbrauchbar.
+
+\item[EMB] \textit{Erroneous message bits}. Absolutwert gekippter Bits in allen Messages des Signals. 
+
+\item[BER] \textit{Bit error rate}\index{Bit error rate}. Das Verhältnis 
+
+	\begin{equation}
+		\mbox{BER} = {\mbox{EMB} \over \mbox{Anzahl an Pakete} \cdot {L}_{m}}
+		\label{equ:ber}
+	\end{equation}
+\end{description}
+
+Sync Blöcke \index{Sync Block} und Informations Blöcke\index{Information Block} wurden seperat behandelt. Somit wurde sichergestellt, dass auch die Daten der nicht erkannten Pakete analysiert werden konnten.  
+
+\begin{table}[h]
+\small
+\begin{tabular}{llrrrr}
+\hline
+\multicolumn{1}{c}{\textbf{Angriff}} & \multicolumn{1}{c}{\textbf{Parameter}} & \multicolumn{1}{c}{\textbf{PL}} & \multicolumn{1}{c}{\textbf{DM}} & \multicolumn{1}{c}{\textbf{EMB}} & \multicolumn{1}{c}{\textbf{BER}} \\ \hline
+Original                             &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
+AddDynNoise                          & Strength=20                            & 10/17                           & 4                               & 7                                & 8.24\%                           \\
+AddNoise                             & Strength=100                           & 6/17                            & 0                               & 0                                & 0\%                              \\
+AddNoise                             & Strength=500                           & 15/17                           & 2                               & 4                                & 4.71\%                           \\
+AddNoise                             & Strength=900                           & 15/17                           & 5                               & 10                               & 11.76\%                          \\
+AddSinus                             & Amplitude=900, Frequency=1300          & 15/17                           & 11                              & 25                               & 29.41\%                          \\
+Amplify                              & Factor=50                              & 0/17                            & 0                               & 0                                & 0\%                              \\
+CutSamples                           & RemoveDist=10, RemoveNumber=1          & 17/17                           & 14                              & \multicolumn{2}{r}{FAILED}                                          \\
+Echo                                 & Period=10                              & 15/17                           & 11                              & 27                               & 31.76\%                          \\
+Echo                                 & Period=50                              & 17/17                           & 14                              & 36                               & 42.35\%                          \\
+Exchange                             &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
+ExtraStereo                          & Strength=30                            & 0/17                            & 0                               & 0                                & 0\%                              \\
+ExtraStereo                          & Strength=50                            & 0/17                            & 0                               & 0                                & 0\%                              \\
+ExtraStereo                          & Strength=70                            & 1/17                            & 0                               & 0                                & 0\%                              \\
+FFT\_Invert                          & FFTSIZE=16384                          & 0/17                            & 0                               & 0                                & 0\%                              \\
+FFT\_RealReverse                     & FFTSIZE=16384                          & 17/17                           & 18                              & \multicolumn{2}{r}{FAILED}                                          \\
+FlippSample                          & Period=10, FlippCount=2, FlippDist=6   & 12/17                           & 6                               & 12                               & 14.12\%                          \\
+Invert                               &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
+RC\_LowPass                          & LowPassFrequency=9000                  & 0/17                            & 0                               & 0                                & 0\%                              \\
+Smooth                               &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
+Smooth2                              &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
+Stat1                                &                                        & 0/17                            & 0                               & 0                                & 0\%                              \\
+ZeroCross                            & ZeroCross=1000                         & 6/17                            & 0                               & 0                                & 0\%                              \\
+ZeroLength                           & ZeroLength=10                          & 17/17                           & 15                              & 40                               & 47.06\%                          \\ \hline
+\end{tabular}
+
+\caption{Robustheit gegen die \textit{Stirmark for Audio} Angriffe}
+\label{tab:stirmark}
+\end{table}
+
+Tabelle \ref{tab:stirmark} zeigt sehr schön auf, wo die Schwächen des Watermarkingverfahren liegen. Sämtliche verfahren, welche das Frequenzspektrum des Signals beeinflussen, wirken sich negativ auf die BER\index{Bit error rate} aus. Besonders jene Verfahren die die Sampleanzahl beeinflussen
  
 
 \section{Manuelle Synchronisation}

@@ -71,7 +71,7 @@ Die logische Schlussfolgerung ist, dass eine Bitsequenz mit dem Synchronisations
 	\label{fig:sync-code-detection}
 \end{wrapfigure}
 
-Abbildung \ref{fig:sync-code-detection} skizziert das Erkennen eines Synchronisations-Codes $sync$\index{Synchronisations-Code}. Der Code wird immer mit einem Block Bits gleicher \mbox{Länge} des extrahierten Bitstroms verglichen. Die in der Skizze blau hervorgehobenen Bits sind das ein\-gebettete $sync$. Die rot markierten Bits signal\-isieren jene Zeichen, die beim \mbox{aktuellen} Vergleich über\-einstimmen. In diesem Beispiel beträgt die Über\-einstimmung zwischen er\-kanntem und tatsächlichem $sync$ 75\% bei einer Synchronisation-Code Wortlänge von 8 Bit. Würde der Erkennungsschwellwert 0.75 betragen, so wäre nun $sync$ erkannt worden. Aus der Skizze ist aber ersichtlich, dass hier der tatsächlich Match erst 2 Shifts später erfolgt. Die anschließend gelesenen Informationsbits würden also teilweise aus dem Ende von $sync$\index{Synchronisations-Code} bestehen. Umgekehrt würden auch 2 echte Bits des Informationsblock\index{Information Block} nicht gelesen werden.
+Abbildung \ref{fig:sync-code-detection} skizziert das Erkennen eines Synchronisations-Codes $sync$\index{Synchronisations-Code}. Der Code wird immer mit einem Block Bits gleicher \mbox{Länge} des extrahierten Bitstroms verglichen. Die in der Skizze blau hervorgehobenen Bits sind das ein\-gebettete $sync$. Die rot markierten Bits signal\-isieren jene Zeichen, die beim \mbox{aktuellen} Vergleich über\-einstimmen. In diesem Beispiel beträgt die Über\-einstimmung zwischen er\-kanntem und tatsächlichem $sync$ 75\% bei einer Synchronisation-Code Wortlänge von 8 Bit. Würde der Erkennungsschwellwert (oder \textit{Synccode-Threshold}\index{Synccode-Threshold}) ${T}_{s}$ 0.75 betragen, so wäre nun $sync$ erkannt worden. Aus der Skizze ist aber ersichtlich, dass hier der tatsächlich Match erst 2 Shifts später erfolgt. Die anschließend gelesenen Informationsbits würden also teilweise aus dem Ende von $sync$\index{Synchronisations-Code} bestehen. Umgekehrt würden auch 2 echte Bits des Informationsblock\index{Information Block} nicht gelesen werden.
 
 Das Problem in diesem Beispiel ist, dass $sync$\index{Synchronisations-Code} eine sehr hohe \textit{Autokorrelation}\index{Autokorrelation} besitzt. In anderen Worten ist $sync$ (als Signal aufgefasst) sehr ähnlich zu sich selbst, weswegen 75\% Überdeckung auch zu 75\% Übereinstimmung führen. Die Lösung ist für $sync$\index{Synchronisations-Code} ein Sequenz mit minimaler Autokorrelation zu wählen. In der Literatur\cite{huang2002blind}\cite{lie2006robust}\cite{chang2012location} erfreuen sich die sog. \textit{Barker-Codes}\cite{barker1953group} großer Beliebtheit. Dabei handelt es sich um 9 Zahlensequenzen von denen der längste 13 Zeichen umfasst, welche alle die Bedingung der Autokorrelations-Funktion:
 
@@ -102,7 +102,8 @@ In der Kodierungstheorie bezeichnet man mit \textit{Message}\index{Message} die 
 Bezeichnen wir mit $wmk$ das zu übertragende Watermark und mit ${L}_{w}$ seine Länge (sog. \textit{Watermark-Length}\index{Watermark-Length}, die Anzahl an Bit) dieses Watermarks, wobei $wmk(i)$ das Bit an der Stelle $i$ mit $i\in[1,{L}_{w}]$ referenziert, so ergeben sich folgende Bedingungen. Für die Bit-L\"ange einer Message ${L}_{m}$, genannt \textit{Message-Length}\index{Message-Length}, muss gelten:
 
 	 \begin{equation}
-		 {L}_{w} \pmod{{L}_{m}} = 0 \quad\mbox{und}\quad {L}_{w}\geq{L}_{m} 		\label{equ:wmkseqlength}
+		 {L}_{w} \pmod{{L}_{m}} = 0 \quad\mbox{und}\quad {L}_{w}\geq{L}_{m} 		
+		 \label{equ:wmkseqlength}
 	 \end{equation} 
 
 und für die Bit-Länge eines Codewords ${L}_{c}$ (sog. \textit{Codeword-Length}\index{Codeword-Length}) gilt allgemein ${L}_{c} > {L}_{m}$
@@ -207,7 +208,13 @@ Definiert in der ITU-T Recommendation P.800\cite{rec1996p} handelt es sich beim 
 
 Der Signal-Rauschabstand oder Signal-Rausch-Verhältnis (engl. \textit{signal-to-noise ratio}, daher kurz SNR) bewertet die technische Qualität eines Signals welches von einem Störsignal überlagert wird. Hier ist zu beachten, dass mit Störsignal nicht jenes im analogen Übertragungskanal\index{\"Ubertragungskanal} gemeint ist. Die Veränderung eines Audiosignals durch das Watermark\index{Watermark} kann bezogen auf das ursprünglich unmodifizierte Signal ebenfalls als Störsignal interpretiert werden. 
 
-Der SNR berechnet sich als $SNR = Nutzsignalleistung / Rauschsignalleistung$, seine Bestimmung ist daher sehr einfach. Leider handelt es sich dabei um eine technisch objektive Güteeigenschaft die das menschliche Hörsystem nicht mit einbezieht und daher als Bewertungskriterium dementsprechend schlecht geeignet ist\cite{xiang2007robust}.
+Der SNR berechnet sich durch: 
+	\begin{equation}	
+		\mbox{SNR} = {\mbox{Nutzsignalleistung} \over \mbox{Rauschsignalleistung}},
+		\label{equ:snr}
+	\end{equation}
+
+seine Bestimmung ist daher sehr einfach. Leider handelt es sich dabei um eine technisch objektive Güteeigenschaft die das menschliche Hörsystem nicht mit einbezieht und daher als Bewertungskriterium dementsprechend schlecht geeignet ist\cite{xiang2007robust}.
 
 \subsubsection{Objective Difference Grade (ODG)} 
 \index{Objective Difference Grade}
@@ -227,7 +234,7 @@ Nachdem das Watermark\index{Watermark} nach den nun beschriebenen Schritten in e
 \begin{figure}[h]
 	\centering
 	%\includesvg[width=0.7\textwidth]{figures/diagram-framework.svg}
-	\includegraphics[width=0.9\textwidth]{figures/diagram-decoder.pdf}
+	\includegraphics[width=0.9\textwidth]{figures/diagram-decoder-v2.pdf}
 	\caption{Schematischer Aufbau des Extraktionsprozesses}
 	\label{fig:diagram-decoder}
 \end{figure}

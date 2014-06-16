@@ -61,20 +61,20 @@ Wie eingangs erwähnt werden wir die relativen Beziehungen dieser Subbänder ver
 		 A = {E}_{max}-{E}_{med} \quad\mbox{und}\quad B = {E}_{med}-{E}_{min} \label{equ:energydifferences}
 	 \end{equation}
 	 
-Um diese Beziehung zu verändern definieren wir die sog. \textit{Embedding Strength}\index{Embedding Strength} $ES$, eine Entscheidungsvariable um den logischen Wert 0 oder 1 zu beschreiben. Die Embedding Strength berechnet sich wie folgt:
+Um diese Beziehung zu verändern definieren wir die sog. \textit{Embedding Strength}\index{Embedding Strength} $\mbox{ES}$, eine Entscheidungsvariable um den logischen Wert 0 oder 1 zu beschreiben. Die Embedding Strength berechnet sich wie folgt:
 	\begin{equation}
-		ES = {1 \over 3} \left[ esf \cdot \sum\limits_{i=1}^{3{N}_{E}}|c_i| \right],
+		\mbox{ES} = {1 \over 3} \left[ \mbox{esf} \cdot \sum\limits_{i=1}^{3{N}_{E}}|c_i| \right],
 		\label{equ:embeddingstrength}
 	\end{equation}
 	
 wobei $esf$ der sog. \textit{Embedding Strength Factor}\index{Embedding Strength Factor}, ein Kontrollparameter für die Stärke der Signalveränderung, ist. Der $esf$ sollte unter der Bedingung der Unhörbarkeit des Watermarks\index{Watermark} maximiert werden (siehe Kapitel \ref{sec:qualitaetskontrolle}).
 	 
-Aus der Summenobergrenze $3 \cdot {N}_{E}$ ist ersichtlich, dass es sich bei der $ES$ um den Mittelwert der Energiewerte der 3 Subbänder handelt.
+Aus der Summenobergrenze $3 \cdot {N}_{E}$ ist ersichtlich, dass es sich bei der $\mbox{ES}$ um den Mittelwert der Energiewerte der 3 Subbänder handelt.
 
 Um einen Wert $a \in\left\{0,1\right\}$ in der Sample Section einzubetten gelten nun folgende Beziehungen:
 
 	 \begin{equation}
-		 A - B \geq ES \iff a = 1 \quad\mbox{und}\quad B - A \geq ES \iff a = 0 \label{equ:embeddingrelationships}
+		 A - B \geq \mbox{ES} \iff a = 1 \quad\mbox{und}\quad B - A \geq \mbox{ES} \iff a = 0 \label{equ:embeddingrelationships}
 	 \end{equation}
 	 
 Sind diese Bedingungen aus der natürlichen Gegebenheit des Signals erfüllt, so ist nichts zu tun. Sollte dies jedoch nicht der Fall sein, so werden die 3 aufeinanderfolgenden Subbänder verändert, bis Formel (\ref{equ:embeddingrelationships}) erfüllt ist. 
@@ -92,7 +92,7 @@ Folgende Regeln angewendet auf die Koeffizienten ${c}_{i},\quad i=1\dots{3\cdot{
 		  \label{equ:modifcoef_case1}
 	 \end{equation}
 	 
-${S}_{min}$ ist das Subband\index{Subband} mit Energiepotential\index{Subband Energy} ${E}_{min}$, äquivalent ${S}_{med}$ und ${S}_{max}$. $|\xi| = |A-B-ES| = ES-A+B = ES - {E}_{max} + 2\cdot {E}_{med} - {E}_{min}$ da $A-B<ES$. Aus Formel (\ref{equ:modifcoef_case1}) ergeben sich folgende neue Sachverhalte:
+${S}_{min}$ ist das Subband\index{Subband} mit Energiepotential\index{Subband Energy} ${E}_{min}$, äquivalent ${S}_{med}$ und ${S}_{max}$. $|\xi| = |A-B-\mbox{ES}| = \mbox{ES}-A+B = \mbox{ES} - {E}_{max} + 2\cdot {E}_{med} - {E}_{min}$ da $A-B<\mbox{ES}$. Aus Formel (\ref{equ:modifcoef_case1}) ergeben sich folgende neue Sachverhalte:
 	 
 	 %\begin{equation}
 	 \begin{eqnarray*}
@@ -110,7 +110,7 @@ ${S}_{min}$ ist das Subband\index{Subband} mit Energiepotential\index{Subband En
 wobei ${E'}_{max}$, ${E'}_{med}$ und ${E'}_{min}$ den maximalen, mittleren und minimalen Energiewert nach der Veränderung bezeichnen. Aus diesen Veränderungen der Koeffizienten können sich die Energiepotenziale der Subbänder ändern. Es kann sein das ${E'}_{med} < {E'}_{min}$, da ${E'}_{min}>{E}_{min},\quad {E}_{min}<{E}_{med}$ und ${E'}_{med}<{E}_{med}$. Um sicherzustellen, dass nach der Anpassung immer noch ${E'}_{med} > {E'}_{min}$ gilt, führen wir folgende Obergrenze für die Embedding Strength\index{Embedding Strength} ein:
 
 	\begin{equation}
-		ES < { 2 \cdot {E}_{med} \over {E}_{med} + {E}_{min} } \cdot ( {E}_{max} - {E}_{min} )
+		\mbox{ES} < { 2 \cdot {E}_{med} \over {E}_{med} + {E}_{min} } \cdot ( {E}_{max} - {E}_{min} )
 		\label{equ:embeddingstrengthconstraint_case1}
 	\end{equation}
 
@@ -127,7 +127,7 @@ Wie in Fall 1 führen wir auch hier Regeln ein, mit denen wir die Subbandkoeffiz
 		  \label{equ:modifcoef_case2}
 	 \end{equation}
 	 
-Hier ist nun  $|\xi| = |B-A-ES| = ES+A-B = S + {E}_{max} - 2\cdot {E}_{med} + {E}_{min}$ da $B-A<ES$. Für die neuen Energiewerte gilt:
+Hier ist nun  $|\xi| = |B-A-\mbox{ES}| = \mbox{ES}+A-B = S + {E}_{max} - 2\cdot {E}_{med} + {E}_{min}$ da $B-A<\mbox{ES}$. Für die neuen Energiewerte gilt:
 
 	 \begin{eqnarray*}
 		 {E'}_{max} & = & {E}_{max} \cdot (1 - { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }),
@@ -138,10 +138,10 @@ Hier ist nun  $|\xi| = |B-A-ES| = ES+A-B = S + {E}_{max} - 2\cdot {E}_{med} + {E
 		 %\label{equ:energychanges_case2}
 	\end{eqnarray*}
 	
-Dieses Mal kann es sich ergeben, dass ${E'}_{med} > {E'}_{max}$, da sich ${E}_{max}$ verringert während ${E}_{med}$ steigt. Um sicherzustellen, dass nach der Koeffizientenanpassung immer noch ${E'}_{max} > {E'}_med$ gilt, führen wir eine weitere Obergrenze für $ES$ ein:
+Dieses Mal kann es sich ergeben, dass ${E'}_{med} > {E'}_{max}$, da sich ${E}_{max}$ verringert während ${E}_{med}$ steigt. Um sicherzustellen, dass nach der Koeffizientenanpassung immer noch ${E'}_{max} > {E'}_med$ gilt, führen wir eine weitere Obergrenze für $\mbox{ES}$ ein:
 
 	\begin{equation}
-		ES < { 2 \cdot {E}_{med} \over {E}_{med} + {E}_{max} } \cdot ( {E}_{max} - {E}_{min} )
+		\mbox{ES} < { 2 \cdot {E}_{med} \over {E}_{med} + {E}_{max} } \cdot ( {E}_{max} - {E}_{min} )
 		\label{equ:embeddingstrengthconstraint_case2}
 	\end{equation}
 

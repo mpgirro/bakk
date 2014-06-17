@@ -3,11 +3,6 @@
 
 Um die Effizient des implementierten Verfahrens bewerten zu können wurde es einer umfangreichen Evaluierung unterzogen. Die Ergebnisse sind in diesem Kapitel gesammelt. 
 
-\section{Payload Performance}
-\label{sec:payloadperformance}
-
-TBD
-
 \section{Watermark Hörbarkeit}
 
 Die Resultate werden von der Implementierung immer mit den Tools EAQUAL und PQevalAudio bewertet. Dabei hat sich gezeigt, dass der berechnete ODG\index{Objective Difference Grade} bei einer $\mbox{esf}=1$ meistens kleiner $-3$ liegt, wobei PQevalAudio traditionell etwas schlechter bewertet. Per Definition des PEAQ\index{Perceptual Evaluation of Audio Quality} Standards werden Werte kleiner $-2$ als \glqq{}Slightly annoying\grqq{} eingestuft und ab $-3$ gelten die Signalveränderungen als \glqq{}Annoying\grqq{}. In subjektiven Hörtests mit verschiedenen handelsüblichen Kopfhörern wie sie etwa bei Smartphones beiliegen bestätigen diese Einschätzungen. Über Laptop oder PC Lautsprecher sind die Watermarks hingegen selten bis gar nicht wahrzunehmen. 
@@ -112,8 +107,6 @@ Aus Tabelle \ref{tab:stirmark} ist gut zu erkennen, wo die Schwächen des Waterm
 Allerdings seit hier darauf hingewießen, dass trotz vergleichsweise moderatem BER dennoch viele Pakete unreparierbar beschädigt werden. Die Literatur beschränkt sich oftmals auf die reine Bewertung des BER, ohne auf diesen Umstand einzugehen. 
 
 Anders sieht es für die Synchronisations-Codes aus. Der Package loss\index{Package loss} ist vergleichsweise viel höher. Offenbar ist der Synccode-Threshold\index{Synccode-Threshold}) ${T}_{s}$ zu restriktiv, um die Bitfehler in den \texttt{sync} Sequenzen auszugleichen.
- 
-\newpage
 
 \section{Manuelle Synchronisation}
 
@@ -129,15 +122,43 @@ Um die Ursachen für die scheiterne Übertragung im analogen Bereich zu analysie
 
 \section{Resampling}
 
-Jedes Testsignal wurde auf die Abtastraten\index{Abtastrate} 8000, 11025, 22050, 44100 und 48000 gesampled. Bei jedes Sampling Rate außer der ursprünglichen liegt ein vollständiger Datenverlust vor. Dies verwundert weiter auch nicht, bedenkt man Formel \ref{equ:samplseclength} die definiert wie viele Samples für die Kodierung eines Bits notwendig sind. Ein Resampling bedeutet aber das eine fixe Signallänge (in Sekunden) in nachher mehr oder weniger Abtastwerten abgebildet wird. Somit bilden die vom Algorithmus bei der Dekodierung betrachteten Samplewerte einen falschen Zeitraum ab, in dem natürlich keine gültigen Bits enthalten sind. 
+Jedes Testsignal wurde auf die Abtastraten\index{Abtastrate} 8000, 11025, 22050, 44100 und 48000 gesampled. Bei jeder Sampling Rate außer der ursprünglichen liegt ein vollständiger Datenverlust vor. Dies verwundert weiter auch nicht, bedenkt man Formel \ref{equ:samplseclength} die definiert wie viele Samples für die Kodierung eines Bits notwendig sind. Ein Resampling bedeutet aber das eine fixe Signallänge (in Sekunden) in nachher mehr oder weniger Abtastwerten abgebildet wird. Somit bilden die vom Algorithmus bei der Dekodierung betrachteten Samplewerte einen falschen Zeitraum ab, in dem natürlich keine gültigen Bits enthalten sind. 
 
 \section{Kompression}
 
-Die Implementierung wurde gegen die verlustbehafteten Kompressionsverfahren\index{Kompressionsverfahren} \textit{MP3}, \textit{Ogg Vorbis} und \textit{AAC} bei den Bitraten 32kHz, 64kHz, 96kHz und 128kHz getestet. Hierbei hat sich eine hohe Robustheit herausgestellt. Es trat nie ein fehlerhaftes Bit auf.  
+Die Implementierung wurde gegen die verlustbehafteten Kompressionsverfahren\index{Kompressionsverfahren} \textit{MP3}, \textit{Ogg Vorbis} und \textit{AAC} bei den Bitraten 32kHz, 64kHz, 96kHz und 128kHz getestet. Hierbei hat sich eine hohe Robustheit herausgestellt. Es trat keine fehlerhaften Bits auf.  
 
+\section{Datenrate}
+\label{sec:datenrate}
 
+Abschließend wollen wir noch einige Überlegungen bezüglich der erreichbaren Datenraten anstellen. Darauf wirken einige - teilweise variable - Faktoren ein.  
 
+Wie bereits aus Formel \ref{equ:samplseclength} bekannt ist sind prinzipiell für die Kodierung eines einzigen Bits $N_s$ Samples notwendig. Für die Defaulteinstellungen der Implementierung aus Tabelle \ref{tab:algo_settings}, mit der auch die Testfälle durchgeführt wurden, beläuft sich $N_s$ auf 1536 Abtastwerte. 
 
+Ausgehend von der Abtastrate des Signal\index{Abtastrate} ergibt sich somit die Bitkapazität\index{Bitkapazität} die das Signal in einer Sekunde aufnehmen kann. Ebenfalls interessant ist die Paketkapazität\index{Paketkapazität}. Ziehen wir wieder die Voreinstellungen aus Tabelle \ref{tab:algo_settings} heran, so besteht ein Package aus 13 Synchronisations-Code\index{Synchronisations-Code} Bits und 15 Codeword\index{Codeword} Bits, insgesamt also 28 Bit. Einem Package kann 5 Bit effektive Nutzlast als Message\index{Message} übertragen. 
 
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{rrrrrrrrrrr}
+\hline
+\multicolumn{1}{c}{\textbf{$N_E$}} & \multicolumn{1}{c}{\textbf{$D_k$}} & \multicolumn{1}{c}{\textbf{$N_s$}} & \multicolumn{1}{c}{\textbf{$f_s$ {[}Hz{]}}} & \multicolumn{1}{c}{\textbf{Bitrate}} & \multicolumn{1}{c}{\textbf{$L_s$}} & \multicolumn{1}{c}{\textbf{$L_m$}} & \multicolumn{1}{c}{\textbf{$L_c$}} & \multicolumn{1}{c}{\textbf{$L_p$}} & \multicolumn{1}{c}{\textbf{Paketrate}} & \multicolumn{1}{c}{\textbf{Nutzlast {[}Bd\tablefootnote{Baud [Bd]. Einheit für die Symbolrate eines Übertragungskanals in der Nachrichtentechnik. Symbole sind hier die Bitzustände $\{0, 1\}$. Ein Baud enspricht demnach einem Bit/Sek}{]}}} \\ \hline
+8                      & 6                      & 1536                   & 11025                           & 7,18                                 & 13                     & 5                      & 15                     & 28                     & 0,26                          & 1,28                                      \\
+8                      & 6                      & 1536                   & 22050                           & 14,36                                & 13                     & 5                      & 15                     & 28                     & 0,51                          & 2,56                                      \\
+8                      & 6                      & 1536                   & 44100                           & 28,71                                & 13                     & 5                      & 15                     & 28                     & 1,03                          & 5,13                                      \\
+8                      & 6                      & 1536                   & 48000                           & 31,25                                & 13                     & 5                      & 15                     & 28                     & 1,12                          & 5,58                                      \\
+16                     & 6                      & 3072                   & 11025                           & 3,59                                 & 13                     & 5                      & 15                     & 28                     & 0,13                          & 0,64                                      \\
+16                     & 6                      & 3072                   & 22050                           & 7,18                                 & 13                     & 5                      & 15                     & 28                     & 0,26                          & 1,28                                      \\
+16                     & 6                      & 3072                   & 44100                           & 14,36                                & 13                     & 5                      & 15                     & 28                     & 0,51                          & 2,56                                      \\
+16                     & 6                      & 3072                   & 48000                           & 15,63                                & 13                     & 5                      & 15                     & 28                     & 0,56                          & 2,79                                      \\
+8                      & 7                      & 3072                   & 11025                           & 3,59                                 & 13                     & 5                      & 15                     & 28                     & 0,13                          & 0,64                                      \\
+8                      & 7                      & 3072                   & 22050                           & 7,18                                 & 13                     & 5                      & 15                     & 28                     & 0,26                          & 1,28                                      \\
+8                      & 7                      & 3072                   & 44100                           & 14,36                                & 13                     & 5                      & 15                     & 28                     & 0,51                          & 2,56                                      \\
+8                      & 7                      & 3072                   & 48000                           & 15,63                                & 13                     & 5                      & 15                     & 28                     & 0,56                          & 2,79                                      \\ \hline
+\end{tabular}
+\caption{Datenraten abhängig von der Samplerate}
+\label{tab:datenraten}
+\end{table}
 
+Tabelle \ref{tab:datenraten} illustriert die Zusammenhänge der Parameter mit Bitrate, Paketrate (Pakete pro Sekunde) und Nutzlastrate (Messagebit pro Sekunde) für die Standardeinstellungen in Abhängigkeit der Abtastrate des Audiosignals. Sie zeigt schön auf, dass sowohl eine Verdoppeltung der Subband-Length\index{Subband-Length} $N_E$ wie auch eine Erhöhung des DWT-Level\index{DWT-Level} $D_k$ um 1 zu einer Verdoppelung der Sample-Section-Length\index{Sample-Section-Length} $N_s$ und somit zu einer Halbierung der Bit-, Paket- und Nutzlastrate führt. Gleichzeitig zeigt sie auch das umgekehrt eine Verdoppeltung der Abtastrate zu einer Verdoppelung eben jener Übertragungsraten führt. 
 

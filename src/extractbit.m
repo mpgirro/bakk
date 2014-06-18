@@ -17,5 +17,12 @@ else
     bit = 0;
 end
 
+
+Emin = decomposition.Emin;
+Emed = decomposition.Emed;
+Emax = decomposition.Emax;
+
+%fprintf('Bit: %2.2f | A: %2.2f | B: %2.2f | Emin: %2.2f | Emed: %2.2f | Emax: %2.2f\n', bit, A, B, Emin, Emed, Emax);
+
 end
 

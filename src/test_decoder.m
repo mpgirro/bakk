@@ -3,7 +3,7 @@ clear;
 
 %path = ['..',filesep,'results',filesep,'watermarked_audio.wav'];
 %path = ['..',filesep,'results',filesep,'watermarked-holgi.wav'];
-path = ['..',filesep,'results',filesep,'watermarked-flute-windowed-soundkarte-cropped.wav'];
+path = ['..',filesep,'results',filesep,'watermarked-flute-windowed-soundkarte-cropped-amplified.wav'];
 %path = ['..',filesep,'results',filesep,'watermarked-flute.wav'];
 %path = ['results',filesep,'recording.wav'];
 %path = ['results',filesep,'watermarked-der-affe-ist-gut.wav'];

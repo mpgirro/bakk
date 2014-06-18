@@ -1,10 +1,14 @@
 \chapter{Stirmark for Audio Testautomation}
 \label{ch:stirmarkaudio}
 
-Da die CLI API von \textit{Stirmark for Audio} und besonders dessen Verlangen nach nich näher definierten Streams  zu Verwirrungen führen kann, sei an dieser Stelle eine sehr kurze Version eines funktionierenden Bash-Skriptes für die automatische Testdurchführung exemplarisch angegeben:
+Das Verlangen der \textit{Stirmark for Audio} API nach nicht näher definierten Streams kann problematisch sein. Exemplarisch sei hier deswegen ein kurzes Bash-Skript gebracht, das dessen Verwendung illustrieren soll:
       
-\lstset{escapeinside={\%*}{*)}}  
-\begin{lstlisting}[language=bash]
+\lstset{
+	escapeinside={\%*}{*)},
+}  
+\begin{lstlisting}[language=bash,
+				   caption=Anwendungsbeispiel für Stirmark for Audio,
+				   captionpos=b]
 #!/usr/bin/env bash
 
 streamfile="teststream"

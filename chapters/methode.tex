@@ -253,7 +253,9 @@ Um diesen Effekt der D/A-Wandlung\index{D/A-Wandlung} aufzuheben, muss versucht 
 Die TSM bewirkt, dass das Signal auf seiner Zeitachse gestreckt oder gestaucht wird. Für das Watermark\index{Watermark} bedeutet das, dass ein Bit nicht mehr in $N_s$\index{Sample-Section-Length} Samples kodiert ist, sondern durch mehr oder weniger Samples ${N}_{s}'$ beschrieben wird. 
 Zuerst gilt es die neue Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ von $0.9 \cdot {N}_{s}$ bis $1.1 \cdot {N}_{s}$ durchgetestet und nach Synchronisations-Codes\index{Synchronisations-Code} gesucht. Algorithmus \ref{alg:resync} illustriert diesen Vorgang:
 
+\RestyleAlgo{algoruled}
 \begin{algorithm}[h]
+
 	\SetKwData{Framelen}{framelen}
 	\SetKwData{Ns}{${N}_{s}$}
 	\SetKwData{Steplen}{steplen}
@@ -292,10 +294,10 @@ Zuerst gilt es die neue Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ 
 	}
 	\Cursor = \Cursor + 0.1 * \Lowerbound\; 
 }
-
 \caption{\texttt{sync} Erkennung in der Resynchronisationsphase}
 \label{alg:resync}
 \end{algorithm}
+
 
 Wurde ein \texttt{sync}\index{Synchronisations-Code} gefunden, so kann man das Verhältnis zwischen neuer und alter Sampleanzahl
 

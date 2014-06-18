@@ -19,6 +19,7 @@
 \usepackage{svg}				
 \usepackage{tikz}					% tikz graphics
 \usetikzlibrary{arrows,automata}
+\usepackage{algorithm2e}
 
 \usepackage{ngerman}
 \usepackage[ngerman]{babel}
@@ -48,8 +49,6 @@
   identifierstyle=\color{blue},
   stringstyle=\color{orange},
 }
-
-
 
 \renewcommand*{\glspostdescription}{} % remove dots at the end of each entry
 
@@ -89,10 +88,14 @@
 % define custom macros for specific formats or names
 \newcommand{\pageintentionallyleftblank}[1]{\cleartooddpage[\vspace*{\fill} #1 \vspace*{\fill}]}
 
+\renewcommand{\listalgorithmcfname}{Quellcodes}
+\renewcommand{\lstlistlistingname}{Algorithmenverzeichnis}
+
 % define newline hight between two paragraphs - by default there is none
 %\setlength{\parskip}{0.15in}
 
 \begin{document}
+
 
 \captionnamefont{\bfseries}
 
@@ -154,15 +157,14 @@ and would otherwise have been left blank.}
 \pagestyle{numberCorner}
 \tableofcontents*
 	
-%\pageintentionallyleftblank{Lorem Ipsum}
 \listoffigures*
 
-%\listofalgorithms
+\listofalgorithms*
+\lstlistoflistings*
+\listoftables*
 
-%\lstlistoflistings
 
-%\pageintentionallyleftblank{Lorem Ipsum}
-%\listoftables
+\pageintentionallyleftblank{Pa\^{g}on intence vaka.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%   MAINMATTER    %%%%%%%%%%%%%%%%%%%%%

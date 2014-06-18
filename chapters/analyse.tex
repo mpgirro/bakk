@@ -170,18 +170,16 @@ Durch den oben angesprochenen manuellen Abgleich der Samples\index{Sample} und d
 	\label{fig:spektrum-soundkarte}
 \end{figure}
 
-
-
 Betrachtet man nun die Zusammensetzung jedes Bits genau, so wird man fündig. Wir erinnern uns: Jedes Bit ist durch die Energieniveaus ${E}_{1}$,${E}_{2}$ und ${E}_{3}$ der DWT-Koeffizienten\index{DWT-Koeffizienten} Subbänder\index{Subband} definiert. Der Bitwert $0$ oder $1$ ergibt sich aus dem Verhältnis der Energieddifferenzen $A$ und $B$ der Subbänder. Es zeigt sich, dass die Energieniveaus im Schnitt um den Wert $0.03$ abweichen. Daraus ergeben sich 2 beobachtete Effekte:
 
 \begin{enumerate}
 		
-\item Die Sortierung zu ${E}_{min}$,${E}_{med}$ und ${E}_{max}$ der Subband-Energiewerte ${E}_{1}$,${E}_{2}$ und ${E}_{3}$ korreliert durch die Abweichung nicht mehr mit dem Ursprungssignal. Somit werden für die Berechnung von $A$ und $B$ andere Bänder herangezogen, weswegen die Dekodierung folglich einen falschen Bitwert produziert. 
+\item Die Sortierung zu ${E}_{min}$,${E}_{med}$ und ${E}_{max}$ der Subband-Energiewerte ${E}_{1}$,${E}_{2}$ und ${E}_{3}$ korreliert durch die Abweichung nicht mehr mit dem Ursprungssignal. Somit werden für die Berechnung von $A$ und $B$ falsche Bänder herangezogen, weswegen die Dekodierung folglich einen falschen Bitwert produziert. 
 	
 \item Auch wenn die Energieniveaus richtig sortiert werden, so kann es durch die Abweichungen dennoch dazu kommen, dass die korrekte Relation der Niveaudifferenzen $A$ und $B$ nicht mehr gegeben ist. Die Veränderung der Bänder kann beispielsweise ausreichen, dass bei einer kodierten $1$ im Dekodierprozess jedoch $A \ngtr B$ gilt, weswegen eine $0$ erkannt wird.
 	
 \end{enumerate}
 
-An dieser Stelle sei noch darauf hingewießen, dass die für dieses Testsigna gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen Originalsignal und übertragenem Signal festellen. 
+An dieser Stelle sei noch darauf hingewießen, dass die für dieses Testsignal gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen Originalsignal und übertragenem Signal festellen. 
 
 Es zeigt sich also, dass die Energieniveaus der Bänder sehr fragil sind. Sie eignen sich demnach für einen Übertragungskanal der die niederfrequenten Energiepotenziale - wenn auch nur gering - verändern kann offensichtlich nicht. 

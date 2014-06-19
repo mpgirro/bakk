@@ -31,7 +31,7 @@ Subband-Length (${N}_{E}$)               & 8             & 	 \\
 Embedding Strength Factor (esf)          & 1             & Schreiben am math. möglichen Limit       \\
 Bufferzone Scaling Factor                & 0.1           & 10\% der Sample Section Length           \\
 Synchronisations Code Length (${L}_{s}$) & 13            & Barker Code mit 13 Bit 	\\
-Barker Threshold (${T}_{s}$)             & 0.8           & 	 \\
+Synccode-Threshold (${T}_{s}$)           & 0.8           & 	 \\
 Error Correction Methode                 & BCH           & 	 \\
 Message-Length (${L}_{m}$)               & 5             & 	 \\
 Codeword-Length (${L}_{c}$)              & 15            & 	 \\
@@ -110,7 +110,7 @@ Jedes Testsignal wurde auf die Abtastraten\index{Abtastrate} 8000Hz, 11025Hz, 22
 
 \section{Kompression}
 
-Die Implementierung wurde gegen die verlustbehafteten Kompressionsverfahren\index{Kompressionsverfahren} \textit{MP3}, \textit{Ogg Vorbis} und \textit{AAC} bei den Bitraten 32kHz, 64kHz, 96kHz und 128kHz getestet. Hierbei hat sich eine hohe Robustheit herausgestellt. Es trat keine fehlerhaften Bits auf.  
+Die Implementierung wurde gegen die verlustbehafteten Kompressionsverfahren\index{Kompressionsverfahren} \textit{MP3}, \textit{Ogg Vorbis} und \textit{AAC} bei den Bitraten 32kHz, 64kHz, 96kHz und 128kHz getestet. Hierbei hat sich eine hohe Robustheit herausgestellt. Es traten keine fehlerhaften Bits auf.  
 
 \section{Datenrate}
 \label{sec:datenrate}
@@ -180,6 +180,6 @@ Betrachtet man nun die Zusammensetzung jedes Bits genau, so wird man fündig. Wi
 	
 \end{enumerate}
 
-An dieser Stelle sei noch darauf hingewiesen, dass die für dieses Testsignal gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen Originalsignal und übertragenem Signal feststellen. Die Belastung die das Signal daher durch diesen Übertragungskanal erfährt, ist denkbar gering. In Luft wäre diese beispielsweise viel massiver. 
+An dieser Stelle sei noch darauf hingewiesen, dass die für dieses Testsignal gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen Originalsignal und übertragenem Signal feststellen. Die Belastung die das Signal durch diesen Übertragungskanal erfährt, ist denkbar gering. In Luft wäre diese beispielsweise viel massiver. 
 
 Es zeigt sich also, dass die Energieniveaus der Bänder sehr fragil sind. Sie eignen sich demnach für einen Übertragungskanal der die niederfrequenten Energiepotenziale - wenn auch nur gering - verändern kann offensichtlich nicht. 

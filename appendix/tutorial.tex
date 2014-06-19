@@ -11,7 +11,7 @@ Die Implementierung liegt in MATLAB vor und deren Verwendung soll hier kurz illu
 function [modSignal, encodedBitCount ] = encoder( inputSignal, watermark, fs )
 \end{verbatim}
 
-Die Signatur des \texttt{encoder}s\index{encoder} zeigt, dass die Funktion ein Signal \texttt{inputSignal} als Liste von Abtastwerten, dessen Sampling-Rate\index{Abtastrate} \texttt{fs} und eine List von Bitwerten \texttt{watermark} verlangt. Als Resultat liefert sie das modifizierte Signal \texttt{modSignal} und die Anzahl der hineingeschriebenen Bits (\texttt{watermark} kann mehr Werte enthalten als \texttt{inputSignal} Kapazität bereit stellt).
+Die Signatur des \texttt{encoder}\index{encoder} zeigt, dass die Funktion ein Signal \texttt{inputSignal} als Liste von Abtastwerten, dessen Sampling-Rate\index{Abtastrate} \texttt{fs} und eine List von Bitwerten \texttt{watermark} verlangt. Als Resultat liefert sie das modifizierte Signal \texttt{modSignal} und die Anzahl der hineingeschriebenen Bits (\texttt{watermark} kann mehr Werte enthalten als \texttt{inputSignal} Kapazität bereit stellt).
 
 Folgendes Codebeispiel erweitert \texttt{test.wav} um 100 zufällig generierte Bits und speichert das Ergebnis in \texttt{result.wav}:
 
@@ -34,7 +34,7 @@ audiowrite('result.wav',modSignal, fs);
 function [watermark] = decoder( signal, fs )
 \end{verbatim}
 
-Das Interface des \texttt{decoder}s\index{decoder} ist ebenso simpel gehalten. Er nimmt ein beliebiges Signal und dessen Abtastrate\index{Abtastrate} und versucht daraus Informationen zu extrahieren indem es nach Paketen gescanned wird. 
+Das Interface des \texttt{decoder}\index{decoder} ist ebenso simpel gehalten. Er nimmt ein beliebiges Signal und dessen Abtastrate\index{Abtastrate} und versucht daraus Informationen zu extrahieren indem es nach Paketen gescanned wird. 
 
 Folgendes Codesnippet liefer die in \ref{sec:encoder} geschriebenen zufälligen Bits:
 
@@ -47,7 +47,7 @@ data = decoder(signal,fs);
 
 \section{Settings}
 
-Die Implementiertung arbeitet per Default mit den Voreinstellungen, die sich als vergleichsweise effektiv erwiesen haben. Die diversen Parameter können aber auch individuell konfiguriert werden. Sinnvoll ist dies zum Beispiel um die Paketgröße über zum verwendeten Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} passende Message-Length\index{Message-Length} und Codeword-Length\index{Codeword-Length} Werte anzupassen.
+Die Implementiertung arbeitet per Default mit den Voreinstellungen, die sich als vergleichsweise effektiv erwiesen haben. Die diversen Parameter können aber auch individuell konfiguriert werden. Sinnvoll ist dies beispielsweise um die Paketgröße über die Synchronisations-Code-Length\index{Synchronisations-Code-Length} oder die zum verwendeten Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} passenden Message-Length\index{Message-Length} und Codeword-Length\index{Codeword-Length} Werte anzupassen.
 
 Sämtliche Module beziehen die Werte über das \texttt{Setting} Objekt. Dabei handelt es sich um einen Datenwrapper des \texttt{SettingSingleton} der wie folgt verändert werden kann. 
 

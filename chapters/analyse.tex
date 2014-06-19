@@ -1,11 +1,11 @@
 \chapter{Analyse}
 \label{ch:analyse}
 
-Um die Effizient des implementierten Verfahrens bewerten zu können wurde es einer umfangreichen Evaluierung unterzogen. Die Ergebnisse sind in diesem Kapitel gesammelt. 
+Um die Effizienz des implementierten Verfahrens bewerten zu können wurde es einer umfangreichen Evaluierung unterzogen. Die Ergebnisse sind in diesem Kapitel gesammelt. 
 
 \section{Hörbarkeit}
 
-Die Resultate werden von der Implementierung immer mit den Tools EAQUAL und PQevalAudio bewertet. Dabei hat sich gezeigt, dass der berechnete ODG\index{Objective Difference Grade} bei einer $\mbox{esf}=1$ meistens kleiner $-3$ liegt, wobei PQevalAudio traditionell etwas schlechter bewertet. Per Definition des PEAQ\index{Perceptual Evaluation of Audio Quality} Standards werden Werte kleiner $-2$ als \glqq{}Slightly annoying\grqq{} eingestuft und ab $-3$ gelten die Signalveränderungen als \glqq{}Annoying\grqq{}. In subjektiven Hörtests mit verschiedenen handelsüblichen Kopfhörern wie sie etwa bei Smartphones beiliegen bestätigen diese Einschätzungen. Über Laptop oder PC Lautsprecher sind die Watermarks hingegen selten bis gar nicht wahrzunehmen. 
+Die Resultate werden von der Implementierung immer mit den Tools EAQUAL und PQevalAudio bewertet. Dabei hat sich gezeigt, dass der berechnete ODG\index{Objective Difference Grade} bei einer $\mbox{esf}=1$ meistens kleiner $-3$ liegt, wobei PQevalAudio traditionell etwas schlechter bewertet. Per Definition des PEAQ\index{Perceptual Evaluation of Audio Quality} Standards werden Werte kleiner $-2$ als \glqq{}Slightly annoying\grqq{} eingestuft und ab $-3$ gelten die Signalveränderungen als \glqq{}Annoying\grqq{}. Subjektive Hörtests mit verschiedenen handelsüblichen Kopfhörern wie sie etwa bei Smartphones beiliegen bestätigen diese Einschätzungen. Über Laptop oder PC Lautsprecher sind die Watermarks hingegen selten bis gar nicht wahrzunehmen. 
 
 Dennoch ist in diesen Fällen eine Reduktion der Embedding Strength\index{Embedding Strength} über den Embedding Strength Factor\index{Embedding Strength Factor} (esf) vorgesehen. Jedoch hat sich ebenfalls gezeigt, dass eine interative Reduktion des esf um 10\% kaum eine Auswirkung auf die resultierenden ODGs hat.
 
@@ -13,13 +13,13 @@ Dennoch ist in diesen Fällen eine Reduktion der Embedding Strength\index{Embedd
 
 Lange war es ein Problem verschiedene Watermarkingverfahren miteinander zu vergleichen, da die Kriterien nach denen die Robustheit getestet wurde von jedem Entwickler selbst definiert wurden. Es fehlte ein entsprechender Standard. Zu diesem Zweck wurden Anfang des neuen Jahrtausends die sog. \textit{StirMark Benchmarks}\index{Stirmark Benchmark} definiert\cite{petitcolas2000watermarking}\cite{petitcolas2004stirmark}, die derzeit in der Version 4.0 vorliegen. Dabei handelt es sich um ein definiertes Set an Angriffsverfahren\index{Angriffverfahren} die auf markierte Daten angewendet werden können. Eine Auswertung der so bearbeiteten Daten und ein Vergleich mit dem Original erlaubt Rückschlüsse auf die Stärken und Schwächen eines Watermarkingalgorithmuses, besonders auf verschiedene Angriffsfamilien (wie wir noch sehen werden), sowie eine Vergleich mit anderen Watermarkingverfahren. Jedoch werden nicht alle Angriffsszenarien welche testenswert wären auch definiert und bereitgestellt\cite{steinebach2002stirmark}.
 
-Für die Auswertung von Audiodaten gibt es eine dedizierte \textit{Stirmark for Audio} Version\cite{stirmarkforaudio} (aktuelle v1.3.2). Auf deren Verwendung wir kurz in Anhang \ref{ch:stirmarkaudio} eingegangen, da sich die Verwendung als nicht trivial herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine, weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu abstrahieren\cite{petitcolas2001public}. Eine Umsetzung dieser ist jedoch nicht abzusehen. 
+Für die Auswertung von Audiodaten gibt es eine dedizierte \textit{Stirmark for Audio} Version\cite{stirmarkforaudio} (aktuelle v1.3.2). Auf deren Verwendung wir kurz in Anhang \ref{ch:stirmarkaudio} eingegangen, da sie sich als nicht ganz einfach herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine, weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu abstrahieren\cite{petitcolas2001public}. Eine Umsetzung dieser ist jedoch nicht abzusehen. 
 
 Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese Implementierung wurde mit den in den folgenden Testergebnissen angegebenen Parameter strapaziert, welche mit jenen von Xiangs Evaluierung\cite{xiang2007robust} übereinstimmen, insofern sie rekonstruiert werden konnten. Einige der Angaben passen jedoch nicht auf die von Stirmark for Audio bereitgestellte API. Andere Angriffe werden zwar als besonders effektiv aufgezählt, ihre Parameter jedoch nicht angegeben, was einen Vergleich ebenfalls nicht ermöglicht. 
 
 Wie in \cite{lang2004stirmark} eingehend erläutert wird sind die Parameter der Angriffe entscheidend für die Auswirkung auf das Audiosignal. Die 3 größen Signaltypen Sprache, Musik und Geräusch haben alle unterschiedliche Stärken und Schwächen gegenüber einem Angriffstyp und dessen Variationen definiert durch seine Parameter. 
 
-Tabelle \ref{tab:algo_settings} zeigt die Parameter mit denen die Implementierung den Watermarkungprozess durchgeführt hat. 
+Tabelle \ref{tab:algo_settings} zeigt die Parameter der Implementierung mit denen der Watermarkingprozess durchgeführt wurde. 
 
 \begin{table}[h]
 \begin{tabular}{lrl}
@@ -48,9 +48,9 @@ Die verwendeten Abkürzungen stehen hier für:
 
 \begin{description}
 	
-\item[PL] \textit{Package loss}\index{Package loss}. Ein Paket wird als verloren klassifiziert, wenn der Synccode-Threshold\index{Synccode-Threshold} von der gelesenen Synccode\index{Synchronisations-Code} Bitsequenz nicht überschritten wurde, das die Bits zu sehr in Mitleidenschaft gezogen worden sind. Das Paket wäre somit nicht als solches erkannt worden. 
+\item[PL] \textit{Package loss}\index{Package loss}. Ein Paket wird als verloren klassifiziert, wenn der Synccode-Threshold\index{Synccode-Threshold} von der gelesenen Synccode\index{Synchronisations-Code} Bitsequenz nicht überschritten wurde, da die Bits zu sehr in Mitleidenschaft gezogen worden sind. Das Paket wäre somit nicht als solches erkannt worden. 
 
-\item[DM] \textit{Damaged message}. Jener Pakete deren Informations Bits so fehlerhaft sind, dass das Codeword\index{Codeword} nicht mehr in die korrekte Message\index{Message} übersetzt werden konnte. Die Message ist daher unbrauchbar.
+\item[DM] \textit{Damaged message}. Jene Pakete deren Informations Bits so fehlerhaft sind, dass das Codeword\index{Codeword} nicht mehr in die korrekte Message\index{Message} übersetzt werden konnte. Die Message ist daher unbrauchbar.
 
 \item[EMB] \textit{Erroneous message bits}. Absolute Anzahl gekippter Bits in allen Messages des Signals. 
 
@@ -148,7 +148,7 @@ Tabelle \ref{tab:datenraten} illustriert die Zusammenhänge der Parameter mit Bi
 
 \section{Ursachenforschung}
 
-Um die Ursachen für die scheiternde Übertragung im analogen Bereich zu analysieren wurden Signale manuell synchronisiert, indem an ein Audiosignal an den Enden Stille eingefügt wurde. Somit konnte das anschließende analog übertragene Signal bis auf wenige Samples\index{Sample} genau synchronisiert werden. Dies erlaubt die DWT-Koeffizientn\index{DWT-Koeffizienten} direkt mit jenen des ursprünglichen Signals zu vergleichen um den Ursachen auf den Grund zu gehen. 
+Um die Ursachen für die scheiternde Übertragung im analogen Bereich zu analysieren wurden Signale manuell synchronisiert, indem an ein Audiosignal an den Enden Stille eingefügt wurde. Somit konnte das anschließend analog übertragene Signal bis auf wenige Samples\index{Sample} genau synchronisiert werden. Dies erlaubt die DWT-Koeffizientn\index{DWT-Koeffizienten} direkt mit jenen des ursprünglichen Signals zu vergleichen um den Ursachen auf den Grund zu gehen. 
 
 Ein Blick auf die logarithmischen Frequenzspektren in den Abbildungen \ref{fig:spektrum-original} und \ref{fig:spektrum-soundkarte} einer auf einer Flöte gespielten 4,3 Sekunden langen Tonleiter zeigt anfänglich keine groß auffallenden Unterschiede. Lediglich eine prinzipielle Verringerung der Intensitäten in den niederen Frequenzbereichen scheint feststellbar zu sein. Da diese jedoch gleichmäßig erscheinen dürfte dies keine Auswirkung auf das Watermark haben. 
 
@@ -170,7 +170,7 @@ Durch den oben angesprochenen manuellen Abgleich der Samples\index{Sample} und d
 	\label{fig:spektrum-soundkarte}
 \end{figure}
 
-Betrachtet man nun die Zusammensetzung jedes Bits genau, so wird man fündig. Wir erinnern uns: Jedes Bit ist durch die Energieniveaus ${E}_{1}$,${E}_{2}$ und ${E}_{3}$ der DWT-Koeffizienten\index{DWT-Koeffizienten} Subbänder\index{Subband} definiert. Der Bitwert $0$ oder $1$ ergibt sich aus dem Verhältnis der Energieddifferenzen $A$ und $B$ der Subbänder. Es zeigt sich, dass die Energieniveaus im Schnitt um den Wert $0.03$ abweichen. Daraus ergeben sich 2 beobachtete Effekte:
+Betrachtet man nun die Zusammensetzung jedes Bits genau, so wird man fündig. Wir erinnern uns: Jedes Bit ist durch die Energieniveaus ${E}_{1}$,${E}_{2}$ und ${E}_{3}$ der DWT-Koeffizienten\index{DWT-Koeffizienten} Subbänder\index{Subband} definiert. Der Bitwert $0$ oder $1$ ergibt sich aus dem Verhältnis der Energieddifferenzen $A$ und $B$ der Subbänder. Es zeigt sich, dass die Energieniveaus im Schnitt um den Wert $0.03$ abweichen. Daraus ergeben sich zwei beobachtete Effekte:
 
 \begin{enumerate}
 		
@@ -180,6 +180,6 @@ Betrachtet man nun die Zusammensetzung jedes Bits genau, so wird man fündig. Wi
 	
 \end{enumerate}
 
-An dieser Stelle sei noch darauf hingewiesen, dass die für dieses Testsignal gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen Originalsignal und übertragenem Signal feststellen. 
+An dieser Stelle sei noch darauf hingewiesen, dass die für dieses Testsignal gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen Originalsignal und übertragenem Signal feststellen. Die Belastung die das Signal daher durch diesen Übertragungskanal erfährt, ist denkbar gering. In Luft wäre diese beispielsweise viel massiver. 
 
 Es zeigt sich also, dass die Energieniveaus der Bänder sehr fragil sind. Sie eignen sich demnach für einen Übertragungskanal der die niederfrequenten Energiepotenziale - wenn auch nur gering - verändern kann offensichtlich nicht. 

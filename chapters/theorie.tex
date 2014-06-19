@@ -5,21 +5,21 @@ Um ein Signal mit zus\"atzlichen Informationen anzureichern muss das Signal auf 
 	
 Die mathematische Grundlage der in dieser Arbeit verwendeten Methode um einen Teil eines Signals so zu verändern, dass daraus wieder auf einen logischer Wert ($0$ oder $1$) geschlossen werden kann, beruht auf dem in \cite{xiang2007robust} publizierten Verfahren.
 
-In diesem und den folgenden Kapiteln werden immer wieder Notationen benutzt, die von denen von \cite{xiang2007robust} abweichen um ein konsistenteres Bezeichnungsschema für die Beschreibung der Erweiterungen zu erreichen. Die in den nächsten Abschnitten vorgestellten Begriffe werden daher oft mit Bezeichnung und Symbol eingeführt. Die Bezeichnungen sind oftmals in englischer Sprache, da diese in der wissenschaftlichen Literatur so verwendet werden und eine Übersetzung ins Deutsche dem geneigten Leser nur die Zuordnung der Begriffe erschweren w\"urde. Die Symbole sind hierf\"ur eine alternative Kurzschreibweise die vor allem in Formeln Verwendung finden werden. 
+In diesem und den folgenden Kapiteln werden immer wieder Notationen benutzt, die von denen von \cite{xiang2007robust} abweichen um ein konsistenteres Bezeichnungsschema für die Beschreibung der Erweiterungen zu erreichen. Die in den nächsten Abschnitten vorgestellten Begriffe werden daher oft mit Bezeichnung und Symbol eingeführt. Die Bezeichnungen sind meistens in englischer Sprache, da diese in der wissenschaftlichen Literatur so verwendet werden und eine Übersetzung ins Deutsche dem geneigten Leser nur die Zuordnung der Begriffe erschweren w\"urde. Die Symbole sind hierf\"ur eine alternative Kurzschreibweise die vor allem in Formeln Verwendung finden werden. 
 
-Grundlegend müssen wir zuerst klären, über welche Art von Signal hier überhaupt gesprochen wird. Signale können an sich unterschiedlichster Natur sein. Wir hier wollen als Signal ganz allgemein die Repräsentation einer akustischen Information bezeichnen. In der Tontechnik spricht man von \textit{Audiosignalen}\index{Audiosignal} als Bezeichnung für all das \glqq{}was man hören kann\grqq{}. Allerdings muss ein Audiosignal noch nicht unbedingt in Form von Schallwellen vorliegen. Es kann sich auch um ein elektrisches Signal handeln, welches durch die Umwandlung z.B mit einem Lautsprecher erst hörbar wird. 
+Grundlegend müssen wir zuerst klären, über welche Art von Signal hier überhaupt gesprochen wird. Signale können an sich unterschiedlichster Natur sein. Wir hier wollen mit \glqq{}Signal\grqq{} ganz allgemein die Repräsentation einer akustischen Information bezeichnen. In der Tontechnik spricht man von \textit{Audiosignalen}\index{Audiosignal} als Bezeichnung für all das \glqq{}was man hören kann\grqq{}. Allerdings muss ein Audiosignal noch nicht unbedingt in Form von Schallwellen vorliegen. Es kann sich auch um ein elektrisches Signal handeln, welches durch die Umwandlung z.B mit einem Lautsprecher erst hörbar wird. 
 
-Audiosignal müssen aber nicht immer zwingend analog vorliegen. So können sie auch als digitale Daten durch sog. \textit{Sample}\index{Sample} Werte betrachtet werden. Diese Samples sind zeit- und wertediskrete Abtastwerte des zugrundeliegenden analogen Signals. Sie wurden durch die sog. \textit{Analog-Digital Wandlung}\index{A/D-Wandlung} (AD) eines Audiosignals ermittelt und erfolgt durch ein geeignettes Instrument (i.A. ein Mikrofon oder eine Soundkarte). Dabei geht Information verloren, da analoge Signale aus einer unendlichen Anzahl an \"uberlagerten Schwingungen bestehen, digitale Repr\"asentationen allerdings nur eine endliche Anzahl an Zust\"anden annehmen k\"onnen. Als Kurzform für ein Signal wird im Folgenden $sig$ verwendet, wobei $sig(i)$ den konkreten Samplewert\index{Sample} des Signals an der Stelle $i$ bezeichnet. Ein digitales Signal kann durch einen Algorithmus manipuliert (siehe ~\ref{sec:embedding}) oder verarbeitet (siehe ~\ref{sec:extraction}) werden.
+Audiosignal müssen aber nicht immer zwingend analog vorliegen. So können sie auch als digitale Daten durch sog. \textit{Sample}\index{Sample} Werte betrachtet werden. Diese Samples sind zeit- und wertediskrete Abtastwerte des zugrundeliegenden analogen Signals. Sie wurden durch die sog. \textit{Analog-Digital Wandlung}\index{AD-Wandlung} (AD) eines Audiosignals ermittelt und erfolgt durch ein geeignettes Instrument (i.A. ein Mikrofon oder eine Soundkarte). Dabei geht Information verloren, da analoge Signale aus einer unendlichen Anzahl an \"uberlagerten Schwingungen bestehen, digitale Repr\"asentationen allerdings nur eine endliche Anzahl an Zust\"anden annehmen k\"onnen. Als Kurzform für ein Signal wird im Folgenden $sig$ verwendet, wobei $sig(i)$ den konkreten Samplewert\index{Sample} des Signals an der Stelle $i$ bezeichnet. Ein digitales Signal kann durch einen Algorithmus manipuliert (siehe ~\ref{sec:embedding}) oder verarbeitet (siehe ~\ref{sec:extraction}) werden.
 
-Die Rücktransformation eines digitalen Signals ist ebenso möglich, durch die sog. \textit{Digital-Analog Wandlung}\index{D/A-Wandlung} (DA). Dabei wird durch einen geeigneten Mechanismus (z.B. einen Lautsprecher) wieder ein analoges Signal erzeugt. Aufgrund des Informationsverlustes der AD-Wandlung dieses Signal im Allgemeinen nicht mit dem urspr\"unglich aufgenommenen ident. 
+Die Rücktransformation eines digitalen Signals ist ebenso möglich, durch die sog. \textit{Digital-Analog Wandlung}\index{DA-Wandlung} (DA). Dabei wird durch einen geeigneten Mechanismus (z.B. einen Lautsprecher) wieder ein analoges Signal erzeugt. Aufgrund des Informationsverlustes der AD-Wandlung\index{AD-Wandlung} ist dieses Signal im Allgemeinen nicht mit dem urspr\"unglich aufgenommenen ident. 
 
 
 \section{Diskrete Wavelet-Transformation} 
 \index{Diskrete Wavelet-Tansformation|(} \index{DWT|see{Diskrete Wavelet-Tansformation}}
 	
-Zur Beantwortung der Frage wie das Signal ver\"andert werden kann existieren verschiedene Ans\"atze. Es gibt Verfahren die das Signal direkt im Zeitbereich modifizieren \cite{bassia2001robust}\cite{lie2006robust}, also konkrete Abtastpunkte des Signals direkt bearbeiten. Andere ver\"andern die Koeffizienten der durch die Fouriertransformation oder die Kosinustransformation erzeugten Frequenzspektrums \cite{chang2012location}, der Wavelet-Transformation\cite{tang2005digital} oder der Cepstrum-Domain\footnote{\textit{Ceprstrum}: Kunstwort durch Vertauschung der Buchstaben des engl. \textit{Spectrum}. Der Cepstrum-Bereich wird durch die Fouriertransformation des logarithmischen Frequenzspektrums eines Signals aufgespannt}\cite{lee2000digital}\cite{li2000transparent}. Es existieren auch Ans\"atze welche die Information durch Phasenverschiebungen innerhalb des Signals einbringen \cite{dong2004data}\cite{ansari2004data} oder solche die mehrere Methoden gleichzeitig bem\"uhen \cite{chang2012location}\cite{lei2012multipurpose}\cite{tang2005digital}. Wir wollen hier die Koeffizienten der diskrete Wavelet-Transformation (DWT) eines Signals ver\"andern, also die Frequenzeigenschaften der Signale beeinflussen. Aus den modifizierten Koeffizienten kann durch die inverse DWT wieder ein Signal rekonstruiert werden. 
+Zur Beantwortung der Frage wie das Signal ver\"andert werden kann existieren verschiedene Ans\"atze. Es gibt Verfahren die das Signal direkt im Zeitbereich modifizieren \cite{bassia2001robust}\cite{lie2006robust}, also konkrete Abtastpunkte des Signals direkt bearbeiten. Andere ver\"andern die Koeffizienten der durch die Fouriertransformation oder die Kosinustransformation erzeugten Frequenzspektrums \cite{chang2012location}, der Wavelet-Transformation\cite{tang2005digital} oder der Cepstrum-Domain\footnote{\textit{Ceprstrum}: Kunstwort durch Vertauschung der Buchstaben des engl. \textit{Spectrum}. Der Cepstrum-Bereich wird durch die Fouriertransformation des logarithmischen Frequenzspektrums eines Signals aufgespannt}\cite{lee2000digital}\cite{li2000transparent}. Es existieren auch Ans\"atze welche die Information durch Phasenverschiebungen innerhalb des Signals einbringen \cite{dong2004data}\cite{ansari2004data} oder solche die mehrere Methoden gleichzeitig bem\"uhen \cite{lei2012multipurpose}. Wir wollen hier die Koeffizienten der diskrete Wavelet-Transformation (DWT) eines Signals ver\"andern, also die Frequenzeigenschaften der Signale beeinflussen. Aus den modifizierten Koeffizienten kann durch die inverse DWT wieder ein Signal rekonstruiert werden. 
 	
-Die Beschreibung der diversen mathematischen Raffinessen welche die Wavelet\--Trans\-formation erst m\"oglich machen wollen wir an dieser Stellen anderen \"uberlassen (z.B. \cite{polikar1996engineer}). Es sei nur gesagt, dass sie eine zeit- und wertediskret (da es sich um digitale Daten handelt) durchgef\"uhrte Wavelet-\-Trans\-formation ist und praktisch durch eine Reihe zeitdiskreter Filter berechnet werden kann und die DWT so implementiert ist. Durch diese Kaskade von Hoch- und Tiefpassfiltern er gibt sich ein Binärbaum. Jede Verzweigungsebene dieses Baumes nennt man DWT-Level\index{DWT-Level} (${D}_{k}$). Je größer der Level, desto genauer ist die Auflösung der DWT-Koeffizienten ($\left\{{c}_{i}\right\}$). Sie sind der Ergebnis der DWT und beschreiben das zugrundeliegende SIgnal in seinem Frequenzbereich. $\left\{{c}_{i}\right\}$ bezeichnet die (indizierte) Gesamtmenge der Koeffizienten eines Signals, $c_i$ ein spezifisches Element. Jedes $c_i$ gibt dabei das Energiepotential der Frequenz $i$ an. 
+Die Beschreibung der diversen mathematischen Raffinessen welche die Wavelet\--Trans\-formation erst m\"oglich machen wollen wir an dieser Stellen anderen \"uberlassen (etwa \cite{polikar1996engineer}). Es sei nur gesagt, dass sie eine zeit- und wertediskret (da es sich um digitale Daten handelt) durchgef\"uhrte Wavelet-\-Trans\-formation ist, praktisch durch eine Reihe zeitdiskreter Filter berechnet werden kann und die DWT so implementiert ist. Durch diese Kaskade von Hoch- und Tiefpassfiltern er gibt sich ein Binärbaum. Jede Verzweigungsebene dieses Baumes nennt man DWT-Level\index{DWT-Level} (${D}_{k}$). Je größer der Level, desto genauer ist die Auflösung der DWT-Koeffizienten $\left\{{c}_{i}\right\}$. Sie sind der Ergebnis der DWT und beschreiben das zugrundeliegende Signal in seinem Frequenzbereich. $\left\{{c}_{i}\right\}$ bezeichnet die (indizierte) Gesamtmenge der Koeffizienten eines Signals, $c_i$ ein spezifisches Element. Jedes $c_i$ gibt dabei das Energiepotential der Frequenz $i$ an. 
 
 Anders als bei \"ahnlichen Verfahren wie etwa der Fourier-\-Transformation oder der Kosinus\-tranformation wird bei der Wavelet-Transformation das Signal nicht durch eine Überlagerung von Sinus- oder Kosinus-Schwingungen beschrieben, sondern durch eine im Allgemeinen komplexere Basisfunktion, genannt \textit{Wavelet}\index{Wavelet} (${f}_{w}$).
 
@@ -28,7 +28,7 @@ Anders als bei \"ahnlichen Verfahren wie etwa der Fourier-\-Transformation oder 
 \section{Einbettungsstrategie}
 \label{sec:embeddingstragety}
 
-Um nun ein Bit stabil in einem Teil eines Signals (einer \textit{Sample Section}\index{Sample Section}) zu verstecken, werden wir die relative Beziehungen von Gruppen der DWT-Koeffizienten\index{DWT-Koeffizienten} der Samples verändern. Aus dieser Veränderung können wir anschließend wieder einfach eine logische Beziehung herstellen und somit den eingebrachten Wert extrahieren. 
+Um nun ein Bit stabil in einem Teil eines Signals (einer sog. \textit{Sample Section}\index{Sample Section}) zu verstecken, werden wir die relative Beziehungen von Gruppen der DWT-Koeffizienten\index{DWT-Koeffizienten} der Samples verändern. Aus dieser Veränderung können wir anschließend wieder einfach eine logische Beziehung herstellen und somit den eingebrachten Wert extrahieren. 
 
 Da digitale Signale als Listen von Abtastwerten (engl. \textit{Samples}) repräsentiert werden, ist daher eine Sample Section\index{Sample Section} eine Folge oder Liste aufeinander folgender Samples. In eine Sample Section werden wir immer genau ein Bit einbringen. Diese Segmentierung des Signals in jene Teilbereiche geschieht im Allgemeinen willkürlich, allerdings sind für die Kodierung eines Bits mindestens:
 
@@ -36,7 +36,7 @@ Da digitale Signale als Listen von Abtastwerten (engl. \textit{Samples}) repräs
 		 {N}_{s} \geq 3 \cdot {N}_{E} \cdot 2 ^ {{D}_{k}}, 			\label{equ:samplseclength}
 	 \end{equation}
 	 
-Samples - daher genannt \textit{Sample-Section-Length}\index{Sample-Section-Length} - notwendig. Das hier verwendete ${N}_{E}$ bezeichnet die sog. \textit{Subband-Length}\index{Subband-Length}. Ein \textit{Subband}\index{Subband} $S$ ist eine indizierte Teilmenge paarweise benachbarter DWT-Koeffizienten\index{DWT-Koeffizienten} einer Sample Section\index{Sample Section}, also $\langle{c}_{i},{c}_{i+{N}_{E}}\rangle \subset \left\{{c}_{i}\right\}, \forall i \in \mathbb{N}$. Folglich ist die Subband-Length die Anzahl der DWT-Koeffizienten in einem Subband: ${N}_{E} = |\langle{c}_{i},{c}_{i+{N}_{E}}\rangle|$.
+Samples - daher ${N}_{s}$ genannt \textit{Sample-Section-Length}\index{Sample-Section-Length} - notwendig. Das hier verwendete ${N}_{E}$ bezeichnet die sog. \textit{Subband-Length}\index{Subband-Length}. Ein \textit{Subband}\index{Subband} $S$ ist eine indizierte Teilmenge paarweise benachbarter DWT-Koeffizienten\index{DWT-Koeffizienten} einer Sample Section\index{Sample Section}, also $\langle{c}_{i},{c}_{i+{N}_{E}}\rangle \subset \left\{{c}_{i}\right\}, \forall i \in \mathbb{N}$. Folglich ist die Subband-Length die Anzahl der DWT-Koeffizienten in einem Subband: ${N}_{E} = |\langle{c}_{i},{c}_{i+{N}_{E}}\rangle|$.
 
 \bigskip
 
@@ -67,7 +67,7 @@ Um diese Beziehung zu verändern definieren wir die sog. \textit{Embedding Stren
 		\label{equ:embeddingstrength}
 	\end{equation}
 	
-wobei $esf$ der sog. \textit{Embedding Strength Factor}\index{Embedding Strength Factor}, ein Kontrollparameter für die Stärke der Signalveränderung, ist. Der $esf$ sollte unter der Bedingung der Unhörbarkeit des Watermarks\index{Watermark} maximiert werden (siehe Kapitel \ref{sec:qualitaetskontrolle}).
+wobei $\mbox{esf}$ der sog. \textit{Embedding Strength Factor}\index{Embedding Strength Factor}, ein Kontrollparameter für die Stärke der Signalveränderung, ist. Der $\mbox{esf}$ sollte unter der Bedingung der Unhörbarkeit des Watermarks\index{Watermark} maximiert werden.
 	 
 Aus der Summenobergrenze $3 \cdot {N}_{E}$ ist ersichtlich, dass es sich bei der $\mbox{ES}$ um den Mittelwert der Energiewerte der 3 Subbänder handelt.
 
@@ -81,7 +81,7 @@ Sind diese Bedingungen aus der natürlichen Gegebenheit des Signals erfüllt, so
 
 \subsubsection{Fall 1: a = 1 und A-B < ES} 
 
-Folgende Regeln angewendet auf die Koeffizienten ${c}_{i},\quad i=1\dots{3\cdot{N}_{E}}$ führen dazu, dass die resultierenden Koeffizienten ${c'}_{i}$ die Bedingung (\ref{equ:embeddingrelationships}) erfüllen:
+Folgende Regeln angewendet auf die Koeffizienten ${c}_{i}, \forall i \in [1, 3\cdot{N}_{E}]$ führen dazu, dass die resultierenden Koeffizienten ${c'}_{i}$ die Bedingung (\ref{equ:embeddingrelationships}) erfüllen:
 
 	 \begin{equation}
 		 {c'}_{i} = \begin{cases}
@@ -116,7 +116,7 @@ wobei ${E'}_{max}$, ${E'}_{med}$ und ${E'}_{min}$ den maximalen, mittleren und m
 
 \subsubsection{Fall 2: a = 0 und B-A < ES}
 
-Wie in Fall 1 führen wir auch hier Regeln ein, mit denen wir die Subbandkoeffizienten\index{Subband} ${c}_{i},\quad i=1\dots{3\cdot{N}_{E}}$ anpassen, damit sie Formel \ref{equ:embeddingrelationships} erfüllen:
+Wie in Fall 1 führen wir auch hier Regeln ein, mit denen wir die Subbandkoeffizienten\index{Subband} ${c}_{i}, \forall i \in [1, 3\cdot{N}_{E}]$ anpassen, damit sie Formel \ref{equ:embeddingrelationships} erfüllen:
 
 	 \begin{equation}
 		 {c'}_{i} = \begin{cases}
@@ -150,7 +150,7 @@ Formal können wir nun eine Funktion $f$ definieren, die eine Menge an Samples u
 \section{Ausdehnung auf mehrere Bit}
 \label{sec:embeddingstragety_bitsequence}
 
-Um eine Bitsequenz $({a}_{i})$ in ein Signal einzubetten, muss dieses in $n$ disjunkte Partitionen ${P}_{i}, {1}\leq{i}\leq{n}$ unterteilt werden. Jede ${P}_{i}\subseteq{sig}$ wird nach dem oben beschriebenen Verfahren mit genau einem binären Informationswert angereichert, d.h. ${P}_{i}'=f({P}_{i}, {a}_{i}), {a}_{i} = wmk(i)\in\left\{0,1\right\}$. Das mit dem Watermark\index{Watermark} angereicherte Signal $sig'$ wird durch die Konkatenation der modifizierten Partitionen ${P}_{i}'$ erzeugt. Für die Teilfolgen $\langle{sig}_{k},{sig}_{l}\rangle$ gilt:
+Um eine Bitsequenz $\{{a}_{i}\}$ in ein Signal einzubetten, muss dieses in $n$ disjunkte Partitionen ${P}_{i}, {1}\leq{i}\leq{n}$ unterteilt werden. Jede ${P}_{i}\subseteq{sig}$ wird nach dem oben beschriebenen Verfahren mit genau einem binären Informationswert angereichert, d.h. ${P}_{i}'=f({P}_{i}, {a}_{i}), {a}_{i} = \mbox{wmk}(i)\in\left\{0,1\right\}$. Das mit dem Watermark\index{Watermark} angereicherte Signal $sig'$ wird durch die Konkatenation der modifizierten Partitionen ${P}_{i}'$ erzeugt. Für die Teilfolgen $\langle{sig}_{k},{sig}_{l}\rangle$ gilt:
 
 	\begin{equation}
 		\langle{sig'}_{k},{sig'}_{l}\rangle = {P}_{i}'\circ{P}_{i+1}' \quad\mbox{mit}\quad k=i \cdot {N}_{s},\quad l=(i+2) \cdot {N}_{s},\quad {1}\leq{i}\leq{n-1}.
@@ -169,9 +169,9 @@ Für die Kardinalitäten ergibt sich daraus folgende Bedingung:
 
 Liegt ein mit den in Abschnitt \ref{sec:embeddingstragety} beschriebenen Methoden mit Information angereichertes Signal vor, so müssen diese Informationen auch wieder eindeutig aus dem Signal rekonstruiert werden. Wurde das Signal übertragen, so kann der Übertragungskanal Einflüsse auf das Signal haben. Diese werden in den Kapiteln \ref{ch:methode} und \ref{ch:analyse} näher beschrieben. 
 
-Beschreiben wir diese Einflüsse ganz allgemein als ein wie auch immer geartetes Störsignal $X$. Wir haben unser Signal $sig$ mit einer Binärsequenz $({a}_{i})$ angereichert, also $sig' = f( sig, ({a}_{i}))$. Durch die Übertragung überlagert sich unser modifiziertes Signal $sig'$ mit dem Störsignal $X$, also $sig'' = sig' + X$.
+Beschreiben wir diese Einflüsse ganz allgemein als ein wie auch immer geartetes Störsignal $X$. Wir haben unser Signal $sig$ mit einer Binärsequenz $\{{a}_{i}\}$ angereichert, also $sig' = f( sig, \{{a}_{i}\})$. Durch die Übertragung überlagert sich unser modifiziertes Signal $sig'$ mit dem Störsignal $X$, also $sig'' = sig' + X$.
 
-Das Verfahren um die Informationssequenz $a$ aus $sig''$ zu extrahieren ist im Prinzip das gleiche wie die Implantierung. Wir erzeugen uns mittels der DWT wieder die Koeffizienten, bilden die 3 Subbänder ${S}_{1}$, ${S}_{2}$ und ${S}_{3}$, errechnen deren Energiepotenziale ${E}_{1}$, ${E}_{2}$ und ${E}_{3}$ und sortieren die Subbändern nach deren Energiewerten indem wir ${E}_{min}$, ${E}_{med}$ und ${E}_{max}$ bilden. Damit berechnen wir wieder die Energiedifferenzen $A'' = {E''}_{max} - {E''}_{med}$ und $B'' = {E''}_{med} - {E''}_{min}$.
+Das Verfahren um die Informationssequenz $\{{a}_{i}\}$ aus $sig''$ zu extrahieren ist im Prinzip das gleiche wie die Implantierung. Wir segmentieren, erzeugen uns mittels der DWT\index{Diskrete Wavelet-Tansformation} wieder die Koeffizienten, bilden die 3 Subbänder ${S}_{1}$, ${S}_{2}$ und ${S}_{3}$, errechnen deren Energiepotenziale ${E}_{1}$, ${E}_{2}$ und ${E}_{3}$ und sortieren die Subbändern nach deren Energiewerten indem wir ${E}_{min}$, ${E}_{med}$ und ${E}_{max}$ bilden. Damit berechnen wir wieder die Energiedifferenzen $A'' = {E''}_{max} - {E''}_{med}$ und $B'' = {E''}_{med} - {E''}_{min}$.
 
 Der springende Punkt ist nun, dass wir in der Implantierungsphase sichergestellt haben, dass die Subbänder die Bedingung (\ref{equ:embeddingrelationships}) erfüllen. Somit können wir über die Energiedifferenzen $A''$ und $B''$ eine Aussagen über den darin enthaltenen Binärwert $a$ treffen:
 
@@ -184,7 +184,7 @@ Der springende Punkt ist nun, dass wir in der Implantierungsphase sichergestellt
 	 	\label{equ:extraction_bedingungen}
 	 \end{equation}
 	 
-Um eine Bitsequenz $({a}_{i})$ aus einem Signal zu extrahieren, muss $sig''$ äquivalent zu Kapitel \ref{sec:embeddingstragety_bitsequence} partitioniert werden. Der Vollständigkeit halber sei noch erwähnt, dass das im Allgemeinen für das Urbild gilt ${P}_{i} \neq f^{-1}({P}_{i}', {a}_{i})$, da die Auswirkungen von $f$ nicht eindeutig rekonstruierbar sind. 
+Um eine Bitsequenz $\{{a}_{i}\}$ aus einem Signal zu extrahieren, muss $sig''$ äquivalent zu Kapitel \ref{sec:embeddingstragety_bitsequence} partitioniert werden. Der Vollständigkeit halber sei noch erwähnt, dass das im Allgemeinen für das Urbild gilt ${P}_{i} \neq f^{-1}({P}_{i}', {a}_{i})$, da die Auswirkungen von $f$ nicht eindeutig rekonstruierbar sind. 
 
 \section{Einbettungskapazit\"at}
 \label{sec:embedding-capacity}
@@ -200,14 +200,14 @@ Bei der Analog-Digital-Wandlung wird ein Signal abgetastet, d.h. es werden zu de
 	
 wobei ${f}_{max}$ die größte auftretende Frequenz des Signals beschreibt, so kann das Signal mit den durch $f_s$ gewonnenen Sample wieder eindeutig rekonstruiert werden.
 
-Wird ein analoges Audiosignal mit einer Samplerate von beispielsweise 48.000kHz abgetastet, so liegen für eine Sekunde Signal 48.000 Messwerte vor. Daraus können wir schließen, dass im Allgemeinen für die Bitkapazität $P$ eines Signals mit 1 Sekunde gilt: 
+Wird ein analoges Audiosignal mit einer Samplerate von beispielsweise 48kHz abgetastet, so liegen für eine Sekunde Signal 48.000 Messwerte vor. Daraus können wir schließen, dass im Allgemeinen für die Bitkapazität $K$ eines Signals mit 1 Sekunde gilt: 
 
 	 \begin{equation}
-		 P = { {f}_{s} \over N_s } = { {f}_{s} \over 3 \cdot {N}_{E} \cdot 2 ^ {{D}_{k}} }
+		 K = { {f}_{s} \over N_s } = { {f}_{s} \over 3 \cdot {N}_{E} \cdot 2 ^ {{D}_{k}} }
 	 	\label{equ:bitcapacity_1sec}
 	 \end{equation}
 
-und folglich für $m$ Sekunden ${P}_{m} = m \cdot P$. 
+und folglich für $m$ Sekunden ${K}_{m} = m \cdot K$. 
 
 Sollen genau $n$ Bit in einem Signal untergebracht werden, so musst das Signal mindestens $n \cdot {N}_{s}$ Samples haben was abhängig von der Samplerate
 

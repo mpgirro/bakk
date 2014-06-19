@@ -1,4 +1,4 @@
-\chapter{Methode}
+\chapter{Implementierung}
 \label{ch:methode}
 
 In Kapitel \ref{ch:theorie} wurde das theoretisch-mathematische Modell beschrieben, mit welchem ein Bit geschrieben und wieder rekonstruiert werden kann. Um dieses Wissen nun praktisch nutzen zu können wurde ein Framework ausgearbeitet in dem es zur Anwendung kommt. 
@@ -15,18 +15,18 @@ Das von Shannon und Weaver entwickelte Sender-Empfänger-Modell \cite{shannon200
 	\label{fig:diagram-framework}
 \end{figure}
 
-Ein beliebiges digitales Signal soll mit einer Information, dem \textit{Watermark}\index{Watermark}, angereichert werden. Das Encodermodul verflechtet basierend auf der Grundlage von Kapitel \ref{sec:embeddingstragety_bitsequence} das Watermark mit dem Signal und liefert erneut ein digitales Signal welches als \textit{wav} File vorliegt.
+Ein beliebiges digitales Signal soll mit einer Information, dem \textit{Watermark}\index{Watermark}, angereichert werden. Das Encodermodul verflechtet basierend auf der Grundlage von Kapitel \ref{sec:embeddingstragety_bitsequence} das Watermark mit dem Signal und liefert erneut ein digitales Signal.
 
-Wir das neue digitale Signal auf analoger Ebene übertragen, muss eine D/A-Wandlung\index{D/A-Wandlung} vorgenommen werden. In der Regel wird das Signal über ein Lautsprechersystem abgespielt werden. Allerdings ist auch die reine Übertragung von einer Soundkarte zu einer anderen via einem Audiokabel eine D/A-Wandlung. Ebenso würde das Pressen einer Schallplatte oder das Übertragen auf ein analoges Tonband in diese Kategorie fallen. 
+Wir das neue digitale Signal auf analoger Ebene übertragen, muss eine DA-Wandlung\index{DA-Wandlung} vorgenommen werden. In der Regel wird das Signal über ein Lautsprechersystem abgespielt werden. Allerdings ist auch die reine Übertragung von einer Soundkarte zu einer anderen via einem Audiokabel eine DA-Wandlung. Ebenso würde das Pressen einer Schallplatte oder das Übertragen auf ein analoges Tonband in diese Kategorie fallen. 
 
-Jede analoge Übertragung geschieht auf einem analogem Trägermedium, da Schall nicht im leeren Raum existieren kann, sondern sich auf einem Medium ausbreiten muss. Für den menschlichen Hörapparat ist dies normalerweise die Luft. Aber auch in Wasser kann sich Schall ausbreiten\footnote{Hier sogar viel besser. Viele Meereslebewesen nutzen diesen Umstand sehr stark aus, da sich Licht unter Wasser nur wenige 100 Meter ausbreitet. Auch das Sonar basiert darauf.} sowie in Festkörpern. In letzteren liegt oftmals das Signal nicht direkt als Schallwelle vor, sondern im Falle eines Audiokabels etwa als elektrisches Signal. 
+Jede analoge Übertragung geschieht auf einem analogen Trägermedium, da Schall nicht im leeren Raum existieren kann, sondern sich auf einem Medium ausbreiten muss. Für den menschlichen Hörapparat ist dies normalerweise die Luft. Aber auch in Wasser kann sich Schall ausbreiten\footnote{Hier sogar viel besser. Viele Meereslebewesen nutzen diesen Umstand sehr stark aus, da sich Licht unter Wasser nur wenige 100 Meter ausbreitet. Auch das Sonar basiert darauf.} sowie in Festkörpern. In letzteren liegt oftmals das Signal nicht direkt als Schallwelle vor, sondern im Falle eines Audiokabels etwa als elektrisches Signal. 
 
 Doch egal welches Medium benutzt wird, jeder Übertragungskanal\index{\"Ubertragungskanal} verändert das Signal durch seine Umwelteinflüsse während es ihn durchläuft. In der Luft etwa kommen die übrigen Geräusche der Umgebung hinzu, u.a. auch die Eigenreflexion der Schallwelle an der Umgebung. 
 Wir wollen uns mit den diversen Formen und Ursachen von Störsignalen nicht näher befassen. Für uns ist wichtig, dass jede Störung das Signal verändert. Das mit Informationen angereicherte, modifizierte Signal überlagert sich also mit den Störungen. Dies wird sich in der Regel negativ auf das Watermark\index{Watermark} auswirken. 
 
-Um das Watermark rekonstruieren zu können, muss das Signal zuerst wieder in eine digitale Form gebracht werden. Dies geschieht durch eine A/D-Wandlung\index{A/D-Wandlung}. Eine Schallwelle wird durch ein Mikrofon aufgenommen, ein elektrisches Signal durch den Line-in Eingang einer Soundkarte umgewandelt. 
+Um das Watermark rekonstruieren zu können, muss das Signal zuerst wieder in eine digitale Form gebracht werden. Dies geschieht durch eine AD-Wandlung\index{AD-Wandlung}. Eine Schallwelle wird durch ein Mikrofon aufgenommen, ein elektrisches Signal durch den Line-in Eingang einer Soundkarte umgewandelt. 
 
-Das Decodermodul versucht anschließend, das Watermark\index{Watermark} zu rekonstruieren. Hier gilt es 2 Probleme zu überwinden. Erstens muss das Watermark erkannt werden, d.h. der Decoder muss herausfinden wo eingebettete Daten sind. Dazu werden wir sog. \textit{Synchronisations-Codes} mit speziellen Eigenschaften bemühen (näheres in Abschnitt \ref{sec:barker-code}). Und zweitens müssen die eingeflochtenen Bits wieder \textit{richtig} rekonstruiert werden. Aufgrund des Störsignals welches im Übertragungskanal\index{\"Ubertragungskanal} das Signal in Mitleidenschaft zieht kann sich dies durchaus als schwierig herausstellen. Zur Erhöhung der Resistenz werden in Abschnitt \ref{sec:errorcorrection} Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} eingeführt. Es sei allerdings an dieser Stelle bereits darauf hingewiesen, dass das Signal im Allgemeinen so weit deformiert werden kann, dass auch die Fehlerkorrektur eine sowohl vollständige wie auch richtige Rekonstruktion nicht gewährleisten kann. 
+Das Decodermodul versucht anschließend, das Watermark\index{Watermark} zu rekonstruieren. Hier gilt es zwei Probleme zu überwinden. Erstens muss das Watermark erkannt werden, d.h. der Decoder muss herausfinden wo eingebettete Daten sind. Dazu werden wir sog. \textit{Synchronisations-Codes} mit speziellen Eigenschaften bemühen (näheres in Abschnitt \ref{sec:barker-code}). Und zweitens müssen die eingeflochtenen Bits wieder \textit{richtig} rekonstruiert werden. Aufgrund des Störsignals welches im Übertragungskanal\index{\"Ubertragungskanal} das Signal in Mitleidenschaft zieht kann sich dies durchaus als schwierig herausstellen. Zur Erhöhung der Resistenz werden in Abschnitt \ref{sec:errorcorrection} Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} eingeführt. Es sei allerdings an dieser Stelle bereits darauf hingewiesen, dass das Signal im Allgemeinen so weit deformiert werden kann, dass auch die Fehlerkorrektur eine sowohl vollständige wie auch richtige Rekonstruktion nicht gewährleisten kann. 
 
 \section{Watermark Implantierung}
 \label{sec:embedding}
@@ -42,7 +42,7 @@ Der Implantationsprozess wird schematisch in Abbildung \ref{fig:diagram-encoder}
 	\label{fig:diagram-encoder}
 \end{figure}
 
-Jede Sample Section\index{Sample Section} bekommt ein Bit der Bitsequenz, die das Signal beherbergen soll. Diese Sequenz setzt sich zusammen aus einer Kombination der mit Redundanz angereicherten (Abschnitt \ref{sec:errorcorrection}) eigentlichen Informationen und der Synchronisation-Codes\index{Synchronisations-Code}. Die Einbettung jedes Bit geschieht nach dem in Abschnitt \ref{sec:embeddingstragety} beschriebenen Algorithmus durch Veränderung der DWT-Koeffizienten\index{DWT-Koeffizienten}. Um das neue nun angereicherte Signal nun herzustellen werden auf die DWT-Koeffizienten eine inverse DWT-Transformation (IDWT)\index{inverse DWT-Transformation} angewandt. Diese resultiert in einer neuen Samples Section. Diese ersetzen im neuen Signal die unimplantierten Samples der korrelierenden Sample Section. 
+Jede Sample Section\index{Sample Section} bekommt ein Bit der Bitsequenz, die das Signal beherbergen soll. Diese Sequenz setzt sich zusammen aus einer Kombination der mit Redundanz angereicherten (Abschnitt \ref{sec:errorcorrection}) eigentlichen Informationen und der Synchronisation-Codes\index{Synchronisations-Code}. Die Einbettung jedes Bit geschieht nach dem in Abschnitt \ref{sec:embeddingstragety} beschriebenen Algorithmus durch Veränderung der DWT-Koeffizienten\index{DWT-Koeffizienten}. Um das neue angereicherte Signal nun herzustellen werden auf die DWT-Koeffizienten eine inverse DWT-Transformation (IDWT)\index{inverse DWT-Transformation} angewandt. Diese resultiert in einer neuen Samples Section. Diese ersetzen im neuen Signal die unimplantierten Samples der korrelierenden Sample Section. 
 
 Um sicherzustellen, dass das Watermark\index{Watermark} unhörbar in die Sample Section\index{Sample Section} implantiert wurde, wird noch eine Qualitätskontrolle vorgenommen. Dazu wird für ein Signalstück der sog. \textit{Objective Difference Grade} (ODG) berechnet. Erfüllt dieser einen vorgegebenen Grenzwert, so ist das Signal zu störhaft verändert worden und das Bit muss neu implantiert werden. Um eine weniger invasive Veränderung sicherzustellen wird der in Formel \ref{equ:embeddingstrength} eingeführte \textit{Embedding Strength Factor} (esf)\index{Embedding Strength Factor} reduziert, was dazu führt, dass die DWT-Koeffizienten weniger stark verändert werden.
 
@@ -52,16 +52,16 @@ Um sicherzustellen, dass das Watermark\index{Watermark} unhörbar in die Sample 
 Das Rekonstruktionsprinzip (vgl. \ref{sec:reconstruction}) bestimmt für das Verhältnis der niederfrequenten DWT-Koeffizienten eines Signal einen Bitwert. Prinzipiell kann dieses Verfahren auf jede beliebige Menge an Samples angewandt werden und daraus einen Bitwert generieren. 
 
 Das Problem ist nun zu erkennen wo das Signal absichtlich verändert wurde und wo daher tatsächlich eingebrachte Bits liegen. In der Literatur findet sich dazu das Konzept der Synchron\-isations-Codes\cite{xiang2007robust}\cite{chang2012location}\cite{li2000transparent}\cite{ansari2004data}\cite{huang2002blind}\cite{petrovic1999data}\cite{wu2005efficiently}. Prinzipiell handelt es sich dabei um einen Mechanismus, der bestimmte Bereiche eines Signals markiert. Jedem Marker folgt ein Teil der eigentlichen Information. Die Umsetzung der Markers kann sich durchaus von der eigentlichen Watermarkingmethode unterscheiden, in diesem Fall wird allerdings das selbe Modifikationsprinzip herangezogen. 
-Ein Synchronisation-Code besteht hier aus einer festgelegten Bitsequenz die als Marker dient. Wenn die Bitsequenz dekodiert wird, ist dies das Indiz das Informationsbits folgen. 
+Ein Synchronisations-Code besteht hier aus einer festgelegten Bitsequenz die als Marker dient. Wenn die Bitsequenz dekodiert wird, ist dies das Indiz das Informationsbits folgen. 
 
-Im Folgenden steht \texttt{sync} als Synonym für die Bitsequenz des Synchronisations-Codes und ${L}_{s}$ ist die L\"ange der Bitsequenz (Anzahl an Bit) von \texttt{sync}. $sync(i)$ bezeichnet das Bit an der Stelle $i$ des Synchronisation-Codes, mit $i\in[1,{L}_{s}]$.
+Im Folgenden steht \texttt{sync} als Synonym für die Bitsequenz des Synchronisations-Codes und ${L}_{s}$ ist die L\"ange der Bitsequenz (Anzahl an Bit) von \texttt{sync}. $\mbox{sync}(i)$ bezeichnet das Bit an der Stelle $i$ des Synchronisation-Codes, mit $i\in[1,{L}_{s}]$.
 
 \subsubsection{Autokorrelation und Barker-Codes}
 \label{sec:barker-code}
 
 \index{Barker-Code|(}
 
-Wie bereits erwähnt können die Bits durch die Störeinflüsse der D/A-Wandlung\index{D/A-Wandlung} beeinflusst werden. Man sagt sie \glqq{}kippen\grqq{}. Bei den Synchronisations-Codes hat ein gekipptes Bit zur Folge, dass der Code nicht mehr erkannt wird. Die auf ihn folgenden Informationsbits gehen verloren. 
+Wie bereits erwähnt können die Bits durch die Störeinflüsse der DA-Wandlung\index{DA-Wandlung} beeinflusst werden. Man sagt sie \textit{kippen}. Bei den Synchronisations-Codes hat ein gekipptes Bit zur Folge, dass der Code nicht mehr erkannt wird. Die auf ihn folgenden Informationsbits gehen verloren. 
 
 Die logische Schlussfolgerung ist, dass eine Bitsequenz mit dem Synchronisations-Code-Schema nicht zu 100\% übereinstimmen muss, um als solcher erkannt zu werden. Man definiert also einen Schwellwert. Aber auch hier kann es zu Problemen führen, wie man sich leicht überlegen kann. 
 
@@ -73,18 +73,18 @@ Die logische Schlussfolgerung ist, dass eine Bitsequenz mit dem Synchronisations
 
 Abbildung \ref{fig:sync-code-detection} skizziert das Erkennen eines Synchronisations-Codes \texttt{sync}\index{Synchronisations-Code}. Der Code wird immer mit einem Block Bits gleicher \mbox{Länge} des extrahierten Bitstroms verglichen. Die in der Skizze blau hervorgehobenen Bits sind das ein\-gebettete \texttt{sync}. Die rot markierten Bits signal\-isieren jene Zeichen, die beim \mbox{aktuellen} Vergleich über\-einstimmen. In diesem Beispiel beträgt die Über\-einstimmung zwischen er\-kanntem und tatsächlichem \texttt{sync} 75\% bei einer Synchronisation-Code Wortlänge von 8 Bit. Würde der Erkennungsschwellwert (oder \textit{Synccode-Threshold}\index{Synccode-Threshold}) ${T}_{s}$ 0.75 betragen, so wäre nun \texttt{sync} erkannt worden. Aus der Skizze ist aber ersichtlich, dass hier der tatsächlich Match erst 2 Shifts später erfolgt. Die anschließend gelesenen Informationsbits würden also teilweise aus dem Ende von \texttt{sync}\index{Synchronisations-Code} bestehen. Umgekehrt würden auch 2 echte Bits des Informationsblock\index{Information Block} nicht gelesen werden.
 
-Das Problem in diesem Beispiel ist, dass \texttt{sync}\index{Synchronisations-Code} eine sehr hohe \textit{Autokorrelation}\index{Autokorrelation} besitzt. In anderen Worten ist \texttt{sync} (als Signal aufgefasst) sehr ähnlich zu sich selbst, weswegen 75\% Überdeckung auch zu 75\% Übereinstimmung führen. Die Lösung ist für \texttt{sync}\index{Synchronisations-Code} ein Sequenz mit minimaler Autokorrelation zu wählen. In der Literatur\cite{huang2002blind}\cite{lie2006robust}\cite{chang2012location} erfreuen sich die sog. \textit{Barker-Codes}\cite{barker1953group} großer Beliebtheit. Dabei handelt es sich um 9 Zahlensequenzen von denen der längste 13 Zeichen umfasst, welche alle die Bedingung der Autokorrelations-Funktion:
+Das Problem in diesem Beispiel ist, dass \texttt{sync}\index{Synchronisations-Code} eine sehr hohe \textit{Autokorrelation}\index{Autokorrelation} besitzt. In anderen Worten ist \texttt{sync} (als Signal aufgefasst) sehr ähnlich zu sich selbst, weswegen 75\% Überdeckung auch zu 75\% Übereinstimmung führen. Die Lösung ist für \texttt{sync}\index{Synchronisations-Code} ein Sequenz mit minimaler Autokorrelation zu wählen. In der Literatur\cite{chang2012location}\cite{lie2006robust}\cite{huang2002blind} erfreuen sich die sog. \textit{Barker-Codes}\cite{barker1953group} großer Beliebtheit. Dabei handelt es sich um 9 Zahlensequenzen von denen der längste 13 Zeichen umfasst, welche alle die Bedingung der Autokorrelations-Funktion:
 
 	 \begin{equation}
 		 | \sum\limits_{j=1}^{N-v} a_j {a}_{j+} | \leq 1 \quad\mbox{mit}\quad 1 \leq v < N \quad\mbox{und}\quad a_j \in {-1,+1}
 	 	\label{equ:barker-correlation}
 	 \end{equation}
 
-wobei $N$ die Code Länge bezeichnet, erfüllen. Es lässt sich zeigen, dass die Summe bei einer Verschiebung wie im Beispiel oben immer sehr klein ist, außer die Codes Überdecken sich exakt. Gleichzeitig bleibt die Summe immer noch sehr groß (nahe an 1) wenn bei vollständiger Überdeckung innerhalb des Codes eine Zahl kippt. Ein gekipptes Bit wirkt sich also nicht so massiv auf die Erkennung des Codes aus wie eine falsche Überdeckung. Barker-Codes eignen sich daher hervorragend als Synchronisations-Code Sequenz. 
+wobei $N$ die Code Länge bezeichnet, erfüllen. Es lässt sich zeigen, dass die Summe bei einer Verschiebung wie im Beispiel oben immer sehr klein ist, außer die Codes überdecken sich exakt. Gleichzeitig bleibt die Summe immer noch sehr groß (nahe an 1) wenn bei vollständiger Überdeckung innerhalb des Codes eine Zahl kippt. Ein gekipptes Bit wirkt sich also nicht so massiv auf die Erkennung des Codes aus wie eine falsche Überdeckung. Barker-Codes eignen sich daher hervorragend als Synchronisations-Code Sequenz. 
 
 Die Länge der verwendeten Barker Sequenz wirkt sich natürlich auch auf die Erkennungsgenauigkeit aus. Hier wird der längste Barker-Code \textsf{+1 +1 +1 +1 +1 -1 -1 +1 -1 -1 +1 -1 +1} verwendet. Der Vollständigkeit halber sei noch darauf hingewiesen, dass wir nur Binärwerte kodieren können, weswegen $-1$ auf den Wert $0$ abgebildet wird. Bei der Erkennung von \texttt{sync} muss dies natürlich entsprechend bedacht werden.
 
-Synchronisations-Codes werden genau wie die eigentlichen Informationen (die \glqq{}Nutzlast\grqq{}) übertragen. Jeder eingebrachte \texttt{sync}\index{Synchronisations-Code} belastet daher die Transportkapazität des Signals. Es können also abhängig von der Informationsblocklänge bedeutend weniger Informationsbits effektiv in einem fixen Zeitfenster transportiert werden. 
+Synchronisations-Codes werden genau wie die eigentlichen Informationen (die \textit{Nutzlast}) übertragen. Jeder eingebrachte \texttt{sync}\index{Synchronisations-Code} belastet daher die Transportkapazität des Signals. Es können also abhängig von der Informationsblocklänge bedeutend weniger Informationsbits effektiv in einem fixen Zeitfenster transportiert werden. 
 
 \index{Barker-Code|)}
 \index{Synchronisations-Code|)}
@@ -93,9 +93,9 @@ Synchronisations-Codes werden genau wie die eigentlichen Informationen (die \glq
 \label{sec:errorcorrection}
 \index{Fehlerkorrekturverfahren|(}
 
-Die Natur der Barker-Codes\index{Barker-Code} bringt eine gewisse Resistenz gegen Bitfehler mit sich. Die Informationsbit haben diese im Allgemeinen nicht. Der Übertragungskanal\index{\"Ubertragungskanal} kann aber das Signal so weit beeinflussen, dass nicht alle Bits korrekt rekonstruiert werden. Es ist daher wünschenswert eine Methode zu verwenden welche derartige Bitfehler nicht nur erkennt, sondern auch korrigieren kann. Mit derartigen Modellen beschäftigt sich die \textit{Kodierungstheorie}\index{Kodierungstheorie}.
+Die Natur der Barker-Codes\index{Barker-Code} bringt eine gewisse Resistenz gegen Bitfehler mit sich, wie eben demonstriert wurde. Die Informationsbit haben diese im Allgemeinen nicht. Der Übertragungskanal\index{\"Ubertragungskanal} kann aber das Signal so weit beeinflussen, dass nicht alle Bits korrekt rekonstruiert werden. Es ist daher wünschenswert eine Methode zu verwenden welche derartige Bitfehler nicht nur erkennt, sondern auch korrigieren kann. Mit derartigen Modellen beschäftigt sich die \textit{Kodierungstheorie}\index{Kodierungstheorie}.
 
-Wir verwenden hier eine Vorwärtsfehlerkorrektur\index{Vorwärtsfehlerkorrektur} (in der englischen Literator \textit{forward error correction}, daher kurz FEC) bei dem die Daten mit einem \textit{error-correcting code} \index{error-correcting code} (ECC\index{error-correcting code}) bewusst mit redundanten Daten angereichert werden. Aus dieser Redundanz lässt sich anschließend prüfen ob Daten richtig rekonstruiert wurden und bei nicht zu starker Fehlerrate die tatsächliche Information auch wieder herstellen. 
+Wir verwenden hier eine Vorwärtsfehlerkorrektur\index{Vorwärtsfehlerkorrektur} (in der englischen Literator \textit{forward error correction}, daher kurz FEC) bei dem die Daten mit einem \textit{error-correcting code} \index{error-correcting code} (ECC\index{error-correcting code}) bewusst mit redundanten Daten angereichert werden. Aus dieser Redundanz lässt sich anschließend prüfen ob die Daten richtig rekonstruiert wurden und bei nicht zu starker Fehlerrate die tatsächliche Information auch wieder herstellen. 
 
 In der Kodierungstheorie bezeichnet man mit \textit{Message}\index{Message} die Information die es zu übertragen gilt und mit \textit{Codeword}\index{Codeword} die mit Redundanz angereicherte Message. Im Informationsblock\index{\index{Information Block}} der einem jeden Synchronisations-Code\index{Synchronisations-Code} folgt befindet sich daher immer ein vollständiges Codeword um hier ggf. Übertragungsfehler auszugleichen. 
 
@@ -136,7 +136,7 @@ Verwendet wird die MATLAB Implementierung der Communication System Toolbox\footn
 \label{sec:protokoll}
 \index{Protokoll}
 
-Jeder digitale Kommunikationsprozess basiert auf einem Protokoll welches alle Teilnehmer beherrschen müssen. So auch dieser hier, denn wenn gleich der Übertragungskanal auch analog sein mag, so werden doch digitale Daten übermittelt. Nicht nur gewährleistet ein definiertes Protokoll die korrekte Verarbeitung, die Abstrahierung erlaubt auch ein einfacheres Verständnis von Aufbau, Funktion und Zusammenspiel der einzelnen Teile. 
+Jeder digitale Kommunikationsprozess basiert auf einem Protokoll welches alle Teilnehmer beherrschen müssen. So auch dieser hier, denn wenn gleich der Übertragungskanal auch analog sein mag, so werden doch digitale Daten übermittelt. Nicht nur gewährleistet ein definiertes Protokoll die korrekte Verarbeitung - die Abstrahierung erlaubt auch ein einfacheres Verständnis von Aufbau, Funktion und Zusammenspiel der einzelnen Teile. 
 
 \begin{figure}[h]
 	\centering
@@ -147,17 +147,17 @@ Jeder digitale Kommunikationsprozess basiert auf einem Protokoll welches alle Te
 
 \subsubsection{Sample Section}
 
-Zunächst wird das Signal, welches durch zeit- und wertediskreten Samplewerten\index{Sample} beschrieben wird in Bereiche segmentiert. Es werden jeweils $N_s$\index{Sample-Section-Length} Samples\index{Sample} benötigt um 1 Bit zu transportieren. Dementsprechend werden genau die benötigte Anzahl aufeinanderfolgender Samples zu einer \textit{Sample Section} gruppiert.  
+Zunächst wird das Signal, welches durch zeit- und wertediskrete Samplewerten\index{Sample} beschrieben wird in Bereiche segmentiert. Es werden jeweils $N_s$\index{Sample-Section-Length} Samples\index{Sample} benötigt um 1 Bit zu transportieren. Dementsprechend werden genau die benötigte Anzahl aufeinanderfolgender Samples zu einer \textit{Sample Section} gruppiert.  
 
 \subsubsection{Buffer Zones}
 \index{Buffer Zones}
 
-Um Interferenz zwischen den einzelnen Sample Sections\index{Sample Section} zu vermeiden befinden sich zwischen ihnen sog. \textit{Buffer Zones}. Dabei handelt es sich um eine an sich beliebige Anzahl an Samples\index{Sample}, die aber nicht zur Informationsübertragung verwendet werden. Bei der Verarbeitung der Samples werden die Buffer Zones einfach übersprungen. Prinzipiell können die Pufferzonen auch mit Sampleanzahl ${N}_{BZ} = 0$ definiert werden, allerdings führen Umweltfaktoren wie die Sensitivität des Aufnahmegerätes (und anderer A/D Einflüsse \index{A/D-Wandlung}) dazu, dass sich die Sample Sections überlagern\cite{chang2012location}. Das Ergebnis ist sog. \textit{Inter-Symbol-Interferenz}\footnote{Ein Symbol ist ein Element aus einem Alphabet. In binären Systemen ist das Alphabet also die Menge $\{0,1\}$.}. Die Auswirkung ist u.a. ein schlechteres Matching der Barker-Codes\index{Barker-Code} bei der Synchronisations-Code Erkennung\index{Synchronisations-Code}.
+Um Interferenz zwischen den einzelnen Sample Sections\index{Sample Section} zu vermeiden befinden sich zwischen ihnen sog. \textit{Buffer Zones}. Dabei handelt es sich um eine an sich beliebige Anzahl an Samples\index{Sample}, die aber nicht zur Informationsübertragung verwendet werden. Bei der Verarbeitung der Samples werden die Buffer Zones einfach übersprungen. Prinzipiell können die Pufferzonen auch mit Sampleanzahl ${N}_{BZ} = 0$ definiert werden, allerdings führen Umweltfaktoren wie die Sensitivität des Aufnahmegerätes (und anderer AD Einflüsse \index{AD-Wandlung}) dazu, dass sich die Sample Sections überlagern\cite{chang2012location}. Das Ergebnis ist sog. \textit{Inter-Symbol-Interferenz}\footnote{Ein Symbol ist ein Element aus einem Alphabet. In binären Systemen ist das Alphabet also die Menge $\{0,1\}$.}. Die Auswirkung ist u.a. ein schlechteres Matching der Barker-Codes\index{Barker-Code} bei der Synchronisations-Code Erkennung\index{Synchronisations-Code}.
 
 \subsubsection{Frame}
 \index{Frame}
 
-Um die Buffer Zones einfacher handzuhaben werden Sie in den \textit{Frames} wegabstrahiert. Alle höheren Schichten sehen ein Frame als die logische Einheit die ein Symbol (also ein Bit) transportiert. Einzig und allein die Frameverarbeitung muss über Position und Länge der Pufferzonen bescheid wissen. Für die höhere Schichten ist ein Bit in den ${N}_{F}$ Samples eines Frames, mit ${N}_{F} = {N}_{s} + {N}_{BZ}$, kodiert.
+Um die Buffer Zones einfacher handzuhaben werden sie in den \textit{Frames} wegabstrahiert. Alle höheren Schichten sehen ein Frame als die logische Einheit die ein Bit transportiert. Einzig und allein die Frameverarbeitung muss über Position und Länge der Pufferzonen bescheid wissen. Für die höhere Schichten ist ein Bit in den ${N}_{F}$ Samples eines Frames, mit ${N}_{F} = {N}_{s} + {N}_{BZ}$, kodiert.
 
 \subsubsection{Sync Block}
 \index{Sync Block}
@@ -244,14 +244,14 @@ Nachdem das Watermark\index{Watermark} nach den nun beschriebenen Schritten in e
 
 \subsection{Resynchronisaton und Interpolation}
 
-Bei der Erkennung der Synchronisations-Codes kann es im Allgemeinen zu Problemen kommen. Die bei der D/A-Wandlung\index{D/A-Wandlung} auftretenden Einflüssen lassen sich im Allgemeinen durch eine Kombination aus \textit{time scaling modification}\index{time scaling modification} (kurz TSM, dt. interessanterweise bekannt als \textit{Time-Stretching}) und \textit{wave magnitude
+Bei der Erkennung der Synchronisations-Codes kann es im Allgemeinen zu Problemen kommen. Die bei der DA-Wandlung\index{DA-Wandlung} auftretenden Einflüssen lassen sich im Allgemeinen durch eine Kombination aus \textit{time scaling modification}\index{time scaling modification} (kurz TSM, dt. interessanterweise bekannt als \textit{Time-Stretching}) und \textit{wave magnitude
 distortion}\textit{wave magnitude
 distortion} (WMD) beschreiben\cite{xiang2007robust}\cite{steinebach2002audio}. Die TSM kann das Auffinden der Synchronisation-Codes verhindern. Das Prinzip kann daher auch gezielt eingesetzt werden, um ein existierendes Watermark\index{Watermark} zu zerstören (etwa um einen Urheberrechtlichsschutz aufzuheben). Dies wird als \textit{Synchronization attack}\index{Synchronization attack} bezeichnet.
 
-Um diesen Effekt der D/A-Wandlung\index{D/A-Wandlung} aufzuheben, muss versucht werden die Synchron\-isations\--Codes wieder\-herzustellen. Man nennt diesen Vorgang \textit{Resynchronisation}\index{Resynchronisation}. Verschiedene Resynchronisationsansätze existieren, hier wird ein sog. \textit{brute-force approach}\index{brute-force approach} angewandt und wie in \cite{steinebach2011re} vorgeschlagen auf ein Suchintervall von -10\% bis +10\% beschränkt. 
+Um diesen Effekt der DA-Wandlung\index{DA-Wandlung} aufzuheben, muss versucht werden die Synchron\-isations\--Codes wieder\-herzustellen. Man nennt diesen Vorgang \textit{Resynchronisation}\index{Resynchronisation}. Verschiedene Resynchronisationsansätze existieren, hier wird ein sog. \textit{brute-force approach}\index{brute-force approach} angewandt und wie in \cite{steinebach2011re} vorgeschlagen auf ein Suchintervall von -10\% bis +10\% beschränkt. 
 
 Die TSM bewirkt, dass das Signal auf seiner Zeitachse gestreckt oder gestaucht wird. Für das Watermark\index{Watermark} bedeutet das, dass ein Bit nicht mehr in $N_s$\index{Sample-Section-Length} Samples kodiert ist, sondern durch mehr oder weniger Samples ${N}_{s}'$ beschrieben wird. 
-Zuerst gilt es die neue Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ von $0.9 \cdot {N}_{s}$ bis $1.1 \cdot {N}_{s}$ durchgetestet und nach Synchronisations-Codes\index{Synchronisations-Code} gesucht. Algorithmus \ref{alg:resync} illustriert diesen Vorgang:
+Zuerst gilt es die neue Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ von $0.9 \cdot {N}_{s}$ bis $1.1 \cdot {N}_{s}$ durchgetestet und nach Synchronisations-Codes\index{Synchronisations-Code} gesucht. Algorithmus \ref{alg:resync} illustriert diesen Vorgang.
 
 \RestyleAlgo{algoruled}
 \begin{algorithm}[h]

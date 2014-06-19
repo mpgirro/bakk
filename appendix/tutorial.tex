@@ -3,7 +3,7 @@
 
 Die Implementierung liegt in MATLAB vor und deren Verwendung soll hier kurz illustriert werden. Die sehr lose gekoppelten modularen Komponenten werden aus Anwendersicht prinzipiell von den beiden Funktionen \texttt{encoder} und \texttt{decoder} wegabstrahiert. 
 
-\section{encoder}
+\section*{encoder}
 \label{sec:encoder}
 \index{encoder|(}
 
@@ -27,7 +27,7 @@ audiowrite('result.wav',modSignal, fs);
 
 \index{encoder|)}
 
-\section{decoder}
+\section*{decoder}
 \index{decoder|(}
 
 \begin{verbatim}
@@ -45,7 +45,7 @@ data = decoder(signal,fs);
 
 \index{decoder|)}
 
-\section{Settings}
+\section*{Settings}
 
 Die Implementiertung arbeitet per Default mit den Voreinstellungen, die sich als vergleichsweise effektiv erwiesen haben. Die diversen Parameter können aber auch individuell konfiguriert werden. Sinnvoll ist dies beispielsweise um die Paketgröße über die Synchronisations-Code-Length\index{Synchronisations-Code-Length} oder die zum verwendeten Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} passenden Message-Length\index{Message-Length} und Codeword-Length\index{Codeword-Length} Werte anzupassen.
 

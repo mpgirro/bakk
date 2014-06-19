@@ -13,6 +13,8 @@
 \usepackage{wrapfig}
 \usepackage{listings}				% source code listings
 \usepackage[toc]{glossaries}
+\usepackage[intoc]{nomencl}
+\usepackage{multicol}
 
 \usepackage{tablefootnote}
 \usepackage{pgf}	
@@ -56,9 +58,11 @@
 \setsecnumdepth{subsection} % the above line does not seem to work with memoir class
 \setcounter{tocdepth}{2}
 \setlength\parindent{0pt}
+\setlength{\columnsep}{2cm}
 
-\makeglossaries
+%\makeglossaries
 \makeindex
+\makenomenclature
 
 %\thesistitle{DIGITAL AUDIO-WATERMARKING}
 \thesistitle{Digital Audio-Watermarking}
@@ -90,6 +94,9 @@
 
 \renewcommand{\listalgorithmcfname}{Quellcodes}
 \renewcommand{\lstlistlistingname}{Algorithmenverzeichnis}
+\renewcommand{\nomname}{Abkürzungsverzeichnis}
+\renewcommand*\nompreamble{\begin{multicols}{2}}
+\renewcommand*\nompostamble{\end{multicols}}
 
 % define newline hight between two paragraphs - by default there is none
 %\setlength{\parskip}{0.15in}
@@ -159,8 +166,8 @@ and would otherwise have been left blank.}
 	
 \listoffigures*
 
-\listofalgorithms*
-\lstlistoflistings*
+%\listofalgorithms*
+%\lstlistoflistings*
 \listoftables*
 
 
@@ -223,9 +230,11 @@ and would otherwise have been left blank.}
 \pageintentionallyleftblank{Denna sida har avsiktligen lämnats blank.}
 \bibliography{references}
 
-\pageintentionallyleftblank{Lorem Ipsum.}
-\include{glossar}
-\printglossary[title=Glossar]
+%!TEX encoding = UTF-8 Unicode\pageintentionallyleftblank{Lorem Ipsum.}
+%\include{glossar}
+%\printglossary[title=Glossar]
+\include{nomenclature}
+\printnomenclature[4em]
 
 \pageintentionallyleftblank{De Seitn homs obsichtlich la lossn.}
 \printindex

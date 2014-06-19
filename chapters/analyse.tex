@@ -3,21 +3,21 @@
 
 Um die Effizient des implementierten Verfahrens bewerten zu können wurde es einer umfangreichen Evaluierung unterzogen. Die Ergebnisse sind in diesem Kapitel gesammelt. 
 
-\section{Watermark Hörbarkeit}
+\section{Hörbarkeit}
 
 Die Resultate werden von der Implementierung immer mit den Tools EAQUAL und PQevalAudio bewertet. Dabei hat sich gezeigt, dass der berechnete ODG\index{Objective Difference Grade} bei einer $\mbox{esf}=1$ meistens kleiner $-3$ liegt, wobei PQevalAudio traditionell etwas schlechter bewertet. Per Definition des PEAQ\index{Perceptual Evaluation of Audio Quality} Standards werden Werte kleiner $-2$ als \glqq{}Slightly annoying\grqq{} eingestuft und ab $-3$ gelten die Signalveränderungen als \glqq{}Annoying\grqq{}. In subjektiven Hörtests mit verschiedenen handelsüblichen Kopfhörern wie sie etwa bei Smartphones beiliegen bestätigen diese Einschätzungen. Über Laptop oder PC Lautsprecher sind die Watermarks hingegen selten bis gar nicht wahrzunehmen. 
 
 Dennoch ist in diesen Fällen eine Reduktion der Embedding Strength\index{Embedding Strength} über den Embedding Strength Factor\index{Embedding Strength Factor} (esf) vorgesehen. Jedoch hat sich ebenfalls gezeigt, dass eine interative Reduktion des esf um 10\% kaum eine Auswirkung auf die resultierenden ODGs hat.
 
-\section{Robustheit mittels Stirmark Benchmarks}
+\section{Stirmark Benchmarks}
 
-Lange war es ein Problem verschiedene Watermarkingverfahren miteinander zu vergleichen, da die Kriterien nach denen getestet wurde von jedem Enwtickler selbst definiert wurden. Es fehlte ein entsprechender Standard. Zu diesem Zweck wurden Anfang des neuen Jahrtausends die sog. \textit{StirMark Benchmarks}\index{Stirmark Benchmark} definiert\cite{petitcolas2000watermarking}\cite{petitcolas2004stirmark}, die derzeit in der Version 4.0 vorliegen. Dabei handelt es sich um ein definiertes Set an Angriffsverfahren\index{Angriffverfahren} die auf markierte Daten angewendet werden können. Eine Auswertung der so bearbeiteten Daten und ein Vergleich mit dem Original erlaubt Rückschlüsse auf die Stärken und Schwächen eines Watermarkingalgorithmuses, besonders auf verschiedene Angriffsfamilien (wie wir noch sehen werden), sowie eine Vergleich mit anderen Watermarkingverfahren. Jedoch werden nicht alle Angriffsszenarien welche testenswert wären auch definiert und bereitgestellt\cite{steinebach2002stirmark}.
+Lange war es ein Problem verschiedene Watermarkingverfahren miteinander zu vergleichen, da die Kriterien nach denen die Robustheit getestet wurde von jedem Entwickler selbst definiert wurden. Es fehlte ein entsprechender Standard. Zu diesem Zweck wurden Anfang des neuen Jahrtausends die sog. \textit{StirMark Benchmarks}\index{Stirmark Benchmark} definiert\cite{petitcolas2000watermarking}\cite{petitcolas2004stirmark}, die derzeit in der Version 4.0 vorliegen. Dabei handelt es sich um ein definiertes Set an Angriffsverfahren\index{Angriffverfahren} die auf markierte Daten angewendet werden können. Eine Auswertung der so bearbeiteten Daten und ein Vergleich mit dem Original erlaubt Rückschlüsse auf die Stärken und Schwächen eines Watermarkingalgorithmuses, besonders auf verschiedene Angriffsfamilien (wie wir noch sehen werden), sowie eine Vergleich mit anderen Watermarkingverfahren. Jedoch werden nicht alle Angriffsszenarien welche testenswert wären auch definiert und bereitgestellt\cite{steinebach2002stirmark}.
 
 Für die Auswertung von Audiodaten gibt es eine dedizierte \textit{Stirmark for Audio} Version\cite{stirmarkforaudio} (aktuelle v1.3.2). Auf deren Verwendung wir kurz in Anhang \ref{ch:stirmarkaudio} eingegangen, da sich die Verwendung als nicht trivial herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine, weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu abstrahieren\cite{petitcolas2001public}. Eine Umsetzung dieser ist jedoch nicht abzusehen. 
 
-Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese Implementierung wurde mit den in den folgenden Testergebnissen angegebenen Parameter strapaziert, welche mit jenen von Xiangs Evaluierung\cite{xiang2007robust} übereinstimmen, insofern sie rekonstruiert werden konnten. Einige der Angaben passen jedoch nicht auf die von Stirmark for Audio bereitsgestellte API. Andere Angriffe werden zwar als besonders effektiv aufgezählt, ihre Parameter jedoch nicht angegeben, was einen Vergleich ebenfalls nicht ermöglicht. 
+Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese Implementierung wurde mit den in den folgenden Testergebnissen angegebenen Parameter strapaziert, welche mit jenen von Xiangs Evaluierung\cite{xiang2007robust} übereinstimmen, insofern sie rekonstruiert werden konnten. Einige der Angaben passen jedoch nicht auf die von Stirmark for Audio bereitgestellte API. Andere Angriffe werden zwar als besonders effektiv aufgezählt, ihre Parameter jedoch nicht angegeben, was einen Vergleich ebenfalls nicht ermöglicht. 
 
-Wie in \cite{lang2004stirmark} eingehend erläutert wird sind die Parameter der Angriffe entscheident für die Auswirkung auf das Audiosignal. Die 3 größen Signaltypen Sprache, Musik und Geräusch haben alle unterschiedliche Stärken und Schwächen gegenüber einem Angriffstyp und dessen Variationen definiert durch seine Parameter. 
+Wie in \cite{lang2004stirmark} eingehend erläutert wird sind die Parameter der Angriffe entscheidend für die Auswirkung auf das Audiosignal. Die 3 größen Signaltypen Sprache, Musik und Geräusch haben alle unterschiedliche Stärken und Schwächen gegenüber einem Angriffstyp und dessen Variationen definiert durch seine Parameter. 
 
 Tabelle \ref{tab:algo_settings} zeigt die Parameter mit denen die Implementierung den Watermarkungprozess durchgeführt hat. 
 
@@ -62,7 +62,7 @@ Die verwendeten Abkürzungen stehen hier für:
 	\end{equation}
 \end{description}
 
-Sync Blöcke \index{Sync Block} und Informations Blöcke\index{Information Block} wurden seperat behandelt. Somit wurde sichergestellt, dass auch die Daten der nicht erkannten Pakete analysiert werden konnten.  
+Sync Blöcke \index{Sync Block} und Informations Blöcke\index{Information Block} wurden separat behandelt. Somit wurde sichergestellt, dass auch die Daten der nicht erkannten Pakete analysiert werden konnten.  
 
 \begin{table}[h]
 \small
@@ -100,7 +100,7 @@ ZeroLength       & ZeroLength=10 	& 100\%  & 88,2\% & 40  & 47,1\% \\ \hline
 \end{table}
 
 Aus Tabelle \ref{tab:stirmark} ist gut zu erkennen, wo die Schwächen des Watermarkingverfahren liegen. Sämtliche Angriffe die das Frequenzspektrum des Signals beeinflussen wirken sich negativ auf die BER\index{Bit error rate} aus. Hier zeigt sich aber auch, dass die Fehlerkorrektur sehr wohl wirksam ist. So kann sie wie man sieht vor allem bei additivem Noise den resultierenden Fehler vergleichsweise klein halten. 
-Allerdings seit hier darauf hingewießen, dass trotz vergleichsweise moderatem BER dennoch viele Pakete unreparierbar beschädigt werden. Die Literatur beschränkt sich oftmals auf die reine Bewertung des BER, ohne auf diesen Umstand einzugehen. 
+Allerdings seit hier darauf hingewiesen, dass trotz vergleichsweise moderatem BER dennoch viele Pakete unreparierbar beschädigt werden. Die Literatur beschränkt sich oftmals auf die reine Bewertung des BER, ohne auf diesen Umstand einzugehen. 
 
 Anders sieht es für die Synchronisations-Codes aus. Der Package loss\index{Package loss} ist vergleichsweise viel höher. Offenbar ist der Synccode-Threshold\index{Synccode-Threshold}) ${T}_{s}$ zu restriktiv, um die Bitfehler in den \texttt{sync} Sequenzen auszugleichen.
 
@@ -146,7 +146,7 @@ Ausgehend von der Abtastrate des Signal\index{Abtastrate} ergibt sich somit die 
 
 Tabelle \ref{tab:datenraten} illustriert die Zusammenhänge der Parameter mit Bitrate\index{Bitrate}, Paketrate\index{Paketrate} (Pakete\index{Package} pro Sekunde) und Nutzlastrate\index{Nutzlastrate} (Messagebit pro Sekunde) für die Standardeinstellungen in Abhängigkeit der Abtastrate des Audiosignals. Sie zeigt schön auf, dass sowohl eine Verdoppeltung der Subband-Length\index{Subband-Length} $N_E$ wie auch eine Erhöhung des DWT-Level\index{DWT-Level} $D_k$ um 1 zu einer Verdoppelung der Sample-Section-Length\index{Sample-Section-Length} $N_s$ und somit zu einer Halbierung der Bit-, Paket- und Nutzlastrate führt. Gleichzeitig zeigt sie auch das umgekehrt eine Verdoppeltung der Abtastrate zu einer Verdoppelung eben jener Übertragungsraten führt. 
 
-\section{Manuelle Synchronisation}
+\section{Ursachenforschung}
 
 Um die Ursachen für die scheiternde Übertragung im analogen Bereich zu analysieren wurden Signale manuell synchronisiert, indem an ein Audiosignal an den Enden Stille eingefügt wurde. Somit konnte das anschließende analog übertragene Signal bis auf wenige Samples\index{Sample} genau synchronisiert werden. Dies erlaubt die DWT-Koeffizientn\index{DWT-Koeffizienten} direkt mit jenen des ursprünglichen Signals zu vergleichen um den Ursachen auf den Grund zu gehen. 
 
@@ -159,7 +159,7 @@ Durch den oben angesprochenen manuellen Abgleich der Samples\index{Sample} und d
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=\textwidth]{figures/spektrum-original.png}
-	\caption{Frequenzspektrum eines Testsignals mit Watermark}
+	\caption{Frequenzspektrum eines Signals mit Watermark}
 	\label{fig:spektrum-original}
 \end{figure}
 
@@ -180,6 +180,6 @@ Betrachtet man nun die Zusammensetzung jedes Bits genau, so wird man fündig. Wi
 	
 \end{enumerate}
 
-An dieser Stelle sei noch darauf hingewießen, dass die für dieses Testsignal gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen Originalsignal und übertragenem Signal festellen. 
+An dieser Stelle sei noch darauf hingewiesen, dass die für dieses Testsignal gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen Originalsignal und übertragenem Signal feststellen. 
 
 Es zeigt sich also, dass die Energieniveaus der Bänder sehr fragil sind. Sie eignen sich demnach für einen Übertragungskanal der die niederfrequenten Energiepotenziale - wenn auch nur gering - verändern kann offensichtlich nicht. 

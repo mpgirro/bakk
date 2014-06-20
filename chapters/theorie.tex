@@ -147,7 +147,7 @@ Dieses Mal kann es sich ergeben, dass ${E'}_{med} > {E'}_{max}$, da sich ${E}_{m
 
 Formal können wir nun eine Funktion $f$ definieren, die eine Menge an Samples und einen binären Wert $a$ in eine neue Menge an Samples überführt, also die Abbildung $f: {\mathbb{R}}^{{N}_{s}} \times \left\{0,1\right\} \mapsto  {\mathbb{R}}^{{N}_{s}}$\index{Sample-Section-Length}, wobei hier natürlich zu bedenken ist, dass ${\mathbb{R}}^{{N}_{s}}$ aufgrund des numerischen Fehlers nur die abbildbare Teilmenge der reellen Zahlen beschreibt. 
 
-\section{Ausbreitung auf mehrere Bit}
+\section{Ausbreitung auf mehrere Bits}
 \label{sec:embeddingstragety_bitsequence}
 
 Um eine Bitsequenz $\{{a}_{i}\}$ in ein Signal einzubetten, muss dieses in $n$ disjunkte Partitionen ${P}_{i}, {1}\leq{i}\leq{n}$ unterteilt werden. Jede ${P}_{i}\subseteq{sig}$ wird nach dem oben beschriebenen Verfahren mit genau einem binären Informationswert angereichert, d.h. ${P}_{i}'=f({P}_{i}, {a}_{i}), {a}_{i} = \mbox{wmk}(i)\in\left\{0,1\right\}$. Das mit dem Watermark\index{Watermark} angereicherte Signal $sig'$ wird durch die Konkatenation der modifizierten Partitionen ${P}_{i}'$ erzeugt. Für die Teilfolgen $\langle{sig}_{k},{sig}_{l}\rangle$ gilt:

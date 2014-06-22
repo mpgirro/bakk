@@ -198,12 +198,12 @@ Vergleicht man dieses Protokoll mit dem OSI-Modell\index{OSI-Modell}\footnote{\t
 
 Das Einbringen des Watermarks\index{Watermark} unterlieg der Bedingung, dass es unhörbar (für den Menschen) sein soll. Um dies zu gewährleisten muss jedes bearbeitete Teilstück des Signals einer Qualitätskontrolle diesbezüglich unterzogen werden. Dazu existieren prinzipiell folgende Methoden:
 
-\subsubsection{Mean Opinion Score (MOS)}
+\subsubsection{Mean Opinion Score}
 \index{Mean Opinion Score}
 
-Definiert in der ITU-T Recommendation P.800\cite{rec1996p} handelt es sich beim MOS um das Ergebnis der Bewertungen einer Reihe von subjektiven Wahrnehmungstest durch Versuchspersonen. Damit werden die Qualitäten von Codecs in der Sprach- und Bildübertragung bewertet. Da hierfür jedes Segment einzeln von menschlichen Versuchspersonen als Teil des Algorithmus behandelt werden müsste, eignet es sich ganz offensichtlich nicht für eine automatische Verarbeitung. 
+Definiert in der ITU-T Recommendation P.800\cite{rec1996p} handelt es sich beim \textit{Mean Opinion Score} (MOS) um das Ergebnis der Bewertungen einer Reihe von subjektiven Wahrnehmungstest durch Versuchspersonen. Damit werden die Qualitäten von Codecs in der Sprach- und Bildübertragung bewertet. Da hierfür jedes Segment einzeln von menschlichen Versuchspersonen als Teil des Algorithmus behandelt werden müsste, eignet es sich ganz offensichtlich nicht für eine automatische Verarbeitung. 
 
-\subsubsection{Signal-Rauschabstand (SNR)} 
+\subsubsection{Signal-Rauschabstand} 
 \index{Signal-Rauschabstand}
 
 Der Signal-Rauschabstand oder Signal-Rausch-Verhältnis (engl. \textit{signal-to-noise ratio}, daher kurz SNR) bewertet die technische Qualität eines Signals welches von einem Störsignal überlagert wird. Hier ist zu beachten, dass mit Störsignal nicht jenes im analogen Übertragungskanal\index{\"Ubertragungskanal} gemeint ist. Die Veränderung eines Audiosignals durch das Watermark\index{Watermark} kann bezogen auf das ursprünglich unmodifizierte Signal ebenfalls als Störsignal interpretiert werden. 
@@ -216,7 +216,7 @@ Der SNR berechnet sich durch:
 
 seine Bestimmung ist daher sehr einfach. Leider handelt es sich dabei um eine technisch objektive Güteeigenschaft die das menschliche Hörsystem nicht mit einbezieht und daher als Bewertungskriterium dementsprechend schlecht geeignet ist\cite{xiang2007robust}.
 
-\subsubsection{Objective Difference Grade (ODG)} 
+\subsubsection{Objective Difference Grade} 
 \index{Objective Difference Grade}
 \index{Perceptual Evaluation of Audio Quality}
 
@@ -245,7 +245,7 @@ Nachdem das Watermark\index{Watermark} nach den nun beschriebenen Schritten in e
 \subsection{Resynchronisaton und Interpolation}
 
 Bei der Erkennung der Synchronisations-Codes kann es im Allgemeinen zu Problemen kommen. Die bei der DA-Wandlung\index{DA-Wandlung} auftretenden Einflüssen lassen sich im Allgemeinen durch eine Kombination aus \textit{time scaling modification}\index{time scaling modification} (kurz TSM, dt. interessanterweise bekannt als \textit{Time-Stretching}) und \textit{wave magnitude
-distortion}\textit{wave magnitude
+distortion}\index{wave magnitude
 distortion} (WMD) beschreiben\cite{xiang2007robust}\cite{steinebach2002audio}. Die TSM kann das Auffinden der Synchronisation-Codes verhindern. Das Prinzip kann daher auch gezielt eingesetzt werden, um ein existierendes Watermark\index{Watermark} zu zerstören (etwa um einen Urheberrechtlichsschutz aufzuheben). Dies wird als \textit{Synchronization attack}\index{Synchronization attack} bezeichnet.
 
 Um diesen Effekt der DA-Wandlung\index{DA-Wandlung} aufzuheben, muss versucht werden die Synchron\-isations\--Codes wieder\-herzustellen. Man nennt diesen Vorgang \textit{Resynchronisation}\index{Resynchronisation}. Verschiedene Resynchronisationsansätze existieren, hier wird ein sog. \textit{brute-force approach}\index{brute-force approach} angewandt und wie in \cite{steinebach2011re} vorgeschlagen auf ein Suchintervall von -10\% bis +10\% beschränkt. 

@@ -1,6 +1,7 @@
 function [ autocorrelation_coefficient ] = barkerautocorrelationcoefficient( signalCode )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+% Calculate the barker autocorrelation coefficient for a given code
+% sequence. The coefficient is normalized to the codelength to make sync
+% threshold in the settings independent of sync code length.
 
 syncCode = Setting.sync_code;
 N = Setting.synccode_block_sequence_length;

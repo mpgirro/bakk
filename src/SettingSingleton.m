@@ -1,5 +1,10 @@
 classdef SettingSingleton < handle
+% This singleton class object holds the settings used by this algorithm. 
+% In order to change the Settings, utilize the setter methods provided by
+% this classes API. Note that this has to be done, of course, BEFORE?
+% encoder or decoder are called. Best practice is to use a preset_ script.
     
+    % private access properties. these hold the values
     properties(Access=private)
         dwt_wavelet;
         dwt_level;
@@ -13,10 +18,12 @@ classdef SettingSingleton < handle
         codeword_length; 
         error_correction_methode; % BCH, RS, local redundancy, LDPC
         % this is a list of available error correction methods
-        ecm_available = {'BCH' 'RS' 'LR' 'LDPC' 'none'};
+        ecm_available = {'BCH' 'RS' 'LDPC' 'none'};
         odg_bool;
     end
     
+    % constructor is private. sets the default value when singleton object 
+    % is first initialized. 
     methods(Access=private)
         function newObj = SettingSingleton()
             % Initialise properties.
@@ -34,8 +41,9 @@ classdef SettingSingleton < handle
         end
     end
     
+    % static instance methode is the only way of getting a singleton object
+    % and making sure only one instance exists. 
     methods(Static)
-        
         function obj = instance()
             persistent uniqueInstance
             if isempty(uniqueInstance)
@@ -76,7 +84,7 @@ classdef SettingSingleton < handle
         
         function esf = getEmbeddingStrengthFactor(obj)
             esf = obj.embedding_strength_factor;
-        end % getEmbeddingStrengthFactor method
+        end 
         
         function setEmbeddingStrengthFactor(obj, esf)
             obj.embedding_strength_factor = esf;
@@ -95,7 +103,7 @@ classdef SettingSingleton < handle
         end
         
         % input argument must be member of [1, 2, 3, 4, 5, 7, 11, 13]
-        % (valid barker code
+        % (valid barker codes)
         function setSynchronizationCode(obj, sc)
             
             % check if argument valid, set to maximum else

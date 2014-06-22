@@ -1,4 +1,5 @@
 function [odg] = odgFromPQevalAudioBinary( refSignal, refFs, testSignal, testFs)
+% calculate ODG value for given signals with PQevalAudio unix binary
 
 % resample if need be - PQevalAudio only works with 48kHz
 if refFs ~= 48000
@@ -18,6 +19,7 @@ audiowrite('../tmp/testSignal.wav', testSignal, testFs);
 % http://www.mathworks.de/de/help/matlab/ref/system.html
 [status,cmdout] = system('../bin/PQevalAudio ../tmp/refSignal.wav ../tmp/testSignal.wav');
 
+% if execution was successfull, parse output for the desired value
 if status == 0
     outputLength = size(cmdout);
     odgLine = 'Objective Difference Grade: ';

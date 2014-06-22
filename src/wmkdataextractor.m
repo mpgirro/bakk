@@ -1,6 +1,7 @@
 function [ messageBlock ] = wmkdataextractor( sample_sequence )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+% Extract watermark information bits of given samples. the bits are
+% supposed to be error correction encoded and will therefore be decoded
+% utilizing the ECC function specified by the Settings
 
 frameLength = Setting.frame_length; 
 wmkSequenceLen = Setting.wmkdata_block_sequence_length;
@@ -18,11 +19,6 @@ for i=1:wmkSequenceLen
 end
 
 messageBlock = ecc_decode(codewordBlock);
-
-% messageLength = Setting.message_length;
-% codewordLength = Setting.codeword_length;
-% fmt=[repmat('%d ',1,codewordLength) '==ecc==> ' repmat('%d ',1,messageLength) '\n'];
-% fprintf(fmt,codewordBlock',messageBlock');
 
 end
 

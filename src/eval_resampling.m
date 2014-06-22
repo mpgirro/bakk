@@ -1,3 +1,4 @@
+% Testscript to evaluate resampling impact on watermarked signals
 
 origfilepath = ['..',filesep,'results',filesep,'watermarked-holgi.wav'];
 [origfilepathstr,origfilename,origfileext] = fileparts(origfilepath);

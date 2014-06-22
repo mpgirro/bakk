@@ -1,6 +1,6 @@
 function [ newSignal, resync_success ] = resynchronize( oldSignal )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+% resynchronize a signal by searching for synchronisation codes with brute 
+% force variating the sample section length used
 
 % so boys, this is where it gets compicated
 % first we need to try all the different segment
@@ -22,8 +22,6 @@ signalSize = signalSize(1);
 
 alpha = 0;
 
-%for signalCursor=1:floor(lowerBound*0.1):signalSize-upperBound
-%    for tmpFrameLength=lowerBound:stepLength:upperBound
 signalCursor = 1;
 while signalCursor < signalSize-upperBound
     

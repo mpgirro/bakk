@@ -1,12 +1,9 @@
 function [ message ] = ecc_decode( codeword )
-%UNTITLED3 Summary of this function goes here
-%   Detailed explanation goes here
+% decode a codeword for an ECC set in the Settings
 
 ecm = Setting.error_correcion_methode;
 
 switch ecm
-    case 'LR'
-        % TODO local redundancy
     case 'BCH'
         message = bchdecode(codeword);
     case 'RS'

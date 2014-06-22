@@ -1,7 +1,7 @@
-
-% records a audio sample
+% Records a audio signal
 % see http://www.mathworks.de/de/help/matlab/import_export/record-and-play-audio.html
 
+% adjust this values as desired
 samplerate = 44100;
 bitdepth = 16;
 channel = 1;

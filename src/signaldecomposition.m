@@ -1,5 +1,9 @@
 function [ decomposition ] = signaldecomposition( signalSegment )
+% This function decomposes given signal segment into the parts needed for
+% watermark encoding and decoding. all information will be returned as a
+% struct field
 
+% performe the DWT 
 [decompositionVector,bookkeepingVector] = wavedec(signalSegment, Setting.dwt_level, Setting.dwt_wavelet);
 
 % create unique class instances, therefore don't use repmat(Subband(),3,1)
@@ -52,7 +56,7 @@ Emax = subbandMap('max').energy;
 A = Emax - Emed;
 B = Emed - Emin;
 
-% return the calcuvalted values in a struct
+% return the calculated values in a struct
 decomposition = struct( 'Signal', signalSegment, ...
     'DecompositionVector', decompositionVector, ...
     'BookkeepingVector', bookkeepingVector, ...
@@ -63,7 +67,6 @@ decomposition = struct( 'Signal', signalSegment, ...
     'A', A, ...
     'B', B, ...
     'SubbandMap', subbandMap);
-
 end
 
 

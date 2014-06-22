@@ -1,3 +1,5 @@
+% this is an example preset script, loading the default settings
+
 clear;
 
 % create a new object

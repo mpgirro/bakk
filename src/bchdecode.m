@@ -1,6 +1,5 @@
 function [ message ] = bchdecode( codeword )
-%UNTITLED2 Summary of this function goes here
-%   Detailed explanation goes here
+% Decode a BCH codeword
 
 hDec = comm.BCHDecoder;
 message = step(hDec, codeword');

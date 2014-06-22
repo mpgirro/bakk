@@ -1,3 +1,4 @@
+% Testscript to evaluate Stirmark for Audio attacked watermarked signals
 
 evalfile = ['..',filesep,'results',filesep,'watermarked-holgi.wav'];
 [evalfilepathstr,evalfilename,evalfileext] = fileparts(evalfile);
@@ -21,11 +22,8 @@ for i=1:afsSize(1)
     if numel(attackwmk) == numel(evalfilewmk)
         [num_errbit,ber_ratio] = biterr(evalfilewmk,attackwmk, 'row-wise');
         fprintf('Total wrong message bits: %d\n',num_errbit);
-        %fprintf('BER: %d\n',ber_ratio);
         fprintf('BER %2.2f%%\n',ber_ratio*100);
     else
         fprintf('Decoded WMK has %d bits!\n',numel(attackwmk));
     end
-    %disp([evalfilewmk,attackwmk])
-    
 end

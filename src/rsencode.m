@@ -1,6 +1,5 @@
 function [ rs_data ] = rsencode( pure_data )
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+% Encode message with RS code
 
 messageLength  = Setting.message_length;
 codewordLength = Setting.codeword_length;

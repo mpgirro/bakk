@@ -1,4 +1,8 @@
 function [watermark] = eval_decoder( signal )
+% WARNING! This is a modified decoder Version, aimed on evaluating signals. 
+% This function MUST NOT be used as productive decoder!
+
+% Cpyright (C) 2014 Maximilian Irro
 
 signalSize      = size(signal);
 signalSize      = signalSize(1);
@@ -42,8 +46,6 @@ while sampleCursor <= lastSampleToStartSearching
         packets_lost = packets_lost + 1;
     end
     
-    % GOOD! this means the next X samples will hold watermark data
-    
     % move sample cursor behind the end of the synccode window
     sampleCursor = sampleCursor + syncSampleLen;
     
@@ -79,7 +81,6 @@ while sampleCursor <= lastSampleToStartSearching
     %     if sampleCursor + dataStructSampleLen > signalSize
     %         break;
     %     end
-    
     
 end
 

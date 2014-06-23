@@ -3,6 +3,9 @@ classdef SettingSingleton < handle
 % In order to change the Settings, utilize the setter methods provided by
 % this classes API. Note that this has to be done, of course, BEFORE?
 % encoder or decoder are called. Best practice is to use a preset_ script.
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
     
     % private access properties. these hold the values
     properties(Access=private)

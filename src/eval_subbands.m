@@ -1,9 +1,12 @@
 % Testscript to evaluate signal subbands of an ad/da signals
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 clear;
 
 %path = ['..',filesep,'results',filesep,'watermarked-flute.wav'];
-path = ['..',filesep,'results',filesep,'watermarked-flute-windowed-soundkarte-cropped-amplified-22050.wav'];
+path = ['..',filesep,'results',filesep,'watermarked-flute-mikrofon-windowed-22050.wav'];
 
 
 fprintf('processing %s\n',path);

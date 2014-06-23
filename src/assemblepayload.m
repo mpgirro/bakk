@@ -6,6 +6,9 @@ function [ payload, payloadSize ] = assemblepayload( watermark )
 % payload consists of two parts. The synchronisation code and the
 % information data. There is always a whole synchronization code followed
 % by X bit of watermark data.
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 syncCode = Setting.sync_code;
 syncBlockSequenceLength  = Setting.synccode_block_sequence_length;

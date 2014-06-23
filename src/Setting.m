@@ -1,3 +1,9 @@
+% This is a wrapper class for the SettingSingleton, abstracting the getter
+% functions and dynamically calculating some infered values
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
+
 classdef Setting
     
     properties(Constant = true)

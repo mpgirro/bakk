@@ -1,6 +1,9 @@
 function [ bit ] = extractbit( signalSegment, frameLength )
 % Extract the bit value encoded by the DWT coefficient subbands in a 
 % signal segment
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 window = 1:frameLength;
 

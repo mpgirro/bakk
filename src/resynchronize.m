@@ -7,6 +7,9 @@ function [ newSignal, resync_success ] = resynchronize( oldSignal )
 % lengths and look if there is a sync code embedded
 % if we found one, we will interpolate the signal
 % to a new one
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 resync_success = int8(0);
 

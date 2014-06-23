@@ -2,6 +2,9 @@ function [ autocorrelation_coefficient ] = barkerautocorrelationcoefficient( sig
 % Calculate the barker autocorrelation coefficient for a given code
 % sequence. The coefficient is normalized to the codelength to make sync
 % threshold in the settings independent of sync code length.
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 syncCode = Setting.sync_code;
 N = Setting.synccode_block_sequence_length;

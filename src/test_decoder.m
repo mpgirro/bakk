@@ -1,3 +1,6 @@
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 clear;
 

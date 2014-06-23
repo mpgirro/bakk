@@ -1,5 +1,8 @@
 function [ pure_data ] = rsdecode( rs_data )
 % Decode a RS codeword
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 messageLength  = Setting.message_length;
 codewordLength = Setting.codeword_length;

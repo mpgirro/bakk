@@ -1,6 +1,9 @@
 function [watermark] = decoder( signal, fs )
 % Decode a signal by searching for sync codes, extract the message from
 % each package and linkung the message parts. 
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 signalSize              = size(signal);
 signalSize              = signalSize(1);
@@ -30,6 +33,7 @@ lastSampleToStartSearching = signalSize-dataStructSampleLen;
 
 
 [ newSignal, success ] = resynchronize( signal );
+%signal = newSignal;
 
 
 fprintf('Extracted messages:\n');

@@ -1,4 +1,7 @@
 % Testscript to evaluate Stirmark for Audio attacked watermarked signals
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 evalfile = ['..',filesep,'results',filesep,'watermarked-holgi.wav'];
 [evalfilepathstr,evalfilename,evalfileext] = fileparts(evalfile);

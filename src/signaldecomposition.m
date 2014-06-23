@@ -2,8 +2,11 @@ function [ decomposition ] = signaldecomposition( signalSegment )
 % This function decomposes given signal segment into the parts needed for
 % watermark encoding and decoding. all information will be returned as a
 % struct field
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
-% performe the DWT 
+% perform the DWT 
 [decompositionVector,bookkeepingVector] = wavedec(signalSegment, Setting.dwt_level, Setting.dwt_wavelet);
 
 % create unique class instances, therefore don't use repmat(Subband(),3,1)

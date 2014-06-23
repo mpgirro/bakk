@@ -5,6 +5,9 @@ function [modSignal, encodedBitCount ] = encoder( inputSignal, watermark, fs )
 % If ODG calculation is enabled, the signal will be checked for watermark 
 % perceptability, and in case of insufficient ODG value, re-encoded with
 % reduced embeding strength
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 signal = inputSignal;
 

@@ -1,5 +1,8 @@
 function [odg] = odgFromPQevalAudioBinary( refSignal, refFs, testSignal, testFs)
 % calculate ODG value for given signals with PQevalAudio unix binary
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 % resample if need be - PQevalAudio only works with 48kHz
 if refFs ~= 48000

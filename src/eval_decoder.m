@@ -1,6 +1,9 @@
 function [watermark] = eval_decoder( signal )
 % WARNING! This is a modified decoder Version, aimed on evaluating signals. 
 % This function MUST NOT be used as productive decoder!
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 signalSize      = size(signal);
 signalSize      = signalSize(1);

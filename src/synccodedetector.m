@@ -5,6 +5,9 @@ function [ found ] = synccodedetector( synccodeBlock, frameLength )
 % sequence this function processes musst be: 
 %       frame_length x sync_sequence_length 
 % values long. 
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 sampleSize  = size(synccodeBlock);
 syncCode    = Setting.sync_code;

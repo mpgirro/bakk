@@ -1,6 +1,9 @@
 function [odg] = odgFromEaqualExe( refSignal, refFs, testSignal, testFs)
 % calculate ODG value for given signals with EAQUAL windows execuable via
 % Wine call. 
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 % write signals to harddrive
 audiowrite('../tmp/refSignal.wav',  refSignal,  refFs);

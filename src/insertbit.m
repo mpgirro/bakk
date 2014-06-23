@@ -1,6 +1,9 @@
 function [ modSignalSegment ] = insertbit( origSignalSegment, bit )
 % Modify a signal segment to encode one bit by modifing the DWT
 % coefficients of the segment. 
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 % only take the samples used for the data, ignore the buffer zone
 window = 1:Setting.frame_data_samples_length;

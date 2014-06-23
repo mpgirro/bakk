@@ -1,5 +1,8 @@
 % Records a audio signal
 % see http://www.mathworks.de/de/help/matlab/import_export/record-and-play-audio.html
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 % adjust this values as desired
 samplerate = 44100;

@@ -1,4 +1,7 @@
 % this is an example preset script, loading the default settings
+%
+% Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+%
 
 clear;
 

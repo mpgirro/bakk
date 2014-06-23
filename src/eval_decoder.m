@@ -2,8 +2,6 @@ function [watermark] = eval_decoder( signal )
 % WARNING! This is a modified decoder Version, aimed on evaluating signals. 
 % This function MUST NOT be used as productive decoder!
 
-% Cpyright (C) 2014 Maximilian Irro
-
 signalSize      = size(signal);
 signalSize      = signalSize(1);
 frameLength     = Setting.frame_length; % # samples needed to encode 1 bit

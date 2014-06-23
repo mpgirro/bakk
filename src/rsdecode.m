@@ -1,7 +1,6 @@
 function [ pure_data ] = rsdecode( rs_data )
 % Decode a RS codeword
 
-
 messageLength  = Setting.message_length;
 codewordLength = Setting.codeword_length;
 

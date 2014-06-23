@@ -32,11 +32,6 @@ classdef Setting
         function code = sync_code()
             sObj = SettingSingleton.instance();
             code = sObj.getSynchronizationCode;
-            %             baseCode        = sObj.getBaseSynchronizationCode;
-            %             redundancyRate  = Setting.synccode_redundancy_rate;
-            %
-            %             % e.g. makes [1,0,1] to [1,1,1,0,0,0,1,1,1] if redundancyRate = 3
-            %             code = reshape(repmat(baseCode,redundancyRate,1),[],1)'; % don't forget the ' at the end!
         end
         
         function threshold = barker_threshold()

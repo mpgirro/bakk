@@ -1,4 +1,6 @@
-# Digital audio-watermarking for analog communication channels
+# Bachelor's Project
+
+**Digital audio-watermarking for analog communication channels** by Maximilian Irro
 
 This is the code of my bachelor's project. It is about the implementation of an audio watermarking algorithm aimed for analog communication channels and its utilisation in an application framework. Detailed explination is available in the thesis report at [maximilian.irro.at/bsc](http://maximilian.irro.at/bsc).
 
@@ -22,7 +24,7 @@ The decoder module is even simpler. Give it a watermarked signal and it's sampli
 	[signal,fs] = audioread(’result.wav’);  
 	data = decoder(signal,fs);
 	
-### Change Settings
+## Change Settings
 
 To change the default settings, use SettingSingletin object. 
 

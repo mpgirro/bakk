@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# Copyright (C) 2013-2014, Maximilian Irro <max@disposia.org>
+
 streamfile="teststream"
 tooldir="../bin" # smfa2 and read_write_stream binary location
 

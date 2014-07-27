@@ -26,7 +26,7 @@ The decoder module is even simpler. Give it a watermarked signal and it's sampli
 	
 ## Change Settings
 
-To change the default settings, use SettingSingletin object. 
+To change the default settings, use SettingSingleton object. 
 
 	sObj = SettingSingleton.instance();  
 	sObj.setDwtWavelet(’db2’);  

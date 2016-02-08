@@ -17,5 +17,6 @@ out/*.bib
 out/*.glsdefs
 out/*-plain.tex
 out/*-full.tex
+out/*-full.pdf
 out/math/
 out/img/

@@ -1,0 +1,71 @@
+
+Package       : style/TUINFDA.sty
+
+Pdf Latex       : pdflatex
+
+Doc Class     : [a4paper,11pt,twoside] memoir
+Maketitle     : True
+Logo          : False
+Math Mode     : mathjax
+Package       : tikz
+Package       : mathtools
+MathJax Ext   : AMScd
+Package       : amscd
+Package       : amsmath
+Package       : tablefootnote
+Package       : multicol
+
+Package       : geometry
+
+Package       : fixltx2e
+Package       : amsmath
+Package       : amssymb
+Package       : mathtools
+Package       : microtype
+Package       : enumitem
+Package       : multirow
+Package       : booktabs
+Package       : subcaption
+Package       : [ruled,linesnumbered,algochapter] algorithm2e
+Package       : nag
+Package       : hyperref
+Package       : [acronym,toc] glossaries
+Package       : [intoc] nomencl
+
+<!--Bib Style     : ieeetr-->
+
+<!-- IMPORTANT! make sure headings get mapped to \chapters -->
+Heading Base        : 1 
+Heading Endperiod   :
+
+Tex Header*   : 
+  \chapterstyle{veelo}
+  \usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,arrows,automata}
+  \mdDefineUnicode{10214}{\ensuremath{\llbracket}}
+  \mdDefineUnicode{10215}{\ensuremath{\rrbracket}}
+  \setcounter{secnumdepth}{3}
+  \setsecnumdepth{subsection} % the above line does not seem to work with memoir class
+  \setcounter{tocdepth}{2}
+  \setlength\parindent{0pt}
+  \setlength{\columnsep}{1.5cm}
+  %
+  \makeglossaries
+  \makeindex
+  \makenomenclature
+  %
+  \makepagestyle{numberCorner}
+  \makeevenfoot{numberCorner}{\thepage}{}{}
+  \makeoddfoot{numberCorner}{}{}{\thepage}
+
+<!--
+  \newcommand{\pageintentionallyleftblank}[1]{\cleartooddpage[\vspace*{\fill} #1 \vspace*{\fill}]}
+  \renewcommand{\listalgorithmcfname}{Quellcodes}
+  \renewcommand{\lstlistlistingname}{Algorithmenverzeichnis}
+  \renewcommand{\nomname}{Abkürzungsverzeichnis}
+  \renewcommand*\nompreamble{\begin{multicols}{2}}
+  \renewcommand*\nompostamble{\end{multicols}}
+-->
+
+
+
+

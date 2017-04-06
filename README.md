@@ -1,4 +1,4 @@
-# Digital audio-watermarking for analog communication channels
+# Bachelor Thesis
 
 ## What is this?
 

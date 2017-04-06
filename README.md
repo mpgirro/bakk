@@ -48,7 +48,7 @@ The decoder module is even simpler. Give it a watermarked signal and it's sampli
 	[signal,fs] = audioread(’result.wav’);  
 	data = decoder(signal,fs);
 
-## Change Settings
+### Change Settings
 
 To change the default settings, use SettingSingleton object. 
 

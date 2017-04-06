@@ -14,10 +14,10 @@ If you want to cite the original thesis (german language), you can use the follo
   school            = {TU Wien},
   type              = {Bachelor Thesis},
   year              = {2014},
-  month				= {June},
-  keywords 			= {audio, watermarking},
+  month             = {June},
+  keywords          = {audio, watermarking},
   timestamp         = {20140623},
-  url 				= {http://max.irro.at/pub/bakk/index.html},
+  url               = {http://max.irro.at/pub/bakk/index.html},
   pdf               = {http://max.irro.at/pub/bakk/thesis.pdf}
 }
 ```

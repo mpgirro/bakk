@@ -1,0 +1,12 @@
+\chapter{Schlussfolgerung und Ausblick}
+\label{ch:ausblick}
+
+Im Zuge der Implementierung hat sich nach den ersten DA/AD-Tests sehr schnell gezeigt, dass die verwendete Watermarking Methode\cite{xiang2007robust} nicht das zu leisten vermag, was sie verspricht. Wenn gleich das Watermark\index{Watermark} im rein digitalen an der Hörschwelle stabil ist, so ist die Resistenz im analogen Kanal unbefriedigend. Die daraufhin angebrachten Erweiterungen um Fehlerkorrekturverfahren\index{Fehlerkorrekturverfahren} haben auch hier nur eingeschränkt für Verbesserung gesorgt. Die prinzipielle Schwäche der Watermarkingmethode, die in der Anfälligkeit für leichte Veränderungen in den niederen Frequenzen identifiziert werden konnte, kann von der natürlichen Fehlerresistenz der Synchronisations-Codes\index{Synchronisations-Code} nicht kompensiert werden.
+
+Allerdings sieht das entwickelte Framework als grundlegende Architektur dennoch sehr vielversprechend aus. Das sehr einfach definierte Protokoll\index{Protokoll} ist flexibel bezüglich der angewendeten Methoden seiner Komponenten. Es wäre daher ein leichtes die Watermarking-Methode gegen eine sich als robuster erwiesenere auszutauschen. Sehr vielversprechend erscheint hier etwa die Publikation von Chang, Di, et al.\cite{chang2012location}. Somit könnte das Framework unverändert weiter benützt werden nachdem lediglich die Funktionen zum lesen und schreiben eines Bits angepasst werden würden. 
+
+Weiters hat sich die Qualität der aktuell verfügbaren PEAQ-Implementierungen\index{Perceptual Evaluation of Audio Quality} als unzureichend erwiesen. Zu viele Probleme und Ergebnisse die mit subjektiven Hörtests nicht bestätigt werden können lassen die Evaluierung des Watermarkingprozesses oftmals in unzureichendem Zustand. Eine mögliche Besserung könnte der PEAQ Konkurrent PEMO-Q\cite{huber2006pemo} bringen. Über die Verfügbarkeit von Tools wurden im Zuge dieser Arbeit keine Informationen eingeholt. 
+
+Wenig performant ist aktuell der Re\-synchron\-isations\-prozess. Die Suche nach Synchron\-isations-Codes wird derzeit über einen einfachen brute-force Ansatz gelöst. Dieser ist nicht nur langsam, sondern liefert im Allgemeinen auch eine nicht optimale Lösung. Hier würden sich die in \cite{steinebach2011re} angeführten Alternativen anbieten, sowie eine lokale Suche um das Optimierungs\-problem zu verbessern. 
+
+Positiv überrascht hingegen die starke Robustheit gegenüber Kompressionsverfahren.

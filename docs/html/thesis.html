@@ -1,0 +1,3122 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd-->
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <title>Digital Audio-Watermarking für analoge Übertragungsstrecken</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="generator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+  <meta name="originator" content="TeX4ht (http://www.cse.ohio-state.edu/~gurari/TeX4ht/)" />
+  <!-- NoFonts,html,xhtml -->
+  <meta name="src" content="thesis.tex" />
+  <meta name="date" content="2014-06-23 22:25:00" />
+  <link rel="stylesheet" type="text/css" href="thesis.css" />
+</head>
+
+<body>
+
+  <div id="thesis-container">
+
+
+    <div class="center">
+      <p id="thesis_title">Digital Audio-Watermarking</p>
+      <p id="thesis_subtitle">für analoge Übertragungsstrecken</p>
+      <p id="thesis_kind">BACHELORARBEIT</p>
+      <p id="title_von">von</p>
+      <p id="thesis_author">Maximilian Irro</p>
+      <p id="author_matrnr">Matrikelnummer 1026859</p>
+      <p id="thesis_betreuer">
+        unter der Betreuung von
+        <br /> Dipl.-Ing. Mag. Dr. Matthias Zeppelzauer
+      </p>
+      <p id="institut">
+        Institut für Softwaretechnik und Interaktive Systeme
+        <br /> Interactive Media Systems Group
+        <br /> Fakultät für Informatik
+        <br /> Technische Universität Wien
+      </p>
+    </div>
+
+
+
+    <h2 class="likechapterHead"><a
+ id="x1-1000"></a>Erklärung zur Verfassung der Arbeit</h2>
+    <!--l. 3-->
+    <p class="noindent">Hiermit erkläre ich, dass ich diese Arbeit selbständig verfasst habe, dass ich die verwendeten Quellen und Hilfsmittel vollständig angegeben habe und dass ich die Stellen der Arbeit - einschließlich Tabellen, Karten und Abbildungen -, die anderen
+      Werken oder dem Internet im Wortlaut oder dem Sinn nach entnommen sind, auf jeden Fall unter Angabe der Quelle als Entlehnung kenntlich gemacht habe.
+      <br class="newline" />
+
+
+
+    </p>
+    <h2 class="likechapterHead"><a
+ id="x1-2000"></a>Danksagung</h2>
+    <!--l. 3-->
+    <p class="noindent">Es gilt einigen Personen zu danken:
+    </p>
+    <!--l. 7-->
+    <p class="noindent">Meinem Betreuer Matthias Zeppelzauer, unter dessen Anleitung diese Arbeit entstanden ist.
+    </p>
+    <!--l. 11-->
+    <p class="noindent">Jürgen Köchl, der sich ab und an die Zeit stehlen ließ um mit mir über die Freuden der Signalverarbeitung zu diskutieren.
+    </p>
+    <!--l. 15-->
+    <p class="noindent">John-Paul &#8222;hukl&#8220; Bader, der mit seinen Beträgen zu analogem und digitalem Audio in den Podcasts Freakshow
+      <span class="footnote-mark"><a
+href="thesis2.html#fn1x0"><sup class="textsuperscript">1</sup></a></span>
+      <a id="x1-2001f1"></a>
+      und <em>300Hertz</em><span class="footnote-mark"><a
+href="thesis3.html#fn2x0"><sup class="textsuperscript">2</sup></a></span>
+      <a id="x1-2002f2"></a>
+      mehr als einmal an einer Eingebung Schuld trägt.
+    </p>
+    <!--l. 19-->
+    <p class="noindent">Und ganz besonders Shijun Xiang, der mich mit seinen typografischen Ausrutschern auf die lange Suche nach einem nicht existierenden Layer 8 Problem schickte.
+
+
+
+    </p>
+    <h2 class="likechapterHead"><a
+ id="x1-3000"></a>Abstract</h2>
+    <!--l. 3-->
+    <p class="noindent">While digital audio watermarking is already a widespread practice, most research only concern copyright protection mechanisms. An aim on open information integration is hardly ever a focus of development goals. Yet there are use cases were additional
+      information in audio signals would be of most value. Especially digital/analog (DA) conversion processes tend to lose all sorts of metadata, for them not being translated into acoustic signals. This is where watermarks may come to aid. Also they
+      could be utilized to add additional information to radio and TV broadcast which would make them accessible not only to the receiving device.
+    </p>
+    <!--l. 6-->
+    <p class="noindent">This paper describes the implementations of an existing watermarking algorithm claiming to be capable of enduring DA conversions. Additionally a framework is proposed to utilize the algorithm in a developed communication protocol with synchronization-codes
+      and error-correction mechanisms to provide a well defined, stable communication channel.
+
+
+
+    </p>
+    <h2 class="likechapterHead"><a
+ id="x1-4000"></a>Kurzfassung</h2>
+    <!--l. 3-->
+    <p class="noindent">Während digitales Audio-Watermarking einen an sich viel beachteten Bereich darstellt, beschränkt sich die Forschung dennoch hauptsächlich auf Anwendungsgebiete rund um Urheberrechtsschutz. Eine Ausrichtung auf offen eingebrachte Information ist kaum
+      im Fokus der Entwicklung. Doch gibt es durchaus Anwendungsfälle in denen Zusatzinformationen in Audiosignalen einen erheblichen Mehrwert bedeuten können. Vor allem bei der Digital/Analog Wandlung gehen in der Regel sämtliche Metadaten eines Audiosignals
+      verloren, da diese nicht in akustische Signale mit überführt werden. Hier können Watermarks Abhilfe schaffen. Auch könnten sie genutzt werden um in Radio- oder Fernsehübertragungen gezielt zusätzliche Informationen einzubauen, welche auch von anderen
+      Geräten als dem ursprünglichen Empfangsgerät verarbeitet werden könnten.
+    </p>
+    <!--l. 6-->
+    <p class="noindent">Diese Arbeit beschäftigt sich mit der Implementierung einer vorhandenen Audio-Watermarking Methode welche für die DA- und AD-Wandlung geeignet sein soll. Weiters wurde für deren Verwendung ein Framework entwickelt, welches mittels eines eigens entwickelten
+      Übertragungsprotokolls unter Verwendung von Synchronisations-Codes und Fehlerkorrekturverfahren einen definierten Übertragungskanal bereitstellt.
+
+
+
+    </p>
+    <h2 class="likechapterHead"><a
+ id="x1-5000"></a>Inhaltsverzeichnis</h2>
+    <div class="tableofcontents">
+      <span class="chapterToc">1 <a
+href="#x1-80001" id="QQ2-1-8">Einführung</a></span>
+      <br />&#x00A0;<span class="sectionToc">1.1 <a
+href="#x1-90001.1" id="QQ2-1-9">Motivation</a></span>
+      <br />&#x00A0;<span class="sectionToc">1.2 <a
+href="#x1-100001.2" id="QQ2-1-10">Digitale und analoge Daten</a></span>
+      <br />&#x00A0;<span class="sectionToc">1.3 <a
+href="#x1-110001.3" id="QQ2-1-11">Digitale Wasserzeichen</a></span>
+      <br />&#x00A0;<span class="sectionToc">1.4 <a
+href="#x1-120001.4" id="QQ2-1-12">Anwendungsgebiete</a></span>
+      <br />&#x00A0;<span class="sectionToc">1.5 <a
+href="#x1-130001.5" id="QQ2-1-13">Ziele</a></span>
+      <br /><span class="chapterToc">2 <a
+href="#x1-140002" id="QQ2-1-14">Theoretische Grundlagen</a></span>
+      <br />&#x00A0;<span class="sectionToc">2.1 <a
+href="#x1-150002.1" id="QQ2-1-15">Diskrete Wavelet-Transformation</a></span>
+      <br />&#x00A0;<span class="sectionToc">2.2 <a
+href="#x1-160002.2" id="QQ2-1-16">Einbettungsstrategie</a></span>
+      <br />&#x00A0;<span class="sectionToc">2.3 <a
+href="#x1-190002.3" id="QQ2-1-19">Ausbreitung auf mehrere Bits</a></span>
+      <br />&#x00A0;<span class="sectionToc">2.4 <a
+href="#x1-200002.4" id="QQ2-1-20">Rekonstruktion</a></span>
+      <br />&#x00A0;<span class="sectionToc">2.5 <a
+href="#x1-210002.5" id="QQ2-1-21">Einbettungskapazität</a></span>
+      <br /><span class="chapterToc">3 <a
+href="#x1-220003" id="QQ2-1-22">Implementierung</a></span>
+      <br />&#x00A0;<span class="sectionToc">3.1 <a
+href="#x1-230003.1" id="QQ2-1-23">Architektur</a></span>
+      <br />&#x00A0;<span class="sectionToc">3.2 <a
+href="#x1-240003.2" id="QQ2-1-25">Watermark Implantierung</a></span>
+      <br />&#x00A0;&#x00A0;<span class="subsectionToc">3.2.1 <a
+href="#x1-250003.2.1" id="QQ2-1-27">Synchronisations-Codes</a></span>
+      <br />&#x00A0;&#x00A0;<span class="subsectionToc">3.2.2 <a
+href="#x1-270003.2.2" id="QQ2-1-30">Fehlerkorrekturverfahren</a></span>
+      <br />&#x00A0;&#x00A0;<span class="subsectionToc">3.2.3 <a
+href="#x1-310003.2.3" id="QQ2-1-34">Datenstrukturen und Protokoll</a></span>
+      <br />&#x00A0;&#x00A0;<span class="subsectionToc">3.2.4 <a
+href="#x1-390003.2.4" id="QQ2-1-43">Qualitätskontrolle</a></span>
+      <br />&#x00A0;<span class="sectionToc">3.3 <a
+href="#x1-430003.3" id="QQ2-1-47">Watermark Extrahierung</a></span>
+      <br />&#x00A0;&#x00A0;<span class="subsectionToc">3.3.1 <a
+href="#x1-440003.3.1" id="QQ2-1-49">Resynchronisaton und Interpolation</a></span>
+      <br />&#x00A0;&#x00A0;<span class="subsectionToc">3.3.2 <a
+href="#x1-450003.3.2" id="QQ2-1-50">Datenextrahierung</a></span>
+      <br /><span class="chapterToc">4 <a
+href="#x1-460004" id="QQ2-1-51">Analyse</a></span>
+      <br />&#x00A0;<span class="sectionToc">4.1 <a
+href="#x1-470004.1" id="QQ2-1-52">Hörbarkeit</a></span>
+      <br />&#x00A0;<span class="sectionToc">4.2 <a
+href="#x1-480004.2" id="QQ2-1-53">Stirmark Benchmarks</a></span>
+      <br />&#x00A0;<span class="sectionToc">4.3 <a
+href="#x1-490004.3" id="QQ2-1-56">Resampling</a></span>
+      <br />&#x00A0;<span class="sectionToc">4.4 <a
+href="#x1-500004.4" id="QQ2-1-57">Kompression</a></span>
+      <br />&#x00A0;<span class="sectionToc">4.5 <a
+href="#x1-510004.5" id="QQ2-1-58">Datenrate</a></span>
+      <br />&#x00A0;<span class="sectionToc">4.6 <a
+href="#x1-520004.6" id="QQ2-1-60">Ursachenforschung</a></span>
+      <br /><span class="chapterToc">5 <a
+href="#x1-530005" id="QQ2-1-63">Schlussfolgerung und Ausblick</a></span>
+      <br /><span class="appendixToc">A <a
+href="#x1-54000A" id="QQ2-1-64">PEAQ Implementierungen</a></span>
+      <br />&#x00A0;<span class="sectionToc">A.1 <a
+href="#x1-55000A.1" id="QQ2-1-65">EAQUAL</a></span>
+      <br />&#x00A0;<span class="sectionToc">A.2 <a
+href="#x1-56000A.2" id="QQ2-1-66">PQevalAudio</a></span>
+      <br />&#x00A0;<span class="sectionToc">A.3 <a
+href="#x1-57000A.3" id="QQ2-1-67">peaqb</a></span>
+      <br />&#x00A0;<span class="sectionToc">A.4 <a
+href="#x1-58000A.4" id="QQ2-1-68">OPERA</a></span>
+
+
+
+      <br /><span class="appendixToc">B <a
+href="#x1-59000B" id="QQ2-1-69">Tutorial zur Implementation</a></span>
+      <br /><span class="appendixToc">C <a
+href="#x1-63000C" id="QQ2-1-73">Stirmark for Audio Testautomation</a></span>
+      <br /><span class="chapterToc"> <a
+href="#Q1-1-77">Abkürzungsverzeichnis</a></span>
+    </div>
+
+
+
+    <h2 class="likechapterHead"><a
+ id="x1-6000"></a>Abbildungsverzeichnis</h2>
+    <div class="tableofcontents"><span class="lofToc">3.1&#x00A0;<a
+href="#x1-230011">Das Framework im Kommunikationsprozess</a></span>
+      <br /><span class="lofToc">3.2&#x00A0;<a
+href="#x1-240012">Schematischer
+Aufbau des Implemetierungsprozesses</a></span>
+      <br /><span class="lofToc">3.3&#x00A0;<a
+href="#x1-260013">sync Erkennung</a></span>
+      <br /><span class="lofToc">3.4&#x00A0;<a
+href="#x1-310014">Hierarchischer Aufbau des
+Protokolls</a></span>
+      <br /><span class="lofToc">3.5&#x00A0;<a
+href="#x1-430015">Schematischer Aufbau des Extraktionsprozesses</a></span>
+      <br /><span class="lofToc">4.1&#x00A0;<a
+href="#x1-520011">Frequenzspektrum
+eines Signals mit Watermark</a></span>
+      <br /><span class="lofToc">4.2&#x00A0;<a
+href="#x1-520022">Frequenzspektrum nach DA- und AD- Wandlung</a></span>
+      <br />
+    </div>
+
+
+
+    <h2 class="likechapterHead"><a
+ id="x1-7000"></a>Tabellenverzeichnis</h2>
+    <div class="tableofcontents"><span class="lotToc">4.1&#x00A0;<a
+href="#x1-480011">Parameter der Implementierung für die Testfälle</a></span>
+      <br /><span class="lotToc">4.2&#x00A0;<a
+href="#x1-480032">Robustheit
+gegen die <em>Stirmark for Audio</em> Angriffe</a></span>
+      <br /><span class="lotToc">4.3&#x00A0;<a
+href="#x1-510013">Datenrate in Abhängigkeit der Samplerate</a></span>
+      <br />
+    </div>
+
+
+
+    <h2 class="chapterHead"><span class="titlemark">Kapitel&#x00A0;1</span><br /><a
+ id="x1-80001"></a>Einführung</h2>
+    <h3 class="sectionHead"><span class="titlemark">1.1   </span> <a
+ id="x1-90001.1"></a>Motivation</h3>
+    <!--l. 6-->
+    <p class="noindent">Die Digitalisierung unserer Welt schreitet seit über 50 Jahren stetig voran. Immer mehr liegt nur mehr in digitaler Form vor. Und durch die wachsende Vernetzung stehen diese Daten vor allem seit dem neuen Jahrtausend immer mehr Menschen mit immer
+      weniger Aufwand jederzeit zur Verfügung.
+    </p>
+    <!--l. 8-->
+    <p class="noindent">Doch es ergibt sich daraus auch ein Problem: <em>Was liegt eigentlich vor?</em> Digitale (und vor allem multimediale) Daten sagen per se nichts über ihre Bedeutung aus. Sie bekommen diese durch den Betrachter. Doch aus diversen Gründen, ganz voran
+      alleine um sie sortieren und suchen zu können, ist es aber interessant ihnen bereits vorher eine gewisse Bedeutung zuzuschreiben. Dadurch wurde in den letzten Jahren ein Stichwort groß: <em>Metadaten</em>. Metadaten sind &#8222;Daten über Daten&#8220;.
+      Mit ihnen wird versucht vorliegende Daten zu beschreiben (z.B. Genre eines Musikstücks), zusätzliche Informationen über sie vorzuhalten (Künstler und Album eines Musikstücks), diese maschinenlesbar bereitzustellen (ID3-Tags bei MP3) und wenn möglich
+      auch direkt mit den Daten zu verknüpfen (Kapitelmarken in MP4/M4B Hörbüchern).
+    </p>
+    <!--l. 10-->
+    <p class="noindent">Das Problem bei Metadaten ist sie bereitzustellen und vorzuhalten. Seit dem Ausbau der digitalen Vernetzung liegen Metadaten oft nicht mehr direkt bei den eigentlichen Daten. Oftmals sind sie auf einem externen Server und werden bei Bedarf angefordert.
+      Die Metadaten sind nur dann zugänglich, wenn der Server verfügbar ist und ein Mechanismus existiert mit dem die Daten eindeutig mit den Metadaten am Server verknüpft werden können. Eine Datei kann auch durch eine zusätzliche standardisierte Datei
+      im selben Namespace beschrieben werden (etwa via XML). Kopiert man jedoch nur die ursprünglichen Daten, nicht aber ihre Metadaten, so geht die zusätzliche Information verloren.
+    </p>
+    <!--l. 13-->
+    <p class="noindent">Es ist daher oftmals wünschenswert die Metadaten direkt <em>in</em> den eigentlichen Daten vorzuhalten. Eine der vielleicht bekanntesten Formen dieser Art der Metadatenspeicherung sind die bereits oben erwähnten MP3 Tags. Hier werden die Metadaten
+      einfach am Ende des Audiosignals angehängt. Diese Form der Metadatenspeicherung ist vor allem bei digitalen, multimedialen Daten besonders beliebt. Nicht zuletzt die MPEG
+      <span class="footnote-mark"><a
+href="thesis4.html#fn1x1"><sup class="textsuperscript">1</sup></a></span>
+      <a id="x1-9001f1"></a>
+      treibt diese Entwicklung mit ihren Standards auch rege voran.
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">1.2   </span> <a
+ id="x1-100001.2"></a>Digitale und analoge Daten</h3>
+    <!--l. 17-->
+    <p class="noindent">Bei digitalen Daten lassen sich die Metadaten oftmals noch recht einfach direkt zu den eigentlichen Daten speichern. Es muss nur einen entsprechenden Standard geben wie diese an die Daten angehängt werden können. Doch vor allem multimediale Daten
+      existieren in der Regel nicht nur in digitaler Form. Spätestens wenn sie konsumiert (betrachtet, gehört) werden sollen müssen sie auf die eine oder andere Art in eine analoge Form gebracht werden. Dabei gehen die Metadaten meistens verloren. Dem
+      wird entgegen gesetzt, dass die Metadaten meistens an diesem Punkt auch angezeigt werden. Die meisten MP3 Player zeigen während des Abspielens den Tracktitel und Artist an. Allerdings ist der Lifecycle der Metadaten an dieser Stelle auch beendet.
+      Werden die nun analogen Daten weiter aufgezeichnet, verarbeitet und verwendet, so ist ihre Beschreibung verloren gegangen, wenn sich nicht jemand explizit &#8222;von Hand&#8220; weiterträgt. Es wäre also Wünschenswert wenn die Metadaten auch im
+      analogen Zustand Teil der Daten wären.
+    </p>
+    <!--l. 19-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">1.3   </span> <a
+ id="x1-110001.3"></a>Digitale Wasserzeichen</h3>
+    <!--l. 21-->
+    <p class="noindent">Digitale Wasserzeichen (engl. <em>Digital Watermarks</em>) sind sämtliche Verfahren die ein digitales Signal (Audio, Video, aber auch nur einfache Bilder) so verändern, dass in ihm ein weiteres Signal versteckt ist. Da dieses zusätzliche Signal in
+      der Regel unwahrnehmbar ist (oder zumindest sein soll) ist die Einbettung dieses <em>versteckten
+Signals</em> in der ursprüngliche (das <em>Trägersignal</em>) also eine steganographische Methode. Somit kann beispielsweise ein Bild in einem anderen Bild versteckt werden. Zu beachten ist natürlich, dass die Einbettungskapazität durchaus limitiert ist,
+      da die Qualität des Trägersignal nicht maßgeblich beeinträchtigt werden soll.
+    </p>
+    <!--l. 24-->
+    <p class="noindent">Prinzipiell lassen sich Watermarks in 2 Kategorien unterteilen&#x00A0;[1]:
+    </p>
+    <dl class="description"><dt class="description">
+Secret watermarks </dt>
+      <dd class="description">sollen unauffindbar sein, außer für jene die dazu berechtigt sind. Sie stellen einen gesicherten übertragungskanal zwischen den autorisierten Personen dar, die zu den versteckten Informationen durch ihr Wissen um ein geheimes Verfahren oder einen
+        geheimen Schlüssel Zugang haben. Die Existenz des Watermarks an sich sollte nach Möglichkeit für Unautorisierte nicht erkennbar sein.
+      </dd><dt class="description">
+Public watermarks </dt>
+      <dd class="description">sollen für jeden unter Anwendung des Dekodierungsverfahrens lesbar sein. Sie sind somit ein öffentlicher übertragungskanal, da das Verfahren transparent gestaltet ist.
+      </dd>
+    </dl>
+
+
+
+    <!--l. 34-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">1.4   </span> <a
+ id="x1-120001.4"></a>Anwendungsgebiete</h3>
+    <!--l. 36-->
+    <p class="noindent">Digitale Wasserzeichen erfreuen sich zunehmender Beliebtheit seitdem es möglich ist praktisch kostenlos perfekte digitale Kopien von Audio, Video, Bildern und Texten herzustellen&#x00A0;[2]. Indem in mediale Daten Wasserzeichen eingebracht werden,
+      wird Urheberschaft kenntlich gemacht und Copyrightanliegen können verfolgt werden. In Bildern wird ein Wasserzeichen eingebracht, das nicht sichtbar ist, trotzdem bei Bedarf aus dem Bild eindeutig extrahiert werden kann. Somit kann überprüft werden,
+      ob Bilder unlizenziert Verwendung finden. In Musikdateien ermöglichen individuelle Wasserzeichen zu jedem Track den ursprünglichen Käufer ausfindig zu machen, seitdem es Dank des MP3-Komprimierungsverfahrens möglich geworden ist Musikdateien in
+      geringer Datengröße und dennoch guter Qualität problemlos (und oftmals illegal) durch das Internet zu kopieren. Bei Videodaten kann festgestellt werden, ob diese nachträglich verändert wurden (bei Beweisaufnahmen etwa).
+    </p>
+    <!--l. 38-->
+    <p class="noindent">In den Anfangszeiten der digitalen Wasserzeichen wurden auch überlegungen angestellt wie die aufkommenden DVDs so gekennzeichnet werden könnten, dass eine Kopierung nur im Rahmen des erlaubten Copyrights stattfindet&#x00A0;[3]. Die Idee war alle DVD
+      Player so zu programmieren, dass sie keine Kopien von kommerziellen Inhalten anfertigen. TV-Ausstrahlungen würden hingegen so gekennzeichnet, dass sie genau einmal kopiert werden könnten. Private Aufnahmen wären unlimitiert kopierbar.
+    </p>
+    <!--l. 40-->
+    <p class="noindent">Jedoch existieren nur wenige Verfahren, die Digital/Analog Wandlung überstehen. Dementsprechend wenig Konzepte bringen Watermarks in analogen Audiosignalen zur Anwendung (ein Beispiel wäre [4]). Es wäre aber denkbar, dass mittels einer effektiven
+      Methode zum Beispiel Radio- und Fernsehübertragungen mit zusätzlichen Informationen erweitert werden, die über die akustische Ebene nicht nur dem eigentlichen Empfangsgerät zugänglich gemacht werden.
+    </p>
+    <!--l. 42-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">1.5   </span> <a
+ id="x1-130001.5"></a>Ziele</h3>
+    <!--l. 44-->
+    <p class="noindent">In dieser Arbeit wird versucht ein transparentes Watermarkingverfahren für digitale Audiosignale umzusetzen, welches die übertragung über eine analoge übertragungsstrecke (etwa Luft) übersteht. Damit könnten Metadaten direkt in Audiosignalen untergebracht
+      und erhalten werden, auch wenn sie über ein Lautsprechersystem abgespielt werden. Entsprechende Empfangsgerät (z.B. ein Handy) könnten dann das Signal aufnehmen und die darin enthaltenen Daten wieder rekonstruieren. Ein denkbarer Anwendungsfall
+      wären etwa Metadaten über das Programm eines Radiosenders. Verfahren zum Urheberrechtsschutz sind im aktuellen Stand der Technik weit ausgereift. Hingegen wurde bisher nur wenig Augenmerkt auf die Resistenz bei DA/AD Wandlung gelegt, da dies zur
+      Beseitigung der Copyright-Watermarks kaum ein angewandter Angriffsvektor ist. Die Auswirkungen auf die resultierende Qualität sind in der Regel zu massiv.
+    </p>
+    <!--l. 46-->
+    <p class="noindent">Diese Arbeit stützt sich vor allem auf das von Shijun Xiang&#x00A0;[5] vorgeschlagene Audio-Watermarkingverfahren für DA/AD-Wandlung. Dokumentiert ist hier die Implementierung dieser sowie deren Erweiterungen und Modifikationen.
+
+
+
+    </p>
+    <h2 class="chapterHead"><span class="titlemark">Kapitel&#x00A0;2</span><br /><a
+ id="x1-140002"></a>Theoretische Grundlagen</h2>
+    <!--l. 4-->
+    <p class="noindent">Um ein Signal mit zusätzlichen Informationen anzureichern muss das Signal auf die eine oder andere Art so verändert werden, dass die Änderungen eindeutig rekonstruierbar sind. Weiters müssen Sie einer gewissen Logik folgen, damit anschließend wieder
+      auf die Information geschlossen werden kann. Es ist selbstverständlich essentiell, dass die Art der Informationsanreicherung stabil ist, d.h. die Veränderungen so geschehen, dass eine 1 eindeutig wieder als 1 erkannt wird.
+    </p>
+    <!--l. 6-->
+    <p class="noindent">Die mathematische Grundlage der in dieser Arbeit verwendeten Methode um einen Teil eines Signals so zu verändern, dass daraus wieder auf einen logischer Wert (0 oder 1) geschlossen werden kann, beruht auf dem in [5] publizierten Verfahren.
+    </p>
+    <!--l. 8-->
+    <p class="noindent">In diesem und den folgenden Kapiteln werden immer wieder Notationen benutzt, die von denen von [5] abweichen um ein konsistenteres Bezeichnungsschema für die Beschreibung der Erweiterungen zu erreichen. Die in den nächsten Abschnitten vorgestellten
+      Begriffe werden daher oft mit Bezeichnung und Symbol eingeführt. Die Bezeichnungen sind meistens in englischer Sprache, da diese in der wissenschaftlichen Literatur so verwendet werden und eine Übersetzung ins Deutsche dem geneigten Leser nur die
+      Zuordnung der Begriffe erschweren würde. Die Symbole sind hierfür eine alternative Kurzschreibweise die vor allem in Formeln Verwendung finden werden.
+    </p>
+    <!--l. 10-->
+    <p class="noindent">Grundlegend müssen wir zuerst klären, über welche Art von Signal hier überhaupt gesprochen wird. Signale können an sich unterschiedlichster Natur sein. Wir hier wollen mit &#8222;Signal&#8220; ganz allgemein die Repräsentation einer akustischen Information
+      bezeichnen. In der Tontechnik spricht man von <em>Audiosignalen</em> als Bezeichnung für all das &#8222;was man hören kann&#8220;. Allerdings muss ein Audiosignal noch nicht unbedingt in Form von Schallwellen vorliegen. Es kann sich auch um ein
+      elektrisches Signal handeln, welches durch die Umwandlung z.B mit einem Lautsprecher erst hörbar wird.
+    </p>
+    <!--l. 12-->
+    <p class="noindent">Audiosignal müssen aber nicht immer zwingend analog vorliegen. So können sie auch als digitale Daten durch sog. <em>Sample</em> Werte betrachtet werden. Diese Samples sind zeit- und wertediskrete Abtastwerte des zugrundeliegenden analogen Signals.
+      Sie wurden durch die sog. <em>Analog-Digital Wandlung</em> (AD) eines Audiosignals ermittelt und erfolgt durch ein geeignettes Instrument (i.A. ein Mikrofon oder eine Soundkarte). Dabei geht Information verloren, da analoge Signale aus einer unendlichen
+      Anzahl an überlagerten Schwingungen bestehen, digitale Repräsentationen allerdings nur eine endliche Anzahl an Zuständen annehmen können. Als Kurzform für ein Signal wird im Folgenden sig verwendet, wobei sig(i) den konkreten Samplewert des Signals
+      an der Stelle i bezeichnet. Ein digitales Signal kann durch einen Algorithmus manipuliert (siehe &#x00A0;<a href="#x1-240003.2">3.2<!--tex4ht:ref: sec:embedding --></a>) oder verarbeitet (siehe &#x00A0;<a href="#x1-430003.3">3.3<!--tex4ht:ref: sec:extraction --></a>)
+      werden.
+    </p>
+    <!--l. 14-->
+    <p class="noindent">Die Rücktransformation eines digitalen Signals ist ebenso möglich, durch die sog.
+      <em>Digital-Analog Wandlung</em> (DA). Dabei wird durch einen geeigneten Mechanismus (z.B. einen Lautsprecher) wieder ein analoges Signal erzeugt. Aufgrund des Informationsverlustes der AD-Wandlung ist dieses Signal im Allgemeinen nicht mit dem
+      ursprünglich aufgenommenen ident.
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">2.1   </span> <a
+ id="x1-150002.1"></a>Diskrete Wavelet-Transformation</h3>
+    <!--l. 20-->
+    <p class="noindent">Zur Beantwortung der Frage wie das Signal verändert werden kann existieren verschiedene Ansätze. Es gibt Verfahren die das Signal direkt im Zeitbereich modifizieren [6]&#x00A0;[7], also konkrete Abtastpunkte des Signals direkt bearbeiten. Andere verändern
+      die Koeffizienten der durch die Fouriertransformation oder die Kosinustransformation erzeugten Frequenzspektrums [4], der Wavelet-Transformation&#x00A0;[8] oder der Cepstrum-Domain
+      <span class="footnote-mark"><a
+href="thesis5.html#fn1x2"><sup class="textsuperscript">1</sup></a></span>
+      <a id="x1-15001f1"></a> &#x00A0;[9]&#x00A0;[10]. Es existieren auch Ansätze welche die Information durch Phasenverschiebungen innerhalb des Signals einbringen [11]&#x00A0;[12] oder solche die mehrere Methoden gleichzeitig bemühen [13]. Wir wollen hier die Koeffizienten
+      der diskrete Wavelet-Transformation (DWT) eines Signals verändern, also die Frequenzeigenschaften der Signale beeinflussen. Aus den modifizierten Koeffizienten kann durch die inverse DWT wieder ein Signal rekonstruiert werden.
+    </p>
+    <!--l. 22-->
+    <p class="noindent">Die Beschreibung der diversen mathematischen Raffinessen welche die Wavelet-Transformation erst möglich machen wollen wir an dieser Stellen anderen überlassen (etwa [14]). Es sei nur gesagt, dass sie eine zeit- und wertediskret (da es sich um digitale
+      Daten handelt) durchgeführte Wavelet-Transformation ist, praktisch durch eine Reihe zeitdiskreter Filter berechnet werden kann und die DWT so implementiert ist. Durch diese Kaskade von Hoch- und Tiefpassfiltern er gibt sich ein Binärbaum. Jede Verzweigungsebene
+      dieses Baumes nennt man DWT-Level (D<sub>k</sub>). Je größer der Level, desto genauer ist die Auflösung der DWT-Koeffizienten <img src="thesis0x.png" alt="{ci}" class="left" align="middle" />. Sie sind der Ergebnis der DWT und beschreiben das zugrundeliegende
+      Signal in seinem Frequenzbereich. <img src="thesis1x.png" alt="{ci}" class="left" align="middle" /> bezeichnet die (indizierte) Gesamtmenge der Koeffizienten eines Signals, c<sub>i</sub> ein spezifisches Element. Jedes c<sub>i</sub> gibt dabei das
+      Energiepotential der Frequenz i an.
+    </p>
+    <!--l. 24-->
+    <p class="noindent">Anders als bei ähnlichen Verfahren wie etwa der Fourier-Transformation oder der Kosinustranformation wird bei der Wavelet-Transformation das Signal nicht durch eine Überlagerung von Sinus- oder Kosinus-Schwingungen beschrieben, sondern durch eine
+      im Allgemeinen komplexere Basisfunktion, genannt <em>Wavelet</em> (f
+      <sub>w</sub>).
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">2.2   </span> <a
+ id="x1-160002.2"></a>Einbettungsstrategie</h3>
+    <!--l. 31-->
+    <p class="noindent">Um nun ein Bit stabil in einem Teil eines Signals (einer sog. <em>Sample Section</em>) zu verstecken, werden wir die relative Beziehungen von Gruppen der DWT-Koeffizienten der Samples verändern. Aus dieser Veränderung können wir anschließend wieder
+      einfach eine logische Beziehung herstellen und somit den eingebrachten Wert extrahieren.
+    </p>
+    <!--l. 33-->
+    <p class="noindent">Da digitale Signale als Listen von Abtastwerten (engl. <em>Samples</em>) repräsentiert werden, ist daher eine Sample Section eine Folge oder Liste aufeinander folgender Samples. In eine Sample Section werden wir immer genau ein Bit einbringen. Diese
+      Segmentierung des Signals in jene Teilbereiche geschieht im Allgemeinen willkürlich, allerdings sind für die Kodierung eines Bits mindestens:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-16001r1"></a>
+          <center class="math-display">
+            <img src="thesis2x.png" alt="Ns &#x2265; 3&#x22C5;NE &#x22C5;2Dk,
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.1)</td>
+      </tr>
+    </table>
+    <!--l. 37-->
+    <p class="nopar">
+    </p>
+    <!--l. 39-->
+    <p class="noindent">Samples - daher N<sub>s</sub> genannt <em>Sample-Section-Length</em> - notwendig. Das hier verwendete N<sub>E</sub> bezeichnet die sog. <em>Subband-Length</em>. Ein <em>Subband</em> S ist eine indizierte Teilmenge paarweise benachbarter DWT-Koeffizienten
+      einer Sample Section, also &#x27E8;c
+      <sub>i</sub>,c<sub>i+N<sub>E</sub></sub>&#x27E9;&#x2282;<img src="thesis3x.png" alt="{ci}" class="left" align="middle" />,&#x2200;i &#x2208; &#x2115;. Folglich ist die Subband-Length die Anzahl der DWT-Koeffizienten in einem Subband: N<sub>E</sub>      = |&#x27E8;c<sub>i</sub>,c<sub>i+N<sub>E</sub></sub>&#x27E9;|.
+    </p>
+    <!--l. 43-->
+    <p class="noindent">Um die Veränderungen für den menschlichen Hörapparat möglichst unwahrnehmbar zu gestalten, gleichzeitig aber vor digitalen Komprimierungsverfahren
+      <span class="footnote-mark"><a
+href="thesis6.html#fn2x2"><sup class="textsuperscript">2</sup></a></span>
+      <a id="x1-16002f2"></a>
+      geschützt zu sein, werden wir die niederfrequenten DWT-Koeffizienten verändern.
+    </p>
+    <!--l. 45-->
+    <p class="noindent">Für eine Sample Section mit N<sub>s</sub> Samples berechnen wir unter Verwendung der Wavelet-Funktion f<sub>w</sub> ihre D<sub>k</sub>-Level DWT-Koeffizienten <img src="thesis4x.png" alt="{ci}" class="left" align="middle" />. Aus den Koeffizienten
+      bilden wir 3 disjunkte Subbänder S<sub>1</sub>, S<sub>2</sub> und S<sub>3</sub>, wobei S<sub>1</sub> die niederfrequentesten Koeffizienten &#x27E8;c<sub>1</sub>,c<sub>N<sub>E</sub></sub>&#x27E9; enthält. Analog dazu setzen sich S<sub>2</sub> aus
+      den Koeffizienten &#x27E8;c<sub>N<sub>E</sub>+1</sub>,c<sub>2N<sub>E</sub></sub>&#x27E9; und S<sub>3</sub> aus &#x27E8;c<sub>2N<sub>E</sub>+1</sub>,c<sub>3N<sub>E</sub></sub>&#x27E9; zusammen.
+
+
+
+    </p>
+    <!--l. 47-->
+    <p class="noindent">Für jedes Subband S<sub>i</sub> berechnen wir das gesammte Energiepotenzial, die sog.
+      <em>Subband Energy</em> E. Da die DWT-Koeffizienten eines Subbandes das Energieniveau ihrer Frequenzen beschreiben, berechnet sich die Subband Engery für Koeffizienten von S aus dem Intervall [k,k + N<sub>E</sub>] wie folgt:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-16003r2"></a>
+          <center class="math-display">
+            <img src="thesis5x.png" alt="    k+&#x2211;NE
+E =     |ci|.
+     i=k
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.2)</td>
+      </tr>
+    </table>
+    <!--l. 52-->
+    <p class="nopar">
+    </p>
+    <!--l. 54-->
+    <p class="noindent">Die Wahl von N<sub>E</sub> steht an sich frei, ist jedoch ein Kompromiss zwischen der Einbettungskapazität (wie später gezeigt wird), dem Signal-Rauschabstand des resultierenden Signals (welcher sich auf die Qualität auswirkt&#x00A0;[5], siehe Kapitel
+      <a href="#x1-390003.2.4">3.2.4<!--tex4ht:ref: sec:qualitaetskontrolle --></a>) und der Robustheit des Watermarks. Im Allgemeinen gilt: Je größer N<sub>E</sub>, desto widerstandsfähiger das Watermark.
+    </p>
+    <!--l. 56-->
+    <p class="noindent">Die 3 Energiewerte werden anschließend der Größe nach sortiert. Es gilt: E
+      <sub>min</sub> &#x2264; E<sub>med</sub> &#x2264; E<sub>max</sub> da E<sub>min</sub> = min(E<sub>1</sub>,E<sub>2</sub>,E<sub>3</sub>),E<sub>med</sub> = med(E<sub>1</sub>,E<sub>2</sub>,E<sub>3</sub>) und E
+      <sub>max</sub> = max(E<sub>1</sub>,E<sub>2</sub>,E<sub>3</sub>), wobei min das Minimum, med den Median und max das Maximum bezeichnet.
+    </p>
+    <!--l. 58-->
+    <p class="noindent">Wie eingangs erwähnt werden wir die relativen Beziehungen dieser Subbänder verändern. Diese relativen Beziehungen lassen sich als Differenzen der 3 Energiewerte E
+      <sub>min</sub>,E<sub>med</sub> und E<sub>max</sub> ausdrücken:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-16004r3"></a>
+          <center class="math-display">
+            <img src="thesis6x.png" alt="A = Emax - Emed  und  B = Emed - Emin
+
+
+
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.3)</td>
+      </tr>
+    </table>
+    <!--l. 62-->
+    <p class="nopar">
+    </p>
+    <!--l. 64-->
+    <p class="noindent">Um diese Beziehung zu verändern definieren wir die sog. <em>Embedding Strength</em> ES, eine Entscheidungsvariable um den logischen Wert 0 oder 1 zu beschreiben. Die Embedding Strength berechnet sich wie folgt:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-16005r4"></a>
+          <center class="math-display">
+            <img src="thesis7x.png" alt="       [         ]
+     1     3&#x2211;NE
+ES = 3  esf&#x22C5;    |ci| ,
+           i=1
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.4)</td>
+      </tr>
+    </table>
+    <!--l. 68-->
+    <p class="nopar">
+    </p>
+    <!--l. 70-->
+    <p class="noindent">wobei esf der sog. <em>Embedding Strength Factor</em>, ein Kontrollparameter für die Stärke der Signalveränderung, ist. Der esf sollte unter der Bedingung der Unhörbarkeit des Watermarks maximiert werden.
+    </p>
+    <!--l. 72-->
+    <p class="noindent">Aus der Summenobergrenze 3 &#x22C5; N<sub>E</sub> ist ersichtlich, dass es sich bei der ES um den Mittelwert der Energiewerte der 3 Subbänder handelt.
+    </p>
+    <!--l. 74-->
+    <p class="noindent">Um einen Wert a &#x2208;<img src="thesis8x.png" alt="{0,1}" class="left" align="middle" /> in der Sample Section einzubetten gelten nun folgende Beziehungen:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-16006r5"></a>
+          <center class="math-display">
+            <img src="thesis9x.png" alt="A - B &#x2265; ES &#x21D0;&#x21D2;  a = 1 und  B - A &#x2265; ES &#x21D0;&#x21D2;  a = 0
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.5)</td>
+      </tr>
+    </table>
+    <!--l. 78-->
+    <p class="nopar">
+
+
+
+    </p>
+    <!--l. 80-->
+    <p class="noindent">Sind diese Bedingungen aus der natürlichen Gegebenheit des Signals erfüllt, so ist nichts zu tun. Sollte dies jedoch nicht der Fall sein, so werden die 3 aufeinanderfolgenden Subbänder verändert, bis Formel (<a href="#x1-16006r5">2.5<!--tex4ht:ref: equ:embeddingrelationships --></a>)
+      erfüllt ist.
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-170002.2"></a>Fall 1: a = 1 und A-B < ES</h5>
+    <!--l. 84-->
+    <p class="noindent">Folgende Regeln angewendet auf die Koeffizienten c<sub>i</sub>,&#x2200;i &#x2208; [1,3 &#x22C5; N<sub>E</sub>] führen dazu, dass die resultierenden Koeffizienten c&#x2032;<sub>i</sub> die Bedingung (<a href="#x1-16006r5">2.5<!--tex4ht:ref: equ:embeddingrelationships --></a>)
+      erfüllen:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-17001r6"></a>
+          <center class="math-display">
+            <img src="thesis10x.png" alt="     {
+ &#x2032;     ci &#x22C5;(1 + E--+2&#x22C5;E|&#x03BE;|-+E---) &#x21D0; &#x21D2; ci &#x2208; Smin oder ci &#x2208; Smax,
+c i =  c &#x22C5;(1 - -max---m|&#x03BE;e|d--min) &#x21D0; &#x21D2; c &#x2208; S  .
+        i     Emax+2&#x22C5;Emed+Emin      i   med
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.6)</td>
+      </tr>
+    </table>
+    <!--l. 93-->
+    <p class="nopar">
+    </p>
+    <!--l. 95-->
+    <p class="noindent">S<sub>min</sub> ist das Subband mit Energiepotential E<sub>min</sub>, äquivalent S<sub>med</sub> und S<sub>max</sub>. |&#x03BE;| = |A - B - ES| = ES - A + B = ES - E<sub>max</sub> + 2 &#x22C5; E<sub>med</sub> - E<sub>min</sub> da A - B &#x003C; ES.
+      Aus Formel (<a href="#x1-17001r6">2.6<!--tex4ht:ref: equ:modifcoef_case1 --></a>) ergeben sich folgende neue Sachverhalte:
+    </p>
+    <div class="eqnarray">
+      <center class="math-display">
+        <img src="thesis11x.png" alt="E &#x2032;max  =   Emax &#x22C5;(1 + ---------|&#x03BE;|--------),
+                     Emax + 2&#x22C5;Emed + Emin
+  &#x2032;                  ---------|&#x03BE;|----------
+E  med =   Emed &#x22C5;(1 - Emax + 2&#x22C5;Emed + Emin),
+  &#x2032;                           |&#x03BE;|
+ E min  =   Emin &#x22C5;(1 + Emax-+-2&#x22C5;Emed-+-Emin),
+" class="math-display" />
+      </center>
+    </div>
+    <!--l. 110-->
+    <p class="noindent">wobei E&#x2032;<sub>max</sub>, E&#x2032;<sub>med</sub> und E&#x2032;<sub>min</sub> den maximalen, mittleren und minimalen Energiewert nach der Veränderung bezeichnen. Aus diesen Veränderungen der Koeffizienten können sich die Energiepotenziale der
+      Subbänder ändern. Es kann sein das E&#x2032;<sub>med</sub> &#x003C; E&#x2032;<sub>min</sub>, da E&#x2032;<sub>min</sub> &#x003E; E<sub>min</sub>, E<sub>min</sub> &#x003C; E<sub>med</sub> und E&#x2032;
+      <sub>med</sub> &#x003C; E<sub>med</sub>. Um sicherzustellen, dass nach der Anpassung immer noch E&#x2032;
+      <sub>med</sub> &#x003E; E&#x2032;<sub>min</sub> gilt, führen wir folgende Obergrenze für die Embedding Strength ein:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-17003r7"></a>
+          <center class="math-display">
+            <img src="thesis12x.png" alt="      --2&#x22C5;Emed----
+ES &#x003C;  Emed + Emin &#x22C5;(Emax - Emin)
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.7)</td>
+      </tr>
+    </table>
+    <!--l. 115-->
+    <p class="nopar">
+    </p>
+    <!--l. 117-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-180002.2"></a>Fall 2: a = 0 und B-A < ES</h5>
+    <!--l. 119-->
+    <p class="noindent">Wie in Fall 1 führen wir auch hier Regeln ein, mit denen wir die Subbandkoeffizienten c
+      <sub>i</sub>,&#x2200;i &#x2208; [1,3 &#x22C5; N<sub>E</sub>] anpassen, damit sie Formel <a href="#x1-16006r5">2.5<!--tex4ht:ref: equ:embeddingrelationships --></a> erfüllen:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-18001r8"></a>
+
+
+
+          <center class="math-display">
+            <img src="thesis13x.png" alt="     {        -------|&#x03BE;|------
+c&#x2032;i =  ci &#x22C5;(1 - Emax+2&#x22C5;Em|&#x03BE;e|d+Emin) &#x21D0; &#x21D2; ci &#x2208; Smin oder ci &#x2208; Smax,
+       ci &#x22C5;(1 + Emax+2&#x22C5;Emed+Emin) &#x21D0; &#x21D2; ci &#x2208; Smed.
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.8)</td>
+      </tr>
+    </table>
+    <!--l. 128-->
+    <p class="nopar">
+    </p>
+    <!--l. 130-->
+    <p class="noindent">Hier ist nun |&#x03BE;| = |B - A - ES| = ES + A - B = S + E<sub>max</sub> - 2 &#x22C5; E<sub>med</sub> + E<sub>min</sub> da B - A &#x003C; ES. Für die neuen Energiewerte gilt:
+    </p>
+    <div class="eqnarray">
+      <center class="math-display">
+        <img src="thesis14x.png" alt="E &#x2032;max  =   Emax &#x22C5;(1 - ---------|&#x03BE;|--------),
+                     Emax + 2&#x22C5;Emed + Emin
+E &#x2032;med =   Emed &#x22C5;(1 + ---------|&#x03BE;|---------),
+                     Emax + 2&#x22C5;Emed + Emin
+  &#x2032;                  ---------|&#x03BE;|----------
+ E min  =   Emin &#x22C5;(1 - Emax + 2&#x22C5;Emed + Emin),
+" class="math-display" />
+      </center>
+    </div>
+    <!--l. 141-->
+    <p class="noindent">Dieses Mal kann es sich ergeben, dass E&#x2032;<sub>med</sub> &#x003E; E&#x2032;<sub>max</sub>, da sich E<sub>max</sub> verringert während E<sub>med</sub> steigt. Um sicherzustellen, dass nach der Koeffizientenanpassung immer noch E&#x2032;<sub>max</sub>      &#x003E; E&#x2032;<sub>m</sub>ed gilt, führen wir eine weitere Obergrenze für ES ein:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-18003r9"></a>
+
+
+
+          <center class="math-display">
+            <img src="thesis15x.png" alt="        2&#x22C5;E
+ES &#x003C; ------med---&#x22C5;(Emax - Emin)
+     Emed + Emax
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.9)</td>
+      </tr>
+    </table>
+    <!--l. 146-->
+    <p class="nopar">
+    </p>
+    <!--l. 148-->
+    <p class="noindent">Formal können wir nun eine Funktion f definieren, die eine Menge an Samples und einen binären Wert a in eine neue Menge an Samples überführt, also die Abbildung f : &#x211D;<sup>N<sub>s</sub></sup> &#x00D7;<img src="thesis16x.png" alt="{0,1}" class="left"
+      align="middle" /><img src="thesis17x.png" alt="&#x21A6;&#x2192;" class="mapsto" />&#x211D;<sup>N<sub>s</sub></sup>, wobei hier natürlich zu bedenken ist, dass &#x211D;<sup>N<sub>s</sub></sup> aufgrund des numerischen Fehlers nur die abbildbare Teilmenge
+      der reellen Zahlen beschreibt.
+    </p>
+    <!--l. 150-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">2.3   </span> <a
+ id="x1-190002.3"></a>Ausbreitung auf mehrere Bits</h3>
+    <!--l. 153-->
+    <p class="noindent">Um eine Bitsequenz {a<sub>i</sub>} in ein Signal einzubetten, muss dieses in n disjunkte Partitionen P<sub>i</sub>,1 &#x2264; i &#x2264; n unterteilt werden. Jede P<sub>i</sub> &#x2286; sig wird nach dem oben beschriebenen Verfahren mit genau einem
+      binären Informationswert angereichert, d.h. P<sub>i</sub>&#x2032; = f(P<sub>i</sub>,a<sub>i</sub>),a<sub>i</sub> = wmk(i) &#x2208;<img src="thesis18x.png" alt="{0,1}" class="left" align="middle" />. Das mit dem Watermark angereicherte Signal sig&#x2032;
+      wird durch die Konkatenation der modifizierten Partitionen P<sub>i</sub>&#x2032; erzeugt. Für die Teilfolgen &#x27E8;sig<sub>k</sub>,sig<sub>l</sub>&#x27E9; gilt:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-19001r10"></a>
+          <center class="math-display">
+            <img src="thesis19x.png" alt="&#x27E8;sig&#x2032;k,sig&#x2032;l&#x27E9; = Pi&#x2032;&#x2218;P&#x2032;i+1 mit k = i&#x22C5;Ns,  l = (i+ 2)&#x22C5;Ns, 1 &#x2264; i &#x2264; n- 1.
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.10)</td>
+      </tr>
+    </table>
+    <!--l. 158-->
+    <p class="nopar">
+    </p>
+    <!--l. 160-->
+    <p class="noindent">Für die Kardinalitäten ergibt sich daraus folgende Bedingung:
+
+
+
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-19002r11"></a>
+          <center class="math-display">
+            <img src="thesis20x.png" alt="|&#x27E8;sigk,sigl&#x27E9;| = |Pi&#x2032;&#x2218;Pi&#x2032;+1| = 2&#x22C5;Ns.
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.11)</td>
+      </tr>
+    </table>
+    <!--l. 165-->
+    <p class="nopar">
+    </p>
+    <!--l. 167-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">2.4   </span> <a
+ id="x1-200002.4"></a>Rekonstruktion</h3>
+    <!--l. 170-->
+    <p class="noindent">Liegt ein mit den in Abschnitt <a href="#x1-160002.2">2.2<!--tex4ht:ref: sec:embeddingstragety --></a> beschriebenen Methoden mit Information angereichertes Signal vor, so müssen diese Informationen auch wieder eindeutig aus dem Signal rekonstruiert
+      werden. Wurde das Signal übertragen, so kann der Übertragungskanal Einflüsse auf das Signal haben. Diese werden in den Kapiteln <a href="#x1-220003">3<!--tex4ht:ref: ch:methode --></a> und <a href="#x1-460004">4<!--tex4ht:ref: ch:analyse --></a>      näher beschrieben.
+    </p>
+    <!--l. 172-->
+    <p class="noindent">Beschreiben wir diese Einflüsse ganz allgemein als ein wie auch immer geartetes Störsignal X. Wir haben unser Signal sig mit einer Binärsequenz {a<sub>i</sub>} angereichert, also sig&#x2032; = f(sig,{a<sub>i</sub>}). Durch die Übertragung überlagert
+      sich unser modifiziertes Signal sig&#x2032; mit dem Störsignal X, also sig&#x2032;&#x2032; = sig&#x2032; + X.
+    </p>
+    <!--l. 174-->
+    <p class="noindent">Das Verfahren um die Informationssequenz {a<sub>i</sub>} aus sig&#x2032;&#x2032; zu extrahieren ist im Prinzip das gleiche wie die Implantierung. Wir segmentieren, erzeugen uns mittels der DWT wieder die Koeffizienten, bilden die 3 Subbänder S<sub>1</sub>,
+      S<sub>2</sub> und S<sub>3</sub>, errechnen deren Energiepotenziale E<sub>1</sub>, E<sub>2</sub> und E<sub>3</sub> und sortieren die Subbändern nach deren Energiewerten indem wir E<sub>min</sub>, E<sub>med</sub> und E<sub>max</sub> bilden. Damit
+      berechnen wir wieder die Energiedifferenzen A&#x2032;&#x2032; = E&#x2032;&#x2032;<sub>max</sub> - E&#x2032;&#x2032;<sub>med</sub> und B&#x2032;&#x2032; = E&#x2032;&#x2032;<sub>med</sub> - E&#x2032;&#x2032;<sub>min</sub>.
+    </p>
+    <!--l. 176-->
+    <p class="noindent">Der springende Punkt ist nun, dass wir in der Implantierungsphase sichergestellt haben, dass die Subbänder die Bedingung (<a href="#x1-16006r5">2.5<!--tex4ht:ref: equ:embeddingrelationships --></a>) erfüllen. Somit können wir über die Energiedifferenzen
+      A&#x2032;&#x2032; und B&#x2032;&#x2032; eine Aussagen über den darin enthaltenen Binärwert a treffen:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-20001r12"></a>
+
+
+
+          <center class="math-display">
+            <img src="thesis21x.png" alt="    {        &#x2032;&#x2032;    &#x2032;&#x2032;
+a =   1 &#x21D0; &#x21D2; A &#x003E; B
+      0 &#x21D0; &#x21D2; sonst
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.12)</td>
+      </tr>
+    </table>
+    <!--l. 185-->
+    <p class="nopar">
+    </p>
+    <!--l. 187-->
+    <p class="noindent">Um eine Bitsequenz {a<sub>i</sub>} aus einem Signal zu extrahieren, muss sig&#x2032;&#x2032;äquivalent zu Kapitel <a href="#x1-190002.3">2.3<!--tex4ht:ref: sec:embeddingstragety_bitsequence --></a> partitioniert werden. Der Vollständigkeit halber
+      sei noch erwähnt, dass das im Allgemeinen für das Urbild gilt P<sub>i</sub>&#x2260;f<sup>-1</sup>(P<sub>i</sub>&#x2032;,a<sub>i</sub>), da die Auswirkungen von f nicht eindeutig rekonstruierbar sind.
+    </p>
+    <!--l. 189-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">2.5   </span> <a
+ id="x1-210002.5"></a>Einbettungskapazität</h3>
+    <!--l. 192-->
+    <p class="noindent">Wie bereits aus Kapitel <a href="#x1-160002.2">2.2<!--tex4ht:ref: sec:embeddingstragety --></a> bekannt ist, werden für die Implantierung eines Bits genau N<sub>s</sub> Samples benötig. Damit können wir eine Aussage über den Zusammenhang zwischen
+      zeitlicher Länge, Bitkapazität und Abtastrate treffen.
+    </p>
+    <!--l. 194-->
+    <p class="noindent">Bei der Analog-Digital-Wandlung wird ein Signal abgetastet, d.h. es werden zu definierten Zeitpunkten Messwerte aufgenommen. Man nennt dies die sog. <em>Abtastrate</em> (oder <em>Samplerate</em>) f<sub>s</sub>. Erfüllt diese das sog. Nyquist-Shannon-Abtasttheorem&#x00A0;[15],
+      d.h. gilt:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-21001r13"></a>
+          <center class="math-display">
+            <img src="thesis22x.png" alt="2 &#x22C5;fmax &#x2264; fs
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.13)</td>
+      </tr>
+    </table>
+    <!--l. 199-->
+    <p class="nopar">
+
+
+
+    </p>
+    <!--l. 201-->
+    <p class="noindent">wobei f<sub>max</sub> die größte auftretende Frequenz des Signals beschreibt, so kann das Signal mit den durch f<sub>s</sub> gewonnenen Sample wieder eindeutig rekonstruiert werden.
+    </p>
+    <!--l. 203-->
+    <p class="noindent">Wird ein analoges Audiosignal mit einer Samplerate von beispielsweise 48kHz abgetastet, so liegen für eine Sekunde Signal 48.000 Messwerte vor. Daraus können wir schließen, dass im Allgemeinen für die Bitkapazität K eines Signals mit 1 Sekunde gilt:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-21002r14"></a>
+          <center class="math-display">
+            <img src="thesis23x.png" alt="K = -fs=  ----fs----
+    Ns    3&#x22C5;NE &#x22C5;2Dk
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.14)</td>
+      </tr>
+    </table>
+    <!--l. 208-->
+    <p class="nopar">
+    </p>
+    <!--l. 210-->
+    <p class="noindent">und folglich für m Sekunden K<sub>m</sub> = m &#x22C5; K.
+    </p>
+    <!--l. 212-->
+    <p class="noindent">Sollen genau n Bit in einem Signal untergebracht werden, so musst das Signal mindestens n &#x22C5; N<sub>s</sub> Samples haben was abhängig von der Samplerate
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-21003r15"></a>
+          <center class="math-display">
+            <img src="thesis24x.png" alt="n-&#x22C5;Ns
+  fs
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(2.15)</td>
+      </tr>
+    </table>
+    <!--l. 217-->
+    <p class="nopar">
+    </p>
+    <!--l. 219-->
+    <p class="noindent">Sekunden ergibt.
+    </p>
+    <!--l. 221-->
+    <p class="noindent">In Kapitel <a href="#x1-310003.2.3">3.2.3<!--tex4ht:ref: sec:protokoll --></a> werden wir sehen, dass es durchaus Sinn macht nicht alle Samples für die Einbettung von Informationen zu verwenden, um die Stabilität des gesamten Watermarks zu verbessern.
+
+
+
+
+
+
+    </p>
+    <h2 class="chapterHead"><span class="titlemark">Kapitel&#x00A0;3</span><br /><a
+ id="x1-220003"></a>Implementierung</h2>
+    <!--l. 4-->
+    <p class="noindent">In Kapitel <a href="#x1-140002">2<!--tex4ht:ref: ch:theorie --></a> wurde das theoretisch-mathematische Modell beschrieben, mit welchem ein Bit geschrieben und wieder rekonstruiert werden kann. Um dieses Wissen nun praktisch nutzen zu können wurde
+      ein Framework ausgearbeitet in dem es zur Anwendung kommt.
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">3.1   </span> <a
+ id="x1-230003.1"></a>Architektur</h3>
+    <!--l. 8-->
+    <p class="noindent">Das von Shannon und Weaver entwickelte Sender-Empfänger-Modell [16] kann herangezogen werden, um den Aufbau des Kommunikationssystems zu modellieren:
+    </p>
+    <hr class="figure" />
+    <div class="figure">
+
+
+
+      <a id="x1-230011"></a>
+
+
+
+
+      <!--l. 13-->
+      <p class="noindent"><img src="figures/diagram-framework.png" alt="PIC" />
+        <br /> </p>
+      <div class="caption"><span class="id">Abbildung&#x00A0;3.1: </span><span class="content">Das Framework im Kommunikationsprozess</span>
+      </div>
+      <!--tex4ht:label?: x1-230011 -->
+
+
+
+    </div>
+    <hr class="endfigure" />
+    <!--l. 18-->
+    <p class="noindent">Ein beliebiges digitales Signal soll mit einer Information, dem <em>Watermark</em>, angereichert werden. Das Encodermodul verflechtet basierend auf der Grundlage von Kapitel <a href="#x1-190002.3">2.3<!--tex4ht:ref: sec:embeddingstragety_bitsequence --></a>      das Watermark mit dem Signal und liefert erneut ein digitales Signal.
+    </p>
+    <!--l. 20-->
+    <p class="noindent">Wir das neue digitale Signal auf analoger Ebene übertragen, muss eine DA-Wandlung vorgenommen werden. In der Regel wird das Signal über ein Lautsprechersystem abgespielt werden. Allerdings ist auch die reine Übertragung von einer Soundkarte zu einer
+      anderen via einem Audiokabel eine DA-Wandlung. Ebenso würde das Pressen einer Schallplatte oder das Übertragen auf ein analoges Tonband in diese Kategorie fallen.
+    </p>
+    <!--l. 22-->
+    <p class="noindent">Jede analoge Übertragung geschieht auf einem analogen Trägermedium, da Schall nicht im leeren Raum existieren kann, sondern sich auf einem Medium ausbreiten muss. Für den menschlichen Hörapparat ist dies normalerweise die Luft. Aber auch in Wasser
+      kann sich Schall ausbreiten
+      <span class="footnote-mark"><a
+href="thesis7.html#fn1x3"><sup class="textsuperscript">1</sup></a></span>
+      <a id="x1-23002f1"></a>
+      sowie in Festkörpern. In letzteren liegt oftmals das Signal nicht direkt als Schallwelle vor, sondern im Falle eines Audiokabels etwa als elektrisches Signal.
+    </p>
+    <!--l. 24-->
+    <p class="noindent">Doch egal welches Medium benutzt wird, jeder Übertragungskanal verändert das Signal durch seine Umwelteinflüsse während es ihn durchläuft. In der Luft etwa kommen die übrigen Geräusche der Umgebung hinzu, u.a. auch die Eigenreflexion der Schallwelle
+      an der Umgebung. Wir wollen uns mit den diversen Formen und Ursachen von Störsignalen nicht näher befassen. Für uns ist wichtig, dass jede Störung das Signal verändert. Das mit Informationen angereicherte, modifizierte Signal überlagert sich also
+      mit den Störungen. Dies wird sich in der Regel negativ auf das Watermark auswirken.
+    </p>
+    <!--l. 27-->
+    <p class="noindent">Um das Watermark rekonstruieren zu können, muss das Signal zuerst wieder in eine digitale Form gebracht werden. Dies geschieht durch eine AD-Wandlung. Eine Schallwelle wird durch ein Mikrofon aufgenommen, ein elektrisches Signal durch den Line-in
+      Eingang einer Soundkarte umgewandelt.
+    </p>
+    <!--l. 29-->
+    <p class="noindent">Das Decodermodul versucht anschließend, das Watermark zu rekonstruieren. Hier gilt es zwei Probleme zu überwinden. Erstens muss das Watermark erkannt werden, d.h. der Decoder muss herausfinden wo eingebettete Daten sind. Dazu werden wir sog.
+      <em>Synchronisations-Codes</em> mit speziellen Eigenschaften bemühen (näheres in Abschnitt
+      <a href="#x1-260003.2.1">3.2.1<!--tex4ht:ref: sec:barker-code --></a>). Und zweitens müssen die eingeflochtenen Bits wieder <em>richtig</em> rekonstruiert werden. Aufgrund des Störsignals welches im Übertragungskanal das Signal in Mitleidenschaft
+      zieht kann sich dies durchaus als schwierig herausstellen. Zur Erhöhung der Resistenz werden in Abschnitt <a href="#x1-270003.2.2">3.2.2<!--tex4ht:ref: sec:errorcorrection --></a> Fehlerkorrekturverfahren eingeführt. Es sei allerdings an dieser
+      Stelle bereits darauf hingewiesen, dass das Signal im Allgemeinen so weit deformiert werden kann, dass auch die Fehlerkorrektur eine sowohl vollständige wie auch richtige Rekonstruktion nicht gewährleisten kann.
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">3.2   </span> <a
+ id="x1-240003.2"></a>Watermark Implantierung</h3>
+    <!--l. 35-->
+    <p class="noindent">Der Implantationsprozess wird schematisch in Abbildung <a href="#x1-240012">3.2<!--tex4ht:ref: fig:diagram-encoder --></a> modelliert. Ein anzureicherndes digitales Audiosignal wird zunächst in gleich große Bereiche segmentiert, d.h. die Samples des
+      Signals werden in Gruppen zu je N<sub>s</sub> Samples zerteilt. In jede Gruppe (sog. <em>Sample Section</em>) wird genau 1 Bit kodiert. Der Einbettungsprozess geschieht in der DWT-Domain, daher werden die DWT-Koeffizienten der Sample Section berechnet
+      (eine Samples Section besteht aus einer Reihen aufeinander folgender Messpunkte eines Signal - sie beschreiben also einen Teil eines Signal und können ganz einfach wieder als eigenständiges Signal betrachtet werden).
+    </p>
+    <hr class="figure" />
+    <div class="figure">
+
+
+
+      <a id="x1-240012"></a>
+
+
+
+
+      <!--l. 40-->
+      <p class="noindent"><img src="figures/diagram-encoder-v2.png" alt="PIC" />
+        <br /> </p>
+      <div class="caption"><span class="id">Abbildung&#x00A0;3.2: </span><span class="content">Schematischer Aufbau des Implemetierungsprozesses</span>
+      </div>
+      <!--tex4ht:label?: x1-240012 -->
+
+
+
+    </div>
+    <hr class="endfigure" />
+    <!--l. 45-->
+    <p class="noindent">Jede Sample Section bekommt ein Bit der Bitsequenz, die das Signal beherbergen soll. Diese Sequenz setzt sich zusammen aus einer Kombination der mit Redundanz angereicherten (Abschnitt <a href="#x1-270003.2.2">3.2.2<!--tex4ht:ref: sec:errorcorrection --></a>)
+      eigentlichen Informationen und der Synchronisation-Codes. Die Einbettung jedes Bit geschieht nach dem in Abschnitt
+      <a href="#x1-160002.2">2.2<!--tex4ht:ref: sec:embeddingstragety --></a> beschriebenen Algorithmus durch Veränderung der DWT-Koeffizienten. Um das neue angereicherte Signal nun herzustellen werden auf die DWT-Koeffizienten eine inverse DWT-Transformation
+      (IDWT) angewandt. Diese resultiert in einer neuen Samples Section. Diese ersetzen im neuen Signal die unimplantierten Samples der korrelierenden Sample Section.
+    </p>
+    <!--l. 47-->
+    <p class="noindent">Um sicherzustellen, dass das Watermark unhörbar in die Sample Section implantiert wurde, wird noch eine Qualitätskontrolle vorgenommen. Dazu wird für ein Signalstück der sog. <em>Objective Difference Grade</em> (ODG) berechnet. Erfüllt dieser einen
+      vorgegebenen Grenzwert, so ist das Signal zu störhaft verändert worden und das Bit muss neu implantiert werden. Um eine weniger invasive Veränderung sicherzustellen wird der in Formel <a href="#x1-16005r4">2.4<!--tex4ht:ref: equ:embeddingstrength --></a>      eingeführte <em>Embedding Strength Factor</em> (esf) reduziert, was dazu führt, dass die DWT-Koeffizienten weniger stark verändert werden.
+    </p>
+    <h4 class="subsectionHead"><span class="titlemark">3.2.1   </span> <a
+ id="x1-250003.2.1"></a>Synchronisations-Codes</h4>
+    <!--l. 52-->
+    <p class="noindent">Das Rekonstruktionsprinzip (vgl. <a href="#x1-200002.4">2.4<!--tex4ht:ref: sec:reconstruction --></a>) bestimmt für das Verhältnis der niederfrequenten DWT-Koeffizienten eines Signal einen Bitwert. Prinzipiell kann dieses Verfahren auf jede beliebige
+      Menge an Samples angewandt werden und daraus einen Bitwert generieren.
+    </p>
+    <!--l. 54-->
+    <p class="noindent">Das Problem ist nun zu erkennen wo das Signal absichtlich verändert wurde und wo daher tatsächlich eingebrachte Bits liegen. In der Literatur findet sich dazu das Konzept der Synchronisations-Codes&#x00A0;[5]&#x00A0;[4]&#x00A0;[10]&#x00A0;[12]&#x00A0;[17]&#x00A0;[18]&#x00A0;[19].
+      Prinzipiell handelt es sich dabei um einen Mechanismus, der bestimmte Bereiche eines Signals markiert. Jedem Marker folgt ein Teil der eigentlichen Information. Die Umsetzung der Markers kann sich durchaus von der eigentlichen Watermarkingmethode
+      unterscheiden, in diesem Fall wird allerdings das selbe Modifikationsprinzip herangezogen. Ein Synchronisations-Code besteht hier aus einer festgelegten Bitsequenz die als Marker dient. Wenn die Bitsequenz dekodiert wird, ist dies das Indiz das
+      Informationsbits folgen.
+    </p>
+    <!--l. 57-->
+    <p class="noindent">Im Folgenden steht sync als Synonym für die Bitsequenz des Synchronisations-Codes und L<sub>s</sub> ist die Länge der Bitsequenz (Anzahl an Bit) von sync. sync(i) bezeichnet das Bit an der Stelle i des Synchronisation-Codes, mit i &#x2208; [1,L<sub>s</sub>].
+    </p>
+    <!--l. 59-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-260003.2.1"></a>Autokorrelation und Barker-Codes</h5>
+    <!--l. 64-->
+    <p class="noindent">Wie bereits erwähnt können die Bits durch die Störeinflüsse der DA-Wandlung beeinflusst werden. Man sagt sie <em>kippen</em>. Bei den Synchronisations-Codes hat ein gekipptes Bit zur Folge, dass der Code nicht mehr erkannt wird. Die auf ihn folgenden
+      Informationsbits gehen verloren.
+    </p>
+    <!--l. 66-->
+    <p class="noindent">Die logische Schlussfolgerung ist, dass eine Bitsequenz mit dem Synchronisations-Code-Schema nicht zu 100% übereinstimmen muss, um als solcher erkannt zu werden. Man definiert also einen Schwellwert. Aber auch hier kann es zu Problemen führen, wie
+      man sich leicht überlegen kann.
+    </p>
+    <div class="wrapfig-r">
+      <a id="x1-260013"></a>
+      <img src="figures/figure-sync-code-detection.png" alt="PIC" />
+      <br />
+      <div class="caption"><span class="id">Abbildung&#x00A0;3.3: </span><span class="content">sync Erkennung</span>
+      </div>
+      <!--tex4ht:label?: x1-260013 -->
+    </div>
+    <!--l. 74-->
+    <p class="noindent">Abbildung <a href="#x1-260013">3.3<!--tex4ht:ref: fig:sync-code-detection --></a> skizziert das Erkennen eines Synchronisations-Codes sync. Der Code wird immer mit einem Block Bits gleicher Länge des extrahierten Bitstroms verglichen. Die in der Skizze
+      blau hervorgehobenen Bits sind das eingebettete sync. Die rot markierten Bits signalisieren jene Zeichen, die beim aktuellen Vergleich übereinstimmen. In diesem Beispiel beträgt die Übereinstimmung zwischen erkanntem und tatsächlichem sync 75% bei
+      einer Synchronisation-Code Wortlänge von 8 Bit. Würde der Erkennungsschwellwert (oder <em>Synccode-Threshold</em>) T<sub>s</sub> 0.75 betragen, so wäre nun sync erkannt worden. Aus der Skizze ist aber ersichtlich, dass hier der tatsächlich Match
+      erst 2 Shifts später erfolgt. Die anschließend gelesenen Informationsbits würden also teilweise aus dem Ende von sync bestehen. Umgekehrt würden auch 2 echte Bits des Informationsblock nicht gelesen werden.
+    </p>
+    <!--l. 76-->
+    <p class="noindent">Das Problem in diesem Beispiel ist, dass sync eine sehr hohe <em>Autokorrelation</em> besitzt. In anderen Worten ist sync (als Signal aufgefasst) sehr ähnlich zu sich selbst, weswegen 75% Überdeckung auch zu 75% Übereinstimmung führen. Die Lösung
+      ist für sync ein Sequenz mit minimaler Autokorrelation zu wählen. In der Literatur&#x00A0;[4]&#x00A0;[7]&#x00A0;[17] erfreuen sich die sog. <em>Barker-Codes</em>&#x00A0;[20] großer Beliebtheit. Dabei handelt es sich um 9 Zahlensequenzen von denen
+      der längste 13 Zeichen umfasst, welche alle die Bedingung der Autokorrelations-Funktion:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-26002r1"></a>
+          <center class="math-display">
+            <img src="thesis25x.png" alt=" N&#x2211;-v
+|   ajaj+| &#x2264; 1 mit  1 &#x2264; v &#x003C; N und   aj &#x2208; - 1,+1
+ j=1
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(3.1)</td>
+      </tr>
+    </table>
+    <!--l. 81-->
+    <p class="nopar">
+
+
+
+    </p>
+    <!--l. 83-->
+    <p class="noindent">wobei N die Code Länge bezeichnet, erfüllen. Es lässt sich zeigen, dass die Summe bei einer Verschiebung wie im Beispiel oben immer sehr klein ist, außer die Codes überdecken sich exakt. Gleichzeitig bleibt die Summe immer noch sehr groß (nahe an
+      1) wenn bei vollständiger Überdeckung innerhalb des Codes eine Zahl kippt. Ein gekipptes Bit wirkt sich also nicht so massiv auf die Erkennung des Codes aus wie eine falsche Überdeckung. Barker-Codes eignen sich daher hervorragend als Synchronisations-Code
+      Sequenz.
+    </p>
+    <!--l. 85-->
+    <p class="noindent">Die Länge der verwendeten Barker Sequenz wirkt sich natürlich auch auf die Erkennungsgenauigkeit aus. Hier wird der längste Barker-Code +1 +1 +1 +1 +1 -1 -1 +1 -1 -1 +1 -1 +1 verwendet. Der Vollständigkeit halber sei noch darauf hingewiesen, dass
+      wir nur Binärwerte kodieren können, weswegen -1 auf den Wert 0 abgebildet wird. Bei der Erkennung von sync muss dies natürlich entsprechend bedacht werden.
+    </p>
+    <!--l. 87-->
+    <p class="noindent">Synchronisations-Codes werden genau wie die eigentlichen Informationen (die
+      <em>Nutzlast</em>) übertragen. Jeder eingebrachte sync belastet daher die Transportkapazität des Signals. Es können also abhängig von der Informationsblocklänge bedeutend weniger Informationsbits effektiv in einem fixen Zeitfenster transportiert
+      werden.
+    </p>
+    <!--l. 92-->
+    <p class="noindent">
+    </p>
+    <h4 class="subsectionHead"><span class="titlemark">3.2.2   </span> <a
+ id="x1-270003.2.2"></a>Fehlerkorrekturverfahren</h4>
+    <!--l. 96-->
+    <p class="noindent">Die Natur der Barker-Codes bringt eine gewisse Resistenz gegen Bitfehler mit sich, wie eben demonstriert wurde. Die Informationsbit haben diese im Allgemeinen nicht. Der Übertragungskanal kann aber das Signal so weit beeinflussen, dass nicht alle
+      Bits korrekt rekonstruiert werden. Es ist daher wünschenswert eine Methode zu verwenden welche derartige Bitfehler nicht nur erkennt, sondern auch korrigieren kann. Mit derartigen Modellen beschäftigt sich die
+      <em>Kodierungstheorie</em>.
+    </p>
+    <!--l. 98-->
+    <p class="noindent">Wir verwenden hier eine Vorwärtsfehlerkorrektur (in der englischen Literator <em>forward
+error correction</em>, daher kurz FEC) bei dem die Daten mit einem <em>error-correcting code</em> (ECC) bewusst mit redundanten Daten angereichert werden. Aus dieser Redundanz lässt sich anschließend prüfen ob die Daten richtig rekonstruiert wurden und
+      bei nicht zu starker Fehlerrate die tatsächliche Information auch wieder herstellen.
+    </p>
+    <!--l. 100-->
+    <p class="noindent">In der Kodierungstheorie bezeichnet man mit <em>Message</em> die Information die es zu übertragen gilt und mit <em>Codeword</em> die mit Redundanz angereicherte Message. Im Informationsblock der einem jeden Synchronisations-Code folgt befindet sich
+      daher immer ein vollständiges Codeword um hier ggf. Übertragungsfehler auszugleichen.
+    </p>
+    <!--l. 102-->
+    <p class="noindent">Bezeichnen wir mit wmk das zu übertragende Watermark und mit L<sub>w</sub> seine Länge (sog. <em>Watermark-Length</em>, die Anzahl an Bit) dieses Watermarks, wobei wmk(i) das Bit an der Stelle i mit i &#x2208; [1,L<sub>w</sub>] referenziert, so ergeben
+      sich folgende Bedingungen. Für die Bit-Länge einer Message L<sub>m</sub>, genannt <em>Message-Length</em>, muss gelten:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-27001r2"></a>
+          <center class="math-display">
+            <img src="thesis26x.png" alt="Lw  (mod Lm ) = 0 und  Lw &#x2265;  Lm
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(3.2)</td>
+      </tr>
+    </table>
+    <!--l. 107-->
+    <p class="nopar">
+    </p>
+    <!--l. 109-->
+    <p class="noindent">und für die Bit-Länge eines Codewords L<sub>c</sub> (sog. <em>Codeword-Length</em>) gilt allgemein L
+      <sub>c</sub> &#x003E; L<sub>m</sub>
+      <br class="newline" />Gültige Parameter für L<sub>m</sub> und L<sub>c</sub> hängen vom jeweiligen Fehlerkorrekturverfahren ab. Die im Folgenden angeführten Verfahren werden unterstützt:
+    </p>
+    <!--l. 113-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-280003.2.2"></a>BCH-Codes</h5>
+    <!--l. 116-->
+    <p class="noindent">In der Literatur&#x00A0;[4]&#x00A0;[17] oftmals verwendet werden die nach Bose, Chaudhuri und Hocquenghem benannten BCH-Codes&#x00A0;[21]. Dabei handelt es sich um eine Gruppe von zyklischen Blockcodes um mehrere 1 Bit Fehler zu korrigieren. Es existieren
+      verschiedene Codes und Implementierungen. Verwendet werden die System Objects comm.BCHEncoder und comm.BCHDecoder aus der MATLAB Communication System Toolbox.
+      <span class="footnote-mark"><a
+href="thesis8.html#fn2x3"><sup class="textsuperscript">2</sup></a></span>
+      <a id="x1-28001f2"></a> .
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-290003.2.2"></a>RS-Codes</h5>
+    <!--l. 121-->
+    <p class="noindent">Reed-Solomon-Codes&#x00A0;[22] (nach Irving S. Reed und Gustave Solomon) sind ebenfalls zyklischen Blockcodes, da sie eine Unterklasse der BCH-Codes sind. Ihr Prinzip ist einfach: Für eine Message aus k Zeichen werden die k Werte als Stützstellen
+      eines Polynoms interpretiert. Mittels der Lagrange-Interpolation werden zusätzliche Stützstellen extrapoliert, sodass sich das Polynom durch n &#x003E; k Werte beschreiben lässt. Die n Zeichen sind somit die Werte des Codewortes.
+
+
+
+    </p>
+    <!--l. 123-->
+    <p class="noindent">Bekannt wurden RS-Codes durch ihre Verwendung im Kommunikationsprotokoll der Voyager Sonden
+      <span class="footnote-mark"><a
+href="thesis9.html#fn3x3"><sup class="textsuperscript">3</sup></a></span>
+      <a id="x1-29001f3"></a>
+      und später als ECC-Verfahren bei CDs, DVDs, DSL oder DVB.
+    </p>
+    <!--l. 125-->
+    <p class="noindent">Verwendet wird die MATLAB Implementierung der Communication System Toolbox
+      <span class="footnote-mark"><a
+href="thesis10.html#fn4x3"><sup class="textsuperscript">4</sup></a></span>
+      <a id="x1-29002f4"></a> .
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-300003.2.2"></a>LDPC-Codes</h5>
+    <!--l. 130-->
+    <p class="noindent">Low-Density-Parity-Check-Codes, von Robert G. Gallager&#x00A0;[23] entwickelt (daher oft auch Gallager-Codes), sind lineare ECC die nahe am Shannon-Limit (theoretische Obergrenze der Bitrate eines Übertragungskanals) operieren. Sie sind daher ähnlich
+      effektiv wie Turbo-Codes. Verwendung finden sie vor allem in der Fehlerkorrektur in WLAN-Standards. Verwendet wird die MATLAB Implementierung der Communication System Toolbox
+      <span class="footnote-mark"><a
+href="thesis11.html#fn5x3"><sup class="textsuperscript">5</sup></a></span>
+      <a id="x1-30001f5"></a> .
+    </p>
+    <h4 class="subsectionHead"><span class="titlemark">3.2.3   </span> <a
+ id="x1-310003.2.3"></a>Datenstrukturen und Protokoll</h4>
+    <!--l. 139-->
+    <p class="noindent">Jeder digitale Kommunikationsprozess basiert auf einem Protokoll welches alle Teilnehmer beherrschen müssen. So auch dieser hier, denn wenn gleich der Übertragungskanal auch analog sein mag, so werden doch digitale Daten übermittelt. Nicht nur gewährleistet
+      ein definiertes Protokoll die korrekte Verarbeitung - die Abstrahierung erlaubt auch ein einfacheres Verständnis von Aufbau, Funktion und Zusammenspiel der einzelnen Teile.
+    </p>
+    <hr class="figure" />
+    <div class="figure">
+
+
+
+      <a id="x1-310014"></a>
+
+
+
+
+      <!--l. 143-->
+      <p class="noindent"><img src="figures/figures-protocol.png" alt="PIC" />
+        <br /> </p>
+      <div class="caption"><span class="id">Abbildung&#x00A0;3.4: </span><span class="content">Hierarchischer Aufbau des Protokolls</span>
+      </div>
+      <!--tex4ht:label?: x1-310014 -->
+
+
+
+    </div>
+    <hr class="endfigure" />
+    <h5 class="subsubsectionHead"><a
+ id="x1-320003.2.3"></a>Sample Section</h5>
+    <!--l. 150-->
+    <p class="noindent">Zunächst wird das Signal, welches durch zeit- und wertediskrete Samplewerten beschrieben wird in Bereiche segmentiert. Es werden jeweils N<sub>s</sub> Samples benötigt um 1 Bit zu transportieren. Dementsprechend werden genau die benötigte Anzahl aufeinanderfolgender
+      Samples zu einer <em>Sample Section</em> gruppiert.
+    </p>
+    <!--l. 152-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-330003.2.3"></a>Buffer Zones</h5>
+    <!--l. 155-->
+    <p class="noindent">Um Interferenz zwischen den einzelnen Sample Sections zu vermeiden befinden sich zwischen ihnen sog. <em>Buffer Zones</em>. Dabei handelt es sich um eine an sich beliebige Anzahl an Samples, die aber nicht zur Informationsübertragung verwendet werden.
+      Bei der Verarbeitung der Samples werden die Buffer Zones einfach übersprungen. Prinzipiell können die Pufferzonen auch mit Sampleanzahl N<sub>BZ</sub> = 0 definiert werden, allerdings führen Umweltfaktoren wie die Sensitivität des Aufnahmegerätes
+      (und anderer AD Einflüsse ) dazu, dass sich die Sample Sections überlagern&#x00A0;[4]. Das Ergebnis ist sog.
+      <em>Inter-Symbol-Interferenz</em><span class="footnote-mark"><a
+href="thesis12.html#fn6x3"><sup class="textsuperscript">6</sup></a></span>
+      <a id="x1-33001f6"></a> . Die Auswirkung ist u.a. ein schlechteres Matching der Barker-Codes bei der Synchronisations-Code Erkennung.
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-340003.2.3"></a>Frame</h5>
+    <!--l. 160-->
+    <p class="noindent">Um die Buffer Zones einfacher handzuhaben werden sie in den <em>Frames</em> wegabstrahiert. Alle höheren Schichten sehen ein Frame als die logische Einheit die ein Bit transportiert. Einzig und allein die Frameverarbeitung muss über Position und Länge
+      der Pufferzonen bescheid wissen. Für die höhere Schichten ist ein Bit in den N<sub>F</sub> Samples eines Frames, mit N<sub>F</sub> = N<sub>s</sub> + N<sub>BZ</sub>, kodiert.
+    </p>
+    <!--l. 162-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-350003.2.3"></a>Sync Block</h5>
+    <!--l. 165-->
+    <p class="noindent">Ein Synchronisations-Code besteht aus L<sub>s</sub> Bit, daher sind ebenso viele Frames notwendig um ein sync zu schreiben. Diese Gruppe an Frames wird als <em>Sync Block</em> bezeichnet.
+    </p>
+    <!--l. 167-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-360003.2.3"></a>Information Block</h5>
+    <!--l. 170-->
+    <p class="noindent">Synchronisations-Codes markieren die Stellen an denen Information vorhanden ist. Demensprechend ist jeder Sync-Block gefolgt von einem <em>Information Block</em>, der sich aus L<sub>c</sub> aufeinander folgender Frames zusammensetzt. Ein Block transportiert
+      immer ein vollständiges Codeword, beinhaltet somit also eine Message inklusive der Redundanz des ECC.
+    </p>
+    <!--l. 172-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-370003.2.3"></a>Package</h5>
+    <!--l. 175-->
+    <p class="noindent">Ein Sync Block und sein Information Block bilden zusammen eine Einheit, sie existieren nie für sich alleine ohne den anderen. Demensprechend empfiehlt es sich sie in einer gemeinsamen Datenstruktur abzubilden, dem sog. <em>Package</em>. Dieses eignet
+      sich für die praktische Verwendung und lässt sich wie folgt Abbilden:
+    </p>
+    <!--l. 179-->
+    <div class="lstlisting" id="listing-1"><span class="label"><a
+ id="x1-37001r1"></a></span>typedef&#x00A0;enum&#x00A0;{&#x00A0;zero,&#x00A0;one&#x00A0;}&#x00A0;bit_t;&#x00A0;
+      <br /><span class="label"><a
+ id="x1-37002r2"></a></span>typedef&#x00A0;struct&#x00A0;package&#x00A0;{&#x00A0;
+      <br /><span class="label"><a
+ id="x1-37003r3"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;bit_t&#x00A0;*header;&#x00A0;
+      <br /><span class="label"><a
+ id="x1-37004r4"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;bit_t&#x00A0;*payload;&#x00A0;
+      <br /><span class="label"><a
+ id="x1-37005r5"></a></span>}&#x00A0;package_t;
+    </div>
+    <!--l. 187-->
+    <p class="noindent">Viele paketbasierte Netzwerkprotokolle definieren einen <em>Header</em> (der das Packet beschreibt) und eine <em>Payload</em> (die &#8222;Nutzlast&#8220;). Diesem entspricht auch ein Data Struct Package wenn man den Sync Block als Header (auch wenn
+      er nur angibt das es sich überhaupt um ein Packet handelt) und den Information Block als Payload auffasst.
+    </p>
+    <!--l. 189-->
+    <p class="noindent">Somit lässt sich der Übermittelungsprozess eines Watermarks konzeptionell beschreiben als eine Partitionierung des Watermarks in Messages geeigneter Länge (bedingt durch das Verhältnis L<sub>m</sub> zu L<sub>c</sub> des ECC) und deren Versand durch
+      Pakete.
+    </p>
+    <!--l. 191-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-380003.2.3"></a>Parallelen zum OSI-Modell</h5>
+    <!--l. 193-->
+    <p class="noindent">Vergleicht man dieses Protokoll mit dem OSI-Modell
+
+
+
+      <span class="footnote-mark"><a
+href="thesis13.html#fn7x3"><sup class="textsuperscript">7</sup></a></span>
+      <a id="x1-38001f7"></a>
+      so erkennt man folgendes: Frames (und somit auch Sample Sections und Buffer Zones) sind hier Teil des <em>Physical Layer</em> (Schicht 1), welcher sich um die Bitübertragung kümmert. Packages und deren Sync bzw. Information Blocks kümmern sich um
+      die Segmentierung von Bitdatenströmen in Blöcke und die Kanalkodierung. Sie bilden daher den <em>Data Link Layer</em> (Schicht 2) ab.
+    </p>
+    <h4 class="subsectionHead"><span class="titlemark">3.2.4   </span> <a
+ id="x1-390003.2.4"></a>Qualitätskontrolle</h4>
+    <!--l. 199-->
+    <p class="noindent">Das Einbringen des Watermarks unterlieg der Bedingung, dass es unhörbar (für den Menschen) sein soll. Um dies zu gewährleisten muss jedes bearbeitete Teilstück des Signals einer Qualitätskontrolle diesbezüglich unterzogen werden. Dazu existieren prinzipiell
+      folgende Methoden:
+    </p>
+    <!--l. 201-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-400003.2.4"></a>Mean Opinion Score</h5>
+    <!--l. 204-->
+    <p class="noindent">Definiert in der ITU-T Recommendation P.800&#x00A0;[24] handelt es sich beim <em>Mean
+Opinion Score</em> (MOS) um das Ergebnis der Bewertungen einer Reihe von subjektiven Wahrnehmungstest durch Versuchspersonen. Damit werden die Qualitäten von Codecs in der Sprach- und Bildübertragung bewertet. Da hierfür jedes Segment einzeln von menschlichen
+      Versuchspersonen als Teil des Algorithmus behandelt werden müsste, eignet es sich ganz offensichtlich nicht für eine automatische Verarbeitung.
+    </p>
+    <!--l. 206-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-410003.2.4"></a>Signal-Rauschabstand</h5>
+    <!--l. 209-->
+    <p class="noindent">Der Signal-Rauschabstand oder Signal-Rausch-Verhältnis (engl. <em>signal-to-noise ratio</em>, daher kurz SNR) bewertet die technische Qualität eines Signals welches von einem Störsignal überlagert wird. Hier ist zu beachten, dass mit Störsignal nicht
+      jenes im analogen Übertragungskanal gemeint ist. Die Veränderung eines Audiosignals durch das Watermark kann bezogen auf das ursprünglich unmodifizierte Signal ebenfalls als Störsignal interpretiert werden.
+    </p>
+    <!--l. 211-->
+    <p class="noindent">Der SNR berechnet sich durch:
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-41001r3"></a>
+
+
+
+          <center class="math-display">
+            <img src="thesis27x.png" alt="        Nutzsignalleistung
+SNR  = -----------------,
+       Rauschsignalleistung
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(3.3)</td>
+      </tr>
+    </table>
+    <!--l. 215-->
+    <p class="nopar">
+    </p>
+    <!--l. 217-->
+    <p class="noindent">seine Bestimmung ist daher sehr einfach. Leider handelt es sich dabei um eine technisch objektive Güteeigenschaft die das menschliche Hörsystem nicht mit einbezieht und daher als Bewertungskriterium dementsprechend schlecht geeignet ist&#x00A0;[5].
+    </p>
+    <!--l. 219-->
+    <p class="noindent">
+    </p>
+    <h5 class="subsubsectionHead"><a
+ id="x1-420003.2.4"></a>Objective Difference Grade</h5>
+    <!--l. 223-->
+    <p class="noindent">Offensichtlich ist es als notwendig ein automatisch berechenbares Qualitätskriterium heranzuziehen, welches allerdings eine auf die menschliche Wahrnehmung skalierte Bewertungsmetrik abbildet. Genau hierfür wurde 1998 die ITU Recommendation BS.1387&#x00A0;[25],
+      besser bekannt als <em>Perceptual Evaluation of
+Audio Quality</em> (PEAQ) spezifiziert. Mit ihr lässt sich für ein Audiosignal der sog. <em>Objective Difference Grade</em> (ODG) berechnen, ein Wert im Intervall [-4,0] wobei 0 für &#8222;unhörbar&#8220; und -4 für &#8222;sehr störend&#8220; steht. Es
+      hat sich gezeigt, dass die Korrelation von PEAQ Bewertung und MOS ca. 0.98 beträgt&#x00A0;[26].
+    </p>
+    <!--l. 225-->
+    <p class="noindent">Leider hat sich recht bald herausgestellt, dass die Berechnung des ODGs nicht hinreichend genau spezifiziert ist&#x00A0;[27]&#x00A0;[28], was sich auch in der Qualität der derzeit vorhandenen Tools wiederspiegelt. Eine kurze Evaluierung gängiger PEAQ
+      Implementierungen findet sich in Anhang <a href="#x1-54000A">A<!--tex4ht:ref: ch:peaq --></a>.
+    </p>
+    <!--l. 229-->
+    <p class="noindent">
+
+
+
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">3.3   </span> <a
+ id="x1-430003.3"></a>Watermark Extrahierung</h3>
+    <!--l. 234-->
+    <p class="noindent">Nachdem das Watermark nach den nun beschriebenen Schritten in ein Signal eingebettet und anschließend übertragen wurde, gilt es nun die Informationsdaten wieder zu extrahieren. Abbildung <a href="#x1-430015">3.5<!--tex4ht:ref: fig:diagram-decoder --></a>      zeigt den schematischen Ablauf des Dekodierungsprozesses.
+    </p>
+    <hr class="figure" />
+    <div class="figure">
+
+
+
+      <a id="x1-430015"></a>
+
+
+
+
+      <!--l. 239-->
+      <p class="noindent"><img src="figures/diagram-decoder-v2.png" alt="PIC" />
+        <br /> </p>
+      <div class="caption"><span class="id">Abbildung&#x00A0;3.5: </span><span class="content">Schematischer Aufbau des Extraktionsprozesses</span>
+      </div>
+      <!--tex4ht:label?: x1-430015 -->
+
+
+
+    </div>
+    <hr class="endfigure" />
+    <h4 class="subsectionHead"><span class="titlemark">3.3.1   </span> <a
+ id="x1-440003.3.1"></a>Resynchronisaton und Interpolation</h4>
+    <!--l. 247-->
+    <p class="noindent">Bei der Erkennung der Synchronisations-Codes kann es im Allgemeinen zu Problemen kommen. Die bei der DA-Wandlung auftretenden Einflüssen lassen sich im Allgemeinen durch eine Kombination aus <em>time scaling modification</em> (kurz TSM, dt. interessanterweise
+      bekannt als <em>Time-Stretching</em>) und <em>wave magnitude
+distortion</em> (WMD) beschreiben&#x00A0;[5]&#x00A0;[29]. Die TSM kann das Auffinden der Synchronisation-Codes verhindern. Das Prinzip kann daher auch gezielt eingesetzt werden, um ein existierendes Watermark zu zerstören (etwa um einen Urheberrechtlichsschutz
+      aufzuheben). Dies wird als <em>Synchronization attack</em> bezeichnet.
+    </p>
+    <!--l. 251-->
+    <p class="noindent">Um diesen Effekt der DA-Wandlung aufzuheben, muss versucht werden die Synchronisations-Codes wiederherzustellen. Man nennt diesen Vorgang
+      <em>Resynchronisation</em>. Verschiedene Resynchronisationsansätze existieren, hier wird ein sog. <em>brute-force approach</em> angewandt und wie in [30] vorgeschlagen auf ein Suchintervall von -10% bis +10% beschränkt.
+    </p>
+    <!--l. 253-->
+    <p class="noindent">Die TSM bewirkt, dass das Signal auf seiner Zeitachse gestreckt oder gestaucht wird. Für das Watermark bedeutet das, dass ein Bit nicht mehr in N<sub>s</sub> Samples kodiert ist, sondern durch mehr oder weniger Samples N<sub>s</sub>&#x2032; beschrieben
+      wird. Zuerst gilt es die neue Sampleanzahl N<sub>s</sub>&#x2032; zu finden. Dazu wird N<sub>s</sub>&#x2032; von 0.9 &#x22C5; N<sub>s</sub> bis 1.1 &#x22C5; N<sub>s</sub> durchgetestet und nach Synchronisations-Codes gesucht. Algorithmus <a href="#x1-440271">3.1<!--tex4ht:ref: alg:resync --></a>      illustriert diesen Vorgang.
+      <a id="x1-44001r1"></a>
+
+
+
+    </p>
+    <!--l. 257-->
+    <p class="noindent"></p>
+    <hr class="float" />
+    <div class="float">
+
+
+
+
+
+
+      __________________________________________________________________
+      <strong><strong>Algorithm&#x00A0;3.1</strong>:</strong>&#x00A0;sync Erkennung in der Resynchronisationsphase_____________
+      <strong>input</strong> :&#x00A0;Samples eines Signals
+      <strong>output</strong>:&#x00A0;Resynchronisiertes Signal
+      <a id="x1-44002r1"></a> <strong>1</strong>steplen = 0.005 * N
+      <sub>s</sub>;
+      <a id="x1-44003r2"></a> <strong>2</strong>lowerbound = 0.9 * N
+      <sub>s</sub>;
+      <a id="x1-44004r3"></a> <strong>3</strong>upperbound = 1.1 * N
+      <sub>s</sub>;
+      <a id="x1-44005r4"></a> <strong>4</strong>cursor = 1;
+      <a id="x1-44006r5"></a> <strong>5</strong><strong>while</strong> cursor ¡ size- upperbound and not found
+      <strong>do</strong>
+      <a id="x1-44007r6"></a><strong>6</strong>
+      <a id="x1-44008r7"></a><strong>7</strong>
+      <a id="x1-44009r8"></a><strong>8</strong>framelen = lowerbound;
+      <a id="x1-44010r9"></a><strong>9</strong><strong>while</strong> framelen ¡ upperbound
+      <strong>do</strong>
+      <a id="x1-44011r10"></a><strong>10</strong>
+      <a id="x1-44012r11"></a><strong>11</strong>
+      <a id="x1-44013r12"></a><strong>12</strong>testwindow = sig [cursor,framelen ];
+      <a id="x1-44014r13"></a><strong>13</strong>found = testsync(testwindow);
+      <a id="x1-44015r14"></a><strong>14</strong><strong>if</strong> found
+      <strong>then</strong>
+      <a id="x1-44016r15"></a><strong>15</strong>
+      <a id="x1-44017r16"></a><strong>16</strong>
+      <a id="x1-44018r17"></a><strong>17</strong>resynchronize(sig,framelen);
+      <a id="x1-44019r18"></a><strong>18</strong><strong>else</strong>
+      <a id="x1-44020r19"></a><strong>19</strong>
+      <a id="x1-44021r20"></a><strong>20</strong>
+      <a id="x1-44022r21"></a><strong>21</strong>framelen = framelen + steplen;
+      <a id="x1-44023r22"></a><strong>22</strong><strong>end</strong>
+      <a id="x1-44024r23"></a><strong>23</strong><strong>end</strong>
+      <a id="x1-44025r24"></a><strong>24</strong>cursor = cursor + 0.1 * lowerbound;
+      <a id="x1-44026r25"></a><strong>25</strong><strong>end</strong>
+      <a id="x1-44028"></a>
+      <a id="x1-440271"></a>______________________________________________________________________________________
+
+
+
+
+
+    </div>
+    <hr class="endfloat" />
+    <!--l. 302-->
+    <p class="noindent">Wurde ein sync gefunden, so kann man das Verhältnis zwischen neuer und alter Sampleanzahl
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-44029r4"></a>
+          <center class="math-display">
+            <img src="thesis28x.png" alt="    N-&#x2032;s
+&#x03B1; = Ns
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(3.4)</td>
+      </tr>
+    </table>
+    <!--l. 307-->
+    <p class="nopar">
+    </p>
+    <!--l. 310-->
+    <p class="noindent">berechnet werden. Mit &#x03B1; können nun alle Samples als Vorverarbeitungsschritt auf ihren ursprünglichen Wert rückinterpoliert werden. Verschiedene Interpolationsverfahren führen hier zu keinem merklichen Unterschied&#x00A0;[5], weswegen eine lineare
+      Lagrange-Interpolation verwendet wird. Somit können die neuen Samplewerte f&#x2032;&#x2032;(i) durch
+    </p>
+    <table class="equation">
+      <tr>
+        <td>
+          <a id="x1-44030r5"></a>
+          <center class="math-display">
+            <img src="thesis29x.png" alt="       (
+       |{ f&#x2032;(i)                              &#x21D0; &#x21D2; i = 1
+f &#x2032;&#x2032;(i) =  (1- &#x03B2;) &#x22C5;f &#x2032;(&#x230A;&#x03B1;&#x22C5;i&#x230B;)+ &#x03B2; &#x22C5;f &#x2032;(&#x230A;&#x03B1;&#x22C5;i&#x230B;+ 1)  &#x21D0; &#x21D2; 1 &#x003C; i &#x003C; Ns
+       |(     &#x2032;
+         f(N s)                             &#x21D0; &#x21D2; i = Ns
+" class="math-display" />
+          </center>
+        </td>
+        <td class="equation-label">(3.5)</td>
+      </tr>
+    </table>
+    <!--l. 321-->
+    <p class="nopar">
+    </p>
+    <!--l. 323-->
+    <p class="noindent">wobei f&#x2032;(i) die alten Werte und &#x03B2; = &#x03B1; &#x22C5; i -&#x230A;&#x03B1; &#x22C5; i&#x230B; beschreibt, berechnet werden. Somit kann für die Extrahierung das exakt selbe Verfahren zur Analyse der DWT-Koeffizienten wie im Implantationsprozess
+      verwendet werden.
+
+
+
+    </p>
+    <h4 class="subsectionHead"><span class="titlemark">3.3.2   </span> <a
+ id="x1-450003.3.2"></a>Datenextrahierung</h4>
+    <!--l. 327-->
+    <p class="noindent">Nach der Resynchronisation kann das Signal schrittweise durchlaufen und nach sync Sequenzen gescannt werden. Dabei wird das Signal genau so wie in der Implementierungsphase in Samples Sections zerteilt, die DWT-Koeffizienten für die Samples berechnet
+      und nach dem Prinzip aus Kapitel <a href="#x1-200002.4">2.4<!--tex4ht:ref: sec:reconstruction --></a> für jedes Segment ein binärer Wert bestimmt. Anschließend werden immer L<sub>s</sub> aufeinander folgende Binärwerte auf ihre Übereinstimmung mit
+      dem Synchronisations-Code sync überprüft.
+    </p>
+    <!--l. 329-->
+    <p class="noindent">Erfolgt ein Match auf den Synchronisations-Code, so sind die folgenden L<sub>c</sub> Bit als Informationsbits aufzufassen. Da es sich um ein Codeword handelt, muss noch der Dekodierungsalgorithmus des ECC angewendet werden, um die Message zu erhalten.
+      Die einzelnen Messages ergeben schließlich zusammengesetzt die eigentliche Information.
+    </p>
+    <!--l. 331-->
+    <p class="noindent">Wie man sich anhand der Abbildung <a href="#x1-310014">3.4<!--tex4ht:ref: fig:protocol --></a> leicht überlegen kann, können immer nachdem ein Codeword erfolgreich gelesen wurde die folgenden L<sub>c</sub> Samples Sections auf der Suche nach weiteren
+      sync Sequenzen übersprungen werden.
+
+
+
+    </p>
+    <h2 class="chapterHead"><span class="titlemark">Kapitel&#x00A0;4</span><br /><a
+ id="x1-460004"></a>Analyse</h2>
+    <!--l. 4-->
+    <p class="noindent">Um die Effizienz des implementierten Verfahrens bewerten zu können wurde es einer umfangreichen Evaluierung unterzogen. Die Ergebnisse sind in diesem Kapitel gesammelt.
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">4.1   </span> <a
+ id="x1-470004.1"></a>Hörbarkeit</h3>
+    <!--l. 8-->
+    <p class="noindent">Die Resultate werden von der Implementierung immer mit den Tools EAQUAL und PQevalAudio bewertet. Dabei hat sich gezeigt, dass der berechnete ODG bei einer esf = 1 meistens kleiner -3 liegt, wobei PQevalAudio traditionell etwas schlechter bewertet.
+      Per Definition des PEAQ Standards werden Werte kleiner -2 als &#8222;Slightly annoying&#8220; eingestuft und ab -3 gelten die Signalveränderungen als &#8222;Annoying&#8220;. Subjektive Hörtests mit verschiedenen handelsüblichen Kopfhörern wie sie
+      etwa bei Smartphones beiliegen bestätigen diese Einschätzungen. Über Laptop oder PC Lautsprecher sind die Watermarks hingegen selten bis gar nicht wahrzunehmen.
+    </p>
+    <!--l. 10-->
+    <p class="noindent">Dennoch ist in diesen Fällen eine Reduktion der Embedding Strength über den Embedding Strength Factor (esf) vorgesehen. Jedoch hat sich ebenfalls gezeigt, dass eine interative Reduktion des esf um 10% kaum eine Auswirkung auf die resultierenden ODGs
+      hat.
+    </p>
+    <!--l. 12-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">4.2   </span> <a
+ id="x1-480004.2"></a>Stirmark Benchmarks</h3>
+    <!--l. 14-->
+    <p class="noindent">Lange war es ein Problem verschiedene Watermarkingverfahren miteinander zu vergleichen, da die Kriterien nach denen die Robustheit getestet wurde von jedem Entwickler selbst definiert wurden. Es fehlte ein entsprechender Standard. Zu diesem Zweck
+      wurden Anfang des neuen Jahrtausends die sog. <em>StirMark Benchmarks</em> definiert&#x00A0;[31]&#x00A0;[32], die derzeit in der Version 4.0 vorliegen. Dabei handelt es sich um ein definiertes Set an Angriffsverfahren die auf markierte Daten angewendet
+      werden können. Eine Auswertung der so bearbeiteten Daten und ein Vergleich mit dem Original erlaubt Rückschlüsse auf die Stärken und Schwächen eines Watermarkingalgorithmuses, besonders auf verschiedene Angriffsfamilien (wie wir noch sehen werden),
+      sowie eine Vergleich mit anderen Watermarkingverfahren. Jedoch werden nicht alle Angriffsszenarien welche testenswert wären auch definiert und bereitgestellt&#x00A0;[33].
+    </p>
+    <!--l. 16-->
+    <p class="noindent">Für die Auswertung von Audiodaten gibt es eine dedizierte <em>Stirmark for Audio</em> Version&#x00A0;[34] (aktuelle v1.3.2). Auf deren Verwendung wir kurz in Anhang <a href="#x1-63000C">C<!--tex4ht:ref: ch:stirmarkaudio --></a> eingegangen, da sie
+      sich als nicht ganz einfach herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine, weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu abstrahieren&#x00A0;[35]. Eine Umsetzung dieser ist jedoch nicht
+      abzusehen.
+
+
+
+    </p>
+    <!--l. 18-->
+    <p class="noindent">Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese Implementierung wurde mit den in den folgenden Testergebnissen angegebenen Parameter strapaziert, welche mit jenen von Xiangs Evaluierung&#x00A0;[5] übereinstimmen, insofern
+      sie rekonstruiert werden konnten. Einige der Angaben passen jedoch nicht auf die von Stirmark for Audio bereitgestellte API. Andere Angriffe werden zwar als besonders effektiv aufgezählt, ihre Parameter jedoch nicht angegeben, was einen Vergleich
+      ebenfalls nicht ermöglicht.
+    </p>
+    <!--l. 20-->
+    <p class="noindent">Wie in [36] eingehend erläutert wird sind die Parameter der Angriffe entscheidend für die Auswirkung auf das Audiosignal. Die 3 größen Signaltypen Sprache, Musik und Geräusch haben alle unterschiedliche Stärken und Schwächen gegenüber einem Angriffstyp
+      und dessen Variationen definiert durch seine Parameter.
+    </p>
+    <!--l. 22-->
+    <p class="noindent">Tabelle <a href="#x1-480011">4.1<!--tex4ht:ref: tab:algo_settings --></a> zeigt die Parameter der Implementierung mit denen der Watermarkingprozess durchgeführt wurde.
+    </p>
+    <div class="table">
+
+
+
+      <!--l. 24-->
+      <p class="noindent">
+        <a id="x1-480011"></a>
+      </p>
+      <hr class="float" />
+      <div class="float">
+
+
+
+        <div class="tabular">
+          <table id="TBL-1" class="tabular" cellspacing="0" cellpadding="0">
+            <colgroup id="TBL-1-1g">
+              <col id="TBL-1-1" />
+              <col id="TBL-1-2" />
+              <col id="TBL-1-3" />
+            </colgroup>
+            <tr class="hline">
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-1-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-1-1" class="td11"><strong>Parameter</strong> </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-1-2" class="td11"><strong>Wert</strong>
+              </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-1-3" class="td11"><strong>Kommentar</strong> </td>
+            </tr>
+            <tr class="hline">
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-2-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-2-1" class="td
+11">Wavelet-Function (f<sub>w</sub>) </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-2-2" class="td11"> db1</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-2-3" class="td11"> </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-3-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-3-1" class="td11">DWT-Level (D<sub>k</sub>) </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-3-2" class="td11"> 6</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-3-3" class="td11"> </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-4-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-4-1" class="td11">Subband-Length (N<sub>E</sub>) </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-4-2" class="td11"> 8</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-4-3" class="td11"> </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-5-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-5-1" class="td11">Embedding Strength Factor (esf) </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-5-2" class="td11"> 1</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-5-3" class="td11">Schreiben am math. möglichen Limit</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-6-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-6-1" class="td11">Bufferzone Scaling Factor </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-6-2" class="td11"> 0.1</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-6-3" class="td11">10% der Sample Section Length </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-7-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-7-1" class="td11">Synchronisations Code Length (L<sub>s</sub>)</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-7-2" class="td11"> 13</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-7-3" class="td11">Barker Code mit 13 Bit </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-8-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-8-1" class="td11">Synccode-Threshold (T<sub>s</sub>) </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-8-2" class="td11"> 0.8</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-8-3" class="td11"> </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-9-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-9-1" class="td11">Error Correction Methode </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-9-2" class="td11"> BCH</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-9-3" class="td11"> </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-10-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-10-1" class="td11">Message-Length (L<sub>m</sub>) </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-10-2" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-10-3" class="td11"> </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-11-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-11-1" class="td11">Codeword-Length (L<sub>c</sub>) </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-11-2" class="td11"> 15</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-11-3" class="td11"> </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-12-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-12-1" class="td11">ODG </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-1-12-2" class="td11"> false</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-12-3" class="td11">erzwinge maximale Watermarkstärke</td>
+            </tr>
+            <tr class="hline">
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-1-13-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-1-13-1" class="td11"> </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+        <div class="caption"><span class="id">Tabelle&#x00A0;4.1: </span><span class="content">Parameter der Implementierung für die Testfälle</span>
+        </div>
+        <!--tex4ht:label?: x1-480011 -->
+
+
+
+      </div>
+      <hr class="endfloat" />
+    </div>
+    <!--l. 45-->
+    <p class="noindent">Da die Testdaten von Xiang nicht vorhanden sind, wurden verschiedene Audiosignale getestet die sowohl zu den von Xiang beschriebenen Testdateninhalten wie auch weitere abbilden. In Tabelle <a href="#x1-480032">4.2<!--tex4ht:ref: tab:stirmark --></a>      finden sich die Ergebnisse einer 19 Sekunden langen Audioaufnahme, welches versucht sowohl Sprache wie auch Musik und Arten von Geräuschen abzubilden. Die <em>Bitfehlerhäufigkeit</em> (engl. <em>Bit error
+rate</em>, BER) hat sich dabei als relativ repräsentativ für die übrigen Testdaten herausgestellt.
+    </p>
+    <!--l. 47-->
+    <p class="noindent">Die verwendeten Abkürzungen stehen hier für:
+    </p>
+    <dl class="description"><dt class="description">
+PL </dt>
+      <dd class="description"><em>Package  loss</em>. Ein Paket wird als verloren klassifiziert, wenn der Synccode-Threshold von der gelesenen Synccode Bitsequenz nicht überschritten wurde, da die Bits zu sehr in Mitleidenschaft gezogen worden sind. Das Paket wäre somit nicht
+        als solches erkannt worden.
+      </dd><dt class="description">
+DM </dt>
+      <dd class="description"><em>Damaged message</em>. Jene Pakete deren Informations Bits so fehlerhaft sind, dass das Codeword nicht mehr in die korrekte Message übersetzt werden konnte. Die Message ist daher unbrauchbar.
+      </dd><dt class="description">
+EMB </dt>
+      <dd class="description"><em>Erroneous  message  bits</em>. Absolute Anzahl gekippter Bits in allen Messages des Signals.
+      </dd><dt class="description">
+BER </dt>
+      <dd class="description"><em>Bit error rate</em>. Das Verhältnis
+        <table class="equation">
+          <tr>
+            <td>
+              <a id="x1-48002r1"></a>
+              <center class="math-display">
+                <img src="thesis30x.png" alt="       -------EMB---------
+BER  = Anzahl an Pakete&#x22C5;Lm
+     " class="math-display" />
+              </center>
+            </td>
+            <td class="equation-label">(4.1)</td>
+          </tr>
+        </table>
+        <!--l. 62-->
+        <p class="nopar">
+        </p>
+      </dd>
+    </dl>
+    <!--l. 65-->
+    <p class="noindent">Sync Blöcke und Informations Blöcke wurden separat behandelt. Somit wurde sichergestellt, dass auch die Daten der nicht erkannten Pakete analysiert werden konnten.
+
+
+
+    </p>
+    <div class="table">
+
+
+
+      <!--l. 67-->
+      <p class="noindent">
+        <a id="x1-480032"></a>
+      </p>
+      <hr class="float" />
+      <div class="float">
+
+
+
+        <div class="tabular">
+          <table id="TBL-2" class="tabular" cellspacing="0" cellpadding="0">
+            <colgroup id="TBL-2-1g">
+              <col id="TBL-2-1" />
+              <col id="TBL-2-2" />
+              <col id="TBL-2-3" />
+              <col id="TBL-2-4" />
+              <col id="TBL-2-5" />
+              <col id="TBL-2-6" />
+            </colgroup>
+            <tr class="hline">
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-1-">
+              <td style="white-space:nowrap; text-align:center;" id="TBL-2-1-1" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>Angriff</strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-2-1-2" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>Parameter</strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-2-1-3" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>PL</strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-2-1-4" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>DM</strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-2-1-5" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>EMB</strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-2-1-6" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>BER</strong>
+                </div>
+              </td>
+            </tr>
+            <tr class="hline">
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-2-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-2-1" class="td11">Original </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-2-2" class="td11"> </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-2-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-2-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-2-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-2-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-3-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-3-1" class="td11">AddDynNoise </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-3-2" class="td11">Strength=20 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-3-3" class="td11">58,8%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-3-4" class="td11">23,5%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-3-5" class="td11"> 7</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-3-6" class="td11"> 8,2%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-4-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-4-1" class="td11">AddNoise </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-4-2" class="td11">Strength=100 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-4-3" class="td11">35,3%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-4-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-4-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-4-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-5-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-5-1" class="td11">AddNoise </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-5-2" class="td11">Strength=500 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-5-3" class="td11">88,2%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-5-4" class="td11">11,8%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-5-5" class="td11"> 4</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-5-6" class="td11"> 4,7%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-6-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-6-1" class="td11">AddNoise </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-6-2" class="td11">Strength=900 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-6-3" class="td11">88,2%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-6-4" class="td11">29,4%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-6-5" class="td11"> 10</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-6-6" class="td11">11,8%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-7-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-7-1" class="td11">AddSinus </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-7-2" class="td11">Amplitude=900, Frequency=1300 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-7-3" class="td11">88,2%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-7-4" class="td11">64,7%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-7-5" class="td11"> 25</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-7-6" class="td11">29,4%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-8-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-8-1" class="td11">Amplify </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-8-2" class="td11">Factor=50 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-8-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-8-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-8-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-8-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-9-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-9-1" class="td11">CutSamples </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-9-2" class="td11">RemoveDist=10, RemoveNumber=1 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-9-3" class="td11"> 100%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-9-4" class="td11">82,4%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-9-5" class="td11"> 37</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-9-6" class="td11">43,5%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-10-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-10-1" class="td11">Echo </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-10-2" class="td11">Period=10 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-10-3" class="td11">88,2%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-10-4" class="td11">64,7%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-10-5" class="td11"> 27</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-10-6" class="td11">31,8%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-11-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-11-1" class="td11">Echo </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-11-2" class="td11">Period=50 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-11-3" class="td11"> 100%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-11-4" class="td11">82,4%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-11-5" class="td11"> 36</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-11-6" class="td11">42,4%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-12-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-12-1" class="td11">Exchange </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-12-2" class="td11"> </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-12-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-12-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-12-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-12-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-13-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-13-1" class="td11">ExtraStereo </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-13-2" class="td11">Strength=30 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-13-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-13-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-13-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-13-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-14-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-14-1" class="td11">ExtraStereo </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-14-2" class="td11">Strength=50 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-14-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-14-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-14-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-14-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-15-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-15-1" class="td11">ExtraStereo </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-15-2" class="td11">Strength=70 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-15-3" class="td11"> 5,9%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-15-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-15-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-15-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-16-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-16-1" class="td11">FFT_Invert </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-16-2" class="td11">FFTSIZE=16384 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-16-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-16-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-16-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-16-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-17-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-17-1" class="td11">FFT_RealReverse</td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-17-2" class="td11">FFTSIZE=16384 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-17-3" class="td11"> 100%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-17-4" class="td11"> 100%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-17-5" class="td11"> 41</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-17-6" class="td11">48,2%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-18-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-18-1" class="td11">FlippSample </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-18-2" class="td11">Period=10, FlippCount=2, FlippDist=6</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-18-3" class="td11">70,6%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-18-4" class="td11">35,3%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-18-5" class="td11"> 12</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-18-6" class="td11">14,1%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-19-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-19-1" class="td11">Invert </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-19-2" class="td11"> </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-19-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-19-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-19-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-19-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-20-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-20-1" class="td11">RC_LowPass </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-20-2" class="td11">LowPassFrequency=9000 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-20-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-20-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-20-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-20-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-21-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-21-1" class="td11">Smooth </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-21-2" class="td11"> </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-21-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-21-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-21-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-21-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-22-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-22-1" class="td11">Smooth2 </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-22-2" class="td11"> </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-22-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-22-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-22-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-22-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-23-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-23-1" class="td11">Stat1 </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-23-2" class="td11"> </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-23-3" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-23-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-23-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-23-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-24-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-24-1" class="td11">ZeroCross </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-24-2" class="td11">ZeroCross=1000 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-24-3" class="td11">35,3%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-24-4" class="td11"> 0%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-24-5" class="td11"> 0</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-24-6" class="td11"> 0%</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-25-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-25-1" class="td11">ZeroLength </td>
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-25-2" class="td11">ZeroLength=10 </td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-25-3" class="td11"> 100%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-25-4" class="td11">88,2%</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-25-5" class="td11"> 40</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-2-25-6" class="td11">47,1%</td>
+            </tr>
+            <tr class="hline">
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-2-26-">
+              <td style="white-space:nowrap; text-align:left;" id="TBL-2-26-1" class="td11"> </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+        <div class="caption"><span class="id">Tabelle&#x00A0;4.2: </span><span class="content">Robustheit gegen die <em>Stirmark for Audio</em> Angriffe</span>
+        </div>
+        <!--tex4ht:label?: x1-480032 -->
+
+
+
+      </div>
+      <hr class="endfloat" />
+    </div>
+    <!--l. 102-->
+    <p class="noindent">Aus Tabelle <a href="#x1-480032">4.2<!--tex4ht:ref: tab:stirmark --></a> ist gut zu erkennen, wo die Schwächen des Watermarkingverfahren liegen. Sämtliche Angriffe die das Frequenzspektrum des Signals beeinflussen wirken sich negativ auf die BER aus.
+      Hier zeigt sich aber auch, dass die Fehlerkorrektur sehr wohl wirksam ist. So kann sie wie man sieht vor allem bei additivem Noise den resultierenden Fehler vergleichsweise klein halten. Allerdings sei hier darauf hingewiesen, dass trotz vergleichsweise
+      moderatem BER dennoch viele Pakete unreparierbar beschädigt werden. Die Literatur beschränkt sich oftmals auf die reine Bewertung des BER, ohne auf diesen Umstand einzugehen.
+    </p>
+    <!--l. 105-->
+    <p class="noindent">Anders sieht es für die Synchronisations-Codes aus. Der Package loss ist vergleichsweise viel höher. Offenbar ist der Synccode-Threshold T<sub>s</sub> zu restriktiv, um die Bitfehler in den sync Sequenzen auszugleichen.
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">4.3   </span> <a
+ id="x1-490004.3"></a>Resampling</h3>
+    <!--l. 109-->
+    <p class="noindent">Jedes Testsignal wurde auf die Abtastraten 8000Hz, 11025Hz, 22050Hz, 44100Hz und 48000Hz gesampled. Bei jeder Sampling Rate außer der ursprünglichen liegt ein vollständiger Datenverlust vor. Dies verwundert weiter auch nicht, bedenkt man Formel
+      <a
+      href="#x1-16001r1">2.1
+        <!--tex4ht:ref: equ:samplseclength -->
+        </a> die definiert wie viele Samples für die Kodierung eines Bits notwendig sind. Ein Resampling bedeutet aber das eine fixe Signallänge (in Sekunden) in nachher mehr oder weniger Abtastwerten abgebildet wird. Somit bilden die vom Algorithmus bei der
+        Dekodierung betrachteten Samplewerte einen falschen Zeitraum ab, in dem natürlich keine gültigen Bits enthalten sind.
+    </p>
+    <!--l. 111-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">4.4   </span> <a
+ id="x1-500004.4"></a>Kompression</h3>
+    <!--l. 113-->
+    <p class="noindent">Die Implementierung wurde gegen die verlustbehafteten Kompressionsverfahren
+      <em>MP3</em>, <em>Ogg Vorbis</em> und <em>AAC</em> bei den Bitraten 32kHz, 64kHz, 96kHz und 128kHz getestet. Hierbei hat sich eine hohe Robustheit herausgestellt. Es traten keine fehlerhaften Bits auf.
+    </p>
+    <!--l. 115-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">4.5   </span> <a
+ id="x1-510004.5"></a>Datenrate</h3>
+    <!--l. 118-->
+    <p class="noindent">Wir wollen noch einige Überlegungen bezüglich der erreichbaren Datenraten anstellen. Darauf wirken einige - teilweise variable - Faktoren ein.
+
+
+
+    </p>
+    <!--l. 120-->
+    <p class="noindent">Wie bereits aus Formel <a href="#x1-16001r1">2.1<!--tex4ht:ref: equ:samplseclength --></a> bekannt ist sind prinzipiell für die Kodierung eines einzigen Bits N<sub>s</sub> Samples notwendig. Für die Defaulteinstellungen der Implementierung aus Tabelle
+      <a href="#x1-480011">4.1<!--tex4ht:ref: tab:algo_settings --></a>, mit der auch die Testfälle durchgeführt wurden, beläuft sich N<sub>s</sub> auf 1536 Abtastwerte.
+    </p>
+    <!--l. 122-->
+    <p class="noindent">Ausgehend von der Abtastrate des Signal ergibt sich somit die Bitkapazität die das Signal in einer Sekunde aufnehmen kann. Ebenfalls interessant ist die Paketkapazität. Ziehen wir wieder die Voreinstellungen aus Tabelle <a href="#x1-480011">4.1<!--tex4ht:ref: tab:algo_settings --></a>      heran, so besteht ein Package aus 13 Synchronisations-Code Bits und 15 Codeword Bits, insgesamt also 28 Bit. Einem Package kann 5 Bit effektive Nutzlast als Message übertragen.
+    </p>
+    <div class="table">
+
+
+
+      <!--l. 124-->
+      <p class="noindent">
+        <a id="x1-510013"></a>
+      </p>
+      <hr class="float" />
+      <div class="float">
+
+
+
+        <div class="tabular">
+          <table id="TBL-3" class="tabular" cellspacing="0" cellpadding="0">
+            <colgroup id="TBL-3-1g">
+              <col id="TBL-3-1" />
+              <col id="TBL-3-2" />
+              <col id="TBL-3-3" />
+              <col id="TBL-3-4" />
+              <col id="TBL-3-5" />
+              <col id="TBL-3-6" />
+              <col id="TBL-3-7" />
+              <col id="TBL-3-8" />
+              <col id="TBL-3-9" />
+              <col id="TBL-3-10" />
+              <col id="TBL-3-11" />
+            </colgroup>
+            <tr class="hline">
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-1-">
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-1" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>N<sub>E</sub></strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-2" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>D<sub>k</sub></strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-3" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>N<sub>s</sub></strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-4" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>f<sub>s</sub> [Hz]</strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-5" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>Bitrate</strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-6" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>L<sub>s</sub></strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-7" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>L<sub>m</sub></strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-8" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>L<sub>c</sub></strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-9" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>L<sub>p</sub></strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-10" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>Paketrate</strong>
+                </div>
+              </td>
+              <td style="white-space:nowrap; text-align:center;" id="TBL-3-1-11" class="td11">
+                <div class="multicolumn" style="white-space:nowrap; text-align:center;"><strong>Nutzlast [Bd<span class="footnote-mark"><sup class="textsuperscript">1</sup></span>]</strong>
+                </div>
+              </td>
+            </tr>
+            <tr class="hline">
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-2-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-1" class="td11"> 8</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-2" class="td11"> 6</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-3" class="td11">1536</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-4" class="td11"> 11025</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-5" class="td11"> 7,18</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-10" class="td11"> 0,26</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-2-11" class="td11"> 1,28</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-3-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-1" class="td11"> 8</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-2" class="td11"> 6</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-3" class="td11">1536</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-4" class="td11"> 22050</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-5" class="td11"> 14,36</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-10" class="td11"> 0,51</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-3-11" class="td11"> 2,56</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-4-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-1" class="td11"> 8</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-2" class="td11"> 6</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-3" class="td11">1536</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-4" class="td11"> 44100</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-5" class="td11"> 28,71</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-10" class="td11"> 1,03</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-4-11" class="td11"> 5,13</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-5-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-1" class="td11"> 8</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-2" class="td11"> 6</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-3" class="td11">1536</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-4" class="td11"> 48000</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-5" class="td11"> 31,25</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-10" class="td11"> 1,12</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-5-11" class="td11"> 5,58</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-6-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-1" class="td11"> 16</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-2" class="td11"> 6</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-3" class="td11">3072</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-4" class="td11"> 11025</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-5" class="td11"> 3,59</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-10" class="td11"> 0,13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-6-11" class="td11"> 0,64</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-7-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-1" class="td11"> 16</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-2" class="td11"> 6</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-3" class="td11">3072</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-4" class="td11"> 22050</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-5" class="td11"> 7,18</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-10" class="td11"> 0,26</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-7-11" class="td11"> 1,28</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-8-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-1" class="td11"> 16</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-2" class="td11"> 6</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-3" class="td11">3072</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-4" class="td11"> 44100</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-5" class="td11"> 14,36</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-10" class="td11"> 0,51</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-8-11" class="td11"> 2,56</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-9-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-1" class="td11"> 16</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-2" class="td11"> 6</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-3" class="td11">3072</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-4" class="td11"> 48000</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-5" class="td11"> 15,63</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-10" class="td11"> 0,56</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-9-11" class="td11"> 2,79</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-10-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-1" class="td11"> 8</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-2" class="td11"> 7</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-3" class="td11">3072</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-4" class="td11"> 11025</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-5" class="td11"> 3,59</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-10" class="td11"> 0,13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-10-11" class="td11"> 0,64</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-11-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-1" class="td11"> 8</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-2" class="td11"> 7</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-3" class="td11">3072</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-4" class="td11"> 22050</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-5" class="td11"> 7,18</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-10" class="td11"> 0,26</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-11-11" class="td11"> 1,28</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-12-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-1" class="td11"> 8</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-2" class="td11"> 7</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-3" class="td11">3072</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-4" class="td11"> 44100</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-5" class="td11"> 14,36</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-10" class="td11"> 0,51</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-12-11" class="td11"> 2,56</td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-13-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-1" class="td11"> 8</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-2" class="td11"> 7</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-3" class="td11">3072</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-4" class="td11"> 48000</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-5" class="td11"> 15,63</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-6" class="td11">13</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-7" class="td11"> 5</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-8" class="td11">15</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-9" class="td11">28</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-10" class="td11"> 0,56</td>
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-13-11" class="td11"> 2,79</td>
+            </tr>
+            <tr class="hline">
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+              <td>
+                <hr />
+              </td>
+            </tr>
+            <tr style="vertical-align:baseline;" id="TBL-3-14-">
+              <td style="white-space:nowrap; text-align:right;" id="TBL-3-14-1" class="td11"> </td>
+            </tr>
+          </table>
+        </div>
+        <br />
+        <div class="caption"><span class="id">Tabelle&#x00A0;4.3: </span><span class="content">Datenrate in Abhängigkeit der Samplerate</span>
+        </div>
+        <!--tex4ht:label?: x1-510013 -->
+
+
+
+      </div>
+      <hr class="endfloat" />
+    </div>
+    <!--l. 147-->
+    <p class="noindent">Tabelle <a href="#x1-510013">4.3<!--tex4ht:ref: tab:datenraten --></a> illustriert die Zusammenhänge der Parameter mit Bitrate, Paketrate (Pakete pro Sekunde) und Nutzlastrate (Messagebit pro Sekunde) für die Standardeinstellungen in Abhängigkeit
+      der Abtastrate des Audiosignals. Sie zeigt schön auf, dass sowohl eine Verdoppeltung der Subband-Length N<sub>E</sub> wie auch eine Erhöhung des DWT-Level D<sub>k</sub> um 1 zu einer Verdoppelung der Sample-Section-Length N<sub>s</sub> und somit
+      zu einer Halbierung der Bit-, Paket- und Nutzlastrate führt. Gleichzeitig zeigt sie auch das umgekehrt eine Verdoppeltung der Abtastrate zu einer Verdoppelung eben jener Übertragungsraten führt.
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">4.6   </span> <a
+ id="x1-520004.6"></a>Ursachenforschung</h3>
+    <!--l. 151-->
+    <p class="noindent">Um die Ursachen für die scheiternde Übertragung im analogen Bereich zu analysieren wurden Signale manuell synchronisiert, indem an ein Audiosignal an den Enden Stille eingefügt wurde. Somit konnte das anschließend analog übertragene Signal bis auf
+      wenige Samples genau synchronisiert werden. Dies erlaubt die DWT-Koeffizientn direkt mit jenen des ursprünglichen Signals zu vergleichen um den Ursachen auf den Grund zu gehen.
+    </p>
+    <!--l. 153-->
+    <p class="noindent">Ein Blick auf die logarithmischen Frequenzspektren in den Abbildungen <a href="#x1-520011">4.1<!--tex4ht:ref: fig:spektrum-original --></a> und <a href="#x1-520022">4.2<!--tex4ht:ref: fig:spektrum-soundkarte --></a> einer auf einer Flöte gespielten
+      4,3 Sekunden langen Tonleiter zeigt anfänglich keine groß auffallenden Unterschiede. Lediglich eine prinzipielle Verringerung der Intensitäten in den niederen Frequenzbereichen scheint feststellbar zu sein. Da diese jedoch gleichmäßig erscheinen
+      dürfte dies keine Auswirkung auf das Watermark haben.
+    </p>
+    <!--l. 155-->
+    <p class="noindent">Durch den oben angesprochenen manuellen Abgleich der Samples und der Kürze des Signal können die Bits ohne großen Aufwand direkt dekodiert und verglichen werden, ohne dabei auf Synchronisations-Codes und die Protokollhierarchie zu achten.
+    </p>
+    <!--l. 157-->
+    <p class="noindent">
+
+
+
+    </p>
+    <hr class="figure" />
+    <div class="figure">
+
+
+
+      <a id="x1-520011"></a>
+
+
+
+
+      <!--l. 161-->
+      <p class="noindent"><img src="figures/spektrum-original.png" alt="PIC" />
+        <br /> </p>
+      <div class="caption"><span class="id">Abbildung&#x00A0;4.1: </span><span class="content">Frequenzspektrum eines Signals mit Watermark</span>
+      </div>
+      <!--tex4ht:label?: x1-520011 -->
+
+
+
+    </div>
+    <hr class="endfigure" />
+    <hr class="figure" />
+    <div class="figure">
+
+
+
+      <a id="x1-520022"></a>
+      <a id="x1-6300028"></a>
+
+
+
+
+      <!--l. 168-->
+      <p class="noindent"><img src="figures/spektrum-soundkarte.png" alt="PIC" />
+        <br /> </p>
+      <div class="caption"><span class="id">Abbildung&#x00A0;4.2: </span><span class="content">Frequenzspektrum nach DA- und AD- Wandlung</span>
+      </div>
+      <!--tex4ht:label?: x1-520022 -->
+
+
+
+    </div>
+    <hr class="endfigure" />
+    <!--l. 173-->
+    <p class="noindent">Betrachtet man nun die Zusammensetzung jedes Bits genau, so wird man fündig. Wir erinnern uns: Jedes Bit ist durch die Energieniveaus E<sub>1</sub>,E<sub>2</sub> und E<sub>3</sub> der DWT-Koeffizienten Subbänder definiert. Der Bitwert 0 oder 1 ergibt
+      sich aus dem Verhältnis der Energieddifferenzen A und B der Subbänder. Es zeigt sich, dass die Energieniveaus im Schnitt um den Wert 0.03 abweichen. Daraus ergeben sich zwei beobachtete Effekte:
+    </p>
+    <ol class="enumerate1">
+      <li class="enumerate" id="x1-52004x1">Die Sortierung zu E<sub>min</sub>,E<sub>med</sub> und E<sub>max</sub> der Subband-Energiewerte E
+        <sub>1</sub>,E<sub>2</sub> und E<sub>3</sub> korreliert durch die Abweichung nicht mehr mit dem Ursprungssignal. Somit werden für die Berechnung von A und B falsche Bänder herangezogen, weswegen die Dekodierung folglich einen falschen Bitwert
+        produziert.
+      </li>
+      <li class="enumerate" id="x1-52006x2">Auch wenn die Energieniveaus richtig sortiert werden, so kann es durch die Abweichungen dennoch dazu kommen, dass die korrekte Relation der Niveaudifferenzen A und B nicht mehr gegeben ist. Die Veränderung der Bänder kann beispielsweise ausreichen,
+        dass bei einer kodierten 1 im Dekodierprozess jedoch A &#x226F; B gilt, weswegen eine 0 erkannt wird.
+      </li>
+    </ol>
+    <!--l. 183-->
+    <p class="noindent">An dieser Stelle sei noch darauf hingewiesen, dass die für dieses Testsignal gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen Originalsignal und
+      übertragenem Signal feststellen. Die Belastung die das Signal durch diesen Übertragungskanal erfährt, ist denkbar gering. In Luft wäre diese beispielsweise viel massiver.
+    </p>
+    <!--l. 185-->
+    <p class="noindent">Es zeigt sich also, dass die Energieniveaus der Bänder sehr fragil sind. Sie eignen sich demnach für einen Übertragungskanal der die niederfrequenten Energiepotenziale - wenn auch nur gering - verändern kann offensichtlich nicht.
+
+
+
+    </p>
+    <h2 class="chapterHead"><span class="titlemark">Kapitel&#x00A0;5</span><br /><a
+ id="x1-530005"></a>Schlussfolgerung und Ausblick</h2>
+    <!--l. 4-->
+    <p class="noindent">Im Zuge der Implementierung hat sich nach den ersten DA/AD-Tests sehr schnell gezeigt, dass die verwendete Watermarking Methode&#x00A0;[5] nicht das zu leisten vermag, was sie verspricht. Wenn gleich das Watermark im rein digitalen an der Hörschwelle
+      stabil ist, so ist die Resistenz im analogen Kanal unbefriedigend. Die daraufhin angebrachten Erweiterungen um Fehlerkorrekturverfahren haben auch hier nur eingeschränkt für Verbesserung gesorgt. Die prinzipielle Schwäche der Watermarkingmethode,
+      die in der Anfälligkeit für leichte Veränderungen in den niederen Frequenzen identifiziert werden konnte, kann von der natürlichen Fehlerresistenz der Synchronisations-Codes nicht kompensiert werden.
+    </p>
+    <!--l. 6-->
+    <p class="noindent">Allerdings sieht das entwickelte Framework als grundlegende Architektur dennoch sehr vielversprechend aus. Das sehr einfach definierte Protokoll ist flexibel bezüglich der angewendeten Methoden seiner Komponenten. Es wäre daher ein leichtes die Watermarking-Methode
+      gegen eine sich als robuster erwiesenere auszutauschen. Sehr vielversprechend erscheint hier etwa die Publikation von Chang, Di, et al.&#x00A0;[4]. Somit könnte das Framework unverändert weiter benützt werden nachdem lediglich die Funktionen zum
+      lesen und schreiben eines Bits angepasst werden würden.
+    </p>
+    <!--l. 8-->
+    <p class="noindent">Weiters hat sich die Qualität der aktuell verfügbaren PEAQ-Implementierungen als unzureichend erwiesen. Zu viele Probleme und Ergebnisse die mit subjektiven Hörtests nicht bestätigt werden können lassen die Evaluierung des Watermarkingprozesses oftmals
+      in unzureichendem Zustand. Eine mögliche Besserung könnte der PEAQ Konkurrent PEMO-Q&#x00A0;[37] bringen. Über die Verfügbarkeit von Tools wurden im Zuge dieser Arbeit keine Informationen eingeholt.
+    </p>
+    <!--l. 10-->
+    <p class="noindent">Wenig performant ist aktuell der Resynchronisationsprozess. Die Suche nach Synchronisations-Codes wird derzeit über einen einfachen brute-force Ansatz gelöst. Dieser ist nicht nur langsam, sondern liefert im Allgemeinen auch eine nicht optimale Lösung.
+      Hier würden sich die in [30] angeführten Alternativen anbieten, sowie eine lokale Suche um das Optimierungsproblem zu verbessern.
+    </p>
+    <!--l. 12-->
+    <p class="noindent">Positiv überrascht hingegen die starke Robustheit gegenüber Kompressionsverfahren.
+
+
+
+      <a id="x1-53001r63"></a>
+    </p>
+    <h2 class="appendixHead"><span class="titlemark">Anhang&#x00A0;A</span><br /><a
+ id="x1-54000A"></a>PEAQ Implementierungen</h2>
+    <!--l. 5-->
+    <p class="noindent">Im Rahmen dieser Arbeit wurden diverse PEAQ Implementierungen getestet. Hier findet sich eine Übersicht der dabei gesammelten Erfahrungen.
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">A.1   </span> <a
+ id="x1-55000A.1"></a>EAQUAL</h3>
+    <!--l. 9-->
+    <p class="noindent">Das de facto Tool der Wahl in der gängigen Literatur&#x00A0;[5]&#x00A0;[38]. <em>EAQUAL</em> (Evaluation of Audio QUALity) ist aktuell als Version 0.1.3alpha vorhanden, eine aktive Weiterentwicklung allerdings nicht erkennbar. Der Sourcecode ist verfügbar,
+      allerdings nur unter MS Visual C++ 6 kompilierbar. Ein unixbasierter Makefile-Ansatz ist zwar vorhanden, nach Angaben der Readme allerdings nur auf einer einzigen Linux Maschine getestet worden. Auf allen hier getesteten Maschinen war der Builtprozess
+      erfolglos und ohne Aussicht auf eine einfache Behebung.
+    </p>
+    <!--l. 11-->
+    <p class="noindent">Ein Windows Executable ist vorhanden und akzeptiert per Command Line Referenzen auf Audiofiles. Um das Watermark zu testen muss daher immer das implantierte und das unberührte Signal zuerst auf den Persistenzspeicher geschrieben werden. Teilweise
+      bricht die Verarbeitung mit (auch undokumentierten) Fehlercodes einfach ab.
+    </p>
+    <!--l. 13-->
+    <p class="noindent">Per Wine (dem Windows compatibility layer für POSIX Systeme) lässt sich das Tool auch per Unix Terminal verwenden. Die Performance ist hier um ca. den Faktor 5 schlechter.
+    </p>
+    <!--l. 15-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">A.2   </span> <a
+ id="x1-56000A.2"></a>PQevalAudio</h3>
+    <!--l. 17-->
+    <p class="noindent">Bei PQevalAudio handelt es sich um eine frei verfügbare Implementierung von P. Kabald&#x00A0;[27] die allerdings nicht vollkommen Standardkonform ist.
+    </p>
+    <!--l. 19-->
+    <p class="noindent">Der Vorteil von PQevalAudio (aktuell <em>PQevalAudio v2r0</em>) ist die Verfügbarkeit einer MATLAB Library zusätzlich zu einem Binary Executable. Das die Implementierung dieser Arbeit in MATLAB vorgenommen wurde war PQevalAudio daher initial besonders
+      interessant. Leider benötigen beide die Signale als Files auf der Festplatte. Durch die hohe Kopplung der Komponenten war ein Erfolg der Bemühung die Library für MATLAB Datenstrukturen umzuschreiben in vertretbarer Zeit nicht absehbar. Zusätzlich
+      verarbeitet PQevalAudio ausschließlich Audiofiles mit einer Abtastrate von 48kHz. Resampling (und vor allem Upsampling - also die Erhöhung der Abtastrate) bringt noch einmal eine ganz eigene Reihe von Auswirkungen für das Signal mit sich - ein Umstand
+      der für die Bewertung nicht förderlich ist. Auch wenn es teilweise in der Literatur noch als die zuverlässigste Implementierung bezeichnet wird&#x00A0;[39], so zeigte die Beobachtung eine gewisse Nutzlosigkeit der Ergebnisse. Der ODG ist normiert
+      als ein Wert zwischen -4 und 0. PQevalAudio liefert hingegen nicht selten einen positiven Wert, was eine sinnvolle verwertbare Interpretation unmöglich macht.
+    </p>
+    <!--l. 21-->
+    <p class="noindent">Positiv ist zu bemerken, dass das Projekt vergleichsweise gut dokumentiert ist und offenbar aktuell nach wie vor gepflegt wird. Auch ist es an sich die stabilste Lösung, da es nie ergebnislos terminiert.
+    </p>
+    <!--l. 23-->
+    <p class="noindent">
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">A.3   </span> <a
+ id="x1-57000A.3"></a>peaqb</h3>
+    <!--l. 25-->
+    <p class="noindent">Bei <em>peaqb</em> handelt es sich um die Bemühung eine Implementation der Recommendation ITU-R BS.1387-1 als freie offene Software zu schaffen. Initiier im Jahr 2003 liegt seit dem 14. März 2013 das GPLv2 lizensierte Tool in der Version 1.0.3 Beta
+      vor. Zu finden ist das Projekt auf der Softwareentwicklungsplattform Sourceforge
+      <span class="footnote-mark"><a
+href="thesis14.html#fn1x6"><sup class="textsuperscript">1</sup></a></span>
+      <a id="x1-57001f1"></a> , welche sich nicht ganz unbegründet in den letzten Jahre den Beinahmen &#8222;Friedhof der Open Source Projekte&#8220; eingefangen hat. Der Grund dafür ist auch an diesem Projekt leider zu spüren.
+    </p>
+    <!--l. 27-->
+    <p class="noindent">Die Versuche peaqb für die Signal-Qualitätssicherung zu bemühen haben schnell gezeigt, dass das Tool noch sehr instabil ist. In den meisten Fällen terminiert das Programm mit einem Segmentation Fault. Falls es in der Lage ist Endergebnisse zu berechnen,
+      so sind diese oftmals ähnlich zu PQevalAudio unbrauchbar, da sie entweder ebenfalls in nicht definierten Bereichen liegen oder mit der subjektiven Hörwahrnehmung einfach nicht übereinstimmen. Die Ergebnisse von [40] nach denen peaqb die genauesten
+      Ergebnisse liefert (verglichen mit EAQUAL und PQevalAudio) konnten nicht nachvollzogen werden.
+    </p>
+    <!--l. 29-->
+    <p class="noindent">Eine Weiterentwicklung jenseits einer Version 1.0 Beta ist nicht abzusehen.
+    </p>
+    <h3 class="sectionHead"><span class="titlemark">A.4   </span> <a
+ id="x1-58000A.4"></a>OPERA</h3>
+    <!--l. 33-->
+    <p class="noindent">OPERA ist eine Software von OPTICOM welche neben dem PEAQ Basic Model auch das Advanced Model unterstützt. Dieses Tool scheint seit Version 3 (nach Angabe des Herstellers) das de facto Standard Tool zur Bewertung der Soundqualität in der Industrie
+      zu sein. Da allerdings die Literatur sich nicht auf dieses Tool stützen, und OPTICOM auch auf ihrer Produktseite keine klaren Angaben zu Lizenzierung und Preis angibt (man solle nachfragen), ist davon auszugehen, dass es für den (wissenschaftlichen)
+      &#8222;Normalgebrauch&#8220; nicht zu bezahlen sein wird.
+
+
+
+      <a id="x1-58001r63"></a>
+    </p>
+    <h2 class="appendixHead"><span class="titlemark">Anhang&#x00A0;B</span><br /><a
+ id="x1-59000B"></a>Tutorial zur Implementation</h2>
+    <!--l. 4-->
+    <p class="noindent">Die Implementierung liegt in MATLAB vor und deren Verwendung soll hier kurz illustriert werden. Die sehr lose gekoppelten modularen Komponenten werden aus Anwendersicht prinzipiell von den beiden Funktionen encoder und decoder wegabstrahiert.
+    </p>
+    <h3 class="likesectionHead"><a
+ id="x1-60000B"></a>encoder</h3>
+
+
+
+    <div class="verbatim" id="verbatim-1">
+      <span class="cmtt-10">function</span><span class="cmtt-10">&#x00A0;[modSignal,</span><span class="cmtt-10">&#x00A0;encodedBitCount</span><span class="cmtt-10">&#x00A0;]</span><span class="cmtt-10">&#x00A0;=</span><span class="cmtt-10">&#x00A0;encoder(</span>
+      <span
+      class="cmtt-10">&#x00A0;inputSignal,</span><span class="cmtt-10">&#x00A0;watermark,</span><span class="cmtt-10">&#x00A0;fs</span><span class="cmtt-10">&#x00A0;)</span>
+    </div>
+    <!--l. 12-->
+    <p class="nopar">
+    </p>
+    <!--l. 14-->
+    <p class="noindent">Die Signatur des encoder zeigt, dass die Funktion ein Signal inputSignal als Liste von Abtastwerten, dessen Sampling-Rate fs und eine List von Bitwerten watermark verlangt. Als Resultat liefert sie das modifizierte Signal modSignal und die Anzahl
+      der hineingeschriebenen Bits (watermark kann mehr Werte enthalten als inputSignal Kapazität bereit stellt).
+    </p>
+    <!--l. 16-->
+    <p class="noindent">Folgendes Codebeispiel erweitert test.wav um 100 zufällig generierte Bits und speichert das Ergebnis in result.wav:
+
+
+
+    </p>
+    <div class="verbatim" id="verbatim-2">
+      <span class="cmtt-10">data</span><span class="cmtt-10">&#x00A0;=</span><span class="cmtt-10">&#x00A0;randi([0</span><span class="cmtt-10">&#x00A0;1],</span><span class="cmtt-10">&#x00A0;1,</span><span class="cmtt-10">&#x00A0;100);</span>
+      <span class="cmtt-10">&#x00A0;</span>
+      <br /><span class="cmtt-10">[signal,fs]</span><span class="cmtt-10">&#x00A0;=</span><span class="cmtt-10">&#x00A0;audioread(&#8217;test.wav&#8217;);</span>
+      <span class="cmtt-10">&#x00A0;</span>
+      <br /><span class="cmtt-10">[modSignal,</span><span class="cmtt-10">&#x00A0;count]</span><span class="cmtt-10">&#x00A0;=</span><span class="cmtt-10">&#x00A0;encoder(signal,</span><span class="cmtt-10">&#x00A0;data,</span><span class="cmtt-10">&#x00A0;fs);</span>
+      <span class="cmtt-10">&#x00A0;</span>
+      <br /><span class="cmtt-10">audiowrite(&#8217;result.wav&#8217;,modSignal,</span><span class="cmtt-10">&#x00A0;fs);</span>
+    </div>
+    <!--l. 23-->
+    <p class="nopar">
+    </p>
+    <!--l. 26-->
+    <p class="noindent">
+
+
+
+    </p>
+    <h3 class="likesectionHead"><a
+ id="x1-61000B"></a>decoder</h3>
+
+
+
+    <div class="verbatim" id="verbatim-3">
+      <span class="cmtt-10">function</span><span class="cmtt-10">&#x00A0;[watermark]</span><span class="cmtt-10">&#x00A0;=</span><span class="cmtt-10">&#x00A0;decoder(</span><span class="cmtt-10">&#x00A0;signal,</span><span class="cmtt-10">&#x00A0;fs</span>
+      <span
+      class="cmtt-10">&#x00A0;)</span>
+    </div>
+    <!--l. 35-->
+    <p class="nopar">
+    </p>
+    <!--l. 37-->
+    <p class="noindent">Das Interface des decoder ist ebenso simpel gehalten. Er nimmt ein beliebiges Signal und dessen Abtastrate und versucht daraus Informationen zu extrahieren indem es nach Paketen gescanned wird.
+    </p>
+    <!--l. 39-->
+    <p class="noindent">Folgendes Codesnippet liefer die in <a href="#x1-60000B">B<!--tex4ht:ref: sec:encoder --></a> geschriebenen zufälligen Bits:
+
+
+
+    </p>
+    <div class="verbatim" id="verbatim-4">
+      <span class="cmtt-10">[signal,fs]</span><span class="cmtt-10">&#x00A0;=</span><span class="cmtt-10">&#x00A0;audioread(&#8217;result.wav&#8217;);</span>
+      <span class="cmtt-10">&#x00A0;</span>
+      <br /><span class="cmtt-10">data</span><span class="cmtt-10">&#x00A0;=</span><span class="cmtt-10">&#x00A0;decoder(signal,fs);</span>
+    </div>
+    <!--l. 44-->
+    <p class="nopar">
+    </p>
+    <!--l. 48-->
+    <p class="noindent">
+    </p>
+    <h3 class="likesectionHead"><a
+ id="x1-62000B"></a>Settings</h3>
+    <!--l. 50-->
+    <p class="noindent">Die Implementiertung arbeitet per Default mit den Voreinstellungen, die sich als vergleichsweise effektiv erwiesen haben. Die diversen Parameter können aber auch individuell konfiguriert werden. Sinnvoll ist dies beispielsweise um die Paketgröße über
+      die Synchronisations-Code-Length oder die zum verwendeten Fehlerkorrekturverfahren passenden Message-Length und Codeword-Length Werte anzupassen.
+    </p>
+    <!--l. 52-->
+    <p class="noindent">Sämtliche Module beziehen die Werte über das Setting Objekt. Dabei handelt es sich um einen Datenwrapper des SettingSingleton der wie folgt verändert werden kann.
+
+
+
+    </p>
+    <div class="verbatim" id="verbatim-5">
+      <span class="cmtt-10">sObj</span><span class="cmtt-10">&#x00A0;=</span><span class="cmtt-10">&#x00A0;SettingSingleton.instance();</span>
+      <span class="cmtt-10">&#x00A0;</span>
+      <br /><span class="cmtt-10">sObj.setDwtWavelet(&#8217;db2&#8217;);</span>
+      <span class="cmtt-10">&#x00A0;</span>
+      <br /><span class="cmtt-10">sObj.setDwtLevel(8);</span>
+      <span class="cmtt-10">&#x00A0;</span>
+      <br /><span class="cmtt-10">sObj.setSubbandLength(10);</span>
+      <span class="cmtt-10">&#x00A0;</span>
+      <br /><span class="cmtt-10">%</span><span class="cmtt-10">&#x00A0;usw...</span>
+    </div>
+    <!--l. 60-->
+    <p class="nopar">
+    </p>
+    <!--l. 62-->
+    <p class="noindent">Wichtig ist, dass sowohl encoder und decoder mit den selben Einstellungen ausgeführt werden <strong>müssen</strong>. Es empfiehlt sich daher ein Skript zu definieren, welches nach oben aufgezeigter Art die Einstellungen setzt und das man immer vor
+      encoder und decoder aufruft. Exemplarisch wird preset_default.m bereitgestellt, welches die Standardeinstellungen der Implementierung lädt (welches aber vom Benutzer nicht vor encoder und decoder aufgerufen werden muss).
+
+
+
+      <a id="x1-62001r63"></a>
+    </p>
+    <h2 class="appendixHead"><span class="titlemark">Anhang&#x00A0;C</span><br /><a
+ id="x1-63000C"></a>Stirmark for Audio Testautomation</h2>
+    <!--l. 4-->
+    <p class="noindent">Das Verlangen der <em>Stirmark for Audio</em> API nach nicht näher definierten Streams kann problematisch sein. Exemplarisch sei hier deswegen ein kurzes Bash-Skript gebracht, das dessen Verwendung illustrieren soll:
+    </p>
+    <!--l. 9-->
+    <a id="x1-63001r1"></a>
+    <a id="x1-63002"></a>
+    <div class="lstlisting" id="listing-2"><span class="label"><a
+ id="x1-63003r1"></a></span>#!/usr/bin/env&#x00A0;bash&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63004r2"></a></span>&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63005r3"></a></span>streamfile="teststream"&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63006r4"></a></span>tooldir="../bin"&#x00A0;#&#x00A0;smfa2&#x00A0;and&#x00A0;read_write_stream&#x00A0;binary&#x00A0;location&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63007r5"></a></span>&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63008r6"></a></span>if&#x00A0;[&#x00A0;$#&#x00A0;-ne&#x00A0;3&#x00A0;]&#x00A0;;&#x00A0;then&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63009r7"></a></span>&#x00A0;&#x00A0;&#x00A0;echo&#x00A0;"usage:&#x00A0;./stirmark_test&#x00A0;&#x003C;testfile&#x003E;&#x00A0;&#x003C;samplerate&#x003E;&#x00A0;&#x003C;channels&#x003E;"&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63010r8"></a></span>&#x00A0;&#x00A0;&#x00A0;exit&#x00A0;1&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63011r9"></a></span>fi&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63012r10"></a></span>&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63013r11"></a></span>testfile=$1&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63014r12"></a></span>samplerate=$2&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63015r13"></a></span>channels=$3&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63016r14"></a></span>&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63017r15"></a></span>attack_list=(&#x00A0;"AddDynNoise:20",&#x00A0;"AddSinus:900&#x00A0;1300",&#x00A0;"Invert"&#x00A0;)&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63018r16"></a></span>&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63019r17"></a></span>#&#x00A0;first&#x00A0;convert&#x00A0;the&#x00A0;audio&#x00A0;file&#x00A0;to&#x00A0;a&#x00A0;stream&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63020r18"></a></span>$tooldir/read_write_stream&#x00A0;-f&#x00A0;$testfile&#x00A0;-c&#x00A0;$channels&#x00A0;&#x003E;&#x00A0;$streamfile&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63021r19"></a></span>&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63022r20"></a></span>#&#x00A0;run&#x00A0;all&#x00A0;attacks&#x00A0;and&#x00A0;convert&#x00A0;results&#x00A0;to&#x00A0;audiofiles&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63023r21"></a></span>for&#x00A0;attack&#x00A0;in&#x00A0;"${attack_list[@]}"&#x00A0;;&#x00A0;do&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63024r22"></a></span>&#x00A0;&#x00A0;&#x00A0;attack_name=${attack%%:*}&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63025r23"></a></span>&#x00A0;&#x00A0;&#x00A0;attack_param=${attack#*:}&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63026r24"></a></span>&#x00A0;&#x00A0;&#x00A0;$tooldir/smfa2&#x00A0;--$attack_name&#x00A0;$attack_param&#x00A0;-s&#x00A0;$samplerate&#x00A0;&#x003C;&#x00A0;$streamfile&#x00A0;\&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63027r25"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;|&#x00A0;$tooldir/read_write_stream&#x00A0;-p&#x00A0;-s&#x00A0;$samplerate&#x00A0;-c&#x00A0;$channels&#x00A0;-f&#x00A0;\&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63028r26"></a></span>&#x00A0;&#x00A0;&#x00A0;&#x00A0;&#x00A0;${testfile%.wav}-attacked-$attack_name-${attack_param//&#x00A0;/-}.wav&#x00A0;
+      <br /><span class="label"><a
+ id="x1-63029r27"></a></span>done
+      <br />
+      <div class="caption"><span class="id">Listing&#x00A0;C.1:
+    </span><span class="content">Anwendungsbeispiel
+    für
+    Stirmark
+    for
+    Audio</span>
+      </div>
+      <!--tex4ht:label?: x1-63000C -->
+    </div>
+
+
+
+    <h2 class="likechapterHead"><a
+ id="x1-64000C"></a>Literaturverzeichnis</h2>
+    <div class="thebibliography">
+      <p class="bibitem"><span class="biblabel">
+  [1]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xarnold2000audio"></a>M.&#x00A0;Arnold, &#8220;Audio Watermarking: Features, Applications, and Algorithms.,&#8221; in IEEE International Conference on Multimedia and Expo (II), pp.&#x00A0;1013&#8211;1016, 2000.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+  [2]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xmintzer1997effective"></a>F.&#x00A0;Mintzer, G.&#x00A0;W. Braudaway, and M.&#x00A0;M. Yeung, &#8220;Effective and ineffective digital watermarks,&#8221; in Image Processing, 1997. Proceedings., International Conference on, vol.&#x00A0;3, pp.&#x00A0;9&#8211;12, IEEE,
+        1997.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+  [3]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xpetitcolas1999information"></a>F.&#x00A0;A. Petitcolas, R.&#x00A0;J. Anderson, and M.&#x00A0;G. Kuhn, &#8220;Information hiding-a survey,&#8221; Proceedings of the IEEE, vol.&#x00A0;87, no.&#x00A0;7, pp.&#x00A0;1062&#8211;1078, 1999.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+  [4]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xchang2012location"></a>D.&#x00A0;Chang, X.&#x00A0;Zhang, Q.&#x00A0;Liu, G.&#x00A0;Gao, and Y.&#x00A0;Wu, &#8220;Location based robust audio watermarking algorithm for social TV system,&#8221; in Advances in Multimedia Information Processing&#8211;PCM 2012, pp.&#x00A0;726&#8211;738,
+        Springer, 2012.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+  [5]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xxiang2007robust"></a>S.&#x00A0;Xiang and J.&#x00A0;Huang, &#8220;Robust Audio Watermarking Against the D/A and A/D Conversions,&#8221; arXiv preprint arXiv:0707.0397, 2007.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+  [6]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xbassia2001robust"></a>P.&#x00A0;Bassia, I.&#x00A0;Pitas, and N.&#x00A0;Nikolaidis, &#8220;Robust audio watermarking in the time domain,&#8221; Multimedia, IEEE Transactions on, vol.&#x00A0;3, no.&#x00A0;2, pp.&#x00A0;232&#8211;241, 2001.
+      </p>
+
+
+
+      <p class="bibitem"><span class="biblabel">
+  [7]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xlie2006robust"></a>W.-N. Lie and L.-C. Chang, &#8220;Robust and high-quality time-domain audio watermarking based on low-frequency amplitude modification,&#8221; Multimedia, IEEE Transactions on, vol.&#x00A0;8, no.&#x00A0;1, pp.&#x00A0;46&#8211;59, 2006.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+  [8]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xtang2005digital"></a>X.&#x00A0;Tang, Y.&#x00A0;Niu, H.&#x00A0;Yue, and Z.&#x00A0;Yin, &#8220;A digital audio watermark embedding algorithm,&#8221; International Journal of Information Technology, vol.&#x00A0;11, no.&#x00A0;12, pp.&#x00A0;24&#8211;31, 2005.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+  [9]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xlee2000digital"></a>S.-K. Lee and Y.-S. Ho, &#8220;Digital audio watermarking in the cepstrum domain,&#8221; Consumer Electronics, IEEE Transactions on, vol.&#x00A0;46, no.&#x00A0;3, pp.&#x00A0;744&#8211;750, 2000.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [10]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xli2000transparent"></a>X.&#x00A0;Li and H.&#x00A0;H. Yu, &#8220;Transparent and robust audio data hiding in cepstrum domain,&#8221; in Multimedia and Expo, 2000. ICME 2000. 2000 IEEE International Conference on, vol.&#x00A0;1, pp.&#x00A0;397&#8211;400, IEEE, 2000.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [11]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xdong2004data"></a>X.&#x00A0;Dong, M.&#x00A0;F. Bocko, and Z.&#x00A0;Ignjatovic, &#8220;Data hiding via phase manipulation of audio signals,&#8221; in Acoustics, Speech, and Signal Processing, 2004. Proceedings.(ICASSP&#8217;04). IEEE International Conference
+        on, vol.&#x00A0;5, pp.&#x00A0;V&#8211;377, IEEE, 2004.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [12]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xansari2004data"></a>R.&#x00A0;Ansari, H.&#x00A0;Malik, and A.&#x00A0;Khokhar, &#8220;Data-hiding in audio using frequency-selective phase alteration,&#8221; in Acoustics, Speech, and Signal Processing, 2004. Proceedings.(ICASSP&#8217;04). IEEE International Conference
+        on, vol.&#x00A0;5, pp.&#x00A0;V&#8211;389, IEEE, 2004.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [13]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xlei2012multipurpose"></a>B.&#x00A0;Lei and Y.&#x00A0;Soon, &#8220;A multipurpose audio watermarking algorithm with synchronization and encryption,&#8221; Journal of Zhejiang University SCIENCE C, vol.&#x00A0;13, no.&#x00A0;1, pp.&#x00A0;11&#8211;19, 2012.
+      </p>
+
+
+
+      <p class="bibitem"><span class="biblabel">
+ [14]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xpolikar1996engineer"></a>R.&#x00A0;Polikar, &#8220;The Engineer&#8217;s Ultimate Guide To Wavelet Analysis-The Wavelet Tutorial,&#8221; available at http://www. public. iastate. edu/~ rpolikar/WAVELETS/WTtutorial. html, 1996.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [15]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xshannon1949communication"></a>C.&#x00A0;E. Shannon, &#8220;Communication in the presence of noise,&#8221; Proceedings of the IRE, vol.&#x00A0;37, no.&#x00A0;1, pp.&#x00A0;10&#8211;21, 1949.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [16]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xshannon2001mathematical"></a>C.&#x00A0;E. Shannon, &#8220;A mathematical theory of communication,&#8221; ACM SIGMOBILE Mobile Computing and Communications Review, vol.&#x00A0;5, no.&#x00A0;1, pp.&#x00A0;3&#8211;55, 2001.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [17]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xhuang2002blind"></a>J.&#x00A0;Huang, Y.&#x00A0;Wang, and Y.&#x00A0;Q. Shi, &#8220;A blind audio watermarking algorithm with self-synchronization,&#8221; in Circuits and Systems, 2002. ISCAS 2002. IEEE International Symposium on, vol.&#x00A0;3, pp.&#x00A0;627&#8211;630,
+        IEEE, 2002.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [18]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xpetrovic1999data"></a>R.&#x00A0;Petrovic, J.&#x00A0;M. Winograd, K.&#x00A0;Jemili, and E.&#x00A0;Metois, &#8220;Data hiding within audio signals,&#8221; in Telecommunications in Modern Satellite, Cable and Broadcasting Services, 1999. 4th International Conference
+        on, vol.&#x00A0;1, pp.&#x00A0;88&#8211;95, IEEE, 1999.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [19]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xwu2005efficiently"></a>S.&#x00A0;Wu, J.&#x00A0;Huang, D.&#x00A0;Huang, and Y.&#x00A0;Q. Shi, &#8220;Efficiently self-synchronized audio watermarking for assured audio data transmission,&#8221; Broadcasting, IEEE Transactions on, vol.&#x00A0;51, no.&#x00A0;1, pp.&#x00A0;69&#8211;76,
+        2005.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [20]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xbarker1953group"></a>R.&#x00A0;Barker, &#8220;Group synchronizing of binary digital systems,&#8221; Communication theory, pp.&#x00A0;273&#8211;287, 1953.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [21]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xbose1960class"></a>R.&#x00A0;C. Bose and D.&#x00A0;K. Ray-Chaudhuri, &#8220;On a class of error correcting binary group codes,&#8221; Information and control, vol.&#x00A0;3, no.&#x00A0;1, pp.&#x00A0;68&#8211;79, 1960.
+
+
+
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [22]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xreed1960polynomial"></a>I.&#x00A0;S. Reed and G.&#x00A0;Solomon, &#8220;Polynomial codes over certain finite fields,&#8221; Journal of the Society for Industrial &amp; Applied Mathematics, vol.&#x00A0;8, no.&#x00A0;2, pp.&#x00A0;300&#8211;304, 1960.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [23]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xgallager1962low"></a>R.&#x00A0;G. Gallager, &#8220;Low-density parity-check codes,&#8221; Information Theory, IRE Transactions on, vol.&#x00A0;8, no.&#x00A0;1, pp.&#x00A0;21&#8211;28, 1962.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [24]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xrec1996p"></a>I.&#x00A0;Rec, &#8220;P. 800: Methods for subjective determination of transmission quality,&#8221; International Telecommunication Union, Geneva, 1996.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [25]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xrec1998bs"></a>I.&#x00A0;Rec, &#8220;Bs. 1387, method for objective measurements of perceived audio quality,&#8221; International Telecommunications Union, Geneva, Switzerland, 1998.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [26]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xal2011dwt"></a>A.&#x00A0;Al-Haj, A.&#x00A0;Mohammad, and L.&#x00A0;Bata, &#8220;DWT-Based Audio Watermarking.,&#8221; International Arab Journal of Information Technology (IAJIT), vol.&#x00A0;8, no.&#x00A0;3, 2011.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [27]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xkabal2002examination"></a>P.&#x00A0;Kabal, &#8220;An examination and interpretation of ITU-R BS. 1387: Perceptual evaluation of audio quality,&#8221; TSP Lab Technical Report, Dept. Electrical &amp; Computer Engineering, McGill University, pp.&#x00A0;1&#8211;89, 2002.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [28]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xcampeanu2005peaq"></a>&#8220;PEAQ - An objective method to assess the perceptual quality of audio compressed files, author=Câmpeanu, Dinu and Câmpeanu, Andrei,&#8221; in Proceedings of International Symposium on System Theory, SINTES, vol.&#x00A0;12, pp.&#x00A0;487&#8211;492,
+        2005.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [29]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xsteinebach2002audio"></a>M.&#x00A0;Steinebach, A.&#x00A0;Lang, J.&#x00A0;Dittmann, and C.&#x00A0;Neubauer, &#8220;Audio watermarking quality evaluation: robustness to DA/AD processes,&#8221; in Information Technology: Coding and Computing, 2002. Proceedings. International
+        Conference on, pp.&#x00A0;100&#8211;103, IEEE, 2002.
+
+
+
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [30]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xsteinebach2011re"></a>M.&#x00A0;Steinebach, S.&#x00A0;Zmudzinski, and S.&#x00A0;Nürnberger, &#8220;Re-synchronizing audio watermarking after non-linear time stretching,&#8221; in IS&amp;T/SPIE Electronic Imaging, pp.&#x00A0;78800I&#8211;78800I, International Society
+        for Optics and Photonics, 2011.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [31]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xpetitcolas2000watermarking"></a>F.&#x00A0;A. Petitcolas, &#8220;Watermarking schemes evaluation,&#8221; Signal Processing Magazine, IEEE, vol.&#x00A0;17, no.&#x00A0;5, pp.&#x00A0;58&#8211;64, 2000.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [32]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xpetitcolas2004stirmark"></a>F.&#x00A0;A. Petitcolas, &#8220;Stirmark benchmark 4.0.&#8221;
+        <a href="http://www.petitcolas.net/fabien/Watermarking/stirmark/" class="url">http://www.petitcolas.net/fabien/Watermarking/stirmark/</a>, 2004.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [33]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xsteinebach2002stirmark"></a>M.&#x00A0;Steinebach, A.&#x00A0;Lang, and J.&#x00A0;Dittmann, &#8220;Stirmark benchmark: audio watermarking attacks based on lossy compression,&#8221; in Electronic Imaging 2002, pp.&#x00A0;79&#8211;90, International Society for Optics and
+        Photonics, 2002.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [34]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xstirmarkforaudio"></a>A.&#x00A0;Lang, &#8220;Stirmark for Audio.&#8221;
+        <a href="http://sourceforge.net/projects/stirmark/" class="url">http://sourceforge.net/projects/stirmark/</a>.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [35]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xpetitcolas2001public"></a>F.&#x00A0;A. Petitcolas, M.&#x00A0;Steinebach, F.&#x00A0;Raynal, J.&#x00A0;Dittmann, C.&#x00A0;Fontaine, and N.&#x00A0;Fates, &#8220;A public automated web-based evaluation service for watermarking schemes: StirMark benchmark,&#8221; in Proceedings
+        of SPIE, vol.&#x00A0;4314, pp.&#x00A0;575&#8211;584, 2001.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [36]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xlang2004stirmark"></a>A.&#x00A0;Lang, M.&#x00A0;Holley, and J.&#x00A0;Dittmann, &#8220;StirMark for Audio: Unterschiede zwischen Musik und Sprache,&#8221; Von eLearning bis ePayment, 2004.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [37]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xhuber2006pemo"></a>R.&#x00A0;Huber and B.&#x00A0;Kollmeier, &#8220;PEMO-Q &#8211; 8212; A New Method for Objective Audio Quality Assessment Using a Model of Auditory Perception,&#8221; Audio, Speech, and Language Processing, IEEE Transactions on, vol.&#x00A0;14,
+        no.&#x00A0;6, pp.&#x00A0;1902&#8211;1911, 2006.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [38]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xkraetzer2006transparency"></a>C.&#x00A0;Kraetzer, J.&#x00A0;Dittmann, and A.&#x00A0;Lang, &#8220;Transparency benchmarking on audio watermarks and steganography,&#8221; in Electronic Imaging 2006, pp.&#x00A0;60721L&#8211;60721L, International Society for Optics and Photonics,
+        2006.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [39]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xnishimura2013objective"></a>A.&#x00A0;Nishimura, M.&#x00A0;Unoki, K.&#x00A0;Kondo, and A.&#x00A0;Ogihara, &#8220;Objective evaluation of sound quality for attacks on robust audio watermarking,&#8221; in Proceedings of Meetings on Acoustics, vol.&#x00A0;19, p.&#x00A0;030052,
+        Acoustical Society of America, 2013.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [40]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xkondo2012use"></a>K.&#x00A0;Kondo, &#8220;On the use of objective quality measures to estimate watermarked audio quality,&#8221; in Intelligent Information Hiding and Multimedia Signal Processing (IIH-MSP), 2012 Eighth International Conference on, pp.&#x00A0;126&#8211;129,
+        IEEE, 2012.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [41]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xthiede2000peaq"></a>T.&#x00A0;Thiede, W.&#x00A0;C. Treurniet, R.&#x00A0;Bitto, C.&#x00A0;Schmidmer, T.&#x00A0;Sporer, J.&#x00A0;G. Beerends, and C.&#x00A0;Colomes, &#8220;PEAQ - The ITU Standard for Objective Measurement of Perceived Audio Quality,&#8221; J.
+        Audio Eng. Soc, vol.&#x00A0;48, no.&#x00A0;1/2, pp.&#x00A0;3&#8211;29, 2000.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [42]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xxiang2007time"></a>S.&#x00A0;Xiang, J.&#x00A0;Huang, and R.&#x00A0;Yang, &#8220;Time-scale invariant audio watermarking based on the statistical features in time domain,&#8221; in Information Hiding, pp.&#x00A0;93&#8211;108, Springer, 2007.
+      </p>
+      <p class="bibitem"><span class="biblabel">
+ [43]<span class="bibsp">&#x00A0;&#x00A0;&#x00A0;</span></span>
+        <a id="Xpetitcolas1998attacks"></a>F.&#x00A0;A. Petitcolas, R.&#x00A0;J. Anderson, and M.&#x00A0;G. Kuhn, &#8220;Attacks on copyright marking systems,&#8221; in Information Hiding, pp.&#x00A0;218&#8211;238, Springer, 1998.
+      </p>
+    </div>
+
+
+
+
+
+
+
+
+
+    <h2 class="likechapterHead"><a
+ id="x1-65000C"></a>Abkürzungsverzeichnis</h2>
+    <a id="Q1-1-77"></a>
+    <table class="multicols" id="multicols-1">
+      <tr>
+        <td class="multicol-1">
+          <dl class="thenomenclature"><dt class="thenomenclature">
+esf      </dt>
+            <dd class="thenomenclature">Embedding Strength Factor
+            </dd><dt class="thenomenclature">
+ES      </dt>
+            <dd class="thenomenclature">Embedding Strength
+            </dd><dt class="thenomenclature">
+sync     </dt>
+            <dd class="thenomenclature">Synchronisations-Code
+            </dd><dt class="thenomenclature">
+wmk     </dt>
+            <dd class="thenomenclature">Watermark
+            </dd><dt class="thenomenclature">
+{a<sub>i</sub>}     </dt>
+            <dd class="thenomenclature">Bitsequenz
+            </dd><dt class="thenomenclature">
+{c<sub>i</sub>}     </dt>
+            <dd class="thenomenclature">DWT-Koeffizienten
+            </dd><dt class="thenomenclature">
+A       </dt>
+            <dd class="thenomenclature">Energieniveaudifferenz
+            </dd><dt class="thenomenclature">
+B       </dt>
+            <dd class="thenomenclature">Energieniveaudifferenz
+            </dd><dt class="thenomenclature">
+D<sub>k</sub>      </dt>
+            <dd class="thenomenclature">DWT-Level
+            </dd><dt class="thenomenclature">
+E       </dt>
+            <dd class="thenomenclature">Subband Energy
+            </dd><dt class="thenomenclature">
+f<sub>s</sub>       </dt>
+            <dd class="thenomenclature">Abtastfrequenz
+            </dd><dt class="thenomenclature">
+L<sub>c</sub>      </dt>
+            <dd class="thenomenclature">Codeword-Length
+            </dd><dt class="thenomenclature">
+L<sub>m</sub>      </dt>
+            <dd class="thenomenclature">Message-Length
+
+
+
+            </dd><dt class="thenomenclature">
+L<sub>p</sub>      </dt>
+            <dd class="thenomenclature">Package-Length
+            </dd><dt class="thenomenclature">
+L<sub>s</sub>      </dt>
+            <dd class="thenomenclature">Synchronisations-Code-Length
+            </dd><dt class="thenomenclature">
+L<sub>w</sub>      </dt>
+            <dd class="thenomenclature">Watermark-Length
+            </dd><dt class="thenomenclature">
+N<sub>E</sub>      </dt>
+            <dd class="thenomenclature">Subband-Length
+            </dd><dt class="thenomenclature">
+N<sub>s</sub>      </dt>
+            <dd class="thenomenclature">Sample-Section-Length
+            </dd><dt class="thenomenclature">
+S       </dt>
+            <dd class="thenomenclature">Subband
+            </dd><dt class="thenomenclature">
+f<sub>max</sub>    </dt>
+            <dd class="thenomenclature">Höchste Frequenz
+            </dd><dt class="thenomenclature">
+f<sub>w</sub>      </dt>
+            <dd class="thenomenclature">Wavelet-Funktion
+            </dd><dt class="thenomenclature">
+K<sub>m</sub>     </dt>
+            <dd class="thenomenclature">Bitkapazität von k Sekunden
+            </dd><dt class="thenomenclature">
+N<sub>BZ</sub>    </dt>
+            <dd class="thenomenclature">Bufferzone-Sample-Length
+            </dd><dt class="thenomenclature">
+N<sub>F</sub>      </dt>
+            <dd class="thenomenclature">Frame-Samples-Length
+            </dd><dt class="thenomenclature">
+T<sub>s</sub>      </dt>
+            <dd class="thenomenclature">Synccode-Threshold
+            </dd><dt class="thenomenclature">
+AD      </dt>
+            <dd class="thenomenclature">Analog-Digital
+            </dd><dt class="thenomenclature">
+BER     </dt>
+            <dd class="thenomenclature">Bit error rate
+            </dd><dt class="thenomenclature">
+DA      </dt>
+            <dd class="thenomenclature">Digital-Analog
+            </dd><dt class="thenomenclature">
+DM     </dt>
+            <dd class="thenomenclature">Damaged message
+            </dd><dt class="thenomenclature">
+ECC     </dt>
+            <dd class="thenomenclature">Error Correcting Code
+
+
+
+            </dd><dt class="thenomenclature">
+EMB    </dt>
+            <dd class="thenomenclature">Erroneous message bits
+            </dd><dt class="thenomenclature">
+MOS    </dt>
+            <dd class="thenomenclature">Mean Opinion Score
+            </dd><dt class="thenomenclature">
+ODG    </dt>
+            <dd class="thenomenclature">Objective Difference Grade
+            </dd><dt class="thenomenclature">
+PEAQ   </dt>
+            <dd class="thenomenclature">Perceptual Evaluation of Audio Quality
+            </dd><dt class="thenomenclature">
+PL      </dt>
+            <dd class="thenomenclature">Package loss
+            </dd><dt class="thenomenclature">
+SNR     </dt>
+            <dd class="thenomenclature">Signal-Rauschabstand
+            </dd><dt class="thenomenclature">
+TSM    </dt>
+            <dd class="thenomenclature">time scaling modification
+            </dd><dt class="thenomenclature">
+WMD   </dt>
+            <dd class="thenomenclature">wave magnitude distortion
+            </dd>
+          </dl>
+        </td>
+      </tr>
+    </table>
+  </div>
+</body>
+
+</html>

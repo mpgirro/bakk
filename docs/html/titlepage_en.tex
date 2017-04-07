@@ -1,0 +1,130 @@
+% $Id: titlepage.tex 1752 2010-03-20 11:07:02Z tkren $
+%
+% TU Wien - Faculty of Informatics
+% thesis titlepage
+%
+% This titlepage is using the geometry package, see
+% <http://www.ctan.org/macros/latex/contrib/geometry/geometry.pdf>
+%
+% For questions and comments send an email to
+% Thomas Krennwallner <tkren@kr.tuwien.ac.at>
+% or to Petra Brosch <brosch@big.tuwien.ac.at>
+%
+
+% setup page dimensions for titlepage
+\newgeometry{left=2.4cm,right=2.4cm,bottom=2.5cm,top=2cm}
+
+% force baselineskip and parindent
+%\newlength{\tmpbaselineskip}
+%\setlength{\tmpbaselineskip}{\baselineskip}
+%\setlength{\baselineskip}{13.6pt}
+%\newlength{\tmpparindent}
+%\setlength{\tmpparindent}{\parindent}
+%\setlength{\parindent}{17pt}
+
+% first titlepage
+\thispagestyle{tuinftitlepage}
+
+%
+% Kludge: for each titlepage set \pagenumbering to a different
+% style. This is used to fix a problem with hyperref, because there
+% are multiple "page 1" and hyperref hates that
+%
+\pagenumbering{Roman}
+
+\begin{center}
+{\ \vspace{3.4cm}}
+
+\begin{minipage}[t][2.8cm][s]{\textwidth}%
+\centering
+\thesistitlefontHUGE\sffamily\bfseries\tuinfthesistitle\\
+\bigskip
+{\thesistitlefonthuge\sffamily\bfseries\tuinfthesissubtitle}
+\end{minipage}
+
+\vspace{1.3cm}
+
+{\thesistitlefontLARGE\sffamily \tuinfthesistypeen}
+
+\vspace{6mm}
+
+{\thesistitlefontlarge\sffamily submitted in partial fulfillment of the requirements for the degree of}
+
+\vspace{6mm}
+
+{\thesistitlefontLARGE\sffamily\bfseries \tuinfthesisdegreeen}
+
+\vspace{6mm}
+
+{\thesistitlefontlarge\sffamily in}
+
+\vspace{6mm}
+
+{\thesistitlefontLarge\sffamily\bfseries \tuinfthesiscurriculumen}
+
+\vspace{6.5mm}
+
+{\thesistitlefontlarge\sffamily by}
+
+\vspace{6mm}
+
+{\thesistitlefontLarge\sffamily\bfseries \tuinfthesisauthor}
+
+\vspace{1.5mm}
+
+{\thesistitlefontlarge\sffamily Registration Number \tuinfthesismatrikelno} 
+
+\vspace{1.4cm}
+
+\begin{minipage}[t][1.6cm][t]{\textwidth}%
+  \vspace{0pt}\raggedright\thesistitlefontnormalsize\sffamily
+  %
+  to the Faculty of Informatics 
+
+  at the Vienna University of Technology
+\end{minipage}
+
+\vspace{0pt}\raggedright\thesistitlefontnormalsize\sffamily
+\begin{minipage}[t][4cm][t]{\textwidth}%
+  \begin{tabbing}%
+	    \hspace{19mm} \= \hspace{66mm} \kill
+	    Advisor: \> \tuinfthesisbetreins\\
+	    Assistance: \> \tuinfthesisbetrzwei\\
+	                \> \tuinfthesisbetrdrei
+     \end{tabbing}
+\end{minipage}
+
+\begin{minipage}[t][1.5cm][t]{\textwidth}%
+  \vspace{0pt}\sffamily\thesistitlefontnormalsize
+  \begin{tabbing}%
+    \hspace{45mm} \= \hspace{63mm} \= \hspace{51mm} \kill
+    Vienna, \tuinfthesisdate \> {\raggedright\rule{51mm}{0.5pt}} \> {\raggedright\rule{51mm}{0.5pt}} \\
+    \> \begin{minipage}[t][0.5cm][t]{51mm}\centering (Signature of Author)\end{minipage}
+    \> \begin{minipage}[t][0.5cm][t]{51mm}\centering (Signature of Advisor)\end{minipage}
+    \end{tabbing}
+\end{minipage}
+
+\end{center}
+
+% we want an empty page right after first titlepage
+\pagestyle{empty}
+\cleardoublepage
+
+% we're done with the titlepages, proceed with default pagenumbering
+\pagenumbering{roman}
+
+% restore baselineskip
+\setlength{\baselineskip}{\tmpbaselineskip}
+\setlength{\parindent}{\tmpparindent}
+
+% back to normal geometry
+\restoregeometry
+
+
+%%% Local Variables:
+%%% TeX-PDF-mode: t
+%%% TeX-debug-bad-boxes: t
+%%% TeX-parse-self: t
+%%% TeX-auto-save: t
+%%% reftex-plug-into-AUCTeX: t
+%%% End:

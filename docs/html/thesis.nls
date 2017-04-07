@@ -1,0 +1,74 @@
+\begin{thenomenclature} 
+
+ \nomgroup{A}
+
+  \item [{$\mbox{esf}$}]\begingroup Embedding Strength Factor\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$\mbox{ES}$}]\begingroup Embedding Strength\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$\mbox{sync}$}]\begingroup Synchronisations-Code\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$\mbox{wmk}$}]\begingroup Watermark\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$\{a_i\}$}]\begingroup Bitsequenz\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$\{c_i\}$}]\begingroup DWT-Koeffizienten\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$A$}]\begingroup Energieniveaudifferenz\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$B$}]\begingroup Energieniveaudifferenz\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$D_k$}]\begingroup DWT-Level\nomeqref {C.0}\nompageref{45}
+  \item [{$E$}]\begingroup Subband Energy\nomeqref {C.0}\nompageref{45}
+  \item [{$f_s$}]\begingroup Abtastfrequenz\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$L_c$}]\begingroup Codeword-Length\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$L_m$}]\begingroup Message-Length\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$L_p$}]\begingroup Package-Length\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$L_s$}]\begingroup Synchronisations-Code-Length\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$L_w$}]\begingroup Watermark-Length\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$N_E$}]\begingroup Subband-Length\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$N_s$}]\begingroup Sample-Section-Length\nomeqref {C.0}
+		\nompageref{45}
+  \item [{$S$}]\begingroup Subband\nomeqref {C.0}\nompageref{45}
+  \item [{${f}_{max}$}]\begingroup Höchste Frequenz\nomeqref {C.0}
+		\nompageref{45}
+  \item [{${f}_{w}$}]\begingroup Wavelet-Funktion\nomeqref {C.0}
+		\nompageref{45}
+  \item [{${K}_{m}$}]\begingroup Bitkapazität von $k$ Sekunden\nomeqref {C.0}
+		\nompageref{45}
+  \item [{${N}_{BZ}$}]\begingroup Bufferzone-Sample-Length\nomeqref {C.0}
+		\nompageref{45}
+  \item [{${N}_{F}$}]\begingroup Frame-Samples-Length\nomeqref {C.0}
+		\nompageref{45}
+  \item [{${T}_{s}$}]\begingroup Synccode-Threshold\nomeqref {C.0}
+		\nompageref{45}
+  \item [{AD}]\begingroup Analog-Digital\nomeqref {C.0}\nompageref{45}
+  \item [{BER}]\begingroup Bit error rate\nomeqref {C.0}\nompageref{45}
+  \item [{DA}]\begingroup Digital-Analog\nomeqref {C.0}\nompageref{45}
+  \item [{DM}]\begingroup Damaged message\nomeqref {C.0}\nompageref{45}
+  \item [{ECC}]\begingroup Error Correcting Code\nomeqref {C.0}
+		\nompageref{45}
+  \item [{EMB}]\begingroup Erroneous message bits\nomeqref {C.0}
+		\nompageref{45}
+  \item [{MOS}]\begingroup Mean Opinion Score\nomeqref {C.0}
+		\nompageref{45}
+  \item [{ODG}]\begingroup Objective Difference Grade\nomeqref {C.0}
+		\nompageref{45}
+  \item [{PEAQ}]\begingroup Perceptual Evaluation of Audio Quality\nomeqref {C.0}
+		\nompageref{45}
+  \item [{PL}]\begingroup Package loss\nomeqref {C.0}\nompageref{45}
+  \item [{SNR}]\begingroup Signal-Rauschabstand\nomeqref {C.0}
+		\nompageref{45}
+  \item [{TSM}]\begingroup time scaling modification\nomeqref {C.0}
+		\nompageref{45}
+  \item [{WMD}]\begingroup wave magnitude distortion\nomeqref {C.0}
+		\nompageref{45}
+
+\end{thenomenclature}

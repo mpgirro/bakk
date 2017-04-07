@@ -1,0 +1,456 @@
+
+/* start css.sty */
+.cmr-7{font-size:70%;}
+.cmmi-5{font-size:50%;font-style: italic;}
+.cmmi-7{font-size:70%;font-style: italic;}
+.cmmi-10{font-style: italic;}
+.cmsy-7{font-size:70%;}
+.cmr-17x-x-143{font-size:243%;}
+.cmr-17x-x-120{font-size:204%;}
+.cmcsc-10x-x-207{font-size:207%;}
+.cmr-12x-x-120{font-size:144%;}
+.cmr-12{font-size:120%;}
+.cmtt-10{font-family: monospace;}
+.cmtt-10{font-family: monospace;}
+.cmtt-10{font-family: monospace;}
+.cmtt-10{font-family: monospace;}
+.cmti-10{ font-style: italic;}
+.cmr-9{font-size:90%;}
+.cmr-8{font-size:80%;}
+.cmtt-8{font-size:80%;font-family: monospace;}
+.cmtt-8{font-family: monospace;}
+.cmtt-8{font-family: monospace;}
+.cmtt-8{font-family: monospace;}
+.cmmi-8{font-size:80%;font-style: italic;}
+.cmmi-6{font-size:60%;font-style: italic;}
+.cmsy-8{font-size:80%;}
+.cmbx-10{ font-weight: bold;}
+.cmbx-10{ font-weight: bold;}
+.cmbx-10{ font-weight: bold;}
+.cmti-8{font-size:80%; font-style: italic;}
+.cmss-10{  font-family: sans-serif;}
+.cmbx-7{font-size:70%; font-weight: bold;}
+.cmbx-7{ font-weight: bold;}
+.cmbx-7{ font-weight: bold;}
+.cmmi-9{font-size:90%;font-style: italic;}
+.cmtt-9{font-size:90%;font-family: monospace;}
+.cmtt-9{font-family: monospace;}
+.cmtt-9{font-family: monospace;}
+.cmtt-9{font-family: monospace;}
+.cmbx-9{font-size:90%; font-weight: bold;}
+.cmbx-9{ font-weight: bold;}
+.cmbx-9{ font-weight: bold;}
+.cmitt-10x-x-80{font-size:80%;font-family: monospace; font-style: italic;}
+p.noindent { text-indent: 0em }
+td p.noindent { text-indent: 0em; margin-top:0em; }
+p.nopar { text-indent: 0em; }
+p.indent{ text-indent: 1.5em }
+@media print {div.crosslinks {visibility:hidden;}}
+a img { border-top: 0; border-left: 0; border-right: 0; }
+center { margin-top:1em; margin-bottom:1em; }
+td center { margin-top:0em; margin-bottom:0em; }
+.Canvas { position:relative; }
+img.math{vertical-align:middle;}
+li p.indent { text-indent: 0em }
+li p:first-child{ margin-top:0em; }
+li p:last-child, li div:last-child { margin-bottom:0.5em; }
+li p~ul:last-child, li p~ol:last-child{ margin-bottom:0.5em; }
+.enumerate1 {list-style-type:decimal;}
+.enumerate2 {list-style-type:lower-alpha;}
+.enumerate3 {list-style-type:lower-roman;}
+.enumerate4 {list-style-type:upper-alpha;}
+div.newtheorem { margin-bottom: 2em; margin-top: 2em;}
+.obeylines-h,.obeylines-v {white-space: nowrap; }
+div.obeylines-v p { margin-top:0; margin-bottom:0; }
+.overline{ text-decoration:overline; }
+.overline img{ border-top: 1px solid black; }
+td.displaylines {text-align:center; white-space:nowrap;}
+.centerline {text-align:center;}
+.rightline {text-align:right;}
+div.verbatim {font-family: monospace; white-space: nowrap; text-align:left; clear:both; }
+.fbox {padding-left:3.0pt; padding-right:3.0pt; text-indent:0pt; border:solid black 0.4pt; }
+div.fbox {display:table}
+div.center div.fbox {text-align:center; clear:both; padding-left:3.0pt; padding-right:3.0pt; text-indent:0pt; border:solid black 0.4pt; }
+div.minipage{width:100%;}
+div.center, div.center div.center {text-align: center; margin-left:1em; margin-right:1em;}
+div.center div {text-align: left;}
+div.flushright, div.flushright div.flushright {text-align: right;}
+div.flushright div {text-align: left;}
+div.flushleft {text-align: left;}
+.underline{ text-decoration:underline; }
+.underline img{ border-bottom: 1px solid black; margin-bottom:1pt; }
+.framebox-c, .framebox-l, .framebox-r { padding-left:3.0pt; padding-right:3.0pt; text-indent:0pt; border:solid black 0.4pt; }
+.framebox-c {text-align:center;}
+.framebox-l {text-align:left;}
+.framebox-r {text-align:right;}
+span.thank-mark{ vertical-align: super }
+span.footnote-mark sup.textsuperscript, span.footnote-mark a sup.textsuperscript{ font-size:80%; }
+div.tabular, div.center div.tabular {text-align: center; margin-top:0.5em; margin-bottom:0.5em; }
+table.tabular td p{margin-top:0em;}
+table.tabular {margin-left: auto; margin-right: auto;}
+td p:first-child{ margin-top:0em; }
+td p:last-child{ margin-bottom:0em; }
+div.td00{ margin-left:0pt; margin-right:0pt; }
+div.td01{ margin-left:0pt; margin-right:5pt; }
+div.td10{ margin-left:5pt; margin-right:0pt; }
+div.td11{ margin-left:5pt; margin-right:5pt; }
+table[rules] {border-left:solid black 0.4pt; border-right:solid black 0.4pt; }
+td.td00{ padding-left:0pt; padding-right:0pt; }
+td.td01{ padding-left:0pt; padding-right:5pt; }
+td.td10{ padding-left:5pt; padding-right:0pt; }
+td.td11{ padding-left:5pt; padding-right:5pt; }
+table[rules] {border-left:solid black 0.4pt; border-right:solid black 0.4pt; }
+.hline hr, .cline hr{ height : 1px; margin:0px; }
+.tabbing-right {text-align:right;}
+span.TEX {letter-spacing: -0.125em; }
+span.TEX span.E{ position:relative;top:0.5ex;left:-0.0417em;}
+a span.TEX span.E {text-decoration: none; }
+span.LATEX span.A{ position:relative; top:-0.5ex; left:-0.4em; font-size:85%;}
+span.LATEX span.TEX{ position:relative; left: -0.4em; }
+div.float, div.figure {margin-left: auto; margin-right: auto;}
+div.float img {text-align:center;}
+div.figure img {text-align:center;}
+.marginpar {width:20%; float:right; text-align:left; margin-left:auto; margin-top:0.5em; font-size:85%; text-decoration:underline;}
+.marginpar p{margin-top:0.4em; margin-bottom:0.4em;}
+table.equation {width:100%;}
+.equation td{text-align:center; }
+td.equation { margin-top:1em; margin-bottom:1em; }
+td.equation-label { width:5%; text-align:center; }
+td.eqnarray4 { width:5%; white-space: normal; }
+td.eqnarray2 { width:5%; }
+table.eqnarray-star, table.eqnarray {width:100%;}
+div.eqnarray{text-align:center;}
+div.array {text-align:center;}
+div.pmatrix {text-align:center;}
+table.pmatrix {width:100%;}
+span.pmatrix img{vertical-align:middle;}
+div.pmatrix {text-align:center;}
+table.pmatrix {width:100%;}
+span.bar-css {text-decoration:overline;}
+img.cdots{vertical-align:middle;}
+.partToc a, .partToc, .likepartToc a, .likepartToc {line-height: 200%; font-weight:bold; font-size:110%;}
+.chapterToc a, .chapterToc, .likechapterToc a, .likechapterToc, .appendixToc a, .appendixToc {line-height: 200%; font-weight:bold;}
+.index-item, .index-subitem, .index-subsubitem {display:block}
+div.caption {text-indent:-2em; margin-left:3em; margin-right:1em; text-align:left;}
+div.caption span.id{font-weight: bold; white-space: nowrap; }
+h1.partHead{text-align: center}
+p.bibitem { text-indent: -2em; margin-left: 2em; margin-top:0.6em; margin-bottom:0.6em; }
+p.bibitem-p { text-indent: 0em; margin-left: 2em; margin-top:0.6em; margin-bottom:0.6em; }
+.paragraphHead, .likeparagraphHead { margin-top:2em; font-weight: bold;}
+.subparagraphHead, .likesubparagraphHead { font-weight: bold;}
+.quote {margin-bottom:0.25em; margin-top:0.25em; margin-left:1em; margin-right:1em; text-align:justify;}
+.verse{white-space:nowrap; margin-left:2em}
+div.maketitle {text-align:center;}
+h2.titleHead{text-align:center;}
+div.maketitle{ margin-bottom: 2em; }
+div.author, div.date {text-align:center;}
+div.thanks{text-align:left; margin-left:10%; font-size:85%; font-style:italic; }
+div.author{white-space: nowrap;}
+.quotation {margin-bottom:0.25em; margin-top:0.25em; margin-left:1em; }
+h1.partHead{text-align: center}
+.abstract p {margin-left:5%; margin-right:5%;}
+div.abstract {width:100%;}
+.figure img.graphics {margin-left:10%;}
+div.verbatiminput {font-family: monospace; white-space: nowrap; }
+.equation td{text-align:center; }
+.equation-star td{text-align:center; }
+table.equation-star { width:100%; }
+table.equation { width:100%; }
+table.align, table.alignat, table.xalignat, table.xxalignat, table.flalign {width:100%; margin-left:5%; white-space: nowrap;}
+table.align-star, table.alignat-star, table.xalignat-star, table.flalign-star {margin-left:auto; margin-right:auto; white-space: nowrap;}
+td.align-label { width:5%; text-align:center; }
+td.align-odd { text-align:right; padding-right:0.3em;}
+td.align-even { text-align:left; padding-right:0.6em;}
+table.multline, table.multline-star {width:100%;}
+td.gather {text-align:center; }
+table.gather {width:100%;}
+div.gather-star {text-align:center;}
+.caption span.id{font-weight: bold;}
+ .wrapfig-r, .wrapfig-ri, .wrapfig-ir, .wrapfig-ro, .wrapfig-or {float:right; text-align:left; margin-left:auto; margin-top:0.5em;}
+ .wrapfig-l, .wrapfig-li, .wrapfig-il, .wrapfig-lo, .wrapfig-ol {float:left; text-align:left; margin-right:auto; margin-top:0.5em;}
+.wrapfig-r .caption td.content, .wrapfig-ri .caption td.content, .wrapfig-ir .caption td.content, .wrapfig-ro .caption td.content, .wrapfig-or .caption td.content, .wrapfig-l .caption td.content, .wrapfig-li .caption td.content, .wrapfig-il .caption td.content, .wrapfig-lo .caption td.content, .wrapfig-ol .caption td.content {white-space: normal; }
+.wrapfig-r .caption, .wrapfig-ri .caption, .wrapfig-ir .caption, .wrapfig-ro .caption, .wrapfig-or .caption, .wrapfig-l .caption, .wrapfig-li .caption, .wrapfig-il .caption, .wrapfig-lo .caption, .wrapfig-ol .caption {width:30%; }
+.lstlisting .label{margin-right:0.5em; }
+div.lstlisting{font-family: monospace; white-space: nowrap; margin-top:0.5em; margin-bottom:0.5em; }
+div.lstinputlisting{ font-family: monospace; white-space: nowrap; }
+.lstinputlisting .label{margin-right:0.5em;}
+table[rules] {border-left:solid black 0.4pt; border-right:solid black 0.4pt; }
+div.longtable{text-align:center;}
+.supertabular {text-align:center}
+dt.thenomenclature{float:left; clear:left;}
+table.multicols { width:100%; margin-left:1em; margin-top:1em; margin-bottom:1em; }
+/* end css.sty */
+
+@import url(http://fonts.googleapis.com/css?family=Open%20Sans);
+/*@import url(http://fonts.googleapis.com/css?family=Droid%20Sans);*/
+@import url(http://fonts.googleapis.com/css?family=Lato);
+
+
+@font-face {
+    font-family: "Computer Modern Serif";
+    src: url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.eot');
+    src: url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.eot?#iefix') format('embedded-opentype'),
+    url('http://spratt.github.io/Computer-Modern/cmunrm.otf') format('opentype'),
+    url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.woff') format('woff'),
+    url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.ttf') format('truetype'),
+    url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.svg#cmu_serifroman') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: "Computer Modern Serif";
+    src: url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.eot');
+    src: url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.eot?#iefix') format('embedded-opentype'),
+    url('http://spratt.github.io/Computer-Modern/cmunsl.otf') format('opentype'),
+    url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.woff') format('woff'),
+    url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.ttf') format('truetype'),
+    url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.svg#cmu_serif_extraromanslanted') format('svg');
+    font-weight: normal;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Computer Modern Serif";
+    src: url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.eot');
+    src: url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.eot?#iefix') format('embedded-opentype'),
+    url('http://spratt.github.io/Computer-Modern/cmunbl.otf') format('opentype'),
+    url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.woff') format('woff'),
+    url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.ttf') format('truetype'),
+    url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.svg#cmu_serif_extraboldslanted') format('svg');
+    font-weight: bold;
+    font-style: italic;
+}
+@font-face {
+    font-family: "Computer Modern Serif";
+    src: url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.eot');
+    src: url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.eot?#iefix') format('embedded-opentype'),
+    url('http://spratt.github.io/Computer-Modern/cmunbx.otf') format('opentype'),
+    url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.woff') format('woff'),
+    url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.ttf') format('truetype'),
+    url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.svg#cmu_serifbold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+}
+
+body {
+    /* Serif options */
+    /*font-family: "Times New Roman", Times, serif;*/
+    /*font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif    */
+
+    /*Sans Serif options */
+    /*font-family: "Helvetica", Arial, Freesans, clean, sans-serif;*/
+    /*font-family: "Helvetica Neue", Arial, Freesans, clean, sans-serif;*/
+	/*font-family: "Lato";*/
+	/*font-family: "Garamond", "Helvetica Neue", "Lato";*/
+	/*font-family: "Droid Sans";*/
+    font-family: "Computer Modern Serif", "Garamond", "Open Sans", "Helvetica Neue", "Times New Roman", Times, serif;
+    /*font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;*/
+    /*font-family: "Trebuchet MS", Helvetica, sans-serif;*/
+    /*font-family: Verdana, Geneva, sans-serif;*/
+    /*font-family: Tahoma, Geneva, sans-serif;*/
+    /*font-family: Baskerville, 'Times New Roman', Times, serif;*/
+
+
+    padding:1em;
+    font-size: 11pt;
+    font-weight:300;
+    line-height: 20px;
+    margin:10px;
+    background:#fefefe;
+    /*color:#333;*/
+    color: #000000;
+	text-align: justify;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    margin: 2em 0px 15px 0px;
+    /*font-family: "Helvetica Neue", "Lato", "Garamond", "Times New Roman";*/
+}
+
+h1 {
+    color: #000;
+    font-size: 2em;
+}
+
+h2 {
+    font-size: 1.8em;
+}
+
+h3 {
+    font-size: 1.6em;
+}
+
+h4 {
+    font-size: 1.3em;
+}
+
+h5 {
+    font-size: 1.3em;
+}
+
+h6 {
+    color: #777777;
+    background-color: inherit;
+    font-size: 1.3em;
+}
+
+hr {
+    height: 0.2em;
+    border: 0;
+    color: #CCCCCC;
+    background-color: #CCCCCC;
+}
+
+p, blockquote, ul, ol, dl, li, table, pre {
+    margin: 15px 0;
+}
+
+code, pre {
+    border-radius: 3px;
+    background-color: #F8F8F8;
+    color: inherit;
+}
+
+code {
+    border: 1px solid #EAEAEA;
+    margin: 0 2px;
+    padding: 0 5px;
+}
+
+pre {
+    border: 1px solid #CCCCCC;
+    line-height: 1.25em;
+    overflow: auto;
+    padding: 6px 10px;
+}
+
+pre > code {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+a, a:visited {
+    /*color: #4183C4;*/
+    background-color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+dt.description{
+	font-weight: bold;
+}
+
+h2.chapterHead, h2.appendixHead {
+	line-height:150%;
+}
+
+tr#TBL-1-1-, tr#TBL-2-1-, tr#TBL-3-1-, tr#TBL-4-1- {
+	font-weight: bold;
+}
+
+.sectionToc{
+	margin-left: 1em;
+}
+
+.subsectionToc{
+	margin-left: 2em;
+}
+
+/*
+div#left-col {
+	width: 150px;
+    float: left;
+    position: fixed;
+}
+*/
+div#thesis-container {
+    width: 620px;
+    margin: 0 auto;
+    background: #fff;
+    overflow: hidden;
+    -webkit-box-shadow: 0 .7em 2em -10px #000;
+    -moz-box-shadow: 0 .7em 2em -10px #000;
+    -o-box-shadow: 0 .7em 2em -10px #000;
+    box-shadow: 0 .7em 2em -10px #000;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+div#titlepage {
+	font-size: 1.5em;
+}
+
+dl.thenomenclature {
+	width: 100%;
+	overflow: hidden;
+}
+
+dt.thenomenclature{
+	float: left;
+	width: 10%;
+}
+
+dd.thenomenclature{
+	float: left;
+	width: 80%;
+}
+
+p#thesis_title,
+p#thesis_subtitle,
+p#thesis_kind,
+p#title_von,
+p#thesis_author,
+p#author_matrnr,
+p#thesis_betreuer,
+p#institut{
+    font-family: "Garamond", "Lato", "Times New Roman";
+}
+
+#thesis_title {
+    font-size: 22pt;
+    font-weight: normal;
+    text-align: center;
+    color:#333;
+}
+
+#thesis_subtitle {
+	font-size: 18pt;
+    font-weight: normal;
+    text-align: center;
+    color:#333;
+}
+
+p#thesis_kind {
+	font-size: 1.5em;
+	margin-top: 3em;
+	margin-bottom: 3em;
+}
+
+p#title_von {
+    font-size: 1.2em;
+	margin-bottom: 3em;
+}
+
+p#thesis_author {
+	font-size: 1.6em;
+}
+
+p#author_matrnr {
+	font-size: 1.3em;
+    margin-top: -0.5em;
+}
+
+p#thesis_betreuer {
+    font-size: 1.2em;
+    margin-top: 3em;
+	margin-bottom: 3em;
+}
+
+p#institut {
+    font-size: 1.2em;
+	margin-bottom: 3em;
+}

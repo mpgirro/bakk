@@ -1,0 +1,48 @@
+\chapter{Einf\"uhrung}
+\label{ch:intro}
+
+\section{Motivation}
+
+Die Digitalisierung unserer Welt schreitet seit \"uber 50 Jahren stetig voran. Immer mehr liegt nur mehr in digitaler Form vor. Und durch die wachsende Vernetzung stehen diese Daten vor allem seit dem neuen Jahrtausend immer mehr Menschen mit immer weniger Aufwand jederzeit zur Verf\"ugung. 
+
+Doch es ergibt sich daraus auch ein Problem: \textit{Was liegt eigentlich vor?} Digitale (und vor allem multimediale) Daten sagen per se nichts \"uber ihre Bedeutung aus. Sie bekommen diese durch den Betrachter. Doch aus diversen Gr\"unden, ganz voran alleine um sie sortieren und suchen zu k\"onnen, ist es aber interessant ihnen bereits vorher eine gewisse Bedeutung zuzuschreiben. Dadurch wurde in den letzten Jahren ein Stichwort groß: \textit{Metadaten}\index{Metadaten}. Metadaten sind \glqq{}Daten \"uber Daten\grqq{}. Mit ihnen wird versucht vorliegende Daten zu beschreiben (z.B. Genre eines Musikst\"ucks), zus\"atzliche Informationen \"uber sie vorzuhalten (K\"unstler und Album eines Musikst\"ucks), diese maschinenlesbar bereitzustellen (ID3-Tags bei MP3) und wenn m\"oglich auch direkt mit den Daten zu verkn\"upfen (Kapitelmarken in MP4/M4B H\"orb\"uchern).
+
+Das Problem bei Metadaten ist sie bereitzustellen und vorzuhalten. Seit dem Ausbau der digitalen Vernetzung liegen Metadaten oft nicht mehr direkt bei den eigentlichen Daten. Oftmals sind sie auf einem externen Server und werden bei Bedarf angefordert. Die Metadaten sind nur dann zug\"anglich, wenn der Server verf\"ugbar ist und ein Mechanismus existiert mit dem die Daten eindeutig mit den Metadaten am Server verkn\"upft werden k\"onnen. 
+Eine Datei kann auch durch eine zus\"atzliche standardisierte Datei im selben Namespace beschrieben werden (etwa via XML). Kopiert man jedoch nur die urspr\"unglichen Daten, nicht aber ihre Metadaten, so geht die zus\"atzliche Information verloren. 
+
+Es ist daher oftmals w\"unschenswert die Metadaten direkt \textit{in} den eigentlichen Daten vorzuhalten. Eine der vielleicht bekanntesten Formen dieser Art der Metadatenspeicherung sind die bereits oben erw\"ahnten MP3 Tags. Hier werden die Metadaten einfach am Ende des Audiosignals angeh\"angt. Diese Form der Metadatenspeicherung ist vor allem bei digitalen, multimedialen Daten besonders beliebt. Nicht zuletzt die MPEG\footnote{Moving Picture Experts Group. Eine Vereinigung zur Standardisierung von Audio- und Video-Kompressionsalgorithmen und Containerformaten. Am bekanntesten d\"urfte das MP4 Dateiformat sein.} treibt diese Entwicklung mit ihren Standards auch rege voran. 
+
+\section{Digitale und analoge Daten}
+
+Bei digitalen Daten lassen sich die Metadaten oftmals noch recht einfach direkt zu den eigentlichen Daten speichern. Es muss nur einen entsprechenden Standard geben wie diese an die Daten angeh\"angt werden k\"onnen. Doch vor allem multimediale Daten existieren in der Regel nicht nur in digitaler Form. Sp\"atestens wenn sie konsumiert (betrachtet, geh\"ort) werden sollen m\"ussen sie auf die eine oder andere Art in eine analoge Form gebracht werden. Dabei gehen die Metadaten meistens verloren. Dem wird entgegen gesetzt, dass die Metadaten meistens an diesem Punkt auch angezeigt werden. Die meisten MP3 Player zeigen w\"ahrend des Abspielens den Tracktitel und Artist an. Allerdings ist der Lifecycle der Metadaten an dieser Stelle auch beendet. Werden die nun analogen Daten weiter aufgezeichnet, verarbeitet und verwendet, so ist ihre Beschreibung verloren gegangen, wenn sich nicht jemand explizit \glqq{}von Hand\grqq{} weitertr\"agt. Es w\"are also W\"unschenswert wenn die Metadaten auch im analogen Zustand Teil der Daten w\"aren. 
+
+\section{Digitale Wasserzeichen}
+
+Digitale Wasserzeichen (engl. \textit{Digital Watermarks}) sind s\"amtliche Verfahren die ein digitales Signal (Audio, Video, aber auch nur einfache Bilder) so ver\"andern, dass in ihm ein weiteres Signal versteckt ist. Da dieses zus\"atzliche Signal in der Regel unwahrnehmbar ist (oder zumindest sein soll) ist die Einbettung dieses \textit{versteckten Signals} in der urspr\"ungliche (das \textit{Tr\"agersignal}) also eine steganographische Methode.
+Somit kann beispielsweise ein Bild in einem anderen Bild versteckt werden. Zu beachten ist nat\"urlich, dass die Einbettungskapazit\"at durchaus limitiert ist, da die Qualit\"at des Tr\"agersignal nicht maßgeblich beeintr\"achtigt werden soll. 
+
+Prinzipiell lassen sich Watermarks in 2 Kategorien unterteilen\cite{arnold2000audio}: 
+
+\begin{description}
+	
+	\item[Secret watermarks] sollen unauffindbar sein, außer f\"ur jene die dazu berechtigt sind. Sie stellen einen gesicherten \"ubertragungskanal zwischen den autorisierten Personen dar, die zu den versteckten Informationen durch ihr Wissen um ein geheimes Verfahren oder einen geheimen Schl\"ussel Zugang haben. Die Existenz des Watermarks an sich sollte nach M\"oglichkeit f\"ur Unautorisierte nicht erkennbar sein. 
+	
+	\item[Public watermarks] sollen f\"ur jeden unter Anwendung des Dekodierungsverfahrens lesbar sein. Sie sind somit ein \"offentlicher \"ubertragungskanal, da das Verfahren transparent gestaltet ist.
+	
+\end{description}
+
+\section{Anwendungsgebiete}
+
+Digitale Wasserzeichen erfreuen sich zunehmender Beliebtheit seitdem es m\"oglich ist praktisch kostenlos perfekte digitale Kopien von Audio, Video, Bildern und Texten herzustellen\cite{mintzer1997effective}. Indem in mediale Daten Wasserzeichen eingebracht werden, wird Urheberschaft kenntlich gemacht und Copyrightanliegen k\"onnen verfolgt werden. In Bildern wird ein Wasserzeichen eingebracht, das nicht sichtbar ist, trotzdem bei Bedarf aus dem Bild eindeutig extrahiert werden kann. Somit kann \"uberpr\"uft werden, ob Bilder unlizenziert Verwendung finden. In Musikdateien erm\"oglichen individuelle Wasserzeichen zu jedem Track den urspr\"unglichen K\"aufer ausfindig zu machen, seitdem es Dank des MP3-Komprimierungsverfahrens m\"oglich geworden ist Musikdateien in geringer Datengr\"oße und dennoch guter Qualit\"at problemlos (und oftmals illegal) durch das Internet zu kopieren. Bei Videodaten kann festgestellt werden, ob diese nachtr\"aglich ver\"andert wurden (bei Beweisaufnahmen etwa). 
+
+In den Anfangszeiten der digitalen Wasserzeichen wurden auch \"uberlegungen angestellt wie die aufkommenden DVDs so gekennzeichnet werden k\"onnten, dass eine Kopierung nur im Rahmen des erlaubten Copyrights stattfindet\cite{petitcolas1999information}. Die Idee war alle DVD Player so zu programmieren, dass sie keine Kopien von kommerziellen Inhalten anfertigen. TV-Ausstrahlungen w\"urden hingegen so gekennzeichnet, dass sie genau einmal kopiert werden k\"onnten. Private Aufnahmen w\"aren unlimitiert kopierbar. 
+
+Jedoch existieren nur wenige Verfahren, die Digital/Analog Wandlung\index{DA-Wandlung} \"uberstehen. Dementsprechend wenig Konzepte bringen Watermarks in analogen Audiosignalen zur Anwendung (ein Beispiel w\"are \cite{chang2012location}). Es w\"are aber denkbar, dass mittels einer effektiven Methode zum Beispiel Radio- und Fernseh\"ubertragungen mit zus\"atzlichen Informationen erweitert werden, die \"uber die akustische Ebene nicht nur dem eigentlichen Empfangsger\"at zug\"anglich gemacht werden.
+
+\section{Ziele}
+
+In dieser Arbeit wird versucht ein transparentes Watermarkingverfahren f\"ur digitale Audiosignale umzusetzen, welches die \"ubertragung \"uber eine analoge \"ubertragungsstrecke (etwa Luft) \"ubersteht. Damit k\"onnten Metadaten direkt in Audiosignalen untergebracht und erhalten werden, auch wenn sie \"uber ein Lautsprechersystem abgespielt werden. Entsprechende Empfangsger\"at (z.B. ein Handy) k\"onnten dann das Signal aufnehmen und die darin enthaltenen Daten wieder rekonstruieren. Ein denkbarer Anwendungsfall w\"aren etwa Metadaten \"uber das Programm eines Radiosenders. Verfahren zum Urheberrechtsschutz sind im aktuellen Stand der Technik weit ausgereift. Hingegen wurde bisher nur wenig Augenmerkt auf die Resistenz bei DA/AD Wandlung gelegt, da dies zur Beseitigung der Copyright-Watermarks kaum ein angewandter Angriffsvektor ist. Die Auswirkungen auf die resultierende Qualit\"at sind in der Regel zu massiv. 
+
+Diese Arbeit st\"utzt sich vor allem auf das von Shijun Xiang\cite{xiang2007robust} vorgeschlagene Audio-Watermarkingverfahren f\"ur DA/AD-Wandlung. Dokumentiert ist hier die Implementierung dieser sowie deren Erweiterungen und Modifikationen. 
+
+

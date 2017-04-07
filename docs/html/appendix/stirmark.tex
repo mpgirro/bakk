@@ -1,0 +1,48 @@
+\chapter{Stirmark for Audio Testautomation}
+\label{ch:stirmarkaudio}
+
+Das Verlangen der \textit{Stirmark for Audio} API nach nicht näher definierten Streams kann problematisch sein. Exemplarisch sei hier deswegen ein kurzes Bash-Skript gebracht, das dessen Verwendung illustrieren soll:
+      
+\lstset{
+	escapeinside={\%*}{*)},
+}  
+\begin{lstlisting}[language=bash,
+				   caption=Anwendungsbeispiel für Stirmark for Audio,
+				   captionpos=b]
+#!/usr/bin/env bash
+
+streamfile="teststream"
+tooldir="../bin" # smfa2 and read_write_stream binary location
+
+if [ $# -ne 3 ] ; then
+   echo "usage: ./stirmark_test <testfile> <samplerate> <channels>"
+   exit 1
+fi
+
+testfile=$1
+samplerate=$2
+channels=$3
+
+attack_list=( "AddDynNoise:20", "AddSinus:900 1300", "Invert" )
+			
+# first convert the audio file to a stream
+$tooldir/read_write_stream -f $testfile -c $channels > $streamfile
+ 
+# run all attacks and convert results to audiofiles
+for attack in "${attack_list[@]}" ; do
+   attack_name=${attack%%:*}
+   attack_param=${attack#*:}
+   $tooldir/smfa2 --$attack_name $attack_param -s $samplerate < $streamfile \
+     | $tooldir/read_write_stream -p -s $samplerate -c $channels -f \
+     ${testfile%.wav}-attacked-$attack_name-${attack_param// /-}.wav
+done
+\end{lstlisting}
+
+
+
+
+
+
+
+
+

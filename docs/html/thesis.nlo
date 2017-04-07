@@ -1,0 +1,38 @@
+\nomenclatureentry{a$L_m$@[{$L_m$}]\begingroup Message-Length\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$L_c$@[{$L_c$}]\begingroup Codeword-Length\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$L_w$@[{$L_w$}]\begingroup Watermark-Length\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$\mbox{sync}$@[{$\mbox{sync}$}]\begingroup Synchronisations-Code\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$L_s$@[{$L_s$}]\begingroup Synchronisations-Code-Length\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$S$@[{$S$}]\begingroup Subband\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$E$@[{$E$}]\begingroup Subband Energy\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aSNR@[{SNR}]\begingroup Signal-Rauschabstand\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$N_E$@[{$N_E$}]\begingroup Subband-Length\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$D_k$@[{$D_k$}]\begingroup DWT-Level\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$N_s$@[{$N_s$}]\begingroup Sample-Section-Length\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$A$@[{$A$}]\begingroup Energieniveaudifferenz\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$B$@[{$B$}]\begingroup Energieniveaudifferenz\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$f_s$@[{$f_s$}]\begingroup Abtastfrequenz\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$L_p$@[{$L_p$}]\begingroup Package-Length\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a${f}_{w}$@[{${f}_{w}$}]\begingroup Wavelet-Funktion\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a${T}_{s}$@[{${T}_{s}$}]\begingroup Synccode-Threshold\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aECC@[{ECC}]\begingroup Error Correcting Code\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aODG@[{ODG}]\begingroup Objective Difference Grade\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aMOS@[{MOS}]\begingroup Mean Opinion Score\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$\mbox{wmk}$@[{$\mbox{wmk}$}]\begingroup Watermark\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aDA@[{DA}]\begingroup Digital-Analog\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aAD@[{AD}]\begingroup Analog-Digital\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a${K}_{m}$@[{${K}_{m}$}]\begingroup Bitkapazität von $k$ Sekunden\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a${f}_{max}$@[{${f}_{max}$}]\begingroup Höchste Frequenz\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$\{c_i\}$@[{$\{c_i\}$}]\begingroup DWT-Koeffizienten\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$\{a_i\}$@[{$\{a_i\}$}]\begingroup Bitsequenz\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$\mbox{ES}$@[{$\mbox{ES}$}]\begingroup Embedding Strength\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a$\mbox{esf}$@[{$\mbox{esf}$}]\begingroup Embedding Strength Factor\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a${N}_{BZ}$@[{${N}_{BZ}$}]\begingroup Bufferzone-Sample-Length\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{a${N}_{F}$@[{${N}_{F}$}]\begingroup Frame-Samples-Length\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aPEAQ@[{PEAQ}]\begingroup Perceptual Evaluation of Audio Quality\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aBER@[{BER}]\begingroup Bit error rate\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aEMB@[{EMB}]\begingroup Erroneous message bits\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aPL@[{PL}]\begingroup Package loss\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aDM@[{DM}]\begingroup Damaged message\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aTSM@[{TSM}]\begingroup time scaling modification\nomeqref {C.0}|nompageref}{45}
+\nomenclatureentry{aWMD@[{WMD}]\begingroup wave magnitude distortion\nomeqref {C.0}|nompageref}{45}

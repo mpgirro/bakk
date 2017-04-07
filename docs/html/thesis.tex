@@ -1,0 +1,282 @@
+\ifcsname HCode\endcsname%
+\documentclass{report}
+\else
+\documentclass[a4paper,11pt,twoside]{memoir}
+\chapterstyle{veelo}
+\fi
+
+
+
+%\usepackage{TUINFDA}
+
+\usepackage{url}
+\usepackage{hyperref}					% links in pdf
+\usepackage{graphicx}            			% Figures
+\usepackage{verbatim}            			% Code-Environment
+\usepackage[lined,linesnumbered,algochapter]{algorithm2e} % Algorithm-Environment
+\usepackage{amsmath}
+\usepackage{CJKutf8}				% Japanische, Chinesisch, Koreanisch
+\usepackage{wrapfig}
+\usepackage{listings}				% source code listings
+\usepackage[toc]{glossaries}
+\usepackage[intoc]{nomencl}
+\usepackage{multicol}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+\usepackage{tablefootnote}
+\usepackage{pgf}	
+\usepackage{svg}				
+\usepackage{tikz}					% tikz graphics
+\usetikzlibrary{arrows,automata}
+\usepackage{algorithm2e}
+
+\usepackage{ngerman}
+\usepackage[ngerman]{babel}\usepackage{bibgerm,cite}       % Deutsche Bezeichnungen, Automatisches Zusammenfassen von Literaturstellen
+\usepackage[ngerman]{varioref}  % Querverweise
+% to use the german charset include cp850 for MS-DOS, ansinew for Windows and latin1 for Linux.
+% \usepackage[latin1]{inputenc}
+
+%%%%%%%%%%%%%%
+%%% DRAFT WATERMARK -- remove when finished!
+%\usepackage[firstpage]{draftwatermark}
+%\SetWatermarkText{DRAFT}
+%\SetWatermarkScale{5}
+%%%%%%%%%%%%%%
+
+% Define Program Code Styles
+\lstdefinestyle{customc}{
+  belowcaptionskip=1\baselineskip,
+  breaklines=true,
+%  frame=L,
+  xleftmargin=\parindent,
+  language=C,
+  showstringspaces=false,
+  basicstyle=\footnotesize\ttfamily,
+  keywordstyle=\bfseries\color{green!40!black},
+  commentstyle=\itshape\color{purple!40!black},
+  identifierstyle=\color{blue},
+  stringstyle=\color{orange},
+}
+
+%\renewcommand*{\glspostdescription}{} % remove dots at the end of each entry
+
+%\setcounter{secnumdepth}{3}
+%\setsecnumdepth{subsection} % the above line does not seem to work with memoir class
+\setcounter{tocdepth}{2}
+\setlength\parindent{0pt}
+\setlength{\columnsep}{1.5cm}
+
+%\makeglossaries
+%\makeindex
+%\makenomenclature
+
+%\thesisbetreins{Dipl.-Ing. Mag. Dr. Matthias Zeppelzauer}
+
+
+% define page numbering styles
+%\makepagestyle{numberCorner}
+%\makeevenfoot{numberCorner}{\thepage}{}{}
+%\makeoddfoot{numberCorner}{}{}{\thepage}
+
+% define custom macros for specific formats or names
+%\newcommand{\pageintentionallyleftblank}[1]{\cleartooddpage[\vspace*{\fill} #1 \vspace*{\fill}]}
+
+%\renewcommand{\listalgorithmcfname}{Quellcodes}
+%\renewcommand{\lstlistlistingname}{Algorithmenverzeichnis}
+\renewcommand{\nomname}{Abk\"urzungsverzeichnis}
+\renewcommand*\nompreamble{\begin{multicols}{2}}
+\renewcommand*\nompostamble{\end{multicols}}
+
+% define newline hight between two paragraphs - by default there is none
+%\setlength{\parskip}{0.15in}
+
+\begin{document}
+
+
+%\captionnamefont{\bfseries}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   FRONTMATTER    %%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\frontmatter
+%\pagenumbering{roman}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   TITLEPAGES    %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% the german title page is required as first page
+%\include{titlepage}
+
+%######################
+\begin{titlepage}
+\begin{center}
+
+% Upper part of the page. The '~' is needed because \\
+% only works if a paragraph has started.
+
+%\title{Digital Audio-Watermarking\\f\"ur analoge \"Ubertragungsstrecken}
+%\author{Maximilian Irro}
+
+{\Huge Digital Audio-Watermarking}\\[0.5cm]
+
+{\huge  f\"ur analoge \"Ubertragungsstrecken}\\[1.5cm]
+
+\textsc{\huge BACHELORARBEIT}\\[1.5cm]
+
+von\\[1.5cm]
+ 
+{\Large Maximilian Irro }\\[0.4cm]
+{\large Matrikelnummer 1026859 }\\[1.5cm]
+
+{\large unter der Betreuung von\\
+Dipl.-Ing. Mag. Dr. Matthias Zeppelzauer}\\[1.5cm]
+
+{\large
+Institut f\"ur Softwaretechnik und Interaktive Systeme\\ 
+Interactive Media Systems Group\\
+Fakult\"at f\"ur Informatik\\
+Technische Universit\"at Wien}
+
+\end{center}
+\end{titlepage}
+
+% Im HTML CODE ersetzen mit:
+%<div class="center" >
+%    <p id="thesis_title">Digital Audio-Watermarking</p>
+%    <p id="thesis_subtitle">für analoge Übertragungsstrecken</p>
+%    <p id="thesis_kind">BACHELORARBEIT</p>
+%    <p id="title_von">von</p>
+%    <p id="thesis_author">Maximilian Irro</p>
+%    <p id="author_matrnr">Matrikelnummer 1026859</p>
+%    <p id="thesis_betreuer">
+%        unter der Betreuung von<br />
+%        Dipl.-Ing. Mag. Dr. Matthias Zeppelzauer
+%    </p>
+%    <p id="institut">
+%        Institut für Softwaretechnik und Interaktive Systeme<br />
+%        Interactive Media Systems Group<br />
+%        Fakultät für Informatik<br />
+%        Technische Universität Wien
+%    </p>
+%</div>
+%#####################
+
+%\maketitle
+
+% an english translation may follow
+%\include{titlepage_en} % optional
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   ERKLAERUNG DER SELBSTAENDIGKEIT   %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{This page intentionally left blank.}
+\selectlanguage{ngerman}
+\input{chapters/erklaerung}
+%\selectlanguage{english}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   ACKNOWLEDGEMENTS    %%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pageintentionallyleftblank{\noindent This page intentionally has nothing but text\\
+%explaining why this page has nothing but text\\
+%explaining that this page would otherwise have been left blank\\
+%and would otherwise have been left blank.}
+% optional acknowledgements may be included in german or in english
+\input{chapters/danksagung} 		% optional
+%\input{chapters/acknowledgements}	% optional
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   ABSTARCT    %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\pageintentionallyleftblank{This page intentionally left blank.}
+\input{chapters/abstract_en}
+\selectlanguage{ngerman}
+
+%\pageintentionallyleftblank{Diese Seite wurde absichtlich leer gelassen.}
+\input{chapters/abstract_de}
+\selectlanguage{english}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   CONTENTS    %%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% uncomment to set document language to german (results in "Inhaltsverzeichnis", "Kapitel", "Abbildung", etc. instead of "Contents", "Chapter", and "Figure"), otherwise the document's language is english
+\selectlanguage{ngerman}
+
+\tableofcontents*
+\listoffigures*
+\listoftables*
+
+%\pageintentionallyleftblank{Gadawyd y tydalen yma un wag ar bwrpas.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%   MAINMATTER    %%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\mainmatter
+%\pagenumbering{arabic}
+%\pagestyle{numberCorner}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{\begin{CJK}{UTF8}{min}這頁故意地被留下空白\end{CJK}}
+\input{chapters/einfuehrung}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{\begin{CJK}{UTF8}{min}このページは計画的にブランクを残ている\end{CJK}}
+\input{chapters/theorie}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{Pa\^{g}on intence vaka.}
+\input{chapters/methode}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{THIS PAGE ACCIDENTALLY PRINTED ON!}
+\input{chapters/analyse}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{Esta página ha sido expresamente dejada en blanco.}
+\input{chapters/ausblick}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% BACKMATTER %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+
+\begin{appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{Page intentionnellement laissée vierge.}
+\input{appendix/peaq}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{Lorem Ipsum}
+%\input{appendix/beweise}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{Lorem Ipsum}
+\input{appendix/tutorial}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\pageintentionallyleftblank{Lorem Ipsum}
+\input{appendix/stirmark}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{appendix}
+
+%\bibliographystyle{plain} % alphabetically I think
+\bibliographystyle{ieeetr} % order by appearance
+\nocite{*} % include all references, even those not cited
+%\pageintentionallyleftblank{Denna sida har avsiktligen l\"amnats blank.}
+\bibliography{references}
+
+%!TEX encoding = UTF-8 Unicode\pageintentionallyleftblank{Lorem Ipsum.}
+%\include{glossar}
+%\printglossary[title=Glossar]
+\include{nomenclature}
+\printnomenclature[4em]
+
+%\pageintentionallyleftblank{De Seitn homs obsichtlich la lossn.}
+%\printindex
+
+
+\end{document}

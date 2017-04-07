@@ -1,0 +1,215 @@
+@import url(http://fonts.googleapis.com/css?family=Open%20Sans);
+/*@import url(http://fonts.googleapis.com/css?family=Droid%20Sans);*/
+@import url(http://fonts.googleapis.com/css?family=Lato);
+
+body {
+    /* Serif options */
+    /*font-family: "Times New Roman", Times, serif;*/
+    /*font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif    */
+
+    /*Sans Serif options */
+    /*font-family: "Helvetica", Arial, Freesans, clean, sans-serif;*/
+    /*font-family: "Helvetica Neue", Arial, Freesans, clean, sans-serif;*/
+	/*font-family: "Lato";*/
+	/*font-family: "Garamond", "Helvetica Neue", "Lato";*/
+	/*font-family: "Droid Sans";*/
+    font-family: "Open Sans", "Helvetica Neue", "Lucida Sans Unicode";
+    /*font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;*/
+    /*font-family: "Trebuchet MS", Helvetica, sans-serif;*/
+    /*font-family: Verdana, Geneva, sans-serif;*/
+    /*font-family: Tahoma, Geneva, sans-serif;*/
+    /*font-family: Baskerville, 'Times New Roman', Times, serif;*/
+
+
+    padding:1em;
+    font-size: 13px;
+    font-weight:300;    
+    line-height: 20px;
+    margin:10em;
+    max-width:42em;
+    background:#fefefe;
+    color:#333;
+	text-align: justify;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    margin: 2em 0px 15px 0px;
+}
+
+h1 {
+    color: #000;
+    font-size: 2em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+}
+
+h2 {
+    font-size: 1.8em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+}
+
+h3 {
+    font-size: 1.6em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+}
+
+h4 {
+    font-size: 1.3em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+}
+
+h5 {
+    font-size: 1.3em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+}
+
+h6 {
+    color: #777777;
+    background-color: inherit;
+    font-size: 1.3em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+}
+
+hr {
+    height: 0.2em;
+    border: 0;
+    color: #CCCCCC;
+    background-color: #CCCCCC;
+}
+
+p, blockquote, ul, ol, dl, li, table, pre {
+    margin: 15px 0;
+}
+
+code, pre {
+    border-radius: 3px;
+    background-color: #F8F8F8;
+    color: inherit;
+}
+
+code {
+    border: 1px solid #EAEAEA;
+    margin: 0 2px;
+    padding: 0 5px;
+}
+
+pre {
+    border: 1px solid #CCCCCC;
+    line-height: 1.25em;
+    overflow: auto;
+    padding: 6px 10px;
+}
+
+pre > code {
+    border: 0;
+    margin: 0;
+    padding: 0;
+}
+
+a, a:visited {
+    color: #4183C4;
+    background-color: inherit;
+    text-decoration: none;
+}
+
+img {
+    max-width: 100%;
+}
+
+dt.description{
+	font-weight: bold;
+}
+
+h2.chapterHead, h2.appendixHead {
+	line-height:150%;
+}
+
+tr#TBL-1-1-, tr#TBL-2-1-, tr#TBL-3-1-, tr#TBL-4-1- {
+	font-weight: bold;
+}
+
+.sectionToc{
+	margin-left: 1em;
+}
+
+.subsectionToc{
+	margin-left: 2em;
+}
+
+div#left-col {
+	width: 150px;
+    float: left;
+    position: fixed;
+}
+
+div#thesis-col {
+	margin: 0 auto;
+	width:42em;
+}
+
+div#titlepage {
+	font-size: 1.5em;
+}
+
+dl.thenomenclature {
+	width: 100%;
+	overflow: hidden;
+}
+
+dt.thenomenclature{
+	float: left;
+	width: 10%;
+}
+
+dd.thenomenclature{ 
+	float: left;
+	width: 80%;
+}
+
+p#thesis_title {
+    font-size: 2.5em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+}
+
+p#thesis_subtitle {
+	font-size: 2.1em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+
+}
+
+p#thesis_kind {
+	font-size: 1.5em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+	margin-top: 3em;
+	margin-bottom: 3em;
+}
+
+p#title_von {
+    font-size: 1.2em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+	margin-bottom: 3em;
+}
+
+p#thesis_author {
+	font-size: 1.6em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+}
+
+p#author_matrnr {
+	font-size: 1.3em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+    margin-top: -0.5em;
+}
+
+p#thesis_betreuer {
+    font-size: 1.2em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+    margin-top: 3em;
+	margin-bottom: 3em;
+}
+
+p#institut {
+    font-size: 1.2em;
+	font-family: "Garamond", "Lato", "Times New Roman";
+	margin-bottom: 3em;
+}

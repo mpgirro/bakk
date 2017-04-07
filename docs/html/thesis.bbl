@@ -1,0 +1,218 @@
+\begin{thebibliography}{10}
+
+\bibitem{arnold2000audio}
+M.~Arnold, ``{Audio Watermarking: Features, Applications, and Algorithms.},''
+  in {\em IEEE International Conference on Multimedia and Expo (II)},
+  pp.~1013--1016, 2000.
+
+\bibitem{mintzer1997effective}
+F.~Mintzer, G.~W. Braudaway, and M.~M. Yeung, ``Effective and ineffective
+  digital watermarks,'' in {\em Image Processing, 1997. Proceedings.,
+  International Conference on}, vol.~3, pp.~9--12, IEEE, 1997.
+
+\bibitem{petitcolas1999information}
+F.~A. Petitcolas, R.~J. Anderson, and M.~G. Kuhn, ``Information hiding-a
+  survey,'' {\em Proceedings of the IEEE}, vol.~87, no.~7, pp.~1062--1078,
+  1999.
+
+\bibitem{chang2012location}
+D.~Chang, X.~Zhang, Q.~Liu, G.~Gao, and Y.~Wu, ``{Location based robust audio
+  watermarking algorithm for social TV system},'' in {\em Advances in
+  Multimedia Information Processing--PCM 2012}, pp.~726--738, Springer, 2012.
+
+\bibitem{xiang2007robust}
+S.~Xiang and J.~Huang, ``{Robust Audio Watermarking Against the D/A and A/D
+  Conversions},'' {\em arXiv preprint arXiv:0707.0397}, 2007.
+
+\bibitem{bassia2001robust}
+P.~Bassia, I.~Pitas, and N.~Nikolaidis, ``Robust audio watermarking in the time
+  domain,'' {\em Multimedia, IEEE Transactions on}, vol.~3, no.~2,
+  pp.~232--241, 2001.
+
+\bibitem{lie2006robust}
+W.-N. Lie and L.-C. Chang, ``Robust and high-quality time-domain audio
+  watermarking based on low-frequency amplitude modification,'' {\em
+  Multimedia, IEEE Transactions on}, vol.~8, no.~1, pp.~46--59, 2006.
+
+\bibitem{tang2005digital}
+X.~Tang, Y.~Niu, H.~Yue, and Z.~Yin, ``A digital audio watermark embedding
+  algorithm,'' {\em International Journal of Information Technology}, vol.~11,
+  no.~12, pp.~24--31, 2005.
+
+\bibitem{lee2000digital}
+S.-K. Lee and Y.-S. Ho, ``Digital audio watermarking in the cepstrum domain,''
+  {\em Consumer Electronics, IEEE Transactions on}, vol.~46, no.~3,
+  pp.~744--750, 2000.
+
+\bibitem{li2000transparent}
+X.~Li and H.~H. Yu, ``Transparent and robust audio data hiding in cepstrum
+  domain,'' in {\em Multimedia and Expo, 2000. ICME 2000. 2000 IEEE
+  International Conference on}, vol.~1, pp.~397--400, IEEE, 2000.
+
+\bibitem{dong2004data}
+X.~Dong, M.~F. Bocko, and Z.~Ignjatovic, ``Data hiding via phase manipulation
+  of audio signals,'' in {\em Acoustics, Speech, and Signal Processing, 2004.
+  Proceedings.(ICASSP'04). IEEE International Conference on}, vol.~5,
+  pp.~V--377, IEEE, 2004.
+
+\bibitem{ansari2004data}
+R.~Ansari, H.~Malik, and A.~Khokhar, ``Data-hiding in audio using
+  frequency-selective phase alteration,'' in {\em Acoustics, Speech, and Signal
+  Processing, 2004. Proceedings.(ICASSP'04). IEEE International Conference on},
+  vol.~5, pp.~V--389, IEEE, 2004.
+
+\bibitem{lei2012multipurpose}
+B.~Lei and Y.~Soon, ``A multipurpose audio watermarking algorithm with
+  synchronization and encryption,'' {\em Journal of Zhejiang University SCIENCE
+  C}, vol.~13, no.~1, pp.~11--19, 2012.
+
+\bibitem{polikar1996engineer}
+R.~Polikar, ``{The Engineer's Ultimate Guide To Wavelet Analysis-The Wavelet
+  Tutorial},'' {\em available at http://www. public. iastate. edu/\~{}
+  rpolikar/WAVELETS/WTtutorial. html}, 1996.
+
+\bibitem{shannon1949communication}
+C.~E. Shannon, ``Communication in the presence of noise,'' {\em Proceedings of
+  the IRE}, vol.~37, no.~1, pp.~10--21, 1949.
+
+\bibitem{shannon2001mathematical}
+C.~E. Shannon, ``A mathematical theory of communication,'' {\em ACM SIGMOBILE
+  Mobile Computing and Communications Review}, vol.~5, no.~1, pp.~3--55, 2001.
+
+\bibitem{huang2002blind}
+J.~Huang, Y.~Wang, and Y.~Q. Shi, ``A blind audio watermarking algorithm with
+  self-synchronization,'' in {\em Circuits and Systems, 2002. ISCAS 2002. IEEE
+  International Symposium on}, vol.~3, pp.~627--630, IEEE, 2002.
+
+\bibitem{petrovic1999data}
+R.~Petrovic, J.~M. Winograd, K.~Jemili, and E.~Metois, ``Data hiding within
+  audio signals,'' in {\em Telecommunications in Modern Satellite, Cable and
+  Broadcasting Services, 1999. 4th International Conference on}, vol.~1,
+  pp.~88--95, IEEE, 1999.
+
+\bibitem{wu2005efficiently}
+S.~Wu, J.~Huang, D.~Huang, and Y.~Q. Shi, ``Efficiently self-synchronized audio
+  watermarking for assured audio data transmission,'' {\em Broadcasting, IEEE
+  Transactions on}, vol.~51, no.~1, pp.~69--76, 2005.
+
+\bibitem{barker1953group}
+R.~Barker, ``Group synchronizing of binary digital systems,'' {\em
+  Communication theory}, pp.~273--287, 1953.
+
+\bibitem{bose1960class}
+R.~C. Bose and D.~K. Ray-Chaudhuri, ``On a class of error correcting binary
+  group codes,'' {\em Information and control}, vol.~3, no.~1, pp.~68--79,
+  1960.
+
+\bibitem{reed1960polynomial}
+I.~S. Reed and G.~Solomon, ``Polynomial codes over certain finite fields,''
+  {\em Journal of the Society for Industrial \& Applied Mathematics}, vol.~8,
+  no.~2, pp.~300--304, 1960.
+
+\bibitem{gallager1962low}
+R.~G. Gallager, ``Low-density parity-check codes,'' {\em Information Theory,
+  IRE Transactions on}, vol.~8, no.~1, pp.~21--28, 1962.
+
+\bibitem{rec1996p}
+I.~Rec, ``{P. 800: Methods for subjective determination of transmission
+  quality},'' {\em International Telecommunication Union, Geneva}, 1996.
+
+\bibitem{rec1998bs}
+I.~Rec, ``Bs. 1387, method for objective measurements of perceived audio
+  quality,'' {\em International Telecommunications Union, Geneva, Switzerland},
+  1998.
+
+\bibitem{al2011dwt}
+A.~Al-Haj, A.~Mohammad, and L.~Bata, ``{DWT-Based Audio Watermarking.},'' {\em
+  International Arab Journal of Information Technology (IAJIT)}, vol.~8, no.~3,
+  2011.
+
+\bibitem{kabal2002examination}
+P.~Kabal, ``{An examination and interpretation of ITU-R BS. 1387: Perceptual
+  evaluation of audio quality},'' {\em TSP Lab Technical Report, Dept.
+  Electrical \& Computer Engineering, McGill University}, pp.~1--89, 2002.
+
+\bibitem{campeanu2005peaq}
+``{PEAQ - An objective method to assess the perceptual quality of audio
+  compressed files}, author={C{\^a}mpeanu, Dinu and C{\^a}mpeanu, Andrei},'' in
+  {\em Proceedings of International Symposium on System Theory, SINTES},
+  vol.~12, pp.~487--492, 2005.
+
+\bibitem{steinebach2002audio}
+M.~Steinebach, A.~Lang, J.~Dittmann, and C.~Neubauer, ``{Audio watermarking
+  quality evaluation: robustness to DA/AD processes},'' in {\em Information
+  Technology: Coding and Computing, 2002. Proceedings. International Conference
+  on}, pp.~100--103, IEEE, 2002.
+
+\bibitem{steinebach2011re}
+M.~Steinebach, S.~Zmudzinski, and S.~N{\"u}rnberger, ``Re-synchronizing audio
+  watermarking after non-linear time stretching,'' in {\em IS\&T/SPIE
+  Electronic Imaging}, pp.~78800I--78800I, International Society for Optics and
+  Photonics, 2011.
+
+\bibitem{petitcolas2000watermarking}
+F.~A. Petitcolas, ``Watermarking schemes evaluation,'' {\em Signal Processing
+  Magazine, IEEE}, vol.~17, no.~5, pp.~58--64, 2000.
+
+\bibitem{petitcolas2004stirmark}
+F.~A. Petitcolas, ``Stirmark benchmark 4.0.''
+  \url{http://www.petitcolas.net/fabien/Watermarking/stirmark/}, 2004.
+
+\bibitem{steinebach2002stirmark}
+M.~Steinebach, A.~Lang, and J.~Dittmann, ``Stirmark benchmark: audio
+  watermarking attacks based on lossy compression,'' in {\em Electronic Imaging
+  2002}, pp.~79--90, International Society for Optics and Photonics, 2002.
+
+\bibitem{stirmarkforaudio}
+A.~Lang, ``{Stirmark for Audio}.''
+  \url{http://sourceforge.net/projects/stirmark/}.
+
+\bibitem{petitcolas2001public}
+F.~A. Petitcolas, M.~Steinebach, F.~Raynal, J.~Dittmann, C.~Fontaine, and
+  N.~Fates, ``{A public automated web-based evaluation service for watermarking
+  schemes: StirMark benchmark},'' in {\em Proceedings of SPIE}, vol.~4314,
+  pp.~575--584, 2001.
+
+\bibitem{lang2004stirmark}
+A.~Lang, M.~Holley, and J.~Dittmann, ``{StirMark for Audio: Unterschiede
+  zwischen Musik und Sprache},'' {\em Von eLearning bis ePayment}, 2004.
+
+\bibitem{huber2006pemo}
+R.~Huber and B.~Kollmeier, ``{PEMO-Q -- 8212; A New Method for Objective Audio
+  Quality Assessment Using a Model of Auditory Perception},'' {\em Audio,
+  Speech, and Language Processing, IEEE Transactions on}, vol.~14, no.~6,
+  pp.~1902--1911, 2006.
+
+\bibitem{kraetzer2006transparency}
+C.~Kraetzer, J.~Dittmann, and A.~Lang, ``Transparency benchmarking on audio
+  watermarks and steganography,'' in {\em Electronic Imaging 2006},
+  pp.~60721L--60721L, International Society for Optics and Photonics, 2006.
+
+\bibitem{nishimura2013objective}
+A.~Nishimura, M.~Unoki, K.~Kondo, and A.~Ogihara, ``Objective evaluation of
+  sound quality for attacks on robust audio watermarking,'' in {\em Proceedings
+  of Meetings on Acoustics}, vol.~19, p.~030052, Acoustical Society of America,
+  2013.
+
+\bibitem{kondo2012use}
+K.~Kondo, ``On the use of objective quality measures to estimate watermarked
+  audio quality,'' in {\em Intelligent Information Hiding and Multimedia Signal
+  Processing (IIH-MSP), 2012 Eighth International Conference on}, pp.~126--129,
+  IEEE, 2012.
+
+\bibitem{thiede2000peaq}
+T.~Thiede, W.~C. Treurniet, R.~Bitto, C.~Schmidmer, T.~Sporer, J.~G. Beerends,
+  and C.~Colomes, ``{PEAQ - The ITU Standard for Objective Measurement of
+  Perceived Audio Quality},'' {\em J. Audio Eng. Soc}, vol.~48, no.~1/2,
+  pp.~3--29, 2000.
+
+\bibitem{xiang2007time}
+S.~Xiang, J.~Huang, and R.~Yang, ``Time-scale invariant audio watermarking
+  based on the statistical features in time domain,'' in {\em Information
+  Hiding}, pp.~93--108, Springer, 2007.
+
+\bibitem{petitcolas1998attacks}
+F.~A. Petitcolas, R.~J. Anderson, and M.~G. Kuhn, ``Attacks on copyright
+  marking systems,'' in {\em Information Hiding}, pp.~218--238, Springer, 1998.
+
+\end{thebibliography}

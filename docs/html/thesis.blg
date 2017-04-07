@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d (TeX Live 2012)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: thesis.aux
+The style file: ieeetr.bst
+A level-1 auxiliary file: nomenclature.aux
+Database file #1: references.bib
+Warning--empty author in campeanu2005peaq
+Warning--can't use both volume and number fields in nishimura2013objective
+You've used 43 entries,
+            1876 wiz_defined-function locations,
+            720 strings with 11070 characters,
+and the built_in function-call counts, 12874 in all, are:
+= -- 1330
+> -- 390
+< -- 0
++ -- 149
+- -- 106
+* -- 891
+:= -- 1711
+add.period$ -- 43
+call.type$ -- 43
+change.case$ -- 43
+chr.to.int$ -- 0
+cite$ -- 45
+duplicate$ -- 695
+empty$ -- 1278
+format.name$ -- 106
+if$ -- 3186
+int.to.chr$ -- 0
+int.to.str$ -- 43
+missing$ -- 41
+newline$ -- 132
+num.names$ -- 42
+pop$ -- 156
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 503
+stack$ -- 0
+substring$ -- 1015
+swap$ -- 298
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 2
+while$ -- 145
+width$ -- 45
+write$ -- 435
+(There were 2 warnings)

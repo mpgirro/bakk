@@ -30,11 +30,13 @@ body.madoko {
   }
     
   .sidepanel {
-    width   : 14rem; 
+    /*width   : 14rem; */
     position: fixed;
     top     : 1rem;
     max-height: 90%;
     overflow-y: auto;
+    left: 1rem;
+    right: 1rem;
   }
   
   .mainpanel, .footnotes, .titleblock {

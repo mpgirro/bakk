@@ -1323,6 +1323,20 @@ bis $1.1 \cdot {N}_{s}$ durchgetestet und nach Synchronisations-Codes \index
 {Synchronisations-Code} gesucht. Algorithmus [#alg-resync] illustriert diesen
 Vorgang.
 
+<!--
+TODO: Der Algorithmus geht weder in PDF noch HTML wirklich korrekt
+      Im Forum ist vorgeschlagen:
+
+      ~ Snippet
+      \begin{algorithm}
+      \caption{My algorithm}\label{euclid}
+      \begin{algorithmic}[1]
+      ...
+
+      Damit wird es im HTML auch nicht gscheit interpretiert, 
+      aber diesen ~ Algorithm Block den ich hier verwende scheint es ja gar nicht zu geben
+-->
+
 ~ Begin Algorithm { #alg-resync; caption: "`sync` Erkennung in der Resynchronisationsphase" }
 ~ Begin Snippet
 \SetKwData{Framelen}{framelen}

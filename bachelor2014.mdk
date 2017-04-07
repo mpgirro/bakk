@@ -1,7 +1,7 @@
 [INCLUDE=style/tuinfda]
 
-Title           : Digital Audio-Watermarking 
-Subtitle        : für analoge Übertragungsstrecken
+Title           : Digital Audio-Watermarking für analoge Übertragungsstrecken
+<!--Subtitle        : für analoge Übertragungsstrecken-->
 Author          : Maximilian Irro
 Email           : max@irro.at
 Copyright       : Maximilian Irro, 2014
@@ -10,8 +10,12 @@ ThesisType      : BACHELORARBEIT
 Matrikelnummer  : 1026859
 ThesisAdvisor   : Dipl.-Ing. Mag. Dr. Matthias Zeppelzauer
 
-Title Note      : Bachelorarbeit
-Title Footer    : 24 Juni 2014
+Title Note      : BACHELORARBEIT
+Title Footer    : 
+  24 Juni 2014 &br;&br;
+  Institut für Softwaretechnik und Interaktive Systeme &br;
+  Interactive Media Systems Group &br;
+  Technische Universität Wien
 
 Bibliography    : bachelor2014.bib
 Cite All        : True
@@ -446,13 +450,13 @@ ist dieses Signal im Allgemeinen nicht mit dem ursprünglich aufgenommenen ident
 
 Zur Beantwortung der Frage wie das Signal verändert werden kann existieren
 verschiedene Ansätze. Es gibt Verfahren die das Signal direkt im Zeitbereich
-modifizieren [@bassia2001robust] [@lie2006robust], also konkrete Abtastpunkte
+modifizieren [@bassia2001robust;@lie2006robust], also konkrete Abtastpunkte
 des Signals direkt bearbeiten. Andere verändern die Koeffizienten der durch die
 Fouriertransformation oder die Kosinustransformation erzeugten Frequenzspektrums
 [@chang2012location], der Wavelet-Transformation [@tang2005digital] oder der
-Cepstrum-Domain[^fn-cepstrum] [@lee2000digital] [@li2000transparent]. Es
+Cepstrum-Domain[^fn-cepstrum] [@lee2000digital;@li2000transparent]. Es
 existieren auch Ansätze welche die Information durch Phasenverschiebungen
-innerhalb des Signals einbringen [@dong2004data] [@ansari2004data] oder solche
+innerhalb des Signals einbringen [@dong2004data;@ansari2004data] oder solche
 die mehrere Methoden gleichzeitig bemühen [@lei2012multipurpose]. Wir wollen
 hier die Koeffizienten der diskrete Wavelet-Transformation (DWT) eines Signals
 verändern, also die Frequenzeigenschaften der Signale beeinflussen. Aus den
@@ -907,9 +911,9 @@ werden und daraus einen Bitwert generieren.
 
 Das Problem ist nun zu erkennen wo das Signal absichtlich verändert wurde und wo
 daher tatsächlich eingebrachte Bits liegen. In der Literatur findet sich dazu
-das Konzept der Synchronisations-Codes [@xiang2007robust][@chang2012location]
-[@li2000transparent] [@ansari2004data] [@huang2002blind] [@petrovic1999data]
-[@wu2005efficiently].  Prinzipiell handelt es sich dabei um einen Mechanismus,
+das Konzept der Synchronisations-Codes [@xiang2007robust;@chang2012location;
+@li2000transparent;@ansari2004data;@huang2002blind;@petrovic1999data;
+@wu2005efficiently].  Prinzipiell handelt es sich dabei um einen Mechanismus,
 der bestimmte Bereiche eines Signals markiert. Jedem Marker folgt ein Teil der
 eigentlichen Information. Die Umsetzung der Markers kann sich durchaus von der
 eigentlichen Watermarkingmethode unterscheiden, in diesem Fall wird allerdings
@@ -960,7 +964,7 @@ eine sehr hohe *Autokorrelation* \index{Autokorrelation} besitzt. In anderen
 Worten ist `sync` (als Signal aufgefasst) sehr ähnlich zu sich selbst, weswegen
 75% Überdeckung auch zu 75% Übereinstimmung führen. Die Lösung ist für `sync`
 \index{Synchronisations-Code} ein Sequenz mit minimaler Autokorrelation zu
-wählen. In der Literatur [@chang2012location] [@lie2006robust; @huang2002blind]
+wählen. In der Literatur [@chang2012location;@lie2006robust;@huang2002blind]
 erfreuen sich die sog. *Barker-Codes* [@barker1953group] großer Beliebtheit.
 Dabei handelt es sich um 9 Zahlensequenzen von denen der längste 13 Zeichen
 umfasst, welche alle die Bedingung der Autokorrelations-Funktion:
@@ -1466,7 +1470,7 @@ Version [@stirmarkforaudio] (aktuelle v1.3.2). Auf deren Verwendung wir kurz in
 Anhang [#ch-stirmarkaudio] eingegangen, da sie sich als nicht ganz einfach
 herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine,
 weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu
-abstrahieren[@petitcolas2001public]. Eine Umsetzung dieser ist jedoch nicht
+abstrahieren [@petitcolas2001public]. Eine Umsetzung dieser ist jedoch nicht
 abzusehen.
 
 Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese
@@ -1799,9 +1803,9 @@ findet sich eine Übersicht der dabei gesammelten Erfahrungen.
 
 ## EAQUAL
 
-Das de facto Tool der Wahl in der gängigen Literatur [@xiang2007robust]
-[@kraetzer2006transparency]. *EAQUAL* (Evaluation of Audio QUALity) ist aktuell
-als Version 0.1.3alpha vorhanden, eine aktive Weiterentwicklung allerdings nicht
+Das de facto Tool der Wahl in der gängigen Literatur [@xiang2007robust;
+@kraetzer2006transparency]. *EAQUAL* (Evaluation of Audio QUALity) ist aktuell
+als Version `0.1.3alpha` vorhanden, eine aktive Weiterentwicklung allerdings nicht
 erkennbar. Der Sourcecode ist verfügbar, allerdings nur unter MS Visual C++ 6
 kompilierbar. Ein unixbasierter Makefile-Ansatz ist zwar vorhanden, nach Angaben
 der Readme allerdings nur auf einer einzigen Linux Maschine getestet worden. Auf
@@ -1821,7 +1825,7 @@ schlechter.
 ## PQevalAudio
 
 Bei PQevalAudio handelt es sich um eine frei verfügbare Implementierung von P.
-Kabald[@kabal2002examination] die allerdings nicht vollkommen Standardkonform
+Kabald [@kabal2002examination] die allerdings nicht vollkommen Standardkonform
 ist.
 
 Der Vorteil von PQevalAudio (aktuell *PQevalAudio v2r0*) ist die Verfügbarkeit
@@ -1835,7 +1839,7 @@ Audiofiles mit einer Abtastrate \index{Abtastrate} von 48kHz. Resampling (und vo
 allem Upsampling - also die Erhöhung der Abtastrate) bringt noch einmal eine
 ganz eigene Reihe von Auswirkungen für das Signal mit sich - ein Umstand der für
 die Bewertung nicht förderlich ist. Auch wenn es teilweise in der Literatur noch
-als die zuverlässigste Implementierung bezeichnet wird[@nishimura2013objective],
+als die zuverlässigste Implementierung bezeichnet wird [@nishimura2013objective],
 so zeigte die Beobachtung eine gewisse Nutzlosigkeit der Ergebnisse. Der
 ODG \index{Objective Difference Grade} ist normiert als ein Wert zwischen -4 und
 0. PQevalAudio liefert hingegen nicht selten einen positiven Wert, was eine

@@ -1,0 +1,7 @@
+- Die Überschrift der Erklärung zur Verfassung der Arbeit hat einen Zeilenumbruch. Im Original aber nicht. Warum also hier?
+- PageIntentionallyLeftBlank mit Chinesischen/Japanischen/etc Zeichen liefern TeX Fehler (zB Seite 4,12)
+- Abbildungs- und Tabellenverzeichnis sollten am besten nicht jeweils eine neue Seite starten
+- Der Algorithmus zur Resynchroninsation (Seite 23-24) ist im PDF nicht ordentlich so wie im Original, und im HTML sowieso ganz furchtbar
+- Wie macht man einen Index?
+- Wie schaltet man den <HR> unter allen Bildern, aber vor allem unter den Tabellen(!) aus?
+- Nomenklatur fehlt auch noch

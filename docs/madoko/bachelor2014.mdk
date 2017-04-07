@@ -1,0 +1,2032 @@
+[INCLUDE=style/tuinfda]
+
+Title           : Digital Audio-Watermarking für analoge Übertragungsstrecken
+<!--Subtitle        : für analoge Übertragungsstrecken-->
+Author          : Maximilian Irro
+Email           : max@irro.at
+Copyright       : Maximilian Irro, 2014
+
+ThesisType      : BACHELORARBEIT
+Matrikelnummer  : 1026859
+ThesisAdvisor   : Dipl.-Ing. Mag. Dr. Matthias Zeppelzauer
+
+Title Note      : BACHELORARBEIT
+Title Footer    : 
+  24 Juni 2014 &br;&br;
+  Institut für Softwaretechnik und Interaktive Systeme &br;
+  Interactive Media Systems Group &br;
+  Technische Universität Wien
+
+Bibliography    : bachelor2014.bib
+Cite All        : True
+
+Name Figure     : Abbildung
+Name Figures    : Abbildungen
+Name Table      : Tabelle
+Name Tables     : Tabellen
+Name Contents   : Inhaltsverzeichnis
+Name References : Literaturverzeichnis
+
+<!--Cite Style      : numeric-->
+
+@if not (tex) {
+  Bib Search Url: scholar.google.at
+}
+
+Math Mode       : static
+
+CSS Header      :
+  .madoko .math-rendering {
+    color: black;
+  }
+  hr.figureline.madoko {
+    display: none;
+  }
+  .toc a, .toc a:visited { 
+    color: #0000EE;  
+  }
+
+<!-------------------------------------------------------------------
+   Define a block for my beloved "Page intentionally left blank" messages
+-------------------------------------------------------------------->
+
+PageIntentionallyLeftBlank { 
+  replace:"~ Begin TexOnly&nl;\
+            ~ Begin TexRaw&nl;\
+            \cleartooddpage[\vspace*{\fill}\/&source;\vspace*{\fill}]&nl;\
+            ~ end TexRaw&nl;\
+           ~ End TexOnly"
+}
+
+Aligned { 
+  replace:"~Math&nl;\begin{aligned}&nl;&source;&nl;\end{aligned}&nl;~" 
+}
+
+EquationArray { 
+  replace:"~Math&nl;\begin{eqnarray*}&nl;&source;&nl;\end{eqnarray*}&nl;~" 
+}
+
+<!-- define a new counter for equations, which resets on every chapter
+     and has the style of (h1.eq) -->
+Equation {
+  @h1-equation;
+  label: "[(@h1.@h1-equation)]{.equation-label}";
+}
+
+<!-- enable HTML like tooltips in tex (pdf) output -->
+~a: .tex-tooltip 
+
+<!-------------------------------------------------------------------
+   Define and redefine some stuff from prelude
+--------------------------------------------------------------------->
+
+
+<!-------------------------------------------------------------------
+   Define the links to the images 
+--------------------------------------------------------------------->
+
+[img-diagram-framework]: img/diagram-framework.png { width:90% }
+[img-diagram-encoder]: img/diagram-encoder-v2.png { width:100% }
+[img-sync-code-detection]: img/figure-sync-code-detection.png { width:100% }
+[img-protocol]: img/figures-protocol.png { width:100% }
+[img-diagram-decoder-v2]: img/diagram-decoder-v2.png { width:"90%" }
+[img-spektrum-original]: img/spektrum-original.png { width:"100%" }
+[img-spektrum-soundkarte]: img/spektrum-soundkarte.png { width:"100%" }
+
+~ HtmlOnly
+[TITLE]
+~
+
+~ TexOnly
+~~ TexRaw
+\captionnamefont{\bfseries}
+\frontmatter
+\pagenumbering{roman}
+~~
+
+[INCLUDE=titlepage]
+~
+
+~ PageIntentionallyLeftBlank
+This page intentionally left blank.
+~
+
+# Erklärung zur Verfassung der Arbeit { -; toc:clear; }
+
+Maximilian Irro &br;
+Pfalzstraße 10, 5282 Ranshofen
+
+~~ { margin-top: 1.2cm }
+~~
+
+Hiermit erkläre ich, dass ich diese Arbeit selbständig verfasst habe, 
+dass ich die verwendeten Quellen und Hilfsmittel vollständig angegeben 
+habe und dass ich die Stellen der Arbeit - einschließlich Tabellen, 
+Karten und Abbildungen -, die anderen Werken oder dem Internet im 
+Wortlaut oder dem Sinn nach entnommen sind, auf jeden Fall unter Angabe 
+der Quelle als Entlehnung kenntlich gemacht habe.
+
+~ TexOnly
+~~ Snippet
+\vspace*{2cm}
+\begin{tabbing}%
+    \hspace{58mm} \= \hspace{28mm} \= \hspace{58mm} \kill
+    {\raggedright\rule{58mm}{0.5pt}} \> \> {\raggedright\rule{58mm}{0.5pt}} \\
+    \begin{minipage}[t][0.5cm][t]{58mm}
+  \vspace{0pt} %\sffamily
+  \thesistitlefontnormalsize
+  \centering (Ort, Datum)
+    \end{minipage}
+    \> \>
+    \begin{minipage}[t][0.5cm][t]{58mm}
+  \vspace{0pt} %\sffamily
+  \thesistitlefontnormalsize
+  \centering (Unterschrift Maximilian Irro)
+    \end{minipage}
+\end{tabbing}
+
+~~
+~
+
+&pagebreak;
+
+~ PageIntentionallyLeftBlank
+This page intentionally has nothing but text \\
+explaining why this page has nothing but text \\
+explaining that this page would otherwise have been left blank \\
+and would otherwise have been left blank.
+~
+
+# Danksagung { -; toc:clear; }
+
+Es gilt einigen Personen zu danken:
+
+- Meinem Betreuer Matthias Zeppelzauer, unter dessen Anleitung diese Arbeit 
+  entstanden ist.
+- Jürgen Köchl, der sich ab und an die Zeit stehlen ließ um mit mir über die 
+  Freuden der Signalverarbeitung zu diskutieren.
+- John-Paul "hukl" Bader, der mit seinen Beträgen zu analogem und digitalem 
+  Audio in den Podcasts *Freakshow*[^fn-freakshow] und *300Hertz*[^fn-300hz] 
+  mehr als einmal an einer Eingebung Schuld trägt. 
+- Und ganz besonders Shijun Xiang, der mich mit seinen typografischen Ausrutschern 
+  auf die lange Suche nach einem nicht existierenden Layer 8 Problem schickte.
+
+[^fn-freakshow]: [http://freakshow.fm](http://freakshow.fm)
+[^fn-300hz]: [http://300hertz.de](http://300hertz.de)
+
+~ PageIntentionallyLeftBlank
+This page intentionally left blank.
+~
+
+# Abstract { -; toc:clear; }
+
+While digital audio watermarking is already a widespread practice, most research
+only concern copyright protection mechanisms. An aim on open information
+integration is hardly ever a focus of development goals. Yet there are use cases
+were additional information in audio signals would be of most value. Especially
+digital/analog (DA) conversion processes \index{DA-Wandlung} tend to lose all
+sorts of metadata, for them not being translated into acoustic signals. This is
+where watermarks may come to aid. Also they could be utilized to add additional
+information to radio and TV broadcast which would make them accessible not only
+to the receiving device.
+
+This paper describes the implementations of an existing watermarking algorithm
+claiming to be capable of enduring DA conversions. Additionally a framework is
+proposed to utilize the algorithm in a developed communication protocol with
+synchronization-codes and error-correction mechanisms to provide a well defined,
+stable communication channel.
+
+~ PageIntentionallyLeftBlank
+Diese Seite wurde absichtlich leer gelassen.
+~
+
+# Kurzfassung { -; toc:clear; }
+
+Während digitales Audio-Watermarking einen an sich viel beachteten Bereich
+darstellt, beschränkt sich die Forschung dennoch hauptsächlich auf
+Anwendungsgebiete rund um Urheberrechtsschutz. Eine Ausrichtung auf offen
+eingebrachte Information ist kaum im Fokus der Entwicklung. Doch gibt es
+durchaus Anwendungsfälle in denen Zusatzinformationen in Audiosignalen einen
+erheblichen Mehrwert bedeuten können. Vor allem bei der Digital/Analog Wandlung
+gehen in der Regel sämtliche Metadaten eines Audiosignals verloren, da diese
+nicht in akustische Signale mit überführt werden. Hier können Watermarks Abhilfe
+schaffen. Auch könnten sie genutzt werden um in Radio- oder Fernsehübertragungen
+gezielt zusätzliche Informationen einzubauen, welche auch von anderen Geräten
+als dem ursprünglichen Empfangsgerät verarbeitet werden könnten.
+
+Diese Arbeit beschäftigt sich mit der Implementierung einer vorhandenen Audio-
+Water\-marking Methode welche für die DA- und AD-Wandlung
+ \index{DA-Wandlung} \index{AD-Wandlung} geeignet sein soll. Weiters wurde für deren
+Verwendung ein Framework entwickelt, welches mittels eines eigens entwickelten
+Übertragungsprotokolls unter Verwendung von Synchronisations-Codes und
+Fehlerkorrekturverfahren einen definierten Übertragungskanal bereitstellt.
+
+~ PageIntentionallyLeftBlank
+Hoc vellum voluntater album mansum est.
+~
+
+[TOC]
+
+[TOC=figures]
+
+[TOC=tables]
+
+~ PageIntentionallyLeftBlank
+Gadawyd y tydalen yma un wag ar bwrpas.
+~
+
+~ TexOnly
+~~ TexRaw
+\mainmatter
+\pagenumbering{arabic}
+\pagestyle{numberCorner}
+~~
+~
+
+<!-- TODO: 這頁故意地被留下空白 -->
+~ PageIntentionallyLeftBlank
+TODO
+~
+
+# Einführung { #ch-intro }
+
+## Motivation
+
+Die Digitalisierung unserer Welt schreitet seit über 50 Jahren stetig voran.
+Immer mehr liegt nur mehr in digitaler Form vor. Und durch die wachsende
+Vernetzung stehen diese Daten vor allem seit dem neuen Jahrtausend immer mehr
+Menschen mit immer weniger Aufwand jederzeit zur Verfügung.
+
+Doch es ergibt sich daraus auch ein Problem: *Was liegt eigentlich vor?*
+Digitale (und vor allem multimediale) Daten sagen per se nichts über ihre
+Bedeutung aus. Sie bekommen diese durch den Betrachter. Doch aus diversen
+Gründen, ganz voran alleine um sie sortieren und suchen zu können, ist es aber
+interessant ihnen bereits vorher eine gewisse Bedeutung zuzuschreiben. Dadurch
+wurde in den letzten Jahren ein Stichwort groß: *Metadaten* \index{Metadaten}.
+Metadaten sind "Daten über Daten". Mit ihnen wird versucht vorliegende Daten zu
+beschreiben (z.B. Genre eines Musikstücks), zusätzliche Informationen über sie
+vorzuhalten (Künstler und Album eines Musikstücks), diese maschinenlesbar
+bereitzustellen (ID3-Tags bei MP3) und wenn möglich auch direkt mit den Daten zu
+verknüpfen (Kapitelmarken in MP4/M4B Hörbüchern).
+
+Das Problem bei Metadaten ist sie bereitzustellen und vorzuhalten. Seit dem
+Ausbau der digitalen Vernetzung liegen Metadaten oft nicht mehr direkt bei den
+eigentlichen Daten. Oftmals sind sie auf einem externen Server und werden bei
+Bedarf angefordert. Die Metadaten sind nur dann zugänglich, wenn der Server
+verfügbar ist und ein Mechanismus existiert mit dem die Daten eindeutig mit den
+Metadaten am Server verknüpft werden können.  Eine Datei kann auch durch eine
+zusätzliche standardisierte Datei im selben Namespace beschrieben werden (etwa
+via XML). Kopiert man jedoch nur die ursprünglichen Daten, nicht aber ihre
+Metadaten, so geht die zusätzliche Information verloren.
+
+Es ist daher oftmals wünschenswert die Metadaten direkt *in* den eigentlichen
+Daten vorzuhalten. Eine der vielleicht bekanntesten Formen dieser Art der
+Metadatenspeicherung sind die bereits oben erwähnten MP3 Tags. Hier werden die
+Metadaten einfach am Ende des Audiosignals angehängt. Diese Form der
+Metadatenspeicherung ist vor allem bei digitalen, multimedialen Daten besonders
+beliebt. Nicht zuletzt die MPEG[^fn-mpeg] treibt diese Entwicklung mit ihren
+Standards auch rege voran.
+
+[^fn-mpeg]: Moving Picture Experts Group. Eine Vereinigung zur
+    Standardisierung von Audio- und Video-Kompressionsalgorithmen und
+    Containerformaten. Am bekanntesten dürfte das MP4 Dateiformat sein.
+
+## Digitale und analoge Daten
+
+Bei digitalen Daten lassen sich die Metadaten oftmals noch recht einfach direkt
+zu den eigentlichen Daten speichern. Es muss nur einen entsprechenden Standard
+geben wie diese an die Daten angehängt werden können. Doch vor allem
+multimediale Daten existieren in der Regel nicht nur in digitaler Form.
+Spätestens wenn sie konsumiert (betrachtet, gehört) werden sollen müssen sie auf
+die eine oder andere Art in eine analoge Form gebracht werden. Dabei gehen die
+Metadaten meistens verloren. Dem wird entgegen gesetzt, dass die Metadaten
+meistens an diesem Punkt auch angezeigt werden. Die meisten MP3 Player zeigen
+während des Abspielens den Tracktitel und Artist an. Allerdings ist der
+Lifecycle der Metadaten an dieser Stelle auch beendet. Werden die nun analogen
+Daten weiter aufgezeichnet, verarbeitet und verwendet, so ist ihre Beschreibung
+verloren gegangen, wenn sich nicht jemand explizit "von Hand" weiterträgt. Es
+wäre also Wünschenswert wenn die Metadaten auch im analogen Zustand Teil der
+Daten wären.
+
+## Digitale Wasserzeichen
+
+Digitale Wasserzeichen (engl. *Digital Watermarks*) sind sämtliche Verfahren die
+ein digitales Signal (Audio, Video, aber auch nur einfache Bilder) so verändern,
+dass in ihm ein weiteres Signal versteckt ist. Da dieses zusätzliche Signal in
+der Regel unwahrnehmbar ist (oder zumindest sein soll) ist die Einbettung dieses
+*versteckten Signals* in der ursprüngliche (das *Trägersignal*) also eine
+steganographische Methode.
+Somit kann beispielsweise ein Bild in einem anderen Bild versteckt werden. Zu
+beachten ist natürlich, dass die Einbettungskapazität durchaus limitiert ist, da
+die Qualität des Trägersignal nicht maßgeblich beeinträchtigt werden soll.
+
+Prinzipiell lassen sich Watermarks in 2 Kategorien unterteilen [@arnold2000audio]: 
+
+* Secret watermarks   
+  : sollen unauffindbar sein, außer für jene die dazu berechtigt sind. Sie
+    stellen einen gesicherten Übertragungskanal zwischen den autorisierten
+    Personen dar, die zu den versteckten Informationen durch ihr Wissen um ein
+    geheimes Verfahren oder einen geheimen Schlüssel Zugang haben. Die Existenz
+    des Watermarks an sich sollte nach Möglichkeit für Unautorisierte nicht
+    erkennbar sein.
+* Public watermarks
+  : sollen für jeden unter Anwendung des Dekodierungsverfahrens lesbar sein. Sie
+    sind somit ein öffentlicher Übertragungskanal, da das Verfahren transparent
+    gestaltet ist.
+
+## Anwendungsgebiete
+
+Digitale Wasserzeichen erfreuen sich zunehmender Beliebtheit seitdem es möglich
+ist praktisch kostenlos perfekte digitale Kopien von Audio, Video, Bildern und
+Texten herzustellen [@mintzer1997effective]. Indem in mediale Daten
+Wasserzeichen eingebracht werden, wird Urheberschaft kenntlich gemacht und
+Copyrightanliegen können verfolgt werden. In Bildern wird ein Wasserzeichen
+eingebracht, das nicht sichtbar ist, trotzdem bei Bedarf aus dem Bild eindeutig
+extrahiert werden kann. Somit kann überprüft werden, ob Bilder unlizenziert
+Verwendung finden. In Musikdateien ermöglichen individuelle Wasserzeichen zu
+jedem Track den ursprünglichen Käufer ausfindig zu machen, seitdem es Dank des
+MP3-Komprimierungsverfahrens möglich geworden ist Musikdateien in geringer
+Datengröße und dennoch guter Qualität problemlos (und oftmals illegal) durch das
+Internet zu kopieren. Bei Videodaten kann festgestellt werden, ob diese
+nachträglich verändert wurden (bei Beweisaufnahmen etwa).
+
+In den Anfangszeiten der digitalen Wasserzeichen wurden auch Überlegungen
+angestellt wie die aufkommenden DVDs so gekennzeichnet werden könnten, dass eine
+Kopierung nur im Rahmen des erlaubten Copyrights stattfindet
+[@petitcolas1999information]. Die Idee war alle DVD Player so zu programmieren,
+dass sie keine Kopien von kommerziellen Inhalten anfertigen. TV-Ausstrahlungen
+würden hingegen so gekennzeichnet, dass sie genau einmal kopiert werden könnten.
+Private Aufnahmen wären unlimitiert kopierbar.
+
+Jedoch existieren nur wenige Verfahren, die Digital/Analog Wandlung \index{DA-
+Wandlung} überstehen. Dementsprechend wenig Konzepte bringen Watermarks in
+analogen Audiosignalen zur Anwendung (ein Beispiel wäre [@chang2012location]).
+Es wäre aber denkbar, dass mittels einer effektiven Methode zum Beispiel Radio-
+und Fernsehübertragungen mit zusätzlichen Informationen erweitert werden, die
+über die akustische Ebene nicht nur dem eigentlichen Empfangsgerät zugänglich
+gemacht werden.
+
+## Ziele
+
+In dieser Arbeit wird versucht ein transparentes Watermarkingverfahren für
+digitale Audiosignale umzusetzen, welches die Übertragung über eine analoge
+Übertragungsstrecke (etwa Luft) übersteht. Damit könnten Metadaten direkt in
+Audiosignalen untergebracht und erhalten werden, auch wenn sie über ein
+Lautsprechersystem abgespielt werden. Entsprechende Empfangsgerät (z.B. ein
+Handy) könnten dann das Signal aufnehmen und die darin enthaltenen Daten wieder
+rekonstruieren. Ein denkbarer Anwendungsfall wären etwa Metadaten über das
+Programm eines Radiosenders. Verfahren zum Urheberrechtsschutz sind im aktuellen
+Stand der Technik weit ausgereift. Hingegen wurde bisher nur wenig Augenmerkt
+auf die Resistenz bei DA/AD Wandlung gelegt, da dies zur Beseitigung der
+Copyright-Watermarks kaum ein angewandter Angriffsvektor ist. Die Auswirkungen
+auf die resultierende Qualität sind in der Regel zu massiv.
+
+Diese Arbeit stützt sich vor allem auf das von Shijun Xiang [@xiang2007robust]
+vorgeschlagene Audio-Watermarkingverfahren für DA/AD-Wandlung. Dokumentiert ist
+hier die Implementierung dieser sowie deren Erweiterungen und Modifikationen.
+
+<!-- TODO: このページは計画的にブランクを残ている -->
+~ PageIntentionallyLeftBlank
+TODO
+~
+
+# Theoretische Grundlagen { #ch-theorie }
+
+Um ein Signal mit zusätzlichen Informationen anzureichern muss das Signal auf
+die eine oder andere Art so verändert werden, dass die Änderungen eindeutig
+rekonstruierbar sind. Weiters müssen Sie einer gewissen Logik folgen, damit
+anschließend wieder auf die Information geschlossen werden kann. Es ist
+selbstverständlich essentiell, dass die Art der Informationsanreicherung stabil
+ist, d.h. die Veränderungen so geschehen, dass eine 1 eindeutig wieder als 1
+erkannt wird.
+  
+Die mathematische Grundlage der in dieser Arbeit verwendeten Methode um einen
+Teil eines Signals so zu verändern, dass daraus wieder auf einen logischer Wert
+($0$ oder $1$) geschlossen werden kann, beruht auf dem in [@xiang2007robust]
+publizierten Verfahren.
+
+In diesem und den folgenden Kapiteln werden immer wieder Notationen benutzt, die
+von denen von [@xiang2007robust] abweichen um ein konsistenteres
+Bezeichnungsschema für die Beschreibung der Erweiterungen zu erreichen. Die in
+den nächsten Abschnitten vorgestellten Begriffe werden daher oft mit Bezeichnung
+und Symbol eingeführt. Die Bezeichnungen sind meistens in englischer Sprache, da
+diese in der wissenschaftlichen Literatur so verwendet werden und eine
+Übersetzung ins Deutsche dem geneigten Leser nur die Zuordnung der Begriffe
+erschweren würde. Die Symbole sind hierfür eine alternative Kurzschreibweise die
+vor allem in Formeln Verwendung finden werden.
+
+Grundlegend müssen wir zuerst klären, über welche Art von Signal hier überhaupt
+gesprochen wird. Signale können an sich unterschiedlichster Natur sein. Wir hier
+wollen mit "Signal" ganz allgemein die Repräsentation einer akustischen
+Information bezeichnen. In der Tontechnik spricht man von *Audiosignalen*
+\index{Audiosignal} als Bezeichnung für all das "was man hören kann". Allerdings
+muss ein Audiosignal noch nicht unbedingt in Form von Schallwellen vorliegen. Es
+kann sich auch um ein elektrisches Signal handeln, welches durch die Umwandlung
+z.B mit einem Lautsprecher erst hörbar wird.
+
+Audiosignal müssen aber nicht immer zwingend analog vorliegen. So können sie
+auch als digitale Daten durch sog. *Sample* \index{Sample} Werte betrachtet
+werden. Diese Samples sind zeit- und wertediskrete Abtastwerte des
+zugrundeliegenden analogen Signals. Sie wurden durch die sog. *Analog-Digital
+Wandlung* \index{AD-Wandlung} (AD) eines Audiosignals ermittelt und erfolgt
+durch ein geeignettes Instrument (i.A. ein Mikrofon oder eine Soundkarte). Dabei
+geht Information verloren, da analoge Signale aus einer unendlichen Anzahl an
+überlagerten Schwingungen bestehen, digitale Repräsentationen allerdings nur
+eine endliche Anzahl an Zuständen annehmen können. Als Kurzform für ein Signal
+wird im Folgenden $sig$ verwendet, wobei $sig(i)$ den konkreten
+Samplewert \index{Sample} des Signals an der Stelle $i$ bezeichnet. Ein digitales
+Signal kann durch einen Algorithmus manipuliert (siehe [#sec-embedding]) oder
+verarbeitet (siehe [#sec-extraction]) werden.
+
+Die Rücktransformation eines digitalen Signals ist ebenso möglich, durch die
+sog. *Digital-Analog Wandlung* \index{DA-Wandlung} (DA). Dabei wird durch einen
+geeigneten Mechanismus (z.B. einen Lautsprecher) wieder ein analoges Signal
+erzeugt. Aufgrund des Informationsverlustes der AD-Wandlung \index{AD-Wandlung}
+ist dieses Signal im Allgemeinen nicht mit dem ursprünglich aufgenommenen ident.
+
+## Diskrete Wavelet-Transformation
+
+\index{Diskrete Wavelet-Tansformation|(} \index{DWT|see{Diskrete Wavelet-Tansformation}}
+
+Zur Beantwortung der Frage wie das Signal verändert werden kann existieren
+verschiedene Ansätze. Es gibt Verfahren die das Signal direkt im Zeitbereich
+modifizieren [@bassia2001robust;@lie2006robust], also konkrete Abtastpunkte
+des Signals direkt bearbeiten. Andere verändern die Koeffizienten der durch die
+Fouriertransformation oder die Kosinustransformation erzeugten Frequenzspektrums
+[@chang2012location], der Wavelet-Transformation [@tang2005digital] oder der
+Cepstrum-Domain[^fn-cepstrum] [@lee2000digital;@li2000transparent]. Es
+existieren auch Ansätze welche die Information durch Phasenverschiebungen
+innerhalb des Signals einbringen [@dong2004data;@ansari2004data] oder solche
+die mehrere Methoden gleichzeitig bemühen [@lei2012multipurpose]. Wir wollen
+hier die Koeffizienten der diskrete Wavelet-Transformation (DWT) eines Signals
+verändern, also die Frequenzeigenschaften der Signale beeinflussen. Aus den
+modifizierten Koeffizienten kann durch die inverse DWT wieder ein Signal
+rekonstruiert werden.
+
+[^fn-cepstrum]: *Ceprstrum*: Kunstwort durch Vertauschung der Buchstaben 
+    des engl. *Spectrum*. Der Cepstrum-Bereich wird durch die Fouriertransformation 
+    des logarithmischen Frequenzspektrums eines Signals aufgespannt.
+
+Die Beschreibung der diversen mathematischen Raffinessen welche die Wavelet-
+Trans\-formation erst möglich machen wollen wir an dieser Stellen anderen
+überlassen (etwa [@polikar1996engineer]). Es sei nur gesagt, dass sie eine zeit-
+und wertediskret (da es sich um digitale Daten handelt) durchgeführte Wavelet-
+Trans\-formation ist, praktisch durch eine Reihe zeitdiskreter Filter berechnet
+werden kann und die DWT so implementiert ist. Durch diese Kaskade von Hoch- und
+Tiefpassfiltern er gibt sich ein Binärbaum. Jede Verzweigungsebene dieses Baumes
+nennt man DWT-Level \index{DWT-Level} (${D}_{k}$). Je größer der Level, desto
+genauer ist die Auflösung der DWT-Koeffizienten $\left\{{c}_{i}\right\}$. Sie
+sind der Ergebnis der DWT und beschreiben das zugrundeliegende Signal in seinem
+Frequenzbereich. $\left\{{c}_{i}\right\}$ bezeichnet die (indizierte)
+Gesamtmenge der Koeffizienten eines Signals, $c_i$ ein spezifisches Element.
+Jedes $c_i$ gibt dabei das Energiepotential der Frequenz $i$ an.
+
+Anders als bei ähnlichen Verfahren wie etwa der Fourier-\-Transformation oder
+der Kosinus\-tranformation wird bei der Wavelet-Transformation das Signal nicht
+durch eine Überlagerung von Sinus- oder Kosinus-Schwingungen beschrieben,
+sondern durch eine im Allgemeinen komplexere Basisfunktion, genannt *Wavelet*
+\index{Wavelet} (${f}_{w}$).
+
+\index{Diskrete Wavelet-Tansformation|)}
+
+## Einbettungsstrategie { #sec-embeddingstragety }
+
+Um nun ein Bit stabil in einem Teil eines Signals (einer sog. *Sample Section*
+\index{Sample Section}) zu verstecken, werden wir die relative Beziehungen von
+Gruppen der DWT-Koeffizienten \index{DWT-Koeffizienten} der Samples verändern.
+Aus dieser Veränderung können wir anschließend wieder einfach eine logische
+Beziehung herstellen und somit den eingebrachten Wert extrahieren.
+
+Da digitale Signale als Listen von Abtastwerten (engl. *Samples*) repräsentiert
+werden, ist daher eine Sample Section \index{Sample Section} eine Folge oder
+Liste aufeinander folgender Samples. In eine Sample Section werden wir immer
+genau ein Bit einbringen. Diese Segmentierung des Signals in jene Teilbereiche
+geschieht im Allgemeinen willkürlich, allerdings sind für die Kodierung eines
+Bits mindestens:
+
+~ Equation { #equ-samplseclength }
+{N}_{s} \geq 3 \cdot {N}_{E} \cdot 2 ^ {{D}_{k}},   
+~
+
+Samples - daher ${N}_{s}$ genannt *Sample-Section-Length* \index{Sample-Section-
+Length} - notwendig. Das hier verwendete ${N}_{E}$ bezeichnet die sog. *Subband-
+Length* \index{Subband-Length}. Ein *Subband* \index{Subband} $S$ ist eine
+indizierte Teilmenge paarweise benachbarter DWT-Koeffizienten \index{DWT-
+Koeffizienten} einer Sample Section \index{Sample Section}, also
+$\langle{c}_{i},{c}_{i+{N}_{E}}\rangle \subset \left\{{c}_{i}\right\}, \forall i
+\in \mathbb{N}$. Folglich ist die Subband-Length die Anzahl der DWT-
+Koeffizienten in einem Subband: ${N}_{E} =
+|\langle{c}_{i},{c}_{i+{N}_{E}}\rangle|$.
+
+Um die Veränderungen für den menschlichen Hörapparat möglichst unwahrnehmbar zu
+gestalten, gleichzeitig aber vor digitalen Komprimierungsverfahren[^fn-kompr]
+geschützt zu sein, werden wir die niederfrequenten DWT-Koeffizienten verändern.
+
+[^fn-kompr]: Kompressionsverfahren für multimediale Daten sind oftmals 
+    verlustbehaftet (z.B MP3). Sie nutzen den Umstand aus, dass die menschlichen 
+    Sinneswahrnehmungen (visuelles System, akustisches System) nicht das volle 
+    Spektrum der vorhandenen Reize erfassen können und/oder das Hirn die 
+    Wahrnehmungen reduziert. Die Kompressionsalgorithmen sind daher bemüht 
+    "unnötigen" Daten zu reduzieren.
+
+Für eine Sample Section \index{Sample Section} mit ${N}_{s}$ \index{Sample-
+Section-Length} Samples berechnen wir unter Verwendung der Wavelet-Funktion
+${f}_{w}$ ihre ${D}_{k}$-Level DWT-Koeffizienten $\left\{{c}_{i}\right\}$. Aus
+den Koeffizienten bilden wir 3 disjunkte Subbänder ${S}_{1}$, ${S}_{2}$ und
+${S}_{3}$, wobei ${S}_{1}$ die niederfrequentesten Koeffizienten
+$\langle{c}_{1},{c}_{{N}_{E}}\rangle$ enthält. Analog dazu setzen sich ${S}_{2}$
+aus den Koeffizienten $\langle{c}_{{N}_{E}+1},{c}_{2{N}_{E}}\rangle$ und
+${S}_{3}$ aus $\langle{c}_{2{N}_{E}+1},{c}_{3{N}_{E}}\rangle$ zusammen.
+
+Für jedes Subband ${S}_{i}$ berechnen wir das gesammte Energiepotenzial, die
+sog. *Subband Energy* \index{Subband Energy} $E$. Da die DWT-Koeffizienten eines
+Subbandes das Energieniveau ihrer Frequenzen beschreiben, berechnet sich die
+Subband Engery für Koeffizienten von $S$ aus dem Intervall $[k, k+{N}_{E}]$ wie
+folgt:
+
+~ Equation { #equ-energy }
+E = \sum\limits_{i=k}^{k+{N}_{E}}|c_i|. 
+~
+
+Die Wahl von ${N}_{E}$ steht an sich frei, ist jedoch ein Kompromiss zwischen
+der Einbettungskapazität (wie später gezeigt wird), dem Signal-Rauschabstand des
+resultierenden Signals (welcher sich auf die Qualität auswirkt
+[@xiang2007robust], siehe Kapitel [#sec-qualitaetskontrolle]) und der Robustheit
+des Watermarks \index{Watermark}. Im Allgemeinen gilt: Je größer ${N}_{E}$, desto
+widerstandsfähiger das Watermark.
+
+Die 3 Energiewerte werden anschließend der Größe nach sortiert. Es gilt:
+${E}_{min}\leq{E}_{med}\leq{E}_{max}$ da ${E}_{min}=min({E}_{1}, {E}_{2},
+{E}_{3}), {E}_{med}=med({E}_{1}, {E}_{2}, {E}_{3})$ und ${E}_{max}=max({E}_{1},
+{E}_{2}, {E}_{3})$, wobei $min$ das Minimum, $med$ den Median und $max$ das
+Maximum bezeichnet.
+
+Wie eingangs erwähnt werden wir die relativen Beziehungen dieser Subbänder
+verändern. Diese relativen Beziehungen lassen sich als Differenzen der 3
+Energiewerte ${E}_{min}$, ${E}_{med}$ und ${E}_{max}$ ausdrücken:
+
+~ Equation { #equ-energydifferences }
+A = {E}_{max}-{E}_{med} \quad\mbox{und}\quad B = {E}_{med}-{E}_{min}
+~
+
+Um diese Beziehung zu verändern definieren wir die sog. *Embedding Strength* 
+\index{Embedding Strength} $\mbox{ES}$, eine Entscheidungsvariable um den
+logischen Wert 0 oder 1 zu beschreiben. Die Embedding Strength berechnet sich
+wie folgt:
+
+~ Equation { #equ-embeddingstrength }
+\mbox{ES} = {1 \over 3} \left[ \mbox{esf} \cdot \sum\limits_{i=1}^{3{N}_{E}}|c_i| \right],
+~
+
+wobei $\mbox{esf}$ der sog. *Embedding Strength Factor* \index{Embedding
+Strength Factor}, ein Kontrollparameter für die Stärke der Signalveränderung,
+ist. Der $\mbox{esf}$ sollte unter der Bedingung der Unhörbarkeit des
+Watermarks \index{Watermark} maximiert werden.
+   
+Aus der Summenobergrenze $3 \cdot {N}_{E}$ ist ersichtlich, dass es sich bei der
+$\mbox{ES}$ um den Mittelwert der Energiewerte der 3 Subbänder handelt.
+
+Um einen Wert $a \in\left\{0,1\right\}$ in der Sample Section einzubetten gelten
+nun folgende Beziehungen:
+
+~ Equation { #equ-embeddingrelationships }
+A - B \geq \mbox{ES} \iff a = 1 \quad\mbox{und}\quad B - A \geq \mbox{ES} \iff a = 0
+~
+
+Sind diese Bedingungen aus der natürlichen Gegebenheit des Signals erfüllt, so
+ist nichts zu tun. Sollte dies jedoch nicht der Fall sein, so werden die 3
+aufeinanderfolgenden Subbänder verändert, bis Formel [#equ-
+embeddingrelationships] erfüllt ist.
+
+### Fall 1: a = 1 und A-B < ES
+
+Folgende Regeln angewendet auf die Koeffizienten ${c}_{i}, \forall i \in [1,
+3\cdot{N}_{E}]$ führen dazu, dass die resultierenden Koeffizienten ${c'}_{i}$
+die Bedingung [#equ-embeddingrelationships] erfüllen:
+
+~ Equation { #equ-modifcoef_case1 }
+{c'}_{i} = \begin{cases}
+  {c}_{i} \cdot ( 1 + { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }) \iff {c}_{i} \in {S}_{min} \quad\mbox{oder}\quad {c}_{i} \in {S}_{max},     \\
+  {c}_{i} \cdot ( 1 - { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }) \iff {c}_{i} \in {S}_{med}.
+\end{cases}
+~
+
+${S}_{min}$ ist das Subband \index{Subband} mit Energiepotential \index{Subband}
+Energy ${E}_{min}$, äquivalent ${S}_{med}$ und ${S}_{max}$. 
+$|\xi| = |A-B-\mbox{ES}| = \mbox{ES}-A+B = \mbox{ES} - {E}_{max} + 2\cdot {E}_{med} - {E}_{min}$
+da $A-B<\mbox{ES}$. Aus Formel [#equ-modifcoef_case1] ergeben sich folgende neue Sachverhalte:
+
+~ Equation { #equ-energychanges_case1 }
+\begin{aligned}
+  {E'}_{max} & = & {E}_{max} \cdot (1 + { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }), \\ 
+  {E'}_{med} & = & {E}_{med} \cdot (1 - { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }), \\
+  {E'}_{min} & = & {E}_{min} \cdot (1 + { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }),
+\end{aligned}
+~
+
+wobei ${E'}_{max}$, ${E'}_{med}$ und ${E'}_{min}$ den maximalen, mittleren und
+minimalen Energiewert nach der Veränderung bezeichnen. Aus diesen Veränderungen
+der Koeffizienten können sich die Energiepotenziale der Subbänder ändern. Es
+kann sein das ${E'}_{med} < {E'}_{min}$, da ${E'}_{min}>{E}_{min},\quad
+{E}_{min}<{E}_{med}$ und ${E'}_{med}<{E}_{med}$. Um sicherzustellen, dass nach
+der Anpassung immer noch ${E'}_{med} > {E'}_{min}$ gilt, führen wir folgende
+Obergrenze für die Embedding Strength \index{Embedding Strength} ein:
+
+~ Equation { #equ-embeddingstrengthconstraint_case1 }
+\mbox{ES} < { 2 \cdot {E}_{med} \over {E}_{med} + {E}_{min} } \cdot ( {E}_{max} - {E}_{min} )
+~
+
+### Fall 2: a = 0 und B-A < ES
+
+Wie in Fall 1 führen wir auch hier Regeln ein, mit denen wir die
+Subbandkoeffizienten \index{Subband} ${c}_{i}, \forall i \in [1, 3\cdot{N}_{E}]$
+anpassen, damit sie Formel [#equ-embeddingrelationships] erfüllen:
+
+~ Equation { #equ-modifcoef_case2 }
+{c'}_{i} = \begin{cases}
+  {c}_{i} \cdot ( 1 - { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }) \iff {c}_{i} \in {S}_{min} \quad\mbox{oder}\quad {c}_{i} \in {S}_{max},  \\
+  {c}_{i} \cdot ( 1 + { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }) \iff {c}_{i} \in {S}_{med}.
+\end{cases}
+~
+
+Hier ist nun  $|\xi| = |B-A-\mbox{ES}| = \mbox{ES}+A-B = S + {E}_{max} - 2\cdot
+{E}_{med} + {E}_{min}$ da $B-A<\mbox{ES}$. Für die neuen Energiewerte gilt:
+
+~ Equation { #equ-energychanges_case2 }
+\begin{aligned}
+  {E'}_{max} & = & {E}_{max} \cdot (1 - { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }), \\ 
+  {E'}_{med} & = & {E}_{med} \cdot (1 + { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }), \\
+  {E'}_{min} & = & {E}_{min} \cdot (1 - { |\xi| \over {{E}_{max} + 2\cdot {E}_{med} + {E}_{min}} }),
+\end{aligned}
+~
+
+Dieses Mal kann es sich ergeben, dass ${E'}_{med} > {E'}_{max}$, da sich
+${E}_{max}$ verringert während ${E}_{med}$ steigt. Um sicherzustellen, dass nach
+der Koeffizientenanpassung immer noch ${E'}_{max} > {E'}_med$ gilt, führen wir
+eine weitere Obergrenze für $\mbox{ES}$ ein:
+
+~ Equation { #equ-embeddingstrengthconstraint_case2 }
+\mbox{ES} < { 2 \cdot {E}_{med} \over {E}_{med} + {E}_{max} } \cdot ( {E}_{max} - {E}_{min} )
+~
+
+Formal können wir nun eine Funktion $f$ definieren, die eine Menge an Samples
+und einen binären Wert $a$ in eine neue Menge an Samples überführt, also die
+Abbildung $f: {\mathbb{R}}^{{N}_{s}} \times \left\{0,1\right\} \mapsto
+{\mathbb{R}}^{{N}_{s}}$ \index{Sample-Section-Length}, wobei hier natürlich zu
+bedenken ist, dass ${\mathbb{R}}^{{N}_{s}}$ aufgrund des numerischen Fehlers nur
+die abbildbare Teilmenge der reellen Zahlen beschreibt.
+
+## Ausbreitung auf mehrere Bits { #sec-embeddingstragety_bitsequence }
+
+Um eine Bitsequenz $\{{a}_{i}\}$ in ein Signal einzubetten, muss dieses in $n$
+disjunkte Partitionen ${P}_{i}, {1}\leq{i}\leq{n}$ unterteilt werden. Jede
+${P}_{i}\subseteq{sig}$ wird nach dem oben beschriebenen Verfahren mit genau
+einem binären Informationswert angereichert, d.h. ${P}_{i}'=f({P}_{i}, {a}_{i}),
+{a}_{i} = \mbox{wmk}(i)\in\left\{0,1\right\}$. Das mit dem
+Watermark \index{Watermark} angereicherte Signal $sig'$ wird durch die
+Konkatenation der modifizierten Partitionen ${P}_{i}'$ erzeugt. Für die
+Teilfolgen $\langle{sig}_{k},{sig}_{l}\rangle$ gilt:
+
+~ Equation { #equ-signalconcat }
+\langle{sig'}_{k},{sig'}_{l}\rangle = {P}_{i}'\circ{P}_{i+1}' \quad\mbox{mit}\quad k=i \cdot {N}_{s},\quad l=(i+2) \cdot {N}_{s},\quad {1}\leq{i}\leq{n-1}.
+~
+
+Für die Kardinalitäten ergibt sich daraus folgende Bedingung:
+
+~ Equation { #equ-signalcardinality }
+\vert\langle{sig}_{k},{sig}_{l}\rangle\vert = \vert{P}_{i}'\circ{P}_{i+1}'\vert = 2 \cdot {N}_{s}.
+~
+
+
+## Rekonstruktion { #sec-reconstruction }
+
+Liegt ein mit den in Abschnitt [#sec-embeddingstragety] beschriebenen Methoden
+mit Information angereichertes Signal vor, so müssen diese Informationen auch
+wieder eindeutig aus dem Signal rekonstruiert werden. Wurde das Signal
+übertragen, so kann der Übertragungskanal Einflüsse auf das Signal haben. Diese
+werden in den Kapiteln [#ch-methode] und [#ch-analyse] näher beschrieben.
+
+Beschreiben wir diese Einflüsse ganz allgemein als ein wie auch immer geartetes
+Störsignal $X$. Wir haben unser Signal $sig$ mit einer Binärsequenz
+$\{{a}_{i}\}$ angereichert, also $sig' = f( sig, \{{a}_{i}\})$. Durch die
+Übertragung überlagert sich unser modifiziertes Signal $sig'$ mit dem Störsignal
+$X$, also $sig'' = sig' + X$.
+
+Das Verfahren um die Informationssequenz $\{{a}_{i}\}$ aus $sig''$ zu
+extrahieren ist im Prinzip das gleiche wie die Implantierung. Wir segmentieren,
+erzeugen uns mittels der DWT \index{Diskrete Wavelet-Tansformation} wieder die
+Koeffizienten, bilden die 3 Subbänder ${S}_{1}$, ${S}_{2}$ und ${S}_{3}$,
+errechnen deren Energiepotenziale ${E}_{1}$, ${E}_{2}$ und ${E}_{3}$ und
+sortieren die Subbändern nach deren Energiewerten indem wir ${E}_{min}$,
+${E}_{med}$ und ${E}_{max}$ bilden. Damit berechnen wir wieder die
+Energiedifferenzen $A'' = {E''}_{max} - {E''}_{med}$ und $B'' = {E''}_{med} -
+{E''}_{min}$.
+
+Der springende Punkt ist nun, dass wir in der Implantierungsphase sichergestellt
+haben, dass die Subbänder die Bedingung [#equ-embeddingrelationships] erfüllen.
+Somit können wir über die Energiedifferenzen $A''$ und $B''$ eine Aussagen über
+den darin enthaltenen Binärwert $a$ treffen:
+
+~ Equation { #equ-extraction_bedingungen }
+a = \begin{cases}
+  1 \iff A'' > B''   \\
+  0 \iff sonst
+\end{cases}
+~
+
+Um eine Bitsequenz $\{{a}_{i}\}$ aus einem Signal zu extrahieren, muss $sig''$
+äquivalent zu Kapitel [#sec-embeddingstragety_bitsequence] partitioniert werden.
+Der Vollständigkeit halber sei noch erwähnt, dass das im Allgemeinen für das
+Urbild gilt ${P}_{i} \neq f^{-1}({P}_{i}', {a}_{i})$, da die Auswirkungen von
+$f$ nicht eindeutig rekonstruierbar sind.
+
+## Einbettungskapazität { #sec-embedding-capacity }
+
+Wie bereits aus Kapitel [#sec-embeddingstragety] bekannt ist, werden für die
+Implantierung eines Bits genau $N_s$ \index{Sample-Section-Length} Samples
+benötig. Damit können wir eine Aussage über den Zusammenhang zwischen zeitlicher
+Länge, Bitkapazität und Abtastrate treffen.
+
+Bei der Analog-Digital-Wandlung wird ein Signal abgetastet, d.h. es werden zu
+definierten Zeitpunkten Messwerte aufgenommen. Man nennt dies die sog.
+*Abtastrate* \index{Abtastrate} (oder *Samplerate*) $f_s$. Erfüllt diese das
+sog. Nyquist-Shannon-Abtasttheorem [@shannon1949communication], d.h. gilt:
+
+~ Equation { #equ-abtasttheorem }
+2 \cdot f_{max} \leq f_s
+~
+
+wobei ${f}_{max}$ die größte auftretende Frequenz des Signals beschreibt, so
+kann das Signal mit den durch $f_s$ gewonnenen Sample wieder eindeutig
+rekonstruiert werden.
+
+Wird ein analoges Audiosignal mit einer Samplerate von beispielsweise 48kHz
+abgetastet, so liegen für eine Sekunde Signal 48.000 Messwerte vor. Daraus
+können wir schließen, dass im Allgemeinen für die Bitkapazität $K$ eines Signals
+mit 1 Sekunde gilt:
+
+~ Equation { #equ-bitcapacity_1sec }
+K = { {f}_{s} \over N_s } = { {f}_{s} \over 3 \cdot {N}_{E} \cdot 2 ^ {{D}_{k}} }
+~
+
+und folglich für $m$ Sekunden ${K}_{m} = m \cdot K$. 
+
+Sollen genau $n$ Bit in einem Signal untergebracht werden, so musst das Signal
+mindestens $n \cdot {N}_{s}$ Samples haben was abhängig von der Samplerate
+
+~ Equation { #equ-bitcapacity_seconds }
+{ n \cdot {N}_{s} \over {f}_{s} }
+~
+
+Sekunden ergibt. 
+
+In Kapitel [#sec-protokoll] werden wir sehen, dass es durchaus Sinn macht nicht
+alle Samples für die Einbettung von Informationen zu verwenden, um die
+Stabilität des gesamten Watermarks \index{Watermark} zu verbessern.
+
+<!-- TODO: Paĝon intence vaka. -->
+~ PageIntentionallyLeftBlank
+TODO
+~
+
+# Implementierung { #ch-methode }
+
+In Kapitel [#ch-theorie] wurde das theoretisch-mathematische Modell beschrieben,
+mit welchem ein Bit geschrieben und wieder rekonstruiert werden kann. Um dieses
+Wissen nun praktisch nutzen zu können wurde ein Framework ausgearbeitet in dem
+es zur Anwendung kommt.
+
+## Architektur
+
+Das von Shannon und Weaver entwickelte Sender-Empfänger-Modell
+[@shannon2001mathematical] kann herangezogen werden, um den Aufbau des
+Kommunikationssystems zu modellieren:
+
+~ Figure { #fig-diagram-framework; caption: "Das Framework im Kommunikationsprozess." }
+![img-diagram-framework]
+~
+
+Ein beliebiges digitales Signal soll mit einer Information, dem *Watermark*
+\index{Watermark}, angereichert werden. Das Encodermodul verflechtet basierend
+auf der Grundlage von Kapitel [#sec-embeddingstragety_bitsequence] das Watermark
+mit dem Signal und liefert erneut ein digitales Signal.
+
+Wir das neue digitale Signal auf analoger Ebene übertragen, muss eine DA-
+Wandlung \index{DA-Wandlung} vorgenommen werden. In der Regel wird das Signal
+über ein Lautsprechersystem abgespielt werden. Allerdings ist auch die reine
+Übertragung von einer Soundkarte zu einer anderen via einem Audiokabel eine DA-
+Wandlung. Ebenso würde das Pressen einer Schallplatte oder das Übertragen auf
+ein analoges Tonband in diese Kategorie fallen.
+
+Jede analoge Übertragung geschieht auf einem analogen Trägermedium, da Schall
+nicht im leeren Raum existieren kann, sondern sich auf einem Medium ausbreiten
+muss. Für den menschlichen Hörapparat ist dies normalerweise die Luft. Aber auch
+in Wasser kann sich Schall ausbreiten[^fn-schall] sowie in Festkörpern. In
+letzteren liegt oftmals das Signal nicht direkt als Schallwelle vor, sondern im
+Falle eines Audiokabels etwa als elektrisches Signal.
+
+[^fn-schall]: Hier sogar viel besser. Viele Meereslebewesen nutzen diesen 
+    Umstand sehr stark aus, da sich Licht unter Wasser nur wenige 100 Meter 
+    ausbreitet. Auch das Sonar basiert darauf.
+
+Doch egal welches Medium benutzt wird, jeder Übertragungskanal
+\index{Übertragungskanal} verändert das Signal durch seine Umwelteinflüsse
+während es ihn durchläuft. In der Luft etwa kommen die übrigen Geräusche der
+Umgebung hinzu, u.a. auch die Eigenreflexion der Schallwelle an der Umgebung.
+Wir wollen uns mit den diversen Formen und Ursachen von Störsignalen nicht näher
+befassen. Für uns ist wichtig, dass jede Störung das Signal verändert. Das mit
+Informationen angereicherte, modifizierte Signal überlagert sich also mit den
+Störungen. Dies wird sich in der Regel negativ auf das Watermark
+\index{Watermark} auswirken.
+
+Um das Watermark rekonstruieren zu können, muss das Signal zuerst wieder in eine
+digitale Form gebracht werden. Dies geschieht durch eine AD-Wandlung \index{AD-
+Wandlung}. Eine Schallwelle wird durch ein Mikrofon aufgenommen, ein
+elektrisches Signal durch den Line-in Eingang einer Soundkarte umgewandelt.
+
+Das Decodermodul versucht anschließend, das Watermark \index{Watermark} zu
+rekonstruieren. Hier gilt es zwei Probleme zu überwinden. Erstens muss das
+Watermark erkannt werden, d.h. der Decoder muss herausfinden wo eingebettete
+Daten sind. Dazu werden wir sog. *Synchronisations-Codes* mit speziellen
+Eigenschaften bemühen (näheres in Abschnitt [#sec-barker-code]). Und zweitens
+müssen die eingeflochtenen Bits wieder *richtig* rekonstruiert werden. Aufgrund
+des Störsignals welches im Übertragungskanal \index{Übertragungskanal} das
+Signal in Mitleidenschaft zieht kann sich dies durchaus als schwierig
+herausstellen. Zur Erhöhung der Resistenz werden in Abschnitt [#sec-
+errorcorrection] Fehlerkorrekturverfahren \index{Fehlerkorrekturverfahren}
+eingeführt. Es sei allerdings an dieser Stelle bereits darauf hingewiesen, dass
+das Signal im Allgemeinen so weit deformiert werden kann, dass auch die
+Fehlerkorrektur eine sowohl vollständige wie auch richtige Rekonstruktion nicht
+gewährleisten kann.
+
+## Watermark Implantierung { #sec-embedding }
+
+\index{Watermark}
+
+Der Implantationsprozess wird schematisch in Abbildung [#fig-diagram-encoder]
+modelliert. Ein anzureicherndes digitales Audiosignal wird zunächst in gleich
+große Bereiche segmentiert, d.h. die Samples des Signals werden in Gruppen zu je
+$N_s$ \index{Sample-Section-Length} Samples zerteilt. In jede Gruppe (sog.
+*Sample Section* \index{Sample Section}) wird genau 1 Bit kodiert. Der
+Einbettungsprozess geschieht in der DWT-Domain, daher werden die DWT-
+Koeffizienten \index{DWT-Koeffizienten} der Sample Section berechnet (eine
+Samples Section besteht aus einer Reihen aufeinander folgender Messpunkte eines
+Signal - sie beschreiben also einen Teil eines Signal und können ganz einfach
+wieder als eigenständiges Signal betrachtet werden).
+
+~ Figure { #fig-diagram-encoder; caption: "Schematischer Aufbau des Implemetierungsprozesses." }
+![img-diagram-encoder]
+~
+
+Jede Sample Section \index{Sample Section} bekommt ein Bit der Bitsequenz, die
+das Signal beherbergen soll. Diese Sequenz setzt sich zusammen aus einer
+Kombination der mit Redundanz angereicherten (Abschnitt [#sec-errorcorrection])
+eigentlichen Informationen und der Synchronisation-Codes \index
+{Synchronisations-Code}. Die Einbettung jedes Bit geschieht nach dem in
+Abschnitt [#sec-embeddingstragety] beschriebenen Algorithmus durch Veränderung
+der DWT-Koeffizienten \index{DWT-Koeffizienten}. Um das neue angereicherte
+Signal nun herzustellen werden auf die DWT-Koeffizienten eine inverse DWT-
+Transformation (IDWT) \index{inverse DWT-Transformation} angewandt. Diese
+resultiert in einer neuen Samples Section. Diese ersetzen im neuen Signal die
+unimplantierten Samples der korrelierenden Sample Section.
+
+Um sicherzustellen, dass das Watermark \index{Watermark} unhörbar in die Sample
+Section \index{Sample Section} implantiert wurde, wird noch eine
+Qualitätskontrolle vorgenommen. Dazu wird für ein Signalstück der sog.
+*Objective Difference Grade* (ODG) berechnet. Erfüllt dieser einen vorgegebenen
+Grenzwert, so ist das Signal zu störhaft verändert worden und das Bit muss neu
+implantiert werden. Um eine weniger invasive Veränderung sicherzustellen wird
+der in Formel [#equ-embeddingstrength] eingeführte *Embedding Strength Factor*
+(esf) \index{Embedding Strength Factor} reduziert, was dazu führt, dass die DWT-
+Koeffizienten weniger stark verändert werden.
+
+### Synchronisations-Codes
+
+\index{Synchronisations-Code|(}
+
+Das Rekonstruktionsprinzip (vgl. [#sec-reconstruction]) bestimmt für das
+Verhältnis der niederfrequenten DWT-Koeffizienten eines Signal einen Bitwert.
+Prinzipiell kann dieses Verfahren auf jede beliebige Menge an Samples angewandt
+werden und daraus einen Bitwert generieren.
+
+Das Problem ist nun zu erkennen wo das Signal absichtlich verändert wurde und wo
+daher tatsächlich eingebrachte Bits liegen. In der Literatur findet sich dazu
+das Konzept der Synchronisations-Codes [@xiang2007robust;@chang2012location;
+@li2000transparent;@ansari2004data;@huang2002blind;@petrovic1999data;
+@wu2005efficiently].  Prinzipiell handelt es sich dabei um einen Mechanismus,
+der bestimmte Bereiche eines Signals markiert. Jedem Marker folgt ein Teil der
+eigentlichen Information. Die Umsetzung der Markers kann sich durchaus von der
+eigentlichen Watermarkingmethode unterscheiden, in diesem Fall wird allerdings
+das selbe Modifikationsprinzip herangezogen.  Ein Synchronisations-Code besteht
+hier aus einer festgelegten Bitsequenz die als Marker dient. Wenn die Bitsequenz
+dekodiert wird, ist dies das Indiz das Informationsbits folgen.
+
+Im Folgenden steht `sync` als Synonym für die Bitsequenz des Synchronisations-
+Codes und ${L}_{s}$ ist die Länge der Bitsequenz (Anzahl an Bit) von `sync`.
+$\mbox{sync}(i)$ bezeichnet das Bit an der Stelle $i$ des Synchronisation-Codes,
+mit $i\in[1,{L}_{s}]$.
+
+#### Autokorrelation und Barker-Codes { #sec-barker-code }
+
+\index{Barker-Code|(}
+
+Wie bereits erwähnt können die Bits durch die Störeinflüsse der DA-
+Wandlung\index{DA-Wandlung} beeinflusst werden. Man sagt sie *kippen*. Bei den
+Synchronisations-Codes hat ein gekipptes Bit zur Folge, dass der Code nicht mehr
+erkannt wird. Die auf ihn folgenden Informationsbits gehen verloren.
+
+Die logische Schlussfolgerung ist, dass eine Bitsequenz mit dem
+Synchronisations-Code-Schema nicht zu 100% übereinstimmen muss, um als solcher
+erkannt zu werden. Man definiert also einen Schwellwert. Aber auch hier kann es
+zu Problemen führen, wie man sich leicht überlegen kann.
+
+~ Figure { #fig-sync-code-detection; width:45%; float:right; caption: "`sync` Erkennung" }
+![img-sync-code-detection]
+~ 
+
+Abbildung [#fig-sync-code-detection] skizziert das Erkennen eines
+Synchronisations-Codes `sync` \index{Synchronisations-Code}. Der Code wird immer
+mit einem Block Bits gleicher Länge des extrahierten Bitstroms
+verglichen. Die in der Skizze blau hervorgehobenen Bits sind das eingebettete
+`sync`. Die rot markierten Bits signalisieren jene Zeichen, die beim
+aktuellen Vergleich übereinstimmen. In diesem Beispiel beträgt die
+Übereinstimmung zwischen erkanntem und tatsächlichem `sync` 75% bei einer
+Synchronisation-Code Wortlänge von 8 Bit. Würde der Erkennungsschwellwert (oder
+*Synccode-Threshold* \index{Synccode-Threshold}) ${T}_{s}$ 0.75 betragen, so
+wäre nun `sync` erkannt worden. Aus der Skizze ist aber ersichtlich, dass hier
+der tatsächlich Match erst 2 Shifts später erfolgt. Die anschließend gelesenen
+Informationsbits würden also teilweise aus dem Ende von `sync` \index
+{Synchronisations-Code} bestehen. Umgekehrt würden auch 2 echte Bits des
+Informationsblock \index{Information Block} nicht gelesen werden.
+
+Das Problem in diesem Beispiel ist, dass `sync` \index{Synchronisations-Code}
+eine sehr hohe *Autokorrelation* \index{Autokorrelation} besitzt. In anderen
+Worten ist `sync` (als Signal aufgefasst) sehr ähnlich zu sich selbst, weswegen
+75% Überdeckung auch zu 75% Übereinstimmung führen. Die Lösung ist für `sync`
+\index{Synchronisations-Code} ein Sequenz mit minimaler Autokorrelation zu
+wählen. In der Literatur [@chang2012location;@lie2006robust;@huang2002blind]
+erfreuen sich die sog. *Barker-Codes* [@barker1953group] großer Beliebtheit.
+Dabei handelt es sich um 9 Zahlensequenzen von denen der längste 13 Zeichen
+umfasst, welche alle die Bedingung der Autokorrelations-Funktion:
+
+~ Equation { #equ-barker-correlation }
+| \sum\limits_{j=1}^{N-v} a_j {a}_{j+} | \leq 1 \quad\mbox{mit}\quad 1 \leq v < N \quad\mbox{und}\quad a_j \in {-1,+1}
+~
+
+wobei $N$ die Code Länge bezeichnet, erfüllen. Es lässt sich zeigen, dass die
+Summe bei einer Verschiebung wie im Beispiel oben immer sehr klein ist, außer
+die Codes überdecken sich exakt. Gleichzeitig bleibt die Summe immer noch sehr
+groß (nahe an 1) wenn bei vollständiger Überdeckung innerhalb des Codes eine
+Zahl kippt. Ein gekipptes Bit wirkt sich also nicht so massiv auf die Erkennung
+des Codes aus wie eine falsche Überdeckung. Barker-Codes eignen sich daher
+hervorragend als Synchronisations-Code Sequenz.
+
+Die Länge der verwendeten Barker Sequenz wirkt sich natürlich auch auf die
+Erkennungsgenauigkeit aus. Hier wird der längste Barker-Code  
+`+1 +1 +1 +1 +1 -1 -1 +1 -1 -1 +1 -1 +1` 
+verwendet. Der Vollständigkeit halber  sei noch darauf hingewiesen, dass wir nur
+Binärwerte kodieren können, weswegen $-1$ auf den Wert $0$ abgebildet wird. Bei
+der Erkennung von `sync` muss dies natürlich entsprechend bedacht werden.
+
+Synchronisations-Codes werden genau wie die eigentlichen Informationen (die
+*Nutzlast*) übertragen. Jeder eingebrachte `sync` \index{Synchronisations-Code}
+belastet daher die Transportkapazität des Signals. Es können also abhängig von
+der Informationsblocklänge bedeutend weniger Informationsbits effektiv in einem
+fixen Zeitfenster transportiert werden.
+
+\index{Barker-Code|)}
+\index{Synchronisations-Code|)}
+
+### Fehlerkorrekturverfahren { id: sec-errorcorrection }
+
+\index{Fehlerkorrekturverfahren|(}
+
+Die Natur der Barker-Codes \index{Barker-Code} bringt eine gewisse Resistenz
+gegen Bitfehler mit sich, wie eben demonstriert wurde. Die Informationsbit haben
+diese im Allgemeinen nicht. Der Übertragungskanal \index{Übertragungskanal} kann
+aber das Signal so weit beeinflussen, dass nicht alle Bits korrekt rekonstruiert
+werden. Es ist daher wünschenswert eine Methode zu verwenden welche derartige
+Bitfehler nicht nur erkennt, sondern auch korrigieren kann. Mit derartigen
+Modellen beschäftigt sich die *Kodierungstheorie* \index{Kodierungstheorie}.
+
+Wir verwenden hier eine Vorwärtsfehlerkorrektur \index{Vorwärtsfehlerkorrektur}
+(in der englischen Literator *forward error correction*, daher kurz FEC) bei dem
+die Daten mit einem *error-correcting code* \index{error-correcting code} (ECC
+\index{error-correcting code}) bewusst mit redundanten Daten angereichert
+werden. Aus dieser Redundanz lässt sich anschließend prüfen ob die Daten richtig
+rekonstruiert wurden und bei nicht zu starker Fehlerrate die tatsächliche
+Information auch wieder herstellen.
+
+In der Kodierungstheorie bezeichnet man mit *Message* \index{Message} die
+Information die es zu übertragen gilt und mit *Codeword* \index{Codeword} die
+mit Redundanz angereicherte Message. Im Informationsblock
+\index{\index{Information Block}} der einem jeden Synchronisations-Code \index
+{Synchronisations-Code} folgt befindet sich daher immer ein vollständiges
+Codeword um hier ggf. Übertragungsfehler auszugleichen.
+
+Bezeichnen wir mit $\mbox{wmk}$ das zu übertragende Watermark und mit ${L}_{w}$
+seine Länge (sog. *Watermark-Length* \index{Watermark-Length}, die Anzahl an
+Bit) dieses Watermarks, wobei $\mbox{wmk}(i)$ das Bit an der Stelle $i$ mit
+$i\in[1,{L}_{w}]$ referenziert, so ergeben sich folgende Bedingungen. Für die
+Bit-L\"ange einer Message ${L}_{m}$, genannt *Message-Length* \index{Message-
+Length}, muss gelten:
+
+~ Equation { #equ-wmkseqlength }
+{L}_{w} \pmod{{L}_{m}} = 0 \quad\mbox{und}\quad {L}_{w}\geq{L}_{m}
+~
+
+und für die Bit-Länge eines Codewords ${L}_{c}$ (sog. *Codeword-Length* 
+\index{Codeword-Length}) gilt allgemein ${L}_{c} > {L}_{m}$.
+
+Gültige Parameter für ${L}_{m}$ und ${L}_{c}$ hängen vom jeweiligen
+Fehlerkorrekturverfahren \index{Fehlerkorrekturverfahren} ab. Die im Folgenden
+angeführten Verfahren werden unterstützt:
+
+#### BCH-Codes { - }
+
+\index{BCH-Codes}
+
+In der Literatur [@chang2012location; @huang2002blind] oftmals verwendet
+werden die nach Bose, Chaudhuri und Hocquenghem benannten BCH-Codes
+[@bose1960class]. Dabei handelt es sich um eine Gruppe von zyklischen Blockcodes
+um mehrere 1 Bit Fehler zu korrigieren. Es existieren verschiedene Codes und
+Implementierungen. Verwendet werden die System Objects `comm.BCHEncoder` und
+`comm.BCHDecoder` aus der MATLAB Communication System Toolbox[^fn-bchcodes].
+
+[^fn-bchcodes]: <http://www.mathworks.de/de/help/comm/bch-codes.html>
+
+#### RS-Codes { - }
+
+\index{RS-Codes}
+
+Reed-Solomon-Codes [@reed1960polynomial] (nach Irving S. Reed und Gustave
+Solomon) sind ebenfalls zyklischen Blockcodes, da sie eine Unterklasse der BCH-
+Codes sind. Ihr Prinzip ist einfach: Für eine Message \index{Message} aus $k$
+Zeichen werden die $k$ Werte als Stützstellen eines Polynoms interpretiert.
+Mittels der Lagrange-Interpolation werden zusätzliche Stützstellen extrapoliert,
+sodass sich das Polynom durch $n>k$ Werte beschreiben lässt. Die $n$ Zeichen
+sind somit die Werte des Codewortes \index{Codeword}.
+
+Bekannt wurden RS-Codes durch ihre Verwendung im Kommunikationsprotokoll der
+Voyager Sonden[^fn-voyager] und später als ECC-Verfahren \index{error-
+correcting code} bei CDs, DVDs, DSL oder DVB.
+
+Verwendet wird die MATLAB Implementierung der Communication System Toolbox
+[^fn-rscodes].
+
+[^fn-voyager]: Zwei interstellare Raumsonden der NASA, gestartet 1977. Beide 
+    sind heute noch aktiv (Stand 2014). Voyager 1 ist das am weitesten von der 
+    Erde entfernte, von Menschen gebaute Objekt.
+
+[^fn-rscodes]: <http://www.mathworks.de/de/help/comm/reed-solomon-codes.html>
+
+#### LDPC-Codes { - }
+
+\index{LDPC-Codes}
+
+Low-Density-Parity-Check-Codes, von  Robert G. Gallager [@gallager1962low]
+entwickelt (daher oft auch Gallager-Codes), sind lineare ECC \index{error-
+correcting code} die nahe am Shannon-Limit (theoretische Obergrenze der Bitrate
+eines Übertragungskanals \index{Übertragungskanal}) operieren. Sie sind daher
+ähnlich effektiv wie Turbo-Codes. Verwendung finden sie vor allem in der
+Fehlerkorrektur in WLAN-Standards.
+Verwendet wird die MATLAB Implementierung der Communication System Toolbox[^fn-ldpccodes].
+
+[^fn-ldpccodes]: <http://www.mathworks.de/de/help/comm/ldpc-codes.html>
+
+\index{Fehlerkorrekturverfahren|)}
+
+### Datenstrukturen und Protokoll { #sec-protokoll }
+
+\index{Protokoll}
+
+Jeder digitale Kommunikationsprozess basiert auf einem Protokoll welches alle
+Teilnehmer beherrschen müssen. So auch dieser hier, denn wenn gleich der
+Übertragungskanal auch analog sein mag, so werden doch digitale Daten
+übermittelt. Nicht nur gewährleistet ein definiertes Protokoll die korrekte
+Verarbeitung - die Abstrahierung erlaubt auch ein einfacheres Verständnis von
+Aufbau, Funktion und Zusammenspiel der einzelnen Teile.
+
+~ Figure { #fig-protocol; caption: "Hierarchischer Aufbau des Protokolls" }
+![img-protocol]
+~
+
+#### Sample Section { - }
+
+Zunächst wird das Signal, welches durch zeit- und wertediskrete Samplewerten
+\index{Sample} beschrieben wird in Bereiche segmentiert. Es werden jeweils $N_s$
+\index{Sample-Section-Length} Samples\index{Sample} benötigt um 1 Bit zu
+transportieren. Dementsprechend werden genau die benötigte Anzahl
+aufeinanderfolgender Samples zu einer *Sample Section* gruppiert.
+
+#### Buffer Zones { - }
+
+\index{Buffer Zones}
+
+Um Interferenz zwischen den einzelnen Sample Sections \index{Sample Section} zu
+vermeiden befinden sich zwischen ihnen sog. *Buffer Zones*. Dabei handelt es
+sich um eine an sich beliebige Anzahl an Samples \index{Sample}, die aber nicht
+zur Informationsübertragung verwendet werden. Bei der Verarbeitung der Samples
+werden die Buffer Zones einfach übersprungen. Prinzipiell können die Pufferzonen
+auch mit Sampleanzahl ${N}_{BZ} = 0$ definiert werden, allerdings führen
+Umweltfaktoren wie die Sensitivität des Aufnahmegerätes (und anderer AD
+Einflüsse \index{AD-Wandlung}) dazu, dass sich die Sample Sections überlagern
+[@chang2012location]. Das Ergebnis ist sog. *Inter-Symbol-Interferen*[^fn-symbol]. 
+Die Auswirkung ist u.a. ein schlechteres Matching der Barker-Codes
+\index{Barker-Code} bei der Synchronisations-Code Erkennung \index
+{Synchronisations-Code}.
+
+[^fn-symbol]: Ein Symbol ist ein Element aus einem Alphabet. In binären Systemen 
+    ist das Alphabet also die Menge $\{0,1\}$.
+
+#### Frame { - }
+
+\index{Frame}
+
+Um die Buffer Zones einfacher handzuhaben werden sie in den *Frames*
+wegabstrahiert. Alle höheren Schichten sehen ein Frame als die logische Einheit
+die ein Bit transportiert. Einzig und allein die Frameverarbeitung muss über
+Position und Länge der Pufferzonen bescheid wissen. Für die höhere Schichten ist
+ein Bit in den ${N}_{F}$ Samples eines Frames, mit ${N}_{F} = {N}_{s} +
+{N}_{BZ}$, kodiert.
+
+#### Sync Block { - }
+
+\index{Sync Block}
+
+Ein Synchronisations-Code \index{Synchronisations-Code} besteht aus $L_s$ \index
+{Synchronisations-Code-Length} Bit, daher sind ebenso viele Frames notwendig um
+ein sync} zu schreiben. Diese Gruppe an Frames wird als *Sync Block* bezeichnet.
+
+#### Information Block { - }
+
+\index{Information Block}
+
+Synchronisations-Codes \index{Synchronisations-Code} markieren die Stellen an
+denen Information vorhanden ist. Demensprechend ist jeder Sync-Block gefolgt von
+einem *Information Block*, der sich aus $L_c$ \index{Codeword-Length}
+aufeinander folgender Frames zusammensetzt. Ein Block transportiert immer ein
+vollständiges Codeword \index{Codeword}, beinhaltet somit also eine Message
+\index{Message} inklusive der Redundanz des ECC \index{error-correcting code}.
+
+#### Package 
+
+\index{Package}
+
+Ein Sync Block und sein Information Block bilden zusammen eine Einheit, sie
+existieren nie für sich alleine ohne den anderen. Demensprechend empfiehlt es
+sich sie in einer gemeinsamen Datenstruktur abzubilden, dem sog. *Package*.
+Dieses eignet sich für die praktische Verwendung und lässt sich wie folgt
+Abbilden:
+
+``` cpp 
+typedef enum { zero, one } bit_t;
+typedef struct package {
+  bit_t *header;
+  bit_t *payload; 
+} package_t; 
+```
+
+Viele paketbasierte Netzwerkprotokolle definieren einen _Header_ (der das Packet
+beschreibt) und eine _Payload_ (die "Nutzlast"). Diesem entspricht auch ein Data
+Struct Package wenn man den Sync Block \index{Sync Block} als Header (auch wenn
+er nur angibt das es sich überhaupt um ein Packet handelt) und den Information
+Block \index{Information Block} als Payload auffasst.
+
+Somit lässt sich der Übermittelungsprozess eines Watermarks \index{Watermark}
+konzeptionell beschreiben als eine Partitionierung des Watermarks in Messages
+geeigneter Länge (bedingt durch das Verhältnis $L_m$ \index{Message-Length} zu
+$L_c$ \index{Codeword-Length} des ECC \index{error-correcting code}) und deren
+Versand durch Pakete.
+
+#### Parallelen zum OSI-Modell { - }
+
+Vergleicht man dieses Protokoll mit dem OSI-Modell[^fn-osimodell] \index{OSI-Modell} 
+so erkennt man folgendes: Frames \index{Frame} (und somit auch Sample
+Sections und Buffer Zones) sind hier Teil des _Physical Layer_ (Schicht 1),
+welcher sich um die Bitübertragung kümmert. Packages und deren Sync bzw.
+Information Blocks kümmern sich um  die Segmentierung von Bitdatenströmen in
+Blöcke und die Kanalkodierung. Sie bilden daher den _Data Link Layer_ (Schicht
+2) ab.
+
+[^fn-osimodell]: _Open Systems Interconnection Model_, auch ISO-OSI-Modell. 
+    Ein Netzwerkprotokolle mit Schichtenarchitektur. Früher tatsächlich in 
+    Verwendung, wird heute vor allem als Referenzmodell herangezogen.
+
+### Qualitätskontrolle {  #sec-qualitaetskontrolle }
+
+\index{Qualitätskontrolle|(}
+
+Das Einbringen des Watermarks \index{Watermark} unterlieg der Bedingung, dass es
+unhörbar (für den Menschen) sein soll. Um dies zu gewährleisten muss jedes
+bearbeitete Teilstück des Signals einer Qualitätskontrolle diesbezüglich
+unterzogen werden. Dazu existieren prinzipiell folgende Methoden:
+
+#### Mean Opinion Score { - }
+
+\index{Mean Opinion Score}
+
+Definiert in der ITU-T Recommendation P.800 [@rec1996p] handelt es sich beim
+_Mean Opinion Score_ (MOS) um das Ergebnis der Bewertungen einer Reihe von
+subjektiven Wahrnehmungstest durch Versuchspersonen. Damit werden die Qualitäten
+von Codecs in der Sprach- und Bildübertragung bewertet. Da hierfür jedes Segment
+einzeln von menschlichen Versuchspersonen als Teil des Algorithmus behandelt
+werden müsste, eignet es sich ganz offensichtlich nicht für eine automatische
+Verarbeitung.
+
+#### Signal-Rauschabstand { - }
+ 
+\index{Signal-Rauschabstand}
+
+Der Signal-Rauschabstand oder Signal-Rausch-Verhältnis (engl. 
+_signal-to-noise ratio_, daher kurz SNR) bewertet die technische Qualität eines 
+Signals welches von einem Störsignal überlagert wird. Hier ist zu beachten, 
+dass mit Störsignal nicht jenes im analogen Übertragungskanal 
+\index{Übertragungskanal} gemeint ist. Die Veränderung eines Audiosignals durch 
+das Watermark \index{Watermark} kann bezogen auf das ursprünglich unmodifizierte 
+Signal ebenfalls als Störsignal interpretiert werden.
+
+Der SNR berechnet sich durch: 
+
+~ Equation { #equ-snr }
+  \mbox{SNR} = {\mbox{Nutzsignalleistung} \over \mbox{Rauschsignalleistung}}, 
+~
+
+seine Bestimmung ist daher sehr einfach. Leider handelt es sich dabei um eine
+technisch objektive Güteeigenschaft die das menschliche Hörsystem nicht mit
+einbezieht und daher als Bewertungskriterium dementsprechend schlecht geeignet
+ist [@xiang2007robust].
+
+#### Objective Difference Grade  { - }
+ 
+\index{Objective Difference Grade}
+\index{Perceptual Evaluation of Audio Quality}
+
+Offensichtlich ist es als notwendig ein automatisch berechenbares
+Qualitätskriterium heranzuziehen, welches allerdings eine auf die menschliche
+Wahrnehmung skalierte Bewertungsmetrik abbildet. Genau hierfür wurde 1998 die
+ITU Recommendation BS.1387 [@rec1998bs], besser bekannt als _Perceptual
+Evaluation of Audio Quality_ (PEAQ) spezifiziert. Mit ihr lässt sich für ein
+Audiosignal der sog. _Objective Difference Grade_ (ODG) berechnen, ein Wert im
+Intervall $[-4,0]$ wobei $0$ für "unhörbar" und $-4$ für "sehr störend" steht.
+Es hat sich gezeigt, dass die Korrelation von PEAQ Bewertung und MOS ca. 0.98
+beträgt [@al2011dwt].
+
+Leider hat sich recht bald herausgestellt, dass die Berechnung des ODGs nicht
+hinreichend genau spezifiziert ist [@kabal2002examination; @campeanu2005peaq],
+was sich auch in der Qualität der derzeit vorhandenen Tools wiederspiegelt. Eine
+kurze Evaluierung gängiger PEAQ Implementierungen findet sich in Anhang [#ch-
+peaq].
+
+\index{Qualitätskontrolle|)}
+
+&pagebreak;
+
+## Watermark Extrahierung { #sec-extraction }
+
+Nachdem das Watermark\index{Watermark} nach den nun beschriebenen Schritten in
+ein Signal eingebettet und anschließend übertragen wurde, gilt es nun die
+Informationsdaten wieder zu extrahieren. Abbildung [#fig-diagram-decoder] zeigt
+den schematischen Ablauf des Dekodierungsprozesses.
+
+~ Begin Figure { #fig-diagram-decoder ; caption:"Schematischer Aufbau des Extraktionsprozesses" }
+![img-diagram-decoder-v2]
+~ End Figure
+
+### Resynchronisaton und Interpolation 
+
+Bei der Erkennung der Synchronisations-Codes kann es im Allgemeinen zu Problemen
+kommen. Die bei der DA-Wandlung \index{DA-Wandlung} auftretenden Einflüssen
+lassen sich im Allgemeinen durch eine Kombination aus _time scaling modification_
+\index{time scaling modification} (kurz TSM, dt. interessanterweise
+bekannt als _Time-Stretching_) und _wave magnitude distortion_
+\index{wave magnitude distortion} (WMD) beschreiben 
+[@xiang2007robust; @steinebach2002audio]. Die TSM kann das Auffinden der 
+Synchronisation-Codes verhindern. Das Prinzip kann daher auch gezielt eingesetzt 
+werden, um ein existierendes Watermark \index{Watermark} zu zerstören (etwa um 
+einen Urheberrechtlichsschutz aufzuheben). Dies wird als _Synchronization attack_ 
+\index{Synchronizationattack} bezeichnet.
+
+Um diesen Effekt der DA-Wandlung \index{DA-Wandlung} aufzuheben, muss versucht
+werden die Synchronisations-Codes wiederherzustellen. Man nennt diesen Vorgang
+_Resynchronisation_ \index{Resynchronisation}. Verschiedene
+Resynchronisationsansätze existieren, hier wird ein sog. _brute-force approach_
+\index{brute-force approach} angewandt und wie in [@steinebach2011re]
+vorgeschlagen auf ein Suchintervall von -10% bis +10% beschränkt.
+
+Die TSM bewirkt, dass das Signal auf seiner Zeitachse gestreckt oder gestaucht
+wird. Für das Watermark \index{Watermark} bedeutet das, dass ein Bit nicht mehr
+in $N_s$ \index{Sample-Section-Length} Samples kodiert ist, sondern durch mehr
+oder weniger Samples ${N}_{s}'$ beschrieben wird.  Zuerst gilt es die neue
+Sampleanzahl ${N}_{s}'$ zu finden. Dazu wird ${N}_{s}'$ von $0.9 \cdot {N}_{s}$
+bis $1.1 \cdot {N}_{s}$ durchgetestet und nach Synchronisations-Codes \index
+{Synchronisations-Code} gesucht. Algorithmus [#alg-resync] illustriert diesen
+Vorgang.
+
+~ Begin Algorithm { #alg-resync; caption: "`sync` Erkennung in der Resynchronisationsphase" }
+~ Begin Snippet
+\SetKwData{Framelen}{framelen}
+\SetKwData{Ns}{${N}_{s}$}
+\SetKwData{Steplen}{steplen}
+\SetKwData{Upperbound}{upperbound}
+\SetKwData{Lowerbound}{lowerbound}
+\SetKwData{Sig}{sig}
+\SetKwData{Size}{size}
+\SetKwData{Testwindow}{testwindow}
+\SetKwData{Cursor}{cursor}
+\SetKwData{Found}{found}
+\SetKwFunction{Resynchronize}{resynchronize}
+\SetKwFunction{Testsync}{testsync}
+\SetKwInOut{Input}{input}
+\SetKwInOut{Output}{output}
+
+\Input{Samples eines Signals}
+\Output{Resynchronisiertes Signal}
+
+\BlankLine
+
+\Steplen = 0.005 * \Ns\;
+\Lowerbound = 0.9 * \Ns\;
+\Upperbound = 1.1 * \Ns\;
+\Cursor = 1\;
+
+\While{ \Cursor < \Size - \Upperbound and not \Found }{
+  \Framelen = \Lowerbound\;
+  \While{\Framelen < \Upperbound}{
+    \Testwindow = \Sig[\Cursor,\Framelen]\;
+    \Found = \Testsync{\Testwindow}\;
+    \eIf{\Found}{ 
+      \Resynchronize{\Sig,\Framelen}\;
+    }{ 
+      \Framelen = \Framelen + \Steplen\;
+    }
+  }
+  \Cursor = \Cursor + 0.1 * \Lowerbound\; 
+}
+~ End Snippet 
+~ End Algorithm
+
+Wurde ein [sync]{font-family:monospace} \index{Synchronisations-Code} gefunden,
+so kann man das Verhältnis zwischen neuer und alter Sampleanzahl
+
+~ Equation { #equ-resampling_factor }
+  \alpha = { {N}_{s}' \over {N}_{s} } 
+~
+
+\index{Sample-Section-Length}
+
+berechnet werden. Mit $\alpha$ können nun alle Samples als
+Vorverarbeitungsschritt auf ihren ursprünglichen Wert rückinterpoliert werden.
+Verschiedene Interpolationsverfahren führen hier zu keinem merklichen
+Unterschied [@xiang2007robust], weswegen eine lineare Lagrange-Interpolation
+\index{Lagrange-Interpolation} verwendet wird. Somit können die neuen
+Samplewerte $f''(i)$ durch
+
+~ Equation { #equ-lagrange_interpolation }
+  f''(i) = \begin{cases}
+    f'(i) & \iff i = 1   \\
+    (1-\beta) \cdot f'(\lfloor\alpha \cdot i\rfloor) + \beta \cdot f'(\lfloor\alpha \cdot i\rfloor + 1) & \iff 1 < i < {N}_{s}  \\
+    f({N}_{s}') & \iff i = {N}_{s}
+  \end{cases} 
+~
+
+wobei $f'(i)$ die alten Werte und $\beta = \alpha \cdot i - \lfloor \alpha \cdot 
+i \rfloor$ beschreibt, berechnet werden. Somit kann für die Extrahierung das
+exakt selbe Verfahren zur Analyse der DWT-Koeffizienten \index{DWT-Koeffizienten}
+wie im Implantationsprozess verwendet werden.
+
+### Datenextrahierung 
+
+Nach der Resynchronisation kann das Signal schrittweise durchlaufen und nach
+[sync]{font-family:monospace} Sequenzen gescannt werden. Dabei wird das Signal
+genau so wie in der Implementierungsphase in Samples Sections zerteilt, die DWT-
+Koeffizienten für die Samples berechnet und nach dem Prinzip aus Kapitel 
+[#sec-reconstruction] für jedes Segment ein binärer Wert bestimmt. Anschließend 
+werden immer $L_s$ \index{Synchronisations-Code-Length} aufeinander folgende 
+Binärwerte auf ihre Übereinstimmung mit dem Synchronisations-Code 
+\index{Synchronisations-Code} [sync]{font-family:monospace} überprüft.
+
+Erfolgt ein Match auf den Synchronisations-Code, so sind die folgenden
+$L_c$ \index{Codeword-Length} Bit als Informationsbits aufzufassen. Da es sich um
+ein Codeword \index{Codeword} handelt, muss noch der Dekodierungsalgorithmus des
+ECC\index{error-correcting code} angewendet werden, um die
+Message \index{Message} zu erhalten. Die einzelnen Messages ergeben schließlich
+zusammengesetzt die eigentliche Information.
+
+Wie man sich anhand der Abbildung [#fig-protocol] leicht überlegen kann, können
+immer nachdem ein Codeword erfolgreich gelesen wurde die folgenden $L_c$\index
+{Codeword-Length} Samples Sections \index{Sample Section} auf der Suche nach
+weiteren [sync]{font-family:monospace} \index{Synchronisations-Code} Sequenzen
+übersprungen werden.
+
+~ PageIntentionallyLeftBlank
+THIS PAGE ACCIDENTALLY PRINTED ON!
+~
+
+# Analyse { #ch-analyse }
+
+Um die Effizienz des implementierten Verfahrens bewerten zu können wurde es
+einer umfangreichen Evaluierung unterzogen. Die Ergebnisse sind in diesem
+Kapitel gesammelt.
+
+## Hörbarkeit 
+
+Die Resultate werden von der Implementierung immer mit den Tools EAQUAL und
+PQevalAudio bewertet. Dabei hat sich gezeigt, dass der berechnete ODG
+\index{Objective Difference Grade} bei einer $\mbox{esf}=1$ meistens kleiner
+$-3$ liegt, wobei PQevalAudio traditionell etwas schlechter bewertet. Per
+Definition des PEAQ \index{Perceptual Evaluation of Audio Quality} Standards
+werden Werte kleiner $-2$ als "Slightly annoying" eingestuft und ab $-3$ gelten
+die Signalveränderungen als "Annoying". Subjektive Hörtests mit verschiedenen
+handelsüblichen Kopfhörern wie sie etwa bei Smartphones beiliegen bestätigen
+diese Einschätzungen. Über Laptop oder PC Lautsprecher sind die Watermarks
+hingegen selten bis gar nicht wahrzunehmen.
+
+Dennoch ist in diesen Fällen eine Reduktion der Embedding Strength
+\index{Embedding Strength} über den Embedding Strength Factor 
+\index{Embedding Strength Factor} (esf) vorgesehen. Jedoch hat sich ebenfalls 
+gezeigt, dass eine interative Reduktion des esf um 10% kaum eine Auswirkung 
+auf die resultierenden ODGs hat.
+
+## Stirmark Benchmarks 
+
+Lange war es ein Problem verschiedene Watermarkingverfahren miteinander zu
+vergleichen, da die Kriterien nach denen die Robustheit getestet wurde von jedem
+Entwickler selbst definiert wurden. Es fehlte ein entsprechender Standard. Zu
+diesem Zweck wurden Anfang des neuen Jahrtausends die sog. _StirMark Benchmarks_
+\index{Stirmark Benchmark} definiert [@petitcolas2000watermarking;
+@petitcolas2004stirmark], die derzeit in der Version 4.0 vorliegen. Dabei
+handelt es sich um ein definiertes Set an Angriffsverfahren
+\index{Angriffverfahren} die auf markierte Daten angewendet werden können. Eine
+Auswertung der so bearbeiteten Daten und ein Vergleich mit dem Original erlaubt
+Rückschlüsse auf die Stärken und Schwächen eines Watermarkingalgorithmuses,
+besonders auf verschiedene Angriffsfamilien (wie wir noch sehen werden), sowie
+eine Vergleich mit anderen Watermarkingverfahren. Jedoch werden nicht alle
+Angriffsszenarien welche testenswert wären auch definiert und bereitgestellt
+[@steinebach2002stirmark].
+
+Für die Auswertung von Audiodaten gibt es eine dedizierte _Stirmark for Audio_
+Version [@stirmarkforaudio] (aktuelle v1.3.2). Auf deren Verwendung wir kurz in
+Anhang [#ch-stirmarkaudio] eingegangen, da sie sich als nicht ganz einfach
+herausstellen kann. Unter anderem bestehen Voraussetzungen an die Maschine,
+weswegen auch Bestrebungen existierten die Applikation als Cloud Service zu
+abstrahieren [@petitcolas2001public]. Eine Umsetzung dieser ist jedoch nicht
+abzusehen.
+
+Eine Vielzahl der Angriffsoperationen sind von Parametern abhängig. Diese
+Implementierung wurde mit den in den folgenden Testergebnissen angegebenen
+Parameter strapaziert, welche mit jenen von Xiangs Evaluierung
+[@xiang2007robust] übereinstimmen, insofern sie rekonstruiert werden konnten.
+Einige der Angaben passen jedoch nicht auf die von Stirmark for Audio
+bereitgestellte API. Andere Angriffe werden zwar als besonders effektiv
+aufgezählt, ihre Parameter jedoch nicht angegeben, was einen Vergleich ebenfalls
+nicht ermöglicht.
+
+Wie in [@lang2004stirmark] eingehend erläutert wird sind die Parameter der
+Angriffe entscheidend für die Auswirkung auf das Audiosignal. Die 3 größen
+Signaltypen Sprache, Musik und Geräusch haben alle unterschiedliche Stärken und
+Schwächen gegenüber einem Angriffstyp und dessen Variationen definiert durch
+seine Parameter.
+
+Tabelle [#tab-algo_settings] zeigt die Parameter der Implementierung mit denen
+der Watermarkingprozess durchgeführt wurde.
+
+~ Begin TableFigure { #tab-algo_settings ; caption:"Parameter der Implementierung für die Testfälle" }
+
+|------------------------------------------|----------|------------------------------------|
+| **Parameter**                            | **Wert** | **Kommentar**                      |
+|:-----------------------------------------|---------:|:-----------------------------------|
+| Wavelet-Function (${f}_{w}$)             | db1      |                                    |
+| DWT-Level (${D}_{k}$)                    | 6        |                                    |
+| Subband-Length (${N}_{E}$)               | 8        |                                    |
+| Embedding Strength Factor (esf)          | 1        | Schreiben am math. möglichen Limit |
+| Bufferzone Scaling Factor                | 0.1      | 10% der Sample Section Length      |
+| Synchronisations Code Length (${L}_{s}$) | 13       | Barker Code mit 13 Bit             |
+| Synccode-Threshold (${T}_{s}$)           | 0.8      |                                    |
+| Error Correction Methode                 | BCH      |                                    |
+| Message-Length (${L}_{m}$)               | 5        |                                    |
+| Codeword-Length (${L}_{c}$)              | 15       |                                    |
+| ODG                                      | false    | erzwinge maximale Watermarkstärke  |
+|------------------------------------------|----------|------------------------------------|
+{ .textable }    
+~ End TableFigure
+   
+Da die Testdaten von Xiang nicht vorhanden sind, wurden verschiedene
+Audiosignale getestet die sowohl zu den von Xiang beschriebenen
+Testdateninhalten wie auch weitere abbilden. In Tabelle [#tab-stirmark] finden
+sich die Ergebnisse einer 19 Sekunden langen Audioaufnahme, welches versucht
+sowohl Sprache wie auch Musik und Arten von Geräuschen abzubilden. Die
+_Bitfehlerhäufigkeit_ \index{Bit error rate} (engl. _Bit error rate_,  BER) hat
+sich dabei als relativ repräsentativ für die übrigen Testdaten herausgestellt.
+
+Die verwendeten Abkürzungen stehen hier für:
+
+~ Begin Description 
+
+* PL 
+  : _Package loss_ \index{Package loss}. Ein Paket wird als verloren klassifiziert, 
+    wenn der Synccode-Threshold \index{Synccode-Threshold} von der gelesenen 
+    Synccode \index{Synchronisations-Code} Bitsequenz nicht überschritten wurde, 
+    da die Bits zu sehr in Mitleidenschaft gezogen worden sind. Das Paket wäre 
+    somit nicht als solches erkannt worden. 
+
+* DM 
+  : _Damaged message_. Jene Pakete deren Informations Bits so fehlerhaft sind, 
+    dass das Codeword \index{Codeword} nicht mehr in die korrekte Message 
+    \index{Message} übersetzt werden konnte. Die Message ist daher unbrauchbar.
+
+* EMB 
+  : _Erroneous message bits_. Absolute Anzahl gekippter Bits in allen Messages 
+    des Signals. 
+
+* BER 
+  : _Bit error rate_\index{Bit error rate}. Das Verhältnis 
+
+~ Equation { #equ-ber }
+  \mbox{BER} = {\mbox{EMB} \over \mbox{Anzahl an Pakete} \cdot {L}_{m}} 
+~
+~ End Description
+
+Sync Blöcke \index{Sync Block} und Informations Blöcke \index{Information Block}
+wurden separat behandelt. Somit wurde sichergestellt, dass auch die Daten der
+nicht erkannten Pakete analysiert werden konnten.
+
+~ Begin TableFigure { #tab-stirmark ; caption:"Robustheit gegen die _Stirmark for Audio_ Angriffe" }
+|-----------------|--------------------------------------|-------|-------|-----|-------|
+| Angriff         | Parameter                            | PLb   | DMb   | EMBb| BER   |
+|:----------------|:-------------------------------------|------:|------:|----:|------:|
+| Original        |                                      | 0%    | 0%    | 0   | 0%    |
+| AddDynNoise     | Strength=20                          | 58,8% | 23,5% | 7   | 8,2%  |
+| AddNoise        | Strength=100                         | 35,3% | 0%    | 0   | 0%    |
+| AddNoise        | Strength=500                         | 88,2% | 11,8% | 4   | 4,7%  |
+| AddNoise        | Strength=900                         | 88,2% | 29,4% | 10  | 11,8% |
+| AddSinus        | Amplitude=900, Frequency=1300        | 88,2% | 64,7% | 25  | 29,4% |
+| Amplify         | Factor=50                            | 0%    | 0%    | 0   | 0%    |
+| CutSamples      | RemoveDist=10, RemoveNumber=1        | 100%  | 82,4% | 37  | 43,5% |
+| Echo            | Period=10                            | 88,2% | 64,7% | 27  | 31,8% |
+| Echo            | Period=50                            | 100%  | 82,4% | 36  | 42,4% |
+| Exchange        |                                      | 0%    | 0%    | 0   | 0%    |
+| ExtraStereo     | Strength=30                          | 0%    | 0%    | 0   | 0%    |
+| ExtraStereo     | Strength=50                          | 0%    | 0%    | 0   | 0%    |
+| ExtraStereo     | Strength=70                          | 5,9%  | 0%    | 0   | 0%    |
+| FFT_Invert      | FFTSIZE=16384                        | 0%    | 0%    | 0   | 0%    |
+| FFT_RealReverse | FFTSIZE=16384                        | 100%  | 100%  | 41  | 48,2% |
+| FlippSample     | Period=10, FlippCount=2, FlippDist=6 | 70,6% | 35,3% | 12  | 14,1% |
+| Invert          |                                      | 0%    | 0%    | 0   | 0%    |
+| RC_LowPass      | LowPassFrequency=9000                | 0%    | 0%    | 0   | 0%    |
+| Smooth          |                                      | 0%    | 0%    | 0   | 0%    |
+| Smooth2         |                                      | 0%    | 0%    | 0   | 0%    |
+| Stat1           |                                      | 0%    | 0%    | 0   | 0%    |
+| ZeroCross       | ZeroCross=1000                       | 35,3% | 0%    | 0   | 0%    |
+| ZeroLength      | ZeroLength=10                        | 100%  | 88,2% | 40  | 47,1% |
+|-----------------|--------------------------------------|-------|-------|-----|-------|
+{ .textable }
+~ End TableFigure
+
+Aus Tabelle [#tab-stirmark] ist gut zu erkennen, wo die Schwächen des
+Watermarkingverfahren liegen. Sämtliche Angriffe die das Frequenzspektrum des
+Signals beeinflussen wirken sich negativ auf die BER \index{Bit error rate} aus.
+Hier zeigt sich aber auch, dass die Fehlerkorrektur sehr wohl wirksam ist. So
+kann sie wie man sieht vor allem bei additivem Noise den resultierenden Fehler
+vergleichsweise klein halten.  Allerdings sei hier darauf hingewiesen, dass
+trotz vergleichsweise moderatem BER dennoch viele Pakete unreparierbar
+beschädigt werden. Die Literatur beschränkt sich oftmals auf die reine Bewertung
+des BER, ohne auf diesen Umstand einzugehen.
+
+Anders sieht es für die Synchronisations-Codes aus. Der Package
+loss\index{Package loss} ist vergleichsweise viel höher. Offenbar ist der
+Synccode-Threshold \index{Synccode-Threshold} ${T}_{s}$ zu restriktiv, um die
+Bitfehler in den [sync]{font-family:monospace} Sequenzen auszugleichen.
+
+## Resampling 
+
+Jedes Testsignal wurde auf die Abtastraten \index{Abtastrate} 8000Hz, 11025Hz,
+22050Hz, 44100Hz und 48000Hz gesampled. Bei jeder Sampling Rate außer der
+ursprünglichen liegt ein vollständiger Datenverlust vor. Dies verwundert weiter
+auch nicht, bedenkt man Formel [#equ-samplseclength] die definiert wie viele
+Samples \index{Sample} für die Kodierung eines Bits notwendig sind. Ein
+Resampling bedeutet aber das eine fixe Signallänge (in Sekunden) in nachher mehr
+oder weniger Abtastwerten abgebildet wird. Somit bilden die vom Algorithmus bei
+der Dekodierung betrachteten Samplewerte einen falschen Zeitraum ab, in dem
+natürlich keine gültigen Bits enthalten sind.
+
+## Kompression
+
+Die Implementierung wurde gegen die verlustbehafteten Kompressionsverfahren
+\index{Kompressionsverfahren} _MP3_, _Ogg Vorbis_ und _AAC_ bei den Bitraten
+32kHz, 64kHz, 96kHz und 128kHz getestet. Hierbei hat sich eine hohe Robustheit
+herausgestellt. Es traten keine fehlerhaften Bits auf.
+
+## Datenrate {  #sec-datenrate }
+
+Wir wollen noch einige Überlegungen bezüglich der erreichbaren Datenraten
+anstellen. Darauf wirken einige - teilweise variable - Faktoren ein.
+
+Wie bereits aus Formel [#equ-samplseclength] bekannt ist sind prinzipiell für
+die Kodierung eines einzigen Bits $N_s$ Samples\index{Sample} notwendig. Für die
+Defaulteinstellungen der Implementierung aus Tabelle [#tab-algo_settings], mit
+der auch die Testfälle durchgeführt wurden, beläuft sich $N_s$ auf 1536
+Abtastwerte.
+
+Ausgehend von der Abtastrate des Signal \index{Abtastrate} ergibt sich somit die
+Bitkapazität \index{Bitkapazität} die das Signal in einer Sekunde aufnehmen
+kann. Ebenfalls interessant ist die Paketkapazität \index{Paketkapazität}.
+Ziehen wir wieder die Voreinstellungen aus Tabelle [#tab-algo_settings] heran,
+so besteht ein Package \index{Package} aus 13 Synchronisations-Code \index
+{Synchronisations-Code} Bits und 15 Codeword \index{Codeword} Bits, insgesamt
+also 28 Bit. Einem Package kann 5 Bit effektive Nutzlast als Message
+\index{Message} übertragen.
+
+~ Begin TableFigure { #tab-datenraten ; caption:"Datenrate in Abhängigkeit der Samplerate" }
+~ Begin Center
+
+|----------|----------|----------|-----------------|------------|----------|----------|----------|----------|--------------|------------------------------|
+| **$N_E$**| **$D_k$**| **$N_s$**| **$f_s$ \[Hz\]**| **Bitrate**| **$L_s$**| **$L_m$**| **$L_c$**| **$L_p$**| **Paketrate**| **Nutzlast \[Bd[^fn-baud]\]**|
+|---------:|---------:|---------:|----------------:|-----------:|---------:|---------:|---------:|---------:|-------------:|-----------------------------:|
+| 8        | 6        | 1536     | 11025           | 7,18       | 13       | 5        | 15       | 28       | 0,26         | 1,28                         |
+| 8        | 6        | 1536     | 22050           | 14,36      | 13       | 5        | 15       | 28       | 0,51         | 2,56                         |
+| 8        | 6        | 1536     | 44100           | 28,71      | 13       | 5        | 15       | 28       | 1,03         | 5,13                         |
+| 8        | 6        | 1536     | 48000           | 31,25      | 13       | 5        | 15       | 28       | 1,12         | 5,58                         |
+| 16       | 6        | 3072     | 11025           | 3,59       | 13       | 5        | 15       | 28       | 0,13         | 0,64                         |
+| 16       | 6        | 3072     | 22050           | 7,18       | 13       | 5        | 15       | 28       | 0,26         | 1,28                         |
+| 16       | 6        | 3072     | 44100           | 14,36      | 13       | 5        | 15       | 28       | 0,51         | 2,56                         |
+| 16       | 6        | 3072     | 48000           | 15,63      | 13       | 5        | 15       | 28       | 0,56         | 2,79                         |
+| 8        | 7        | 3072     | 11025           | 3,59       | 13       | 5        | 15       | 28       | 0,13         | 0,64                         |
+| 8        | 7        | 3072     | 22050           | 7,18       | 13       | 5        | 15       | 28       | 0,26         | 1,28                         |
+| 8        | 7        | 3072     | 44100           | 14,36      | 13       | 5        | 15       | 28       | 0,51         | 2,56                         |
+| 8        | 7        | 3072     | 48000           | 15,63      | 13       | 5        | 15       | 28       | 0,56         | 2,79                         |
+|----------|----------|----------|-----------------|------------|----------|----------|----------|----------|--------------|------------------------------|
+{ .textable }
+
+~ End Center
+~ End TableFigure
+
+[^fn-baud]: Baud \[Bd\]. Einheit für die Symbolrate eines Übertragungskanals 
+    in der Nachrichtentechnik. Symbole sind hier die Bitzustände $\{0, 1\}$. 
+    Ein Baud enspricht demnach einem Bit/Sek.
+
+Tabelle [#tab-datenraten] illustriert die Zusammenhänge der Parameter mit
+Bitrate \index{Bitrate}, Paketrate\index{Paketrate} (Pakete \index{Package} pro
+Sekunde) und Nutzlastrate \index{Nutzlastrate} (Messagebit pro Sekunde) für die
+Standardeinstellungen in Abhängigkeit der Abtastrate des Audiosignals. Sie zeigt
+schön auf, dass sowohl eine Verdoppeltung der Subband-Length \index{Subband-Length} 
+$N_E$ wie auch eine Erhöhung des DWT-Level \index{DWT-Level} $D_k$ um 1
+zu einer Verdoppelung der Sample-Section-Length \index{Sample-Section-Length}
+$N_s$ und somit zu einer Halbierung der Bit-, Paket- und Nutzlastrate führt.
+Gleichzeitig zeigt sie auch das umgekehrt eine Verdoppeltung der Abtastrate zu
+einer Verdoppelung eben jener Übertragungsraten führt.
+
+## Ursachenforschung
+
+Um die Ursachen für die scheiternde Übertragung im analogen Bereich zu
+analysieren wurden Signale manuell synchronisiert, indem an ein Audiosignal an
+den Enden Stille eingefügt wurde. Somit konnte das anschließend analog
+übertragene Signal bis auf wenige Samples \index{Sample} genau synchronisiert
+werden. Dies erlaubt die DWT-Koeffizientn \index{DWT-Koeffizienten} direkt mit
+jenen des ursprünglichen Signals zu vergleichen um den Ursachen auf den Grund zu
+gehen.
+
+Ein Blick auf die logarithmischen Frequenzspektren in den Abbildungen 
+[#fig-spektrum-original] und [#fig-spektrum-soundkarte] einer auf einer Flöte
+gespielten 4,3 Sekunden langen Tonleiter zeigt anfänglich keine groß
+auffallenden Unterschiede. Lediglich eine prinzipielle Verringerung der
+Intensitäten in den niederen Frequenzbereichen scheint feststellbar zu sein. Da
+diese jedoch gleichmäßig erscheinen dürfte dies keine Auswirkung auf das
+Watermark haben.
+
+Durch den oben angesprochenen manuellen Abgleich der Samples \index{Sample} und
+der Kürze des Signal können die Bits ohne großen Aufwand direkt dekodiert und
+verglichen werden, ohne dabei auf Synchronisations-Codes \index{Synchronisations-Codes} 
+und die Protokollhierarchie zu achten.
+
+&pagebreak;
+
+~ Begin Figure { #fig-spektrum-original ; caption:"Frequenzspektrum eines Signals mit Watermark" }
+![img-spektrum-original]
+~ End Figure
+
+
+~ Begin Figure { #fig-spektrum-soundkarte ; caption:"Frequenzspektrum nach DA- und AD- Wandlung" }
+![img-spektrum-soundkarte]
+~ End Figure
+
+Betrachtet man nun die Zusammensetzung jedes Bits genau, so wird man fündig. Wir
+erinnern uns: Jedes Bit ist durch die Energieniveaus ${E}_{1}$,${E}_{2}$ und
+${E}_{3}$ der DWT-Koeffizienten \index{DWT-Koeffizienten}
+Subbänder \index{Subband} definiert. Der Bitwert $0$ oder $1$ ergibt sich aus dem
+Verhältnis der Energieddifferenzen $A$ und $B$ der Subbänder. Es zeigt sich,
+dass die Energieniveaus im Schnitt um den Wert $0.03$ abweichen. Daraus ergeben
+sich zwei beobachtete Effekte:
+
+1. Die Sortierung zu ${E}_{min}$,${E}_{med}$ und ${E}_{max}$ der Subband-Energiewerte 
+   ${E}_{1}$,${E}_{2}$ und ${E}_{3}$ korreliert durch die Abweichung nicht mehr mit 
+   dem Ursprungssignal. Somit werden für die Berechnung von $A$ und $B$ falsche Bänder 
+   herangezogen, weswegen die Dekodierung folglich einen falschen Bitwert produziert. 
+
+2. Auch wenn die Energieniveaus richtig sortiert werden, so kann es durch die 
+   Abweichungen dennoch dazu kommen, dass die korrekte Relation der Niveaudifferenzen 
+   $A$ und $B$ nicht mehr gegeben ist. Die Veränderung der Bänder kann beispielsweise 
+   ausreichen, dass bei einer kodierten $1$ im Dekodierprozess jedoch $A \ngtr B$ gilt, 
+   weswegen eine $0$ erkannt wird.
+   
+An dieser Stelle sei noch darauf hingewiesen, dass die für dieses Testsignal
+gewählte analoge Übertragungsstrecke lediglich aus einem analogen Audiokabel
+bestand. Subjektive Hörtests lassen keinen merklichen Unterschied zwischen
+Originalsignal und übertragenem Signal feststellen. Die Belastung die das Signal
+durch diesen Übertragungskanal erfährt, ist denkbar gering. In Luft wäre diese
+beispielsweise viel massiver.
+
+Es zeigt sich also, dass die Energieniveaus der Bänder sehr fragil sind. Sie
+eignen sich demnach für einen Übertragungskanal der die niederfrequenten
+Energiepotenziale - wenn auch nur gering - verändern kann offensichtlich nicht.
+
+~ PageIntentionallyLeftBlank
+Esta página ha sido expresamente dejada en blanco.
+~
+
+# Schlussfolgerung und Ausblick {  #ch-ausblick }
+
+Im Zuge der Implementierung hat sich nach den ersten DA/AD-Tests sehr schnell
+gezeigt, dass die verwendete Watermarking Methode [@xiang2007robust] nicht das
+zu leisten vermag, was sie verspricht. Wenn gleich das Watermark
+\index{Watermark} im rein digitalen an der Hörschwelle stabil ist, so ist die
+Resistenz im analogen Kanal unbefriedigend. Die daraufhin angebrachten
+Erweiterungen um Fehlerkorrekturverfahren \index{Fehlerkorrekturverfahren} haben
+auch hier nur eingeschränkt für Verbesserung gesorgt. Die prinzipielle Schwäche
+der Watermarkingmethode, die in der Anfälligkeit für leichte Veränderungen in
+den niederen Frequenzen identifiziert werden konnte, kann von der natürlichen
+Fehlerresistenz der Synchronisations-Codes \index{Synchronisations-Code} nicht
+kompensiert werden.
+
+Allerdings sieht das entwickelte Framework als grundlegende Architektur dennoch
+sehr vielversprechend aus. Das sehr einfach definierte Protokoll
+\index{Protokoll} ist flexibel bezüglich der angewendeten Methoden seiner
+Komponenten. Es wäre daher ein leichtes die Watermarking-Methode gegen eine sich
+als robuster erwiesenere auszutauschen. Sehr vielversprechend erscheint hier
+etwa die Publikation von Chang, Di, et al. [@chang2012location]. Somit könnte
+das Framework unverändert weiter benützt werden nachdem lediglich die Funktionen
+zum lesen und schreiben eines Bits angepasst werden würden.
+
+Weiters hat sich die Qualität der aktuell verfügbaren PEAQ-Implementierungen
+\index{Perceptual Evaluation of Audio Quality} als unzureichend erwiesen. Zu
+viele Probleme und Ergebnisse die mit subjektiven Hörtests nicht bestätigt
+werden können lassen die Evaluierung des Watermarkingprozesses oftmals in
+unzureichendem Zustand. Eine mögliche Besserung könnte der PEAQ Konkurrent
+PEMO-Q [@huber2006pemo] bringen. Über die Verfügbarkeit von Tools wurden im Zuge
+dieser Arbeit keine Informationen eingeholt.
+
+Wenig performant ist aktuell der Resynchronisationsprozess. Die Suche nach
+Synchronisations-Codes wird derzeit über einen einfachen brute-force Ansatz
+gelöst. Dieser ist nicht nur langsam, sondern liefert im Allgemeinen auch eine
+nicht optimale Lösung. Hier würden sich die in [@steinebach2011re] angeführten
+Alternativen anbieten, sowie eine lokale Suche um das Optimierungsproblem zu
+verbessern.
+
+Positiv überrascht hingegen die starke Robustheit gegenüber Kompressionsverfahren.
+
+~TexRaw
+\vfill
+\pagebreak
+\appendix
+~
+
+~ PageIntentionallyLeftBlank
+Page intentionnellement laissée vierge.
+~
+
+# PEAQ Implementierungen { @h1="A"; #ch-peaq }
+
+\index{Perceptual Evaluation of Audio Quality|(}
+
+Im Rahmen dieser Arbeit wurden diverse PEAQ Implementierungen getestet. Hier
+findet sich eine Übersicht der dabei gesammelten Erfahrungen.
+
+## EAQUAL
+
+Das de facto Tool der Wahl in der gängigen Literatur [@xiang2007robust;
+@kraetzer2006transparency]. *EAQUAL* (Evaluation of Audio QUALity) ist aktuell
+als Version `0.1.3alpha` vorhanden, eine aktive Weiterentwicklung allerdings nicht
+erkennbar. Der Sourcecode ist verfügbar, allerdings nur unter MS Visual C++ 6
+kompilierbar. Ein unixbasierter Makefile-Ansatz ist zwar vorhanden, nach Angaben
+der Readme allerdings nur auf einer einzigen Linux Maschine getestet worden. Auf
+allen hier getesteten Maschinen war der Builtprozess erfolglos und ohne Aussicht
+auf eine einfache Behebung.
+
+Ein Windows Executable ist vorhanden und akzeptiert per Command Line Referenzen
+auf Audiofiles. Um das Watermark zu testen muss daher immer das implantierte und
+das unberührte Signal zuerst auf den Persistenzspeicher geschrieben werden.
+Teilweise bricht die Verarbeitung mit (auch undokumentierten) Fehlercodes
+einfach ab.
+
+Per Wine (dem Windows compatibility layer für POSIX Systeme) lässt sich das Tool
+auch per Unix Terminal verwenden. Die Performance ist hier um ca. den Faktor 5
+schlechter.
+
+## PQevalAudio
+
+Bei PQevalAudio handelt es sich um eine frei verfügbare Implementierung von P.
+Kabald [@kabal2002examination] die allerdings nicht vollkommen Standardkonform
+ist.
+
+Der Vorteil von PQevalAudio (aktuell *PQevalAudio v2r0*) ist die Verfügbarkeit
+einer MATLAB Library zusätzlich zu einem Binary Executable. Das die
+Implementierung dieser Arbeit in MATLAB vorgenommen wurde war PQevalAudio daher
+initial besonders interessant. Leider benötigen beide die Signale als Files auf
+der Festplatte. Durch die hohe Kopplung der Komponenten war ein Erfolg der
+Bemühung die Library für MATLAB Datenstrukturen umzuschreiben in vertretbarer
+Zeit nicht absehbar. Zusätzlich verarbeitet PQevalAudio ausschließlich
+Audiofiles mit einer Abtastrate \index{Abtastrate} von 48kHz. Resampling (und vor
+allem Upsampling - also die Erhöhung der Abtastrate) bringt noch einmal eine
+ganz eigene Reihe von Auswirkungen für das Signal mit sich - ein Umstand der für
+die Bewertung nicht förderlich ist. Auch wenn es teilweise in der Literatur noch
+als die zuverlässigste Implementierung bezeichnet wird [@nishimura2013objective],
+so zeigte die Beobachtung eine gewisse Nutzlosigkeit der Ergebnisse. Der
+ODG \index{Objective Difference Grade} ist normiert als ein Wert zwischen -4 und
+0. PQevalAudio liefert hingegen nicht selten einen positiven Wert, was eine
+sinnvolle verwertbare Interpretation unmöglich macht.
+
+Positiv ist zu bemerken, dass das Projekt vergleichsweise gut dokumentiert ist
+und offenbar aktuell nach wie vor gepflegt wird. Auch ist es an sich die
+stabilste Lösung, da es nie ergebnislos terminiert.
+
+## peaqb
+
+Bei *peaqb* handelt es sich um die Bemühung eine Implementation der
+Recommendation ITU-R BS.1387-1 als freie offene Software zu schaffen. Initiier
+im Jahr 2003 liegt seit dem 14. März 2013 das GPLv2 lizensierte Tool in der
+Version 1.0.3 Beta vor. Zu finden ist das Projekt auf der
+Softwareentwicklungsplattform Sourceforge[^fn-peaqb], welche sich nicht ganz
+unbegründet in den letzten Jahre den Beinahmen "Friedhof der Open Source
+Projekte" eingefangen hat. Der Grund dafür ist auch an diesem Projekt leider zu
+spüren.
+
+[^fn-peaqb]: <http://sourceforge.net/projects/peaqb/>
+
+Die Versuche peaqb für die Signal-Qualitätssicherung zu bem\"uhen haben schnell
+gezeigt, dass das Tool noch sehr instabil ist. In den meisten Fällen terminiert
+das Programm mit einem Segmentation Fault. Falls es in der Lage ist
+Endergebnisse zu berechnen, so sind diese oftmals ähnlich zu PQevalAudio
+unbrauchbar, da sie entweder ebenfalls in nicht definierten Bereichen liegen
+oder mit der subjektiven Hörwahrnehmung einfach nicht übereinstimmen. Die
+Ergebnisse von [@kondo2012use] nach denen peaqb die genauesten Ergebnisse
+liefert (verglichen mit EAQUAL und PQevalAudio) konnten nicht nachvollzogen
+werden.
+
+Eine Weiterentwicklung jenseits einer Version 1.0 Beta ist nicht abzusehen.
+
+## OPERA
+
+OPERA ist eine Software von OPTICOM welche neben dem PEAQ Basic Model auch das
+Advanced Model unterstützt. Dieses Tool scheint seit Version 3 (nach Angabe des
+Herstellers) das de facto Standard Tool zur Bewertung der Soundqualität in der
+Industrie zu sein. Da allerdings die Literatur sich nicht auf dieses Tool
+stützen, und OPTICOM auch auf ihrer Produktseite keine klaren Angaben zu
+Lizenzierung und Preis angibt (man solle nachfragen), ist davon auszugehen, dass
+es für den (wissenschaftlichen) "Normalgebrauch" nicht zu bezahlen sein wird.
+
+\index{Perceptual Evaluation of Audio Quality|)}
+ 
+# Tutorial zur Implementation { @h1="B"; #ch-tutorial }
+
+Die Implementierung liegt in MATLAB vor und deren Verwendung soll hier kurz
+illustriert werden. Die sehr lose gekoppelten modularen Komponenten werden aus
+Anwendersicht prinzipiell von den beiden Funktionen `encoder` und `decoder`
+wegabstrahiert.
+
+## encoder {  - ;  #sec-encoder }
+
+\index{encoder|(}
+
+``` Matlab
+function [modSignal, encodedBitCount ] = encoder( inputSignal, watermark, fs )
+```
+
+Die Signatur des `encoder` \index{encoder} zeigt, dass die Funktion ein Signal
+`inputSignal` als Liste von Abtastwerten, dessen Sampling-Rate
+\index{Abtastrate} `fs` und eine List von Bitwerten `watermark` verlangt. Als
+Resultat liefert sie das modifizierte Signal `modSignal` und die Anzahl der
+hineingeschriebenen Bits (`watermark` kann mehr Werte enthalten als
+`inputSignal` Kapazität bereit stellt).
+
+Folgendes Codebeispiel erweitert `test.wav` um 100 zufällig generierte Bits und
+speichert das Ergebnis in `result.wav`:
+
+``` Matlab
+data = randi([0 1], 1, 100);
+[signal,fs] = audioread('test.wav');
+[modSignal, count] = encoder(signal, data, fs);
+audiowrite('result.wav',modSignal, fs);
+```
+
+\index{encoder|)}
+
+## decoder { - }
+
+\index{decoder|(}
+
+``` Matlab
+function [watermark] = decoder( signal, fs )
+```
+
+Das Interface des `decoder` \index{decoder} ist ebenso simpel gehalten. Er nimmt
+ein beliebiges Signal und dessen Abtastrate \index{Abtastrate} und versucht
+daraus Informationen zu extrahieren indem es nach Paketen gescanned wird.
+
+Folgendes Codesnippet liefer die in [#sec-encoder] geschriebenen zufälligen
+Bits:
+
+``` Matlab
+[signal,fs] = audioread('result.wav');
+data = decoder(signal,fs);
+```
+
+## Settings { - }
+
+Die Implementiertung arbeitet per Default mit den Voreinstellungen, die sich als
+vergleichsweise effektiv erwiesen haben. Die diversen Parameter können aber auch
+individuell konfiguriert werden. Sinnvoll ist dies beispielsweise um die
+Paketgröße über die Synchronisations-Code-Length \index{Synchronisations-Code-
+Length} oder die zum verwendeten Fehlerkorrekturverfahren
+\index{Fehlerkorrekturverfahren} passenden Message-Length \index{Message-Length}
+und Codeword-Length \index{Codeword-Length} Werte anzupassen.
+
+Sämtliche Module beziehen die Werte über das `Setting` Objekt. Dabei handelt es
+sich um einen Datenwrapper des `SettingSingleton der wie folgt verändert werden
+kann.
+
+``` Matlab
+sObj = SettingSingleton.instance();
+sObj.setDwtWavelet('db2');
+sObj.setDwtLevel(8);
+sObj.setSubbandLength(10);
+% usw...
+```
+
+Wichtig ist, dass sowohl `encoder` und `decoder` mit den selben Einstellungen
+ausgeführt werden **müssen**. Es empfiehlt sich daher ein Skript zu definieren,
+welches nach oben aufgezeigter Art die Einstellungen setzt und das man immer vor
+`encoder` und `decoder` aufruft. Exemplarisch wird `preset_default.m`
+bereitgestellt, welches die Standardeinstellungen der Implementierung lädt
+(welches aber vom Benutzer nicht vor `encoder` und `decoder` aufgerufen werden
+muss).
+ 
+# Stirmark for Audio Testautomation { @h1="C"; #ch-stirmarkaudio } 
+
+Das Verlangen der *Stirmark for Audio* API nach nicht näher definierten Streams
+kann problematisch sein. Exemplarisch sei hier deswegen ein kurzes Bash-Skript
+gebracht, das dessen Verwendung illustrieren soll:
+
+``` Shell { #code-stirmark; caption:"Anwendungsbeispiel für Stirmark for Audio" }
+#!/usr/bin/env bash
+
+streamfile="teststream"
+tooldir="../bin" # smfa2 and read_write_stream binary location
+
+if [ $# -ne 3 ] ; then
+   echo "usage: ./stirmark_test <testfile> <samplerate> <channels>"
+   exit 1
+fi
+
+testfile=$1
+samplerate=$2
+channels=$3
+
+attack_list=( "AddDynNoise:20", "AddSinus:900 1300", "Invert" )
+      
+# first convert the audio file to a stream
+$tooldir/read_write_stream -f $testfile -c $channels > $streamfile
+ 
+# run all attacks and convert results to audiofiles
+for attack in "${attack_list[@]}" ; do
+   attack_name=${attack%%:*}
+   attack_param=${attack#*:}
+   $tooldir/smfa2 --$attack_name $attack_param \
+   -s $samplerate < $streamfile | $tooldir/read_write_stream \
+   -p -s $samplerate -c $channels -f \ 
+   ${testfile%.wav}-attacked-$attack_name-${attack_param// /-}.wav
+done
+```
+
+~ PageIntentionallyLeftBlank
+Denna sida har avsiktligen lämnats blank.
+~
+
+[BIB]
+
+~ TexRaw
+\include{glossar}
+\printglossary[title=Glossar]
+
+\include{nomenclature}
+\printnomenclature[4em]
+~
+
+~ PageIntentionallyLeftBlank
+De Seitn homs obsichtlich la lossn.
+~
+
+~ TexRaw
+\printindex
+~
+
+

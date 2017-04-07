@@ -1,0 +1,141 @@
+
+Package       : style/TUINFDA.sty
+
+Pdf Latex     : pdflatex
+
+Doc Class     : [a4paper,11pt,twoside] memoir
+
+Logo          : False
+
+Math Mode     : mathjax
+Package       : tikz
+Package       : mathtools
+MathJax Ext   : AMScd
+Package       : amscd
+Package       : amsmath
+Package       : tablefootnote
+Package       : multicol
+Package       : geometry
+Package       : fixltx2e
+Package       : amsmath
+Package       : amssymb
+Package       : mathtools
+Package       : microtype
+Package       : enumitem
+Package       : multirow
+Package       : booktabs
+Package       : subcaption
+Package       : [ruled,linesnumbered,algochapter] algorithm2e
+Package       : nag
+Package       : hyperref
+Package       : [acronym,toc] glossaries
+Package       : [intoc] nomencl
+
+<!-- IMPORTANT! make sure headings get mapped to \chapters -->
+Heading Base        : 1 
+Heading Endperiod   :
+
+Tex Header*   : 
+  \chapterstyle{veelo}
+  \usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,arrows,automata}
+  \mdDefineUnicode{10214}{\ensuremath{\llbracket}}
+  \mdDefineUnicode{10215}{\ensuremath{\rrbracket}}
+  \setcounter{secnumdepth}{3}
+  \setsecnumdepth{subsection} % the above line does not seem to work with memoir class
+  \setcounter{tocdepth}{2}
+  \setlength\parindent{0pt}
+  \setlength{\columnsep}{1.5cm}
+  %
+  \makeglossaries
+  \makeindex
+  \makenomenclature
+  %
+  \makepagestyle{numberCorner}
+  \makeevenfoot{numberCorner}{\thepage}{}{}
+  \makeoddfoot{numberCorner}{}{}{\thepage}
+
+<!-- use Computer Modern Font in HTML version -->
+CSS Header :
+  @font-face {
+      font-family: "Computer Modern Serif";
+      src: url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.eot');
+      src: url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.eot?#iefix') format('embedded-opentype'),
+      url('http://spratt.github.io/Computer-Modern/cmunrm.otf') format('opentype'),
+      url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.woff') format('woff'),
+      url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.ttf') format('truetype'),
+      url('http://spratt.github.io/Computer-Modern/cmunrm-webfont.svg#cmu_serifroman') format('svg');
+      font-weight: normal;
+      font-style: normal;
+  }
+  @font-face {
+      font-family: "Computer Modern Serif";
+      src: url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.eot');
+      src: url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.eot?#iefix') format('embedded-opentype'),
+      url('http://spratt.github.io/Computer-Modern/cmunsl.otf') format('opentype'),
+      url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.woff') format('woff'),
+      url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.ttf') format('truetype'),
+      url('http://spratt.github.io/Computer-Modern/cmunsl-webfont.svg#cmu_serif_extraromanslanted') format('svg');
+      font-weight: normal;
+      font-style: italic;
+  }
+  @font-face {
+      font-family: "Computer Modern Serif";
+      src: url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.eot');
+      src: url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.eot?#iefix') format('embedded-opentype'),
+      url('http://spratt.github.io/Computer-Modern/cmunbl.otf') format('opentype'),
+      url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.woff') format('woff'),
+      url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.ttf') format('truetype'),
+      url('http://spratt.github.io/Computer-Modern/cmunbl-webfont.svg#cmu_serif_extraboldslanted') format('svg');
+      font-weight: bold;
+      font-style: italic;
+  }
+  @font-face {
+      font-family: "Computer Modern Serif";
+      src: url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.eot');
+      src: url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.eot?#iefix') format('embedded-opentype'),
+      url('http://spratt.github.io/Computer-Modern/cmunbx.otf') format('opentype'),
+      url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.woff') format('woff'),
+      url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.ttf') format('truetype'),
+      url('http://spratt.github.io/Computer-Modern/cmunbx-webfont.svg#cmu_serifbold') format('svg');
+      font-weight: bold;
+      font-style: normal;
+  }
+  body.madoko {
+    font-family: "Computer Modern Serif", Cambria, "Times New Roman", "Liberation Serif", "Times", serif;
+  }
+
+<!--
+CSS Header :
+  @font-face {
+    font-family: "CMU Serif";
+  }
+  @font-face {
+      font-family: "CMU Serif Bold";
+      font-weight: bold;
+  }
+  @font-face {
+      font-family: "CMU Serif Italic";
+      font-style: italic;
+  }
+  @font-face {
+      font-family: "CMU Serif Bold Italic";
+      font-weight: bold;
+      font-style: italic;
+  }
+  @font-face {
+      font-family: "CMU Serif Monospace";
+      font-style: monospace;
+  }
+  body.madoko {
+    font-family: "CMU Serif", Cambria, "Times New Roman", "Liberation Serif", "Times", serif;
+  }
+  .madoko h1,
+  .madoko h2,
+  .madoko h3,
+  .madoko h4,
+  .madoko h5,
+  .madoko h6, {
+    font-family: "CMU Serif Bold", serif !important;
+  }
+-->
+

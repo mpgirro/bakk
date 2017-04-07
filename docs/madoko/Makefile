@@ -1,8 +1,13 @@
 
 # This uses Madoko (https://madoko.codeplex.com/)
 
-thesis:
-	madoko -v --pdf --odir=out bachelor2014.mdk
+pdf:
+	madoko -v --pdf thesis.mdk
+
+html:
+	madoko -v thesis.mdk
+
+all: pdf
 
 clean:
 	cd out/

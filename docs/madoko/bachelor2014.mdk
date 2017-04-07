@@ -29,6 +29,12 @@ Name References : Literaturverzeichnis
 
 <!--Cite Style      : numeric-->
 
+@if html {
+  Section Depth : 1
+  Css           : webpaginated.css
+  Script*       : webpaginated.js
+}
+
 @if not (tex) {
   Bib Search Url: scholar.google.at
 }
@@ -93,9 +99,16 @@ Equation {
 [img-spektrum-original]: img/spektrum-original.png { width:"100%" }
 [img-spektrum-soundkarte]: img/spektrum-soundkarte.png { width:"100%" }
 
-~ HtmlOnly
+~ Begin HtmlOnly
 [TITLE]
-~
+~ Begin SidePanel
+[TOC]
+[TOC=figures]
+[TOC=tables]
+~ End SidePanel
+~ End HtmlOnly
+<!-- We open an HTML class here, which we'll need to close at the end -->
+~ Begin MainPanel
 
 ~ TexOnly
 ~~ TexRaw
@@ -225,11 +238,12 @@ Fehlerkorrekturverfahren einen definierten Übertragungskanal bereitstellt.
 Hoc vellum voluntater album mansum est.
 ~
 
+<!-- We have included the TOC in HTML earlier (for nice sidepanel) -->
+~ TexOnly
 [TOC]
-
 [TOC=figures]
-
 [TOC=tables]
+~
 
 ~ PageIntentionallyLeftBlank
 Gadawyd y tydalen yma un wag ar bwrpas.
@@ -2021,6 +2035,8 @@ for attack in "${attack_list[@]}" ; do
 done
 ```
 
+
+
 ~ PageIntentionallyLeftBlank
 Denna sida har avsiktligen lämnats blank.
 ~
@@ -2042,5 +2058,8 @@ De Seitn homs obsichtlich la lossn.
 ~ TexRaw
 \printindex
 ~
+
+<!-- We need to close the HTML class we opened right at the top -->
+~ End MainPanel
 
 

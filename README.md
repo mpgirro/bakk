@@ -16,7 +16,7 @@ If you want to cite the original thesis (german language), you can use the follo
   year              = {2014},
   month             = {June},
   keywords          = {audio, watermarking},
-  timestamp         = {20140623},
+  timestamp         = {20140624},
   url               = {http://max.irro.at/pub/bakk/index.html},
   pdf               = {http://max.irro.at/pub/bakk/thesis.pdf}
 }

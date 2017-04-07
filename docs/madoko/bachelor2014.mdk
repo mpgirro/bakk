@@ -24,8 +24,15 @@ Name Figure     : Abbildung
 Name Figures    : Abbildungen
 Name Table      : Tabelle
 Name Tables     : Tabellen
-Name Contents   : Inhaltsverzeichnis
 Name References : Literaturverzeichnis
+
+
+@if html {
+  Name Contents   : \/
+}
+@if not html {
+  Name Contents   : Inhaltsverzeichnis
+}
 
 <!--Cite Style      : numeric-->
 
@@ -103,8 +110,6 @@ Equation {
 [TITLE]
 ~ Begin SidePanel
 [TOC]
-[TOC=figures]
-[TOC=tables]
 ~ End SidePanel
 ~ End HtmlOnly
 <!-- We open an HTML class here, which we'll need to close at the end -->

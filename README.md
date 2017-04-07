@@ -1,5 +1,7 @@
 # Bachelor Thesis
 
+*Note: there is the occasional change in this repository, but only for minor updates of the HTML version of the thesis document.*
+
 ## What is this?
 
 This is the code and thesis of my bachelor project I wrote in 2013/2014 at TU Wien. It is about the implementation of an audio watermarking algorithm aimed for analog communication channels and its utilisation in an application framework.

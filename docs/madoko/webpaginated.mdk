@@ -1,5 +1,0 @@
-@if html {
-  Section Depth : 1
-  Css           : webpaginated.css
-  Script*       : webpaginated.js
-}

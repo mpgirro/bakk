@@ -36,6 +36,17 @@ Name References : Literaturverzeichnis
 
 <!--Cite Style      : numeric-->
 
+<!--
+@if html {
+  
+  Css           : sidebar.css
+  Script        : sidebar.js
+}
+SidePanel {
+  class: ui left visible sidebar;
+}
+-->
+
 @if html {
   Section Depth : 1
   Css           : webpaginated.css
@@ -233,8 +244,8 @@ gezielt zusätzliche Informationen einzubauen, welche auch von anderen Geräten
 als dem ursprünglichen Empfangsgerät verarbeitet werden könnten.
 
 Diese Arbeit beschäftigt sich mit der Implementierung einer vorhandenen Audio-
-Water\-marking Methode welche für die DA- und AD-Wandlung
- \index{DA-Wandlung} \index{AD-Wandlung} geeignet sein soll. Weiters wurde für deren
+Water\-marking Methode welche für die [DA- und AD-Wandlung]{tex-cmd: "\index{DA-Wandlung} \index{AD-Wandlung}"}
+geeignet sein soll. Weiters wurde für deren
 Verwendung ein Framework entwickelt, welches mittels eines eigens entwickelten
 Übertragungsprotokolls unter Verwendung von Synchronisations-Codes und
 Fehlerkorrekturverfahren einen definierten Übertragungskanal bereitstellt.

@@ -32,11 +32,22 @@ body.madoko {
   .sidepanel {
     /*width   : 14rem; */
     position: fixed;
-    top     : 1rem;
-    max-height: 90%;
-    overflow-y: auto;
+    top: 1rem;
     left: 1rem;
-    right: 1rem;
+    /*right: 1rem;*/
+    right: auto;
+    height: 100%!important;
+    max-height: 100%;
+    margin: 0!important;
+    overflow-y: auto!important;
+    z-index: 102;
+    /*
+    border-radius: 0!important;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: none;
+    will-change: transform;
+    */
   }
   
   .mainpanel, .footnotes, .titleblock {

@@ -10,7 +10,7 @@ If you want to cite the original thesis (german language), you can use the follo
 
 ```
 @mastersthesis{Irro2014,
-  document_type = {Bachelor's Thesis},
+  document_type = {Bachelor Thesis},
   author        = {Maximilian Irro},
   title         = {Digital Audio-Watermarking für analoge Übertragungsstrecken},
   school        = {TU Wien},

@@ -30,6 +30,7 @@ Package       : nag
 Package       : hyperref
 Package       : [acronym,toc] glossaries
 Package       : [intoc] nomencl
+Package       : makeidx
 
 <!-- IMPORTANT! make sure headings get mapped to \chapters -->
 Heading Base        : 1 

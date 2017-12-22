@@ -47,11 +47,13 @@ SidePanel {
 }
 -->
 
+
 @if html {
   Section Depth : 1
   Css           : webpaginated.css
   Script*       : webpaginated.js
 }
+
 
 @if not (tex) {
   Bib Search Url: scholar.google.at
@@ -64,7 +66,7 @@ CSS Header      :
     color: black;
   }
   hr.figureline.madoko {
-    display: none;
+    visibility: hidden;
   }
   .toc a, .toc a:visited { 
     color: #0000EE;  
@@ -104,6 +106,25 @@ Equation {
    Define and redefine some stuff from prelude
 --------------------------------------------------------------------->
 
+
+
+<!-------------------------------------------------------------------
+   Define Index for PDFs
+--------------------------------------------------------------------->
+
+.Index {
+
+}
+
+.IndexBlock {
+  replace:"~ Begin TexOnly&nl;\
+            ~ Begin TexRaw&nl;\
+            \index{&caption;|()}&nl;\
+            &source;&nl;\
+            \index{&caption;|)}&nl;\
+            ~ end TexRaw&nl;\
+           ~ End TexOnly"
+}
 
 <!-------------------------------------------------------------------
    Define the links to the images 
@@ -1941,6 +1962,8 @@ wegabstrahiert.
 
 \index{encoder|(}
 
+~ Begin IndexBlock { caption:"encoder" }
+
 ``` Matlab
 function [modSignal, encodedBitCount ] = encoder( inputSignal, watermark, fs )
 ```
@@ -1963,6 +1986,8 @@ audiowrite('result.wav',modSignal, fs);
 ```
 
 \index{encoder|)}
+
+~ End IndexBlock
 
 ## decoder { - }
 
@@ -2071,9 +2096,11 @@ Denna sida har avsiktligen lämnats blank.
 De Seitn homs obsichtlich la lossn.
 ~
 
-~ TexRaw
+~ Begin TexOnly
+~ Begin TexRaw
 \printindex
-~
+~ End TexRaw
+~ End TexOnly
 
 <!-- We need to close the HTML class we opened right at the top -->
 ~ End MainPanel

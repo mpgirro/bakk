@@ -6,7 +6,7 @@
 
 This is the code and thesis of my bachelor project I wrote in 2013/2014 at TU Wien. It is about the implementation of an audio watermarking algorithm aimed for analog communication channels and its utilisation in an application framework.
 
-If you want to cite the original thesis (german language), you can use the following [BibTeX entry](http://max.irro.at/pub/bakk.bib):
+If you want to cite the original thesis (german language), you can use the following [BibTeX entry](http://max.irro.at/pub/bakk/thesis.bib):
 
     @mastersthesis{Irro2014,
       document_type = {Bachelor Thesis},

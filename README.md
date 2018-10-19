@@ -8,21 +8,18 @@ This is the code and thesis of my bachelor project I wrote in 2013/2014 at TU Wi
 
 If you want to cite the original thesis (german language), you can use the following [BibTeX entry](http://max.irro.at/pub/bakk.bib):
 
-```
-@mastersthesis{Irro2014,
-  document_type = {Bachelor Thesis},
-  author        = {Maximilian Irro},
-  title         = {Digital Audio-Watermarking für analoge Übertragungsstrecken},
-  school        = {TU Wien},
-  type          = {Bachelor Thesis},
-  year          = {2014},
-  month         = {June},
-  keywords      = {audio, watermarking},
-  timestamp     = {20140624},
-  url           = {http://max.irro.at/pub/bakk/},
-  pdf           = {http://max.irro.at/pub/bakk/thesis.pdf}
-}
-```
+    @mastersthesis{Irro2014,
+      document_type = {Bachelor Thesis},
+      author        = {Maximilian Irro},
+      title         = {{Digital Audio-Watermarking für analoge Übertragungsstrecken}},
+      school        = {Interactive Media Systems Group, TU Wien},
+      type          = {Bachelor Thesis},
+      year          = {2014},
+      month         = {June},
+      keywords      = {audio, watermarking},
+      timestamp     = {20140624},
+      url           = {https://max.irro.at/pub/bakk/thesis.pdf}
+    }
 
 ## Abstract
 

@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: If you use this software, please cite the thesis from preferred-citation.
+authors:
+  - family-names: Irro
+    given-names: Maximilian
+title: Digital audio-watermarking for analog transmission channels
+date-released: 2014-06-24
+version: 1.0.0
+repository-code: https://github.com/mpgirro/bakk
+institution: TU Wien
+preferred-citation:
+  authors:
+    - family-names: Irro
+      given-names: Maximilian
+  title: Digital audio-watermarking for analog transmission channels
+  year: 2014
+  thesis-type: "Bachelor thesis"
+  type: thesis
+  keywords:
+    - audio
+    - watermarking
+  languages: 
+    - en
+  url: https://max.irro.at/pub/bakk/thesis.pdf
